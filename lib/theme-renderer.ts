@@ -1,0 +1,192 @@
+import type { ParsedResume, ThemeId, TailorChange } from "@/types";
+
+/** Merge accepted TailorChanges into a ParsedResume copy */
+export function applyChanges(
+  resume: ParsedResume,
+  changes: TailorChange[] = []
+): ParsedResume {
+  const accepted = changes.filter((c) => c.accepted);
+  if (accepted.length === 0) return resume;
+
+  // Deep clone
+  const result: ParsedResume = JSON.parse(JSON.stringify(resume));
+
+  for (const change of accepted) {
+    if (change.section === "summary") {
+      result.summary = change.tailored;
+    } else if (change.section === "experience") {
+      // field format: "experience[i].bullets[j]"
+      const expMatch = change.field.match(/experience\[(\d+)\]\.bullets\[(\d+)\]/);
+      if (expMatch) {
+        const ei = parseInt(expMatch[1]);
+        const bi = parseInt(expMatch[2]);
+        if (result.experience[ei]?.bullets[bi] !== undefined) {
+          result.experience[ei].bullets[bi] = change.tailored;
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+/** Escape HTML special characters */
+function esc(str: string | undefined | null): string {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/** Render a list of items as <li> elements */
+function li(items: string[]): string {
+  return items.map((i) => `<li>${esc(i)}</li>`).join("");
+}
+
+// ─── Theme HTML generators ────────────────────────────────────────────────────
+
+function renderClassic(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  return `
+    <div style="font-family:Georgia,serif;color:#111;background:#fff;padding:40px;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+      <div style="text-align:center;border-bottom:2px solid #222;padding-bottom:16px;margin-bottom:24px;">
+        <h1 style="font-size:24px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 6px;">${esc(contact.name)}</h1>
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;font-size:11px;color:#555;">
+          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<span>${v}</span>`).join("")}
+        </div>
+      </div>
+      ${summary ? `<section style="margin-bottom:20px;"><h2 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #aaa;padding-bottom:4px;margin-bottom:8px;">Professional Summary</h2><p style="color:#444;">${esc(summary)}</p></section>` : ""}
+      ${experience.length ? `<section style="margin-bottom:20px;"><h2 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #aaa;padding-bottom:4px;margin-bottom:8px;">Experience</h2>${experience.map((j) => `<div style="margin-bottom:16px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:700;">${esc(j.title)}</span><span style="font-size:11px;color:#777;">${esc(j.startDate)} – ${esc(j.endDate as string)}</span></div><div style="color:#555;font-style:italic;margin-bottom:4px;">${esc(j.company)}</div><ul style="margin:0;padding-left:20px;">${li(j.bullets)}</ul></div>`).join("")}</section>` : ""}
+      ${education.length ? `<section style="margin-bottom:20px;"><h2 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #aaa;padding-bottom:4px;margin-bottom:8px;">Education</h2>${education.map((e) => `<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:700;">${esc(e.degree)} in ${esc(e.field)}</span><span style="font-size:11px;color:#777;">${esc(e.graduationYear)}</span></div><div style="color:#555;font-style:italic;">${esc(e.institution)}</div></div>`).join("")}</section>` : ""}
+      ${skills.length ? `<section style="margin-bottom:20px;"><h2 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #aaa;padding-bottom:4px;margin-bottom:8px;">Skills</h2><p style="color:#444;">${skills.map(esc).join(" · ")}</p></section>` : ""}
+      ${projects?.length ? `<section style="margin-bottom:20px;"><h2 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #aaa;padding-bottom:4px;margin-bottom:8px;">Projects</h2>${projects.map((p) => `<div style="margin-bottom:12px;"><div style="font-weight:700;">${esc(p.name)}</div><p style="color:#444;margin:2px 0;">${esc(p.description)}</p><p style="font-size:11px;color:#777;">${p.technologies.map(esc).join(", ")}</p></div>`).join("")}</section>` : ""}
+      ${certifications?.length ? `<section><h2 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #aaa;padding-bottom:4px;margin-bottom:8px;">Certifications</h2><ul style="margin:0;padding-left:20px;">${li(certifications)}</ul></section>` : ""}
+    </div>`;
+}
+
+function renderModern(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  return `
+    <div style="font-family:Arial,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;display:flex;">
+      <div style="width:220px;background:#1e293b;color:#fff;padding:24px;flex-shrink:0;">
+        <h1 style="font-size:16px;font-weight:700;margin:0 0 4px;">${esc(contact.name)}</h1>
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:20px;">
+          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<div>${v}</div>`).join("")}
+        </div>
+        ${skills.length ? `<div style="margin-bottom:20px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:8px;">Skills</div><div style="display:flex;flex-wrap:wrap;gap:4px;">${skills.map((s) => `<span style="background:#334155;color:#cbd5e1;font-size:10px;padding:2px 6px;border-radius:3px;">${esc(s)}</span>`).join("")}</div></div>` : ""}
+        ${education.length ? `<div style="margin-bottom:20px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:8px;">Education</div>${education.map((e) => `<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:600;">${esc(e.degree)}</div><div style="font-size:11px;color:#94a3b8;">${esc(e.field)}</div><div style="font-size:11px;color:#64748b;">${esc(e.institution)}</div><div style="font-size:10px;color:#475569;">${esc(e.graduationYear)}</div></div>`).join("")}</div>` : ""}
+        ${certifications?.length ? `<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:8px;">Certifications</div><ul style="margin:0;padding-left:14px;font-size:11px;color:#94a3b8;">${li(certifications)}</ul></div>` : ""}
+      </div>
+      <div style="flex:1;padding:32px;">
+        ${summary ? `<section style="margin-bottom:24px;"><h2 style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:6px;">About</h2><div style="width:32px;height:2px;background:#3b82f6;margin-bottom:10px;"></div><p style="color:#555;">${esc(summary)}</p></section>` : ""}
+        ${experience.length ? `<section style="margin-bottom:24px;"><h2 style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:6px;">Experience</h2><div style="width:32px;height:2px;background:#3b82f6;margin-bottom:10px;"></div>${experience.map((j) => `<div style="margin-bottom:18px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:700;">${esc(j.title)}</span><span style="font-size:11px;color:#94a3b8;">${esc(j.startDate)} – ${esc(j.endDate as string)}</span></div><div style="color:#3b82f6;font-size:11px;font-weight:600;margin-bottom:6px;">${esc(j.company)}</div><ul style="margin:0;padding:0;list-style:none;">${j.bullets.map((b) => `<li style="display:flex;gap:6px;color:#555;margin-bottom:3px;"><span style="color:#93c5fd;flex-shrink:0;">▸</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>` : ""}
+        ${projects?.length ? `<section><h2 style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:6px;">Projects</h2><div style="width:32px;height:2px;background:#3b82f6;margin-bottom:10px;"></div>${projects.map((p) => `<div style="margin-bottom:14px;"><div style="font-weight:700;">${esc(p.name)}</div><p style="color:#555;margin:3px 0;">${esc(p.description)}</p><div style="display:flex;flex-wrap:wrap;gap:4px;">${p.technologies.map((t) => `<span style="background:#eff6ff;color:#1d4ed8;font-size:10px;padding:2px 6px;border-radius:3px;">${esc(t)}</span>`).join("")}</div></div>`).join("")}</section>` : ""}
+      </div>
+    </div>`;
+}
+
+function renderMinimal(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  return `
+    <div style="font-family:Arial,sans-serif;color:#333;background:#fff;padding:48px;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+      <div style="margin-bottom:32px;">
+        <h1 style="font-size:28px;font-weight:300;letter-spacing:-1px;color:#111;margin:0 0 8px;">${esc(contact.name)}</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#aaa;">
+          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<span>${v}</span>`).join("")}
+        </div>
+      </div>
+      ${summary ? `<section style="margin-bottom:28px;"><p style="color:#666;line-height:1.7;">${esc(summary)}</p></section>` : ""}
+      ${experience.length ? `<section style="margin-bottom:28px;"><h2 style="font-size:10px;text-transform:uppercase;letter-spacing:3px;color:#aaa;margin-bottom:16px;">Experience</h2>${experience.map((j) => `<div style="margin-bottom:20px;display:flex;gap:24px;"><div style="width:100px;flex-shrink:0;text-align:right;font-size:11px;color:#aaa;line-height:1.4;">${esc(j.startDate)}<br>–<br>${esc(j.endDate as string)}</div><div style="flex:1;"><div style="font-weight:500;color:#111;">${esc(j.title)}</div><div style="font-size:11px;color:#aaa;margin-bottom:6px;">${esc(j.company)}</div><ul style="margin:0;padding:0;list-style:none;">${j.bullets.map((b) => `<li style="color:#555;padding-left:12px;border-left:2px solid #e5e7eb;margin-bottom:3px;">${esc(b)}</li>`).join("")}</ul></div></div>`).join("")}</section>` : ""}
+      ${education.length ? `<section style="margin-bottom:28px;"><h2 style="font-size:10px;text-transform:uppercase;letter-spacing:3px;color:#aaa;margin-bottom:16px;">Education</h2>${education.map((e) => `<div style="margin-bottom:12px;display:flex;gap:24px;"><div style="width:100px;flex-shrink:0;text-align:right;font-size:11px;color:#aaa;">${esc(e.graduationYear)}</div><div style="flex:1;"><div style="font-weight:500;color:#111;">${esc(e.degree)} in ${esc(e.field)}</div><div style="font-size:11px;color:#aaa;">${esc(e.institution)}</div></div></div>`).join("")}</section>` : ""}
+      ${skills.length ? `<section style="margin-bottom:28px;"><h2 style="font-size:10px;text-transform:uppercase;letter-spacing:3px;color:#aaa;margin-bottom:16px;">Skills</h2><div style="display:flex;flex-wrap:wrap;gap:8px;">${skills.map((s) => `<span style="font-size:11px;color:#666;border:1px solid #e5e7eb;padding:3px 10px;border-radius:20px;">${esc(s)}</span>`).join("")}</div></section>` : ""}
+      ${projects?.length ? `<section style="margin-bottom:28px;"><h2 style="font-size:10px;text-transform:uppercase;letter-spacing:3px;color:#aaa;margin-bottom:16px;">Projects</h2>${projects.map((p) => `<div style="margin-bottom:14px;display:flex;gap:24px;"><div style="width:100px;flex-shrink:0;"></div><div style="flex:1;"><div style="font-weight:500;color:#111;">${esc(p.name)}</div><p style="color:#666;margin:2px 0;">${esc(p.description)}</p><p style="font-size:11px;color:#aaa;">${p.technologies.map(esc).join(", ")}</p></div></div>`).join("")}</section>` : ""}
+      ${certifications?.length ? `<section><h2 style="font-size:10px;text-transform:uppercase;letter-spacing:3px;color:#aaa;margin-bottom:16px;">Certifications</h2><ul style="margin:0;padding:0;list-style:none;">${certifications.map((c) => `<li style="color:#666;padding-left:12px;border-left:2px solid #e5e7eb;margin-bottom:3px;">${esc(c)}</li>`).join("")}</ul></section>` : ""}
+    </div>`;
+}
+
+function renderExecutive(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  return `
+    <div style="font-family:Arial,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+      <div style="background:#111;color:#fff;padding:32px 40px;">
+        <h1 style="font-size:24px;font-weight:700;letter-spacing:1px;margin:0 0 8px;">${esc(contact.name)}</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:20px;font-size:11px;color:#9ca3af;">
+          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<span>${v}</span>`).join("")}
+        </div>
+      </div>
+      <div style="padding:32px 40px;">
+        ${summary ? `<section style="margin-bottom:28px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">Executive Summary</h2><div style="height:2px;background:#111;margin-bottom:12px;"></div><p style="color:#555;line-height:1.7;">${esc(summary)}</p></section>` : ""}
+        ${experience.length ? `<section style="margin-bottom:28px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">Professional Experience</h2><div style="height:2px;background:#111;margin-bottom:16px;"></div>${experience.map((j) => `<div style="margin-bottom:22px;"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;"><div><span style="font-weight:700;font-size:14px;">${esc(j.title)}</span><span style="color:#9ca3af;margin:0 8px;">·</span><span style="font-weight:600;color:#374151;">${esc(j.company)}</span></div><span style="font-size:11px;color:#9ca3af;">${esc(j.startDate)} – ${esc(j.endDate as string)}</span></div><ul style="margin:6px 0 0;padding:0;list-style:none;">${j.bullets.map((b) => `<li style="display:flex;gap:8px;color:#555;margin-bottom:3px;"><span style="font-weight:700;flex-shrink:0;">—</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>` : ""}
+        <div style="display:flex;gap:32px;">
+          <div style="flex:1;">
+            ${education.length ? `<section style="margin-bottom:28px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">Education</h2><div style="height:2px;background:#111;margin-bottom:12px;"></div>${education.map((e) => `<div style="margin-bottom:10px;"><div style="font-weight:600;">${esc(e.degree)} in ${esc(e.field)}</div><div style="color:#555;">${esc(e.institution)}</div><div style="font-size:11px;color:#9ca3af;">${esc(e.graduationYear)}</div></div>`).join("")}</section>` : ""}
+            ${certifications?.length ? `<section><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">Certifications</h2><div style="height:2px;background:#111;margin-bottom:12px;"></div><ul style="margin:0;padding-left:16px;">${li(certifications)}</ul></section>` : ""}
+          </div>
+          <div style="width:200px;flex-shrink:0;">
+            ${skills.length ? `<section style="margin-bottom:28px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">Core Competencies</h2><div style="height:2px;background:#111;margin-bottom:12px;"></div><ul style="margin:0;padding:0;list-style:none;">${skills.map((s) => `<li style="display:flex;gap:6px;color:#555;margin-bottom:3px;"><span style="color:#9ca3af;">›</span><span>${esc(s)}</span></li>`).join("")}</ul></section>` : ""}
+            ${projects?.length ? `<section><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">Key Projects</h2><div style="height:2px;background:#111;margin-bottom:12px;"></div>${projects.map((p) => `<div style="margin-bottom:10px;"><div style="font-weight:600;">${esc(p.name)}</div><p style="font-size:11px;color:#555;">${esc(p.description)}</p></div>`).join("")}</section>` : ""}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderCreative(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  return `
+    <div style="font-family:Arial,sans-serif;color:#333;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+      <div style="background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;padding:32px 40px;">
+        <h1 style="font-size:24px;font-weight:700;margin:0 0 8px;">${esc(contact.name)}</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#ddd6fe;">
+          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<span>${v}</span>`).join("")}
+        </div>
+      </div>
+      <div style="padding:32px 40px;">
+        ${summary ? `<section style="margin-bottom:28px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="width:10px;height:10px;border-radius:50%;background:#7c3aed;flex-shrink:0;"></span><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#7c3aed;margin:0;">About Me</h2></div><p style="color:#555;padding-left:20px;">${esc(summary)}</p></section>` : ""}
+        ${experience.length ? `<section style="margin-bottom:28px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;"><span style="width:10px;height:10px;border-radius:50%;background:#4f46e5;flex-shrink:0;"></span><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#4f46e5;margin:0;">Experience</h2></div><div style="padding-left:20px;border-left:2px solid #ede9fe;">${experience.map((j) => `<div style="margin-bottom:20px;position:relative;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:700;">${esc(j.title)}</span><span style="font-size:11px;color:#9ca3af;">${esc(j.startDate)} – ${esc(j.endDate as string)}</span></div><div style="color:#7c3aed;font-size:11px;font-weight:600;margin-bottom:6px;">${esc(j.company)}</div><ul style="margin:0;padding:0;list-style:none;">${j.bullets.map((b) => `<li style="display:flex;gap:6px;color:#555;margin-bottom:3px;"><span style="color:#c4b5fd;flex-shrink:0;">◆</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</div></section>` : ""}
+        <div style="display:flex;gap:32px;">
+          <div style="flex:1;">
+            ${education.length ? `<section style="margin-bottom:28px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="width:10px;height:10px;border-radius:50%;background:#7c3aed;flex-shrink:0;"></span><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#7c3aed;margin:0;">Education</h2></div>${education.map((e) => `<div style="margin-bottom:10px;padding-left:20px;"><div style="font-weight:600;">${esc(e.degree)} in ${esc(e.field)}</div><div style="color:#4f46e5;font-size:11px;">${esc(e.institution)}</div><div style="font-size:11px;color:#9ca3af;">${esc(e.graduationYear)}</div></div>`).join("")}</section>` : ""}
+            ${projects?.length ? `<section><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="width:10px;height:10px;border-radius:50%;background:#4f46e5;flex-shrink:0;"></span><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#4f46e5;margin:0;">Projects</h2></div>${projects.map((p) => `<div style="margin-bottom:14px;padding-left:20px;"><div style="font-weight:600;">${esc(p.name)}</div><p style="color:#555;margin:2px 0;">${esc(p.description)}</p><div style="display:flex;flex-wrap:wrap;gap:4px;">${p.technologies.map((t) => `<span style="background:#f5f3ff;color:#5b21b6;font-size:10px;padding:2px 8px;border-radius:20px;">${esc(t)}</span>`).join("")}</div></div>`).join("")}</section>` : ""}
+          </div>
+          <div style="width:200px;flex-shrink:0;">
+            ${skills.length ? `<section style="margin-bottom:28px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="width:10px;height:10px;border-radius:50%;background:#7c3aed;flex-shrink:0;"></span><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#7c3aed;margin:0;">Skills</h2></div><div style="display:flex;flex-wrap:wrap;gap:6px;padding-left:20px;">${skills.map((s) => `<span style="background:linear-gradient(135deg,#ede9fe,#e0e7ff);color:#3730a3;font-size:10px;padding:3px 10px;border-radius:20px;">${esc(s)}</span>`).join("")}</div></section>` : ""}
+            ${certifications?.length ? `<section><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="width:10px;height:10px;border-radius:50%;background:#4f46e5;flex-shrink:0;"></span><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#4f46e5;margin:0;">Certifications</h2></div><ul style="margin:0;padding-left:20px;list-style:none;">${certifications.map((c) => `<li style="font-size:11px;color:#555;margin-bottom:3px;">${esc(c)}</li>`).join("")}</ul></section>` : ""}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ─── Public API ───────────────────────────────────────────────────────────────
+
+const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
+  classic: renderClassic,
+  modern: renderModern,
+  minimal: renderMinimal,
+  executive: renderExecutive,
+  creative: renderCreative,
+};
+
+/** Render a ParsedResume to a full self-contained HTML document */
+export function renderThemeHtml(resume: ParsedResume, theme: ThemeId): string {
+  const body = RENDERERS[theme]?.(resume) ?? RENDERERS.classic(resume);
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${esc(resume.contact.name)} — Resume</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fff; }
+    ul { padding-left: 18px; }
+    li { margin-bottom: 2px; }
+    p { margin: 0; }
+  </style>
+</head>
+<body>${body}</body>
+</html>`;
+}

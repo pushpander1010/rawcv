@@ -1,0 +1,69 @@
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+import { authOptions } from "@/lib/auth";
+import { getUserById, deductCredits } from "@/lib/user-store";
+import type { ModelId } from "@/types";
+
+// Credits charged per AI operation per model
+const OPERATION_COSTS: Record<ModelId, number> = {
+  "gemini-1.5-flash": 1,
+  "gpt-4o-mini":      2,
+  "claude-haiku":     2,
+  "gemini-1.5-pro":   8,
+  "claude-sonnet":    10,
+  "gpt-4o":           15,
+};
+
+export function getOperationCost(model: ModelId): number {
+  return OPERATION_COSTS[model] ?? 2;
+}
+
+/**
+ * Checks that the current session user has enough credits for the operation.
+ * If not, returns a 402 NextResponse. Otherwise deducts and returns null.
+ */
+export async function chargeCredits(
+  model: ModelId,
+  operationLabel: string
+): Promise<NextResponse | null> {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return NextResponse.json(
+      { error: "unauthorized", message: "Not signed in" },
+      { status: 401 }
+    );
+  }
+
+  const userId = (session.user as { id?: string }).id;
+  if (!userId) {
+    return NextResponse.json(
+      { error: "unauthorized", message: "Invalid session" },
+      { status: 401 }
+    );
+  }
+
+  const user = getUserById(userId);
+  const cost = getOperationCost(model);
+
+  if (!user || user.creditBalance < cost) {
+    return NextResponse.json(
+      {
+        error: "insufficient_credits",
+        message: "You don't have enough credits. Please purchase more to continue.",
+        balance: user?.creditBalance ?? 0,
+        required: cost,
+      },
+      { status: 402 }
+    );
+  }
+
+  const ok = deductCredits(userId, cost, operationLabel);
+  if (!ok) {
+    return NextResponse.json(
+      { error: "insufficient_credits", message: "Credit deduction failed." },
+      { status: 402 }
+    );
+  }
+
+  return null; // success — credits deducted
+}

@@ -1,0 +1,125 @@
+import { NextRequest, NextResponse } from "next/server";
+import type { ModelId, ParsedResume } from "@/types";
+import { createProvider } from "@/lib/ai-providers";
+
+const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+const ALLOWED_TYPES = [
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/plain",
+];
+const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
+
+async function extractText(file: File): Promise<string> {
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const name = file.name.toLowerCase();
+
+  if (name.endsWith(".pdf")) {
+    const { PDFParse } = await import("pdf-parse");
+    const parser = new PDFParse({ data: buffer });
+    try {
+      const result = await parser.getText();
+      return result.text;
+    } finally {
+      await parser.destroy();
+    }
+  }
+
+  if (name.endsWith(".docx")) {
+    const mammoth = await import("mammoth");
+    const result = await mammoth.extractRawText({ buffer });
+    return result.value;
+  }
+
+  // TXT — native Node
+  return buffer.toString("utf-8");
+}
+
+const SYSTEM_PROMPT = `You are a resume parser. Extract structured information from the provided resume text and return ONLY valid JSON matching the schema below. Do not include any explanation or markdown.
+
+Schema:
+{
+  "contact": { "name": string, "email": string, "phone"?: string, "location"?: string, "linkedin"?: string, "website"?: string },
+  "summary"?: string,
+  "experience": [{ "company": string, "title": string, "startDate": string, "endDate": string, "bullets": string[] }],
+  "education": [{ "institution": string, "degree": string, "field": string, "graduationYear": string }],
+  "skills": string[],
+  "certifications"?: string[],
+  "projects"?: [{ "name": string, "description": string, "technologies": string[] }]
+}`;
+
+export async function POST(req: NextRequest) {
+  let formData: FormData;
+  try {
+    formData = await req.formData();
+  } catch {
+    return NextResponse.json(
+      { error: "invalid_request", message: "Expected multipart/form-data" },
+      { status: 400 }
+    );
+  }
+
+  const file = formData.get("file") as File | null;
+  const modelId = (formData.get("model") as ModelId | null) ?? "gemini-1.5-flash";
+
+  if (!file) {
+    return NextResponse.json(
+      { error: "missing_file", message: "No file provided" },
+      { status: 400 }
+    );
+  }
+
+  // Validate size
+  if (file.size > MAX_SIZE) {
+    return NextResponse.json(
+      { error: "file_too_large", message: "File exceeds the 5 MB size limit" },
+      { status: 400 }
+    );
+  }
+
+  // Validate type
+  const ext = "." + file.name.split(".").pop()?.toLowerCase();
+  const validType = ALLOWED_TYPES.includes(file.type) || ALLOWED_EXTENSIONS.includes(ext);
+  if (!validType) {
+    return NextResponse.json(
+      {
+        error: "unsupported_format",
+        message: "Unsupported file format. Please upload a PDF, DOCX, or TXT file.",
+      },
+      { status: 400 }
+    );
+  }
+
+  // Extract raw text
+  let rawText: string;
+  try {
+    rawText = await extractText(file);
+  } catch {
+    return NextResponse.json(
+      { error: "parse_failed", message: "Could not extract text from the file. Try a different file or format." },
+      { status: 422 }
+    );
+  }
+
+  if (!rawText.trim()) {
+    return NextResponse.json(
+      { error: "parse_failed", message: "The file appears to be empty or unreadable. Try a different file." },
+      { status: 422 }
+    );
+  }
+
+  // AI extraction
+  let parsed: ParsedResume;
+  try {
+    const provider = createProvider(modelId);
+    const json = await provider.complete(rawText, SYSTEM_PROMPT);
+    parsed = JSON.parse(json) as ParsedResume;
+  } catch {
+    return NextResponse.json(
+      { error: "ai_unavailable", message: "AI extraction failed. Please try again." },
+      { status: 502 }
+    );
+  }
+
+  return NextResponse.json({ parsed, raw: rawText });
+}
