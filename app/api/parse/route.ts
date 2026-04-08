@@ -13,11 +13,11 @@ const ALLOWED_TYPES = [
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Use require() inside the function to avoid pdf-parse's module-level
-  // test-file side effect that crashes when imported at the top level in Next.js
+  // require() triggers the "require" export condition → CJS build with PDFParse class
   // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
-  const pdfParse: (buf: Buffer) => Promise<{ text: string }> = require("pdf-parse");
-  const result = await pdfParse(buffer);
+  const { PDFParse } = require("pdf-parse") as any;
+  const parser = new PDFParse({ data: new Uint8Array(buffer) });
+  const result = await parser.getText();
   return result.text;
 }
 
