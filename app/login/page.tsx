@@ -35,11 +35,13 @@ function LoginForm() {
   // Redirect authenticated users away from login page
   useEffect(() => {
     if (status === "authenticated") {
-      router.replace(callbackUrl);
+      window.location.href = callbackUrl;
     }
-  }, [status, router, callbackUrl]);
+  }, [status, callbackUrl]);
 
-  if (status === "loading" || status === "authenticated") {
+  // Only show spinner while session is initially loading (not yet known)
+  // Don't block on "authenticated" — let the redirect handle it
+  if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <div className="w-8 h-8 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" aria-label="Loading" />
@@ -61,7 +63,8 @@ function LoginForm() {
     if (result?.error) {
       setError("Invalid email or password.");
     } else {
-      router.push(callbackUrl);
+      // Hard redirect so the session cookie is picked up cleanly
+      window.location.href = callbackUrl;
     }
   }
 
