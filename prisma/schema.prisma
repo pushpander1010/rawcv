@@ -1,0 +1,49 @@
+// PostgreSQL — set DATABASE_URL in .env or .env.local (see .env.example)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CreditTransactionType {
+  purchase
+  ai_operation
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  name              String
+  hashedPassword    String?
+  emailVerified     Boolean  @default(false)
+  verificationToken String?  @unique
+  creditBalance     Int      @default(10)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  creditTransactions CreditTransaction[]
+}
+
+model CreditTransaction {
+  id                    String                 @id @default(cuid())
+  userId                String
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type                  CreditTransactionType
+  amount                Int
+  description           String
+  stripePaymentIntentId String?
+  createdAt             DateTime               @default(now())
+
+  @@index([userId])
+}
+
+/// Idempotency for Stripe webhooks (same event must not credit twice)
+model ProcessedStripeEvent {
+  id        String   @id @default(cuid())
+  eventId   String   @unique
+  createdAt DateTime @default(now())
+}
