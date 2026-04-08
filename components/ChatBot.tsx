@@ -2,12 +2,15 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useResume } from "@/context/ResumeContext";
+import ModelSelector from "@/components/ModelSelector";
 import type { ParsedResume } from "@/types";
 import type { ChatMessage, ChatResponse } from "@/app/api/chat/route";
 
 interface Props {
   mode?: "build" | "customize";
   onComplete?: () => void;
+  /** Hide the model selector (e.g. when the parent already shows one) */
+  hideModelSelector?: boolean;
 }
 
 const WELCOME_BUILD =
@@ -16,7 +19,7 @@ const WELCOME_BUILD =
 const WELCOME_CUSTOMIZE =
   "Hi! I can help you customize your resume. What would you like to change or improve? You can also ask me to undo any change I make.";
 
-export default function ChatBot({ mode = "build", onComplete }: Props) {
+export default function ChatBot({ mode = "build", onComplete, hideModelSelector = false }: Props) {
   const { state, setState } = useResume();
 
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -122,6 +125,13 @@ export default function ChatBot({ mode = "build", onComplete }: Props) {
 
   return (
     <div className="flex flex-col h-full min-h-0">
+      {/* Model selector — shown unless parent already provides one */}
+      {!hideModelSelector && (
+        <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+          <ModelSelector label="AI Model" />
+        </div>
+      )}
+
       {/* Message list */}
       <div
         className="flex-1 overflow-y-auto px-4 py-4 space-y-4"

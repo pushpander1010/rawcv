@@ -64,7 +64,7 @@ export default function ChatPage() {
           className="flex flex-col w-full md:w-1/2 lg:w-2/5 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950"
           aria-label="Chat panel"
         >
-          <ChatBot mode={mode} onComplete={handleComplete} />
+          <ChatBot mode={mode} onComplete={handleComplete} hideModelSelector />
         </section>
 
         {/* Preview panel */}
