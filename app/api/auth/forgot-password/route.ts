@@ -16,11 +16,20 @@ export async function POST(req: NextRequest) {
     const token = randomUUID();
     const expiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
     await setPasswordResetToken(email, token, expiry);
+    console.log("[forgot-password] token set for:", email);
     try {
       await sendPasswordResetEmail(email, user.name, token);
+      console.log("[forgot-password] email sent to:", email);
     } catch (err) {
       console.error("[forgot-password] email send failed:", err);
+      // Surface the error in the response so we can debug
+      return NextResponse.json(
+        { message: "Reset email could not be sent. Please try again.", debug: String(err) },
+        { status: 500 }
+      );
     }
+  } else {
+    console.log("[forgot-password] user not found or not verified for:", email);
   }
 
   return NextResponse.json({
