@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import SessionProvider from "@/components/SessionProvider";
 import { ResumeProvider } from "@/context/ResumeContext";
@@ -67,6 +68,7 @@ export default function RootLayout({
                 </div>
               </header>
               {children}
+              <Analytics />
             </ToastProvider>
           </ResumeProvider>
         </SessionProvider>
