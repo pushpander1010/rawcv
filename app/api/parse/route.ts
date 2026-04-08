@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import * as pdfParseModule from "pdf-parse";
 import type { ModelId, ParsedResume } from "@/types";
 import { createProvider } from "@/lib/ai-providers";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const pdfParse: (buf: Buffer) => Promise<{ text: string }> =
-  (pdfParseModule as any).default ?? (pdfParseModule as any);
-
-// Force Node.js runtime so pdf-parse and mammoth work correctly
 export const runtime = "nodejs";
 
-const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = [
   "application/pdf",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -18,13 +12,30 @@ const ALLOWED_TYPES = [
 ];
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
 
+async function extractPdfText(buffer: Buffer): Promise<string> {
+  // Use pdfjs-dist legacy build — works reliably in Node.js without test-file side effects
+  const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+  const pdf = await loadingTask.promise;
+  const pages: string[] = [];
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageText = content.items
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((item: any) => item.str ?? "")
+      .join(" ");
+    pages.push(pageText);
+  }
+  return pages.join("\n");
+}
+
 async function extractText(file: File): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
   const name = file.name.toLowerCase();
 
   if (name.endsWith(".pdf")) {
-    const result = await pdfParse(buffer);
-    return result.text;
+    return extractPdfText(buffer);
   }
 
   if (name.endsWith(".docx")) {
@@ -83,9 +94,9 @@ export async function POST(req: NextRequest) {
   let rawText: string;
   try {
     rawText = await extractText(file);
-    console.log("[parse] extracted text length:", rawText.length);
+    console.log("[parse] extracted chars:", rawText.length);
   } catch (err) {
-    console.error("[parse] text extraction failed:", err);
+    console.error("[parse] extraction error:", err);
     return NextResponse.json(
       { error: "parse_failed", message: "Could not extract text from the file. Try a different file or format." },
       { status: 422 }
@@ -105,7 +116,7 @@ export async function POST(req: NextRequest) {
     const json = await provider.complete(rawText, SYSTEM_PROMPT);
     parsed = JSON.parse(json) as ParsedResume;
   } catch (err) {
-    console.error("[parse] AI extraction failed:", err);
+    console.error("[parse] AI error:", err);
     return NextResponse.json(
       { error: "ai_unavailable", message: "AI extraction failed. Please try again." },
       { status: 502 }
