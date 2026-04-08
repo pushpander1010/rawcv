@@ -15,7 +15,11 @@ async function extractText(file: File): Promise<string> {
   const name = file.name.toLowerCase();
 
   if (name.endsWith(".pdf")) {
-    const pdfParse = (await import("pdf-parse")).default;
+    // pdf-parse may export as default or as the module itself depending on bundler
+    const mod = await import("pdf-parse");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pdfParse: (buf: Buffer) => Promise<{ text: string }> =
+      (mod as any).default ?? (mod as any);
     const result = await pdfParse(buffer);
     return result.text;
   }
