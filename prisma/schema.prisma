@@ -7,6 +7,8 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // Use a non-pooler direct connection for migrations if provided (recommended for Supabase)
+  directUrl = env("DIRECT_URL")
 }
 
 enum CreditTransactionType {
