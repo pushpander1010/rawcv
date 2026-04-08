@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -22,6 +22,13 @@ function LoginForm() {
   const callbackUrl = searchParams.get("callbackUrl") || "/analyze";
   const verified = searchParams.get("verified");
   const errorParam = searchParams.get("error");
+  const { status } = useSession();
+
+  // Already logged in — redirect immediately
+  if (status === "authenticated") {
+    router.replace(callbackUrl);
+    return null;
+  }
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,6 +62,9 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4">
+      {status === "loading" ? (
+        <div className="w-8 h-8 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" aria-label="Loading" />
+      ) : (
       <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-100 dark:border-gray-800">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">Welcome back</h1>
         <p className="text-sm text-gray-500 mb-6">Sign in to your rawcv account</p>
@@ -141,6 +151,7 @@ function LoginForm() {
           </Link>
         </p>
       </div>
+      )}
     </div>
   );
 }
