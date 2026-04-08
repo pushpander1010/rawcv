@@ -13,21 +13,12 @@ const ALLOWED_TYPES = [
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Use pdfjs-dist legacy build — works reliably in Node.js without test-file side effects
-  const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf.mjs");
-  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
-  const pdf = await loadingTask.promise;
-  const pages: string[] = [];
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    const pageText = content.items
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((item: any) => item.str ?? "")
-      .join(" ");
-    pages.push(pageText);
-  }
-  return pages.join("\n");
+  // Use require() inside the function to avoid pdf-parse's module-level
+  // test-file side effect that crashes when imported at the top level in Next.js
+  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
+  const pdfParse: (buf: Buffer) => Promise<{ text: string }> = require("pdf-parse");
+  const result = await pdfParse(buffer);
+  return result.text;
 }
 
 async function extractText(file: File): Promise<string> {
