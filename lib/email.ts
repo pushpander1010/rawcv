@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = process.env.EMAIL_FROM ?? "rawcv <noreply@rawcv.app>";
+const FROM = process.env.EMAIL_FROM ?? "rawcv <noreply@rawcv.com>";
 const BASE_URL = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
 
 export async function sendVerificationEmail(
@@ -12,13 +12,24 @@ export async function sendVerificationEmail(
 ): Promise<void> {
   const verifyUrl = `${BASE_URL}/api/auth/verify-email?token=${token}`;
 
-  await resend.emails.send({
+  console.log("[email] Sending verification email to:", to);
+  console.log("[email] FROM:", FROM);
+  console.log("[email] Verify URL:", verifyUrl);
+
+  const { data, error } = await resend.emails.send({
     from: FROM,
     to,
     subject: "Verify your rawcv email address",
     html: buildVerificationHtml(name, verifyUrl),
     text: buildVerificationText(name, verifyUrl),
   });
+
+  if (error) {
+    console.error("[email] Resend error:", JSON.stringify(error));
+    throw new Error(`Resend failed: ${error.message}`);
+  }
+
+  console.log("[email] Sent successfully, id:", data?.id);
 }
 
 function buildVerificationHtml(name: string, url: string): string {

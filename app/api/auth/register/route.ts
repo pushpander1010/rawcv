@@ -33,10 +33,10 @@ export async function POST(req: NextRequest) {
     verificationToken,
   });
 
-  const isDev = process.env.NODE_ENV === "development";
+  const skipEmail = process.env.NODE_ENV === "development" && process.env.SKIP_EMAIL_VERIFICATION === "true";
 
-  if (isDev) {
-    // Skip email in dev — auto-verify so you can test locally without Resend
+  if (skipEmail) {
+    // Auto-verify in dev when SKIP_EMAIL_VERIFICATION=true (no Resend needed)
     await updateUser(email, { emailVerified: true, verificationToken: undefined });
     return NextResponse.json(
       { message: "Account created. You can now sign in." },
@@ -44,12 +44,18 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Production: send verification email via Resend
+  // Send verification email via Resend
   try {
     await sendVerificationEmail(email, name, verificationToken);
   } catch (err) {
     console.error("[register] Failed to send verification email:", err);
-    // Don't block registration — user can request a resend later
+    return NextResponse.json(
+      {
+        error: "email_send_failed",
+        message: `Account created but verification email failed: ${err instanceof Error ? err.message : String(err)}`,
+      },
+      { status: 201 }
+    );
   }
 
   return NextResponse.json(
