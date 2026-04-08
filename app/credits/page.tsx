@@ -11,7 +11,7 @@ const BUNDLES = [
     id: "starter",
     name: "Starter Pack",
     credits: 50,
-    priceUsd: 4.99,
+    priceInr: 499,
     description: "Great for a few analyses",
     highlight: false,
   },
@@ -19,7 +19,7 @@ const BUNDLES = [
     id: "pro",
     name: "Pro Pack",
     credits: 150,
-    priceUsd: 9.99,
+    priceInr: 999,
     description: "Best value for active job seekers",
     highlight: true,
   },
@@ -27,11 +27,31 @@ const BUNDLES = [
     id: "power",
     name: "Power Pack",
     credits: 400,
-    priceUsd: 19.99,
+    priceInr: 1999,
     description: "For power users and career coaches",
     highlight: false,
   },
 ];
+
+declare global {
+  interface Window {
+    Razorpay?: new (options: Record<string, unknown>) => { open: () => void };
+  }
+}
+
+async function loadRazorpayScript(): Promise<boolean> {
+  if (typeof window === "undefined") return false;
+  if (window.Razorpay) return true;
+
+  return await new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -67,7 +87,13 @@ function CreditsPageContent() {
     setPurchasing(bundleId);
     setPurchaseError(null);
     try {
-      const res = await fetch("/api/stripe/checkout", {
+      const ok = await loadRazorpayScript();
+      if (!ok) {
+        setPurchaseError("Could not load Razorpay. Please disable ad blockers and try again.");
+        return;
+      }
+
+      const res = await fetch("/api/razorpay/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bundleId }),
@@ -77,9 +103,42 @@ function CreditsPageContent() {
         setPurchaseError(data.message ?? "Purchase failed. Please try again.");
         return;
       }
-      if (data.url) {
-        window.location.href = data.url;
+
+      if (!window.Razorpay) {
+        setPurchaseError("Razorpay is not available. Please refresh and try again.");
+        return;
       }
+
+      const rzp = new window.Razorpay({
+        key: data.keyId,
+        amount: data.amount,
+        currency: data.currency,
+        name: "rawcv",
+        description: data.description ?? "Buy credits",
+        order_id: data.orderId,
+        prefill: data.prefill ?? undefined,
+        theme: { color: "#2563eb" },
+        handler: async function (response: {
+          razorpay_payment_id: string;
+          razorpay_order_id: string;
+          razorpay_signature: string;
+        }) {
+          // Optional immediate verification to show success; credits are added by webhook.
+          await fetch("/api/razorpay/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(response),
+          }).catch(() => null);
+          window.location.href = "/credits?success=1";
+        },
+        modal: {
+          ondismiss: () => {
+            window.location.href = "/credits?cancelled=1";
+          },
+        },
+      });
+
+      rzp.open();
     } catch {
       setPurchaseError("Something went wrong. Please try again.");
     } finally {
@@ -159,7 +218,7 @@ function CreditsPageContent() {
               {bundle.credits}{" "}
               <span className="text-sm font-normal text-gray-500 dark:text-gray-400">credits</span>
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-300">${bundle.priceUsd.toFixed(2)}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300">₹{bundle.priceInr.toLocaleString("en-IN")}</p>
             <button
               type="button"
               onClick={() => handlePurchase(bundle.id)}
@@ -169,7 +228,7 @@ function CreditsPageContent() {
                   ? "bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
                   : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 disabled:opacity-50"
                 }`}
-              aria-label={`Buy ${bundle.name} for $${bundle.priceUsd.toFixed(2)}`}
+              aria-label={`Buy ${bundle.name} for ₹${bundle.priceInr.toLocaleString("en-IN")}`}
             >
               {purchasing === bundle.id ? "Redirecting…" : "Buy now"}
             </button>
