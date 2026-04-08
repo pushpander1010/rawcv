@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import pdfParse from "pdf-parse";
 import type { ModelId, ParsedResume } from "@/types";
 import { createProvider } from "@/lib/ai-providers";
+
+// Force Node.js runtime so pdf-parse and mammoth work correctly
+export const runtime = "nodejs";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_TYPES = [
@@ -15,11 +19,6 @@ async function extractText(file: File): Promise<string> {
   const name = file.name.toLowerCase();
 
   if (name.endsWith(".pdf")) {
-    // pdf-parse may export as default or as the module itself depending on bundler
-    const mod = await import("pdf-parse");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const pdfParse: (buf: Buffer) => Promise<{ text: string }> =
-      (mod as any).default ?? (mod as any);
     const result = await pdfParse(buffer);
     return result.text;
   }
@@ -30,7 +29,6 @@ async function extractText(file: File): Promise<string> {
     return result.value;
   }
 
-  // TXT — native Node
   return buffer.toString("utf-8");
 }
 
@@ -62,38 +60,28 @@ export async function POST(req: NextRequest) {
   const modelId = (formData.get("model") as ModelId | null) ?? "gemini-1.5-flash";
 
   if (!file) {
-    return NextResponse.json(
-      { error: "missing_file", message: "No file provided" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "missing_file", message: "No file provided" }, { status: 400 });
   }
 
-  // Validate size
   if (file.size > MAX_SIZE) {
-    return NextResponse.json(
-      { error: "file_too_large", message: "File exceeds the 5 MB size limit" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "file_too_large", message: "File exceeds the 5 MB size limit" }, { status: 400 });
   }
 
-  // Validate type
   const ext = "." + file.name.split(".").pop()?.toLowerCase();
   const validType = ALLOWED_TYPES.includes(file.type) || ALLOWED_EXTENSIONS.includes(ext);
   if (!validType) {
     return NextResponse.json(
-      {
-        error: "unsupported_format",
-        message: "Unsupported file format. Please upload a PDF, DOCX, or TXT file.",
-      },
+      { error: "unsupported_format", message: "Unsupported file format. Please upload a PDF, DOCX, or TXT file." },
       { status: 400 }
     );
   }
 
-  // Extract raw text
   let rawText: string;
   try {
     rawText = await extractText(file);
-  } catch {
+    console.log("[parse] extracted text length:", rawText.length);
+  } catch (err) {
+    console.error("[parse] text extraction failed:", err);
     return NextResponse.json(
       { error: "parse_failed", message: "Could not extract text from the file. Try a different file or format." },
       { status: 422 }
@@ -107,13 +95,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // AI extraction
   let parsed: ParsedResume;
   try {
     const provider = createProvider(modelId);
     const json = await provider.complete(rawText, SYSTEM_PROMPT);
     parsed = JSON.parse(json) as ParsedResume;
-  } catch {
+  } catch (err) {
+    console.error("[parse] AI extraction failed:", err);
     return NextResponse.json(
       { error: "ai_unavailable", message: "AI extraction failed. Please try again." },
       { status: 502 }
