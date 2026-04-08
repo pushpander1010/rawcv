@@ -1,5 +1,8 @@
-// In-memory user store (stateless per design — no persistent DB)
-// In production this would be replaced with a real database.
+import type {
+  CreditTransactionType as PrismaTxType,
+  User as PrismaUser,
+} from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 export interface StoredUser {
   id: string;
@@ -17,101 +20,191 @@ export interface CreditTransaction {
   id: string;
   userId: string;
   type: TransactionType;
-  amount: number;          // positive = credit added, negative = credit deducted
-  description: string;     // e.g. "ATS analysis" or "Starter Pack (100 credits)"
+  amount: number;
+  description: string;
   stripePaymentIntentId?: string;
-  createdAt: string;       // ISO timestamp
+  createdAt: string;
 }
 
-// Module-level maps persist across requests within the same serverless instance
-const users = new Map<string, StoredUser>();
-const transactions = new Map<string, CreditTransaction[]>(); // keyed by userId
+const INITIAL_CREDITS = 10;
 
-const INITIAL_CREDITS = 10; // free credits on sign-up
-
-export function getUserByEmail(email: string): StoredUser | undefined {
-  return users.get(email.toLowerCase());
+function normalizeEmail(email: string): string {
+  return email.toLowerCase();
 }
 
-export function getUserById(id: string): StoredUser | undefined {
-  for (const user of Array.from(users.values())) {
-    if (user.id === id) return user;
-  }
-  return undefined;
+function toStoredUser(u: PrismaUser): StoredUser {
+  return {
+    id: u.id,
+    email: u.email,
+    name: u.name,
+    hashedPassword: u.hashedPassword ?? undefined,
+    emailVerified: u.emailVerified,
+    verificationToken: u.verificationToken ?? undefined,
+    creditBalance: u.creditBalance,
+  };
 }
 
-export function getUserByVerificationToken(token: string): StoredUser | undefined {
-  for (const user of Array.from(users.values())) {
-    if (user.verificationToken === token) return user;
-  }
-  return undefined;
+function prismaTypeToTxType(t: PrismaTxType): TransactionType {
+  return t === "purchase" ? "purchase" : "ai_operation";
 }
 
-export function createUser(user: Omit<StoredUser, "creditBalance"> & { creditBalance?: number }): void {
-  const stored: StoredUser = { ...user, creditBalance: user.creditBalance ?? INITIAL_CREDITS };
-  users.set(user.email.toLowerCase(), stored);
+export async function getUserByEmail(email: string): Promise<StoredUser | null> {
+  const u = await prisma.user.findUnique({
+    where: { email: normalizeEmail(email) },
+  });
+  return u ? toStoredUser(u) : null;
 }
 
-export function updateUser(email: string, updates: Partial<StoredUser>): void {
-  const existing = users.get(email.toLowerCase());
-  if (existing) {
-    users.set(email.toLowerCase(), { ...existing, ...updates });
-  }
+export async function getUserById(id: string): Promise<StoredUser | null> {
+  const u = await prisma.user.findUnique({ where: { id } });
+  return u ? toStoredUser(u) : null;
 }
 
-// ─── Credit operations ────────────────────────────────────────────────────────
+export async function getUserByVerificationToken(
+  token: string
+): Promise<StoredUser | null> {
+  const u = await prisma.user.findFirst({
+    where: { verificationToken: token },
+  });
+  return u ? toStoredUser(u) : null;
+}
 
-/** Returns false if the user has insufficient credits. */
-export function deductCredits(
+export async function createUser(user: {
+  email: string;
+  name: string;
+  hashedPassword?: string;
+  emailVerified: boolean;
+  verificationToken?: string;
+  creditBalance?: number;
+}): Promise<StoredUser> {
+  const created = await prisma.user.create({
+    data: {
+      email: normalizeEmail(user.email),
+      name: user.name,
+      hashedPassword: user.hashedPassword ?? null,
+      emailVerified: user.emailVerified,
+      verificationToken: user.verificationToken ?? null,
+      creditBalance: user.creditBalance ?? INITIAL_CREDITS,
+    },
+  });
+  return toStoredUser(created);
+}
+
+export async function updateUser(
+  email: string,
+  updates: Partial<StoredUser>
+): Promise<void> {
+  await prisma.user.update({
+    where: { email: normalizeEmail(email) },
+    data: {
+      ...(updates.name !== undefined ? { name: updates.name } : {}),
+      ...(updates.hashedPassword !== undefined
+        ? { hashedPassword: updates.hashedPassword ?? null }
+        : {}),
+      ...(updates.emailVerified !== undefined
+        ? { emailVerified: updates.emailVerified }
+        : {}),
+      ...(updates.verificationToken !== undefined
+        ? { verificationToken: updates.verificationToken ?? null }
+        : {}),
+      ...(updates.creditBalance !== undefined
+        ? { creditBalance: updates.creditBalance }
+        : {}),
+    },
+  });
+}
+
+/** Returns false if the user has insufficient credits or does not exist. */
+export async function deductCredits(
   userId: string,
   amount: number,
   description: string
-): boolean {
-  const user = getUserById(userId);
-  if (!user) return false;
-  if (user.creditBalance < amount) return false;
+): Promise<boolean> {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const user = await tx.user.findUnique({ where: { id: userId } });
+      if (!user || user.creditBalance < amount) return false;
 
-  updateUser(user.email, { creditBalance: user.creditBalance - amount });
-  addTransaction(userId, {
-    type: "ai_operation",
-    amount: -amount,
-    description,
-  });
-  return true;
+      await tx.user.update({
+        where: { id: userId },
+        data: { creditBalance: user.creditBalance - amount },
+      });
+      await tx.creditTransaction.create({
+        data: {
+          userId,
+          type: "ai_operation",
+          amount: -amount,
+          description,
+        },
+      });
+      return true;
+    });
+  } catch {
+    return false;
+  }
 }
 
-export function addCredits(
+/**
+ * Apply credits after a successful Stripe payment.
+ * Uses `stripeEventId` so the same webhook delivery never credits twice.
+ */
+export async function addCreditsFromStripePayment(
+  stripeEventId: string,
   userId: string,
   amount: number,
   description: string,
   stripePaymentIntentId?: string
-): void {
-  const user = getUserById(userId);
-  if (!user) return;
+): Promise<{ ok: boolean; duplicate: boolean; error?: "user_not_found" }> {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const existing = await tx.processedStripeEvent.findUnique({
+        where: { eventId: stripeEventId },
+      });
+      if (existing) {
+        return { ok: true, duplicate: true };
+      }
 
-  updateUser(user.email, { creditBalance: user.creditBalance + amount });
-  addTransaction(userId, {
-    type: "purchase",
-    amount,
-    description,
-    stripePaymentIntentId,
-  });
+      const user = await tx.user.findUnique({ where: { id: userId } });
+      if (!user) {
+        return { ok: false, duplicate: false, error: "user_not_found" };
+      }
+
+      await tx.processedStripeEvent.create({ data: { eventId: stripeEventId } });
+      await tx.user.update({
+        where: { id: userId },
+        data: { creditBalance: user.creditBalance + amount },
+      });
+      await tx.creditTransaction.create({
+        data: {
+          userId,
+          type: "purchase",
+          amount,
+          description,
+          stripePaymentIntentId: stripePaymentIntentId ?? null,
+        },
+      });
+
+      return { ok: true, duplicate: false };
+    });
+  } catch {
+    return { ok: false, duplicate: false };
+  }
 }
 
-function addTransaction(
-  userId: string,
-  tx: Omit<CreditTransaction, "id" | "userId" | "createdAt">
-): void {
-  const list = transactions.get(userId) ?? [];
-  list.unshift({
-    id: crypto.randomUUID(),
-    userId,
-    createdAt: new Date().toISOString(),
-    ...tx,
+export async function getTransactions(userId: string): Promise<CreditTransaction[]> {
+  const rows = await prisma.creditTransaction.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    take: 200,
   });
-  transactions.set(userId, list);
-}
 
-export function getTransactions(userId: string): CreditTransaction[] {
-  return transactions.get(userId) ?? [];
+  return rows.map((r) => ({
+    id: r.id,
+    userId: r.userId,
+    type: prismaTypeToTxType(r.type),
+    amount: r.amount,
+    description: r.description,
+    stripePaymentIntentId: r.stripePaymentIntentId ?? undefined,
+    createdAt: r.createdAt.toISOString(),
+  }));
 }

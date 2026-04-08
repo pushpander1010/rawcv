@@ -8,12 +8,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(new URL("/login?error=missing_token", req.url));
   }
 
-  const user = getUserByVerificationToken(token);
+  const user = await getUserByVerificationToken(token);
   if (!user) {
     return NextResponse.redirect(new URL("/login?error=invalid_token", req.url));
   }
 
-  updateUser(user.email, { emailVerified: true, verificationToken: undefined });
+  await updateUser(user.email, { emailVerified: true, verificationToken: undefined });
 
   return NextResponse.redirect(new URL("/login?verified=true", req.url));
 }

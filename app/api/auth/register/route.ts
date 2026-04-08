@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
-import { getUserByEmail, createUser } from "@/lib/user-store";
+import { createUser, getUserByEmail, updateUser } from "@/lib/user-store";
 
 export async function POST(req: NextRequest) {
   const { name, email, password } = await req.json();
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const existing = getUserByEmail(email);
+  const existing = await getUserByEmail(email);
   if (existing) {
     return NextResponse.json(
       { error: "email_in_use", message: "This email is already registered." },
@@ -24,8 +24,7 @@ export async function POST(req: NextRequest) {
   const hashedPassword = await bcrypt.hash(password, 12);
   const verificationToken = randomUUID();
 
-  createUser({
-    id: randomUUID(),
+  await createUser({
     email,
     name,
     hashedPassword,
@@ -33,12 +32,9 @@ export async function POST(req: NextRequest) {
     verificationToken,
   });
 
-  // In production, send a verification email here.
-  // For development, we auto-verify so the flow can be tested end-to-end.
   const isDev = process.env.NODE_ENV === "development";
   if (isDev) {
-    const { updateUser } = await import("@/lib/user-store");
-    updateUser(email, { emailVerified: true, verificationToken: undefined });
+    await updateUser(email, { emailVerified: true, verificationToken: undefined });
   }
 
   return NextResponse.json(
@@ -46,7 +42,6 @@ export async function POST(req: NextRequest) {
       message: isDev
         ? "Account created. You can now sign in."
         : "Account created. Please check your email to verify your account.",
-      verificationToken: isDev ? undefined : verificationToken,
     },
     { status: 201 }
   );

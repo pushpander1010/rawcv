@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { addCredits } from "@/lib/user-store";
+import { addCreditsFromStripePayment } from "@/lib/user-store";
 import { CREDIT_BUNDLES } from "@/lib/stripe-config";
+
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
@@ -31,7 +33,6 @@ export async function POST(req: NextRequest) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
-    // Only credit on successful payment
     if (session.payment_status !== "paid") {
       return NextResponse.json({ received: true });
     }
@@ -51,12 +52,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "invalid_bundle" }, { status: 400 });
     }
 
-    addCredits(
+    const paymentIntentId =
+      typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : session.payment_intent?.id;
+
+    const result = await addCreditsFromStripePayment(
+      event.id,
       userId,
       creditAmount,
       `${bundle.name} (${creditAmount} credits)`,
-      session.payment_intent as string | undefined
+      paymentIntentId
     );
+
+    if (result.error === "user_not_found") {
+      console.error("Webhook: user not found", userId);
+      return NextResponse.json({ error: "user_not_found" }, { status: 400 });
+    }
+
+    if (!result.ok) {
+      return NextResponse.json({ error: "credit_failed" }, { status: 500 });
+    }
   }
 
   return NextResponse.json({ received: true });

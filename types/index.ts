@@ -6,7 +6,10 @@ export type ModelId =
   | "gemini-1.5-flash"
   | "gemini-1.5-pro"
   | "claude-haiku"
-  | "claude-sonnet";
+  | "claude-sonnet"
+  | "groq-llama-3.1-8b"
+  | "groq-llama-3.3-70b"
+  | "openrouter-qwen-7b";
 
 export type ThemeId =
   | "classic"

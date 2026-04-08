@@ -16,6 +16,9 @@ interface ModelMeta {
 
 const MODELS: ModelMeta[] = [
   { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash", provider: "Google",    tier: "free",     estimatedCredits: 1  },
+  { id: "groq-llama-3.1-8b", name: "Llama 3.1 8B (Groq)", provider: "Groq", tier: "free", estimatedCredits: 1 },
+  { id: "openrouter-qwen-7b", name: "Qwen 2.5 7B (OpenRouter)", provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1 },
+  { id: "groq-llama-3.3-70b", name: "Llama 3.3 70B (Groq)", provider: "Groq", tier: "low-cost", estimatedCredits: 2 },
   { id: "gpt-4o-mini",      name: "GPT-4o Mini",      provider: "OpenAI",    tier: "low-cost", estimatedCredits: 2  },
   { id: "claude-haiku",     name: "Claude Haiku",     provider: "Anthropic", tier: "low-cost", estimatedCredits: 2  },
   { id: "gemini-1.5-pro",   name: "Gemini 1.5 Pro",   provider: "Google",    tier: "paid",     estimatedCredits: 8  },
@@ -33,6 +36,8 @@ const PROVIDER_ICONS: Record<string, string> = {
   OpenAI:    "🟢",
   Google:    "🔵",
   Anthropic: "🟠",
+  Groq:      "⚡",
+  OpenRouter: "🔗",
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -81,7 +86,7 @@ export default function ModelSelector({ label, onChange }: ModelSelectorProps) {
         "
       >
         <span className="flex items-center gap-2 min-w-0">
-          <span aria-hidden="true">{PROVIDER_ICONS[selected.provider]}</span>
+          <span aria-hidden="true">{PROVIDER_ICONS[selected.provider] ?? "🤖"}</span>
           <span className="font-medium text-sm text-gray-800 dark:text-gray-100 truncate">
             {selected.name}
           </span>
@@ -139,7 +144,7 @@ export default function ModelSelector({ label, onChange }: ModelSelectorProps) {
                   `}
                 >
                   <span className="flex items-center gap-2 min-w-0">
-                    <span aria-hidden="true">{PROVIDER_ICONS[model.provider]}</span>
+                    <span aria-hidden="true">{PROVIDER_ICONS[model.provider] ?? "🤖"}</span>
                     <span className="font-medium text-gray-800 dark:text-gray-100 truncate">
                       {model.name}
                     </span>

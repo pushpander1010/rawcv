@@ -15,9 +15,9 @@ export async function GET(_req: NextRequest) {
     return NextResponse.json({ error: "unauthorized", message: "Invalid session" }, { status: 401 });
   }
 
-  const user = getUserById(userId);
+  const user = await getUserById(userId);
   const balance = user?.creditBalance ?? 0;
-  const transactions = getTransactions(userId);
+  const transactions = await getTransactions(userId);
 
   return NextResponse.json({ balance, transactions });
 }
