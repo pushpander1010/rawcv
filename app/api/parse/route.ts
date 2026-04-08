@@ -13,11 +13,10 @@ const ALLOWED_TYPES = [
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // require() triggers the "require" export condition → CJS build with PDFParse class
   // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
-  const { PDFParse } = require("pdf-parse") as any;
-  const parser = new PDFParse({ data: new Uint8Array(buffer) });
-  const result = await parser.getText();
+  const pdfParse = require("pdf-parse") as any;
+  const fn = pdfParse.default ?? pdfParse;
+  const result = await fn(buffer);
   return result.text;
 }
 
