@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -24,18 +24,28 @@ function LoginForm() {
   const errorParam = searchParams.get("error");
   const { status } = useSession();
 
-  // Already logged in — redirect immediately
-  if (status === "authenticated") {
-    router.replace(callbackUrl);
-    return null;
-  }
-
+  // All hooks must be declared before any conditional returns
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(
     errorParam === "CredentialsSignin" ? "Invalid email or password." : null
   );
   const [loading, setLoading] = useState(false);
+
+  // Redirect authenticated users away from login page
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace(callbackUrl);
+    }
+  }, [status, router, callbackUrl]);
+
+  if (status === "loading" || status === "authenticated") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <div className="w-8 h-8 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" aria-label="Loading" />
+      </div>
+    );
+  }
 
   async function handleCredentialsLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -62,9 +72,6 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4">
-      {status === "loading" ? (
-        <div className="w-8 h-8 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" aria-label="Loading" />
-      ) : (
       <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-100 dark:border-gray-800">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">Welcome back</h1>
         <p className="text-sm text-gray-500 mb-6">Sign in to your rawcv account</p>
@@ -151,7 +158,6 @@ function LoginForm() {
           </Link>
         </p>
       </div>
-      )}
     </div>
   );
 }
