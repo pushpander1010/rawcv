@@ -6,6 +6,7 @@ import "./globals.css";
 import SessionProvider from "@/components/SessionProvider";
 import { ResumeProvider } from "@/context/ResumeContext";
 import { ToastProvider } from "@/components/Toast";
+import UserNav from "@/components/UserNav";
 import CreditBalance from "@/components/CreditBalance";
 
 const geistSans = localFont({
@@ -58,12 +59,7 @@ export default function RootLayout({
                   </div>
                   <div className="flex items-center gap-3">
                     <CreditBalance />
-                    <Link
-                      href="/login"
-                      className="hidden sm:inline-flex items-center px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                    >
-                      Sign in
-                    </Link>
+                    <UserNav />
                   </div>
                 </div>
               </header>

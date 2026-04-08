@@ -208,3 +208,30 @@ export async function getTransactions(userId: string): Promise<CreditTransaction
     createdAt: r.createdAt.toISOString(),
   }));
 }
+
+export async function setPasswordResetToken(
+  email: string,
+  token: string,
+  expiry: Date
+): Promise<void> {
+  await prisma.user.update({
+    where: { email: normalizeEmail(email) },
+    data: { passwordResetToken: token, passwordResetExpiry: expiry },
+  });
+}
+
+export async function getUserByPasswordResetToken(
+  token: string
+): Promise<StoredUser | null> {
+  const u = await prisma.user.findFirst({
+    where: { passwordResetToken: token },
+  });
+  return u ? toStoredUser(u) : null;
+}
+
+export async function clearPasswordResetToken(email: string): Promise<void> {
+  await prisma.user.update({
+    where: { email: normalizeEmail(email) },
+    data: { passwordResetToken: null, passwordResetExpiry: null },
+  });
+}
