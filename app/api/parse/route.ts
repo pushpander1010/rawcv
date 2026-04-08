@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import pdfParse from "pdf-parse";
+import * as pdfParseModule from "pdf-parse";
 import type { ModelId, ParsedResume } from "@/types";
 import { createProvider } from "@/lib/ai-providers";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const pdfParse: (buf: Buffer) => Promise<{ text: string }> =
+  (pdfParseModule as any).default ?? (pdfParseModule as any);
 
 // Force Node.js runtime so pdf-parse and mammoth work correctly
 export const runtime = "nodejs";
