@@ -50,7 +50,6 @@ function runRuleChecks(parsed: ParsedResume, raw: string): ATSIssue[] {
   }
 
   // Formatting signals from raw text
-  const rawLower = raw.toLowerCase();
 
   // Tables are ATS-unfriendly — detect common table markers
   if (raw.includes("|") && (raw.match(/\|/g) ?? []).length > 6) {

@@ -49,31 +49,17 @@ function normalizeParsed(data: any): ParsedResume {
 
 /* ---------------- PDF ---------------- */
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Use pdfjs-dist directly — more reliable in serverless than pdf-parse wrapper
+  // mupdf = same engine as Python's PyMuPDF (fitz) — handles image PDFs,
+  // complex layouts, and embedded fonts far better than pdfjs-dist.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let pdfjsLib: any;
-  try {
-    pdfjsLib = await import("pdfjs-dist/legacy/build/pdf.mjs");
-  } catch {
-    pdfjsLib = await import("pdfjs-dist");
+  const mupdf = await import("mupdf") as any;
+  const doc = mupdf.Document.openDocument(buffer, "application/pdf");
+  let text = "";
+  for (let i = 0; i < doc.countPages(); i++) {
+    const page = doc.loadPage(i);
+    text += page.toStructuredText("preserve-whitespace").asText() + "\n";
   }
-
-  const getDocument = pdfjsLib.getDocument ?? pdfjsLib.default?.getDocument;
-  if (!getDocument) throw new Error("pdfjs-dist getDocument not found");
-
-  const loadingTask = getDocument({ data: new Uint8Array(buffer) });
-  const doc = await loadingTask.promise;
-
-  const pages: string[] = [];
-  for (let i = 1; i <= doc.numPages; i++) {
-    const page = await doc.getPage(i);
-    const content = await page.getTextContent();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const pageText = content.items.map((item: any) => item.str ?? "").join(" ");
-    pages.push(pageText);
-  }
-
-  return pages.join("\n").trim();
+  return text.trim();
 }
 
 /* ---------------- DOCX ---------------- */
@@ -121,11 +107,23 @@ export async function POST(req: NextRequest) {
     }
 
     /* -------- TEXT -------- */
-    let rawText = await extractText(file);
+    let rawText: string;
+    try {
+      rawText = await extractText(file);
+      console.log("[parse] extracted", rawText.length, "chars from", file.name);
+    } catch (extractErr) {
+      const detail = extractErr instanceof Error ? extractErr.message : String(extractErr);
+      console.error("[parse] extraction threw:", detail);
+      return NextResponse.json(
+        { error: "EXTRACTION_FAILED", detail },
+        { status: 422 }
+      );
+    }
 
     if (!rawText || rawText.length < 20) {
+      console.warn("[parse] text too short:", rawText?.length ?? 0, "chars");
       return NextResponse.json(
-        { error: "NO_TEXT_EXTRACTED" },
+        { error: "NO_TEXT_EXTRACTED", length: rawText?.length ?? 0 },
         { status: 422 }
       );
     }
@@ -160,6 +158,7 @@ Return ONLY the JSON object. No markdown, no explanation.`
     return NextResponse.json({
       success: true,
       parsed,
+      raw: rawText,
     });
   } catch (err) {
     return NextResponse.json(
