@@ -37,7 +37,7 @@ const defaultState: ResumeState = {
   suggestions: [],
   tailoredResume: null,
   selectedTheme: "classic",
-  selectedModel: "gemini-2.5-flash",
+  selectedModel: "openrouter-gemma-4-27b",
   jd: "",
   lastOperationCost: null,
 };

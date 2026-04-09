@@ -1,16 +1,14 @@
 // ─── Model & Theme IDs ───────────────────────────────────────────────────────
 
 export type ModelId =
-  | "gpt-4o-mini"
-  | "gpt-4o"
-  | "gemini-2.5-flash"
-  | "gemini-2.5-pro"
-  | "claude-haiku"
-  | "claude-sonnet"
   | "groq-llama-3.1-8b"
   | "groq-llama-3.3-70b"
+  | "groq-deepseek-r1"
+  | "openrouter-gemma-4-27b"
   | "openrouter-qwen-7b"
-  | "openrouter-gemma-4-27b";
+  | "openrouter-mistral-small"
+  | "openrouter-llama-4-maverick"
+  | "openrouter-deepseek-v3";
 
 export type ThemeId =
   | "classic"
