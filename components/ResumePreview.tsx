@@ -7,11 +7,15 @@ import {
   MinimalTheme,
   ExecutiveTheme,
   CreativeTheme,
+  SharpTheme,
+  NavyTheme,
+  TerraTheme,
 } from "./themes";
 
 interface Props {
   resume: ParsedResume;
   theme: ThemeId;
+  bare?: boolean; // skip card wrapper (used for PDF capture)
 }
 
 const THEME_MAP: Record<ThemeId, React.ComponentType<{ resume: ParsedResume }>> = {
@@ -20,18 +24,22 @@ const THEME_MAP: Record<ThemeId, React.ComponentType<{ resume: ParsedResume }>> 
   minimal: MinimalTheme,
   executive: ExecutiveTheme,
   creative: CreativeTheme,
+  sharp: SharpTheme,
+  navy: NavyTheme,
+  terra: TerraTheme,
 };
 
-export default function ResumePreview({ resume, theme }: Props) {
+export default function ResumePreview({ resume, theme, bare = false }: Props) {
   const ThemeComponent = THEME_MAP[theme] ?? ClassicTheme;
 
-  // Normalize: ensure required arrays are never undefined regardless of AI output
   const safe: ParsedResume = {
     ...resume,
     experience: resume.experience ?? [],
     education: resume.education ?? [],
     skills: resume.skills ?? [],
   };
+
+  if (bare) return <ThemeComponent resume={safe} />;
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">

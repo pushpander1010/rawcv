@@ -3,3 +3,6 @@ export { default as ModernTheme } from "./ModernTheme";
 export { default as MinimalTheme } from "./MinimalTheme";
 export { default as ExecutiveTheme } from "./ExecutiveTheme";
 export { default as CreativeTheme } from "./CreativeTheme";
+export { default as SharpTheme } from "./SharpTheme";
+export { default as NavyTheme } from "./NavyTheme";
+export { default as TerraTheme } from "./TerraTheme";

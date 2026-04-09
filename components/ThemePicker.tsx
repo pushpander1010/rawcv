@@ -9,8 +9,8 @@ interface ThemeMeta {
   name: string;
   category: "Classic" | "Modern" | "Minimal" | "Executive" | "Creative";
   description: string;
-  accent: string;       // Tailwind bg class for thumbnail accent
-  preview: string;      // short visual descriptor shown in thumbnail
+  accent: string;
+  preview: string;
 }
 
 const THEMES: ThemeMeta[] = [
@@ -53,6 +53,30 @@ const THEMES: ThemeMeta[] = [
     description: "Gradient accents and timeline layout for creative roles",
     accent: "bg-violet-600",
     preview: "Gradient · Timeline",
+  },
+  {
+    id: "sharp",
+    name: "Sharp",
+    category: "Modern",
+    description: "High-contrast black & white with geometric accents",
+    accent: "bg-black",
+    preview: "B&W · Geometric",
+  },
+  {
+    id: "navy",
+    name: "Navy",
+    category: "Executive",
+    description: "Deep navy sidebar with gold accents, polished and professional",
+    accent: "bg-[#0f2044]",
+    preview: "Navy · Gold accents",
+  },
+  {
+    id: "terra",
+    name: "Terra",
+    category: "Classic",
+    description: "Warm earthy tones with elegant serif typography",
+    accent: "bg-[#8b4513]",
+    preview: "Serif · Warm tones",
   },
 ];
 

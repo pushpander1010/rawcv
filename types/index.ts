@@ -16,7 +16,10 @@ export type ThemeId =
   | "modern"
   | "minimal"
   | "executive"
-  | "creative";
+  | "creative"
+  | "sharp"
+  | "navy"
+  | "terra";
 
 // ─── Resume Data Models ───────────────────────────────────────────────────────
 
