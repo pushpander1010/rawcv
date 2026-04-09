@@ -15,12 +15,11 @@ const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
 async function extractPdfText(buffer: Buffer): Promise<string> {
   // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
   const { PDFParse } = require("pdf-parse") as any;
-  // Pass Buffer directly — PDFParse auto-converts it to Uint8Array internally.
-  // Pre-converting to Uint8Array can lose the Buffer identity check and cause
-  // "no url parameter provided" errors.
   const parser = new PDFParse({ data: buffer });
   const result = await parser.getText();
-  return result?.text ?? "";
+  const text = result?.text ?? "";
+  console.log("[parse] pdf text length:", text.length, "| first 100:", text.slice(0, 100).replace(/\n/g, " "));
+  return text;
 }
 
 async function extractText(file: File): Promise<string> {
@@ -102,8 +101,12 @@ export async function POST(req: NextRequest) {
   }
 
   if (!rawText.trim()) {
+    const ext = "." + file.name.split(".").pop()?.toLowerCase();
+    const msg = ext === ".pdf"
+      ? "No text could be extracted from this PDF. It may be a scanned/image-based PDF. Please try a text-based PDF or copy-paste your resume as a .txt file."
+      : "The file appears to be empty or unreadable. Try a different file.";
     return NextResponse.json(
-      { error: "parse_failed", message: "The file appears to be empty or unreadable. Try a different file." },
+      { error: "parse_failed", message: msg },
       { status: 422 }
     );
   }
