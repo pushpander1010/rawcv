@@ -18,6 +18,7 @@ const MODELS: ModelMeta[] = [
   { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash", provider: "Google",    tier: "free",     estimatedCredits: 1  },
   { id: "groq-llama-3.1-8b", name: "Llama 3.1 8B (Groq)", provider: "Groq", tier: "free", estimatedCredits: 1 },
   { id: "openrouter-qwen-7b", name: "Qwen 2.5 7B (OpenRouter)", provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1 },
+  { id: "openrouter-gemma-4-27b", name: "Gemma 4 27B (Free)", provider: "OpenRouter", tier: "free", estimatedCredits: 0 },
   { id: "groq-llama-3.3-70b", name: "Llama 3.3 70B (Groq)", provider: "Groq", tier: "low-cost", estimatedCredits: 2 },
   { id: "gpt-4o-mini",      name: "GPT-4o Mini",      provider: "OpenAI",    tier: "low-cost", estimatedCredits: 2  },
   { id: "claude-haiku",     name: "Claude Haiku",     provider: "Anthropic", tier: "low-cost", estimatedCredits: 2  },

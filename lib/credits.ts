@@ -9,6 +9,7 @@ const OPERATION_COSTS: Record<ModelId, number> = {
   "gemini-2.5-flash": 1,
   "groq-llama-3.1-8b": 1,
   "openrouter-qwen-7b": 1,
+  "openrouter-gemma-4-27b": 0, // free model
   "gpt-4o-mini":      2,
   "claude-haiku":     2,
   "groq-llama-3.3-70b": 2,
