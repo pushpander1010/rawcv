@@ -6,8 +6,28 @@ export const runtime = "nodejs";
 
 const MAX_SIZE = 5 * 1024 * 1024;
 
+/* ---------------- NORMALIZER (CRITICAL FIX) ---------------- */
+function normalizeParsed(data: any): ParsedResume {
+  return {
+    contact: {
+      name: data?.contact?.name || "",
+      email: data?.contact?.email || "",
+      phone: data?.contact?.phone || "",
+      location: data?.contact?.location || "",
+      linkedin: data?.contact?.linkedin || "",
+      website: data?.contact?.website || "",
+    },
+    summary: data?.summary || "",
+    experience: Array.isArray(data?.experience) ? data.experience : [],
+    education: Array.isArray(data?.education) ? data.education : [],
+    skills: Array.isArray(data?.skills) ? data.skills : [],
+    certifications: Array.isArray(data?.certifications) ? data.certifications : [],
+    projects: Array.isArray(data?.projects) ? data.projects : [],
+  };
+}
+
 /* ---------------- PDF + OCR ---------------- */
-async function extractPdfText(buffer: Buffer) {
+async function extractPdfText(buffer: Buffer): Promise<string> {
   try {
     const pdfModule = await import("pdf-parse");
     const pdfFn = (pdfModule as any).default || pdfModule;
@@ -15,59 +35,61 @@ async function extractPdfText(buffer: Buffer) {
     const data = await pdfFn(buffer);
     let text = data?.text || "";
 
-    console.log("[PDF TEXT LENGTH]:", text.length);
+    console.log("[PDF TEXT]:", text.length);
 
-    // OCR fallback
     if (!text.trim()) {
-      console.log("[OCR] Running fallback...");
+      console.log("[OCR] fallback...");
 
       try {
         const Tesseract = await import("tesseract.js");
         const result = await Tesseract.recognize(buffer, "eng");
 
         text = result.data.text || "";
-        console.log("[OCR TEXT LENGTH]:", text.length);
-      } catch (ocrErr) {
-        console.error("[OCR FAILED]:", ocrErr);
+        console.log("[OCR TEXT]:", text.length);
+      } catch (err) {
+        console.error("[OCR FAILED]:", err);
       }
     }
 
     return text;
   } catch (err) {
-    console.error("[PDF FAILED]:", err);
+    console.error("[PDF ERROR]:", err);
     throw err;
   }
 }
 
 /* ---------------- DOCX ---------------- */
-async function extractDocxText(buffer: Buffer) {
+async function extractDocxText(buffer: Buffer): Promise<string> {
   try {
     const mammoth = await import("mammoth");
-    const result = await mammoth.extractRawText({ buffer});
+    const result = await mammoth.extractRawText({ buffer });
 
     const text = result.value || "";
-    console.log("[DOCX TEXT LENGTH]:", text.length);
+    console.log("[DOCX TEXT]:", text.length);
 
     return text;
   } catch (err) {
-    console.error("[DOCX FAILED]:", err);
+    console.error("[DOCX ERROR]:", err);
     throw err;
   }
 }
 
 /* ---------------- EXTRACT ---------------- */
-async function extractText(file: File) {
+async function extractText(file: File): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
   const name = file.name.toLowerCase();
 
   if (name.endsWith(".pdf")) return extractPdfText(buffer);
   if (name.endsWith(".docx")) return extractDocxText(buffer);
 
-  return buffer.toString("utf-8");
+  const text = buffer.toString("utf-8");
+  console.log("[TXT TEXT]:", text.length);
+
+  return text;
 }
 
-/* ---------------- CLEAN JSON ---------------- */
-function cleanJson(text: string) {
+/* ---------------- JSON CLEAN ---------------- */
+function cleanJson(text: string): string {
   return text.replace(/```json|```/g, "").trim();
 }
 
@@ -80,11 +102,35 @@ function safeParse(text: string) {
   }
 }
 
+/* ---------------- PROMPT ---------------- */
+const SYSTEM_PROMPT = `
+Extract resume into STRICT JSON.
+
+RULES:
+- ALWAYS include ALL fields
+- Use "" or [] if missing
+- NO explanation
+- NO markdown
+
+Schema:
+{
+  "contact": { "name": string, "email": string, "phone": string, "location": string, "linkedin": string, "website": string },
+  "summary": string,
+  "experience": [],
+  "education": [],
+  "skills": [],
+  "certifications": [],
+  "projects": []
+}
+`;
+
 /* ---------------- API ---------------- */
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const file = formData.get("file") as File;
+    const file = formData.get("file") as File | null;
+    const modelId =
+      (formData.get("model") as ModelId | null) ?? "groq-llama-3.1-8b";
 
     if (!file) {
       return NextResponse.json({ error: "NO_FILE" }, { status: 400 });
@@ -96,14 +142,12 @@ export async function POST(req: NextRequest) {
 
     /* -------- TEXT EXTRACTION -------- */
     let rawText = "";
+
     try {
       rawText = await extractText(file);
     } catch (err) {
       return NextResponse.json(
-        {
-          error: "EXTRACTION_FAILED",
-          detail: String(err),
-        },
+        { error: "EXTRACTION_FAILED", detail: String(err) },
         { status: 422 }
       );
     }
@@ -112,48 +156,45 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error: "NO_TEXT_EXTRACTED",
-          debug: {
-            length: rawText?.length || 0,
-            hint: "Likely scanned PDF or unsupported format",
-          },
+          debug: { length: rawText.length },
         },
         { status: 422 }
       );
     }
 
     /* -------- AI PARSE -------- */
-    let parsed = null;
+    let parsed: ParsedResume | null = null;
 
     try {
-      const provider = createProvider("groq-llama-3.1-8b");
+      const provider = createProvider(modelId);
 
       const response = await provider.complete(
-        rawText.slice(0, 15000), // 🔥 prevent token overflow
-        `Return ONLY JSON resume data. No explanation.`
+        rawText.slice(0, 15000),
+        SYSTEM_PROMPT
       );
 
       const cleaned = cleanJson(response);
-      parsed = safeParse(cleaned);
+      const rawParsed = safeParse(cleaned);
+
+      parsed = normalizeParsed(rawParsed || {});
     } catch (err) {
-      console.error("[AI FAILED]:", err);
+      console.error("[AI ERROR]:", err);
+      parsed = normalizeParsed({});
     }
 
-    /* -------- FINAL RESPONSE -------- */
+    /* -------- RESPONSE -------- */
     return NextResponse.json({
       success: true,
-      parsed: parsed || null,
+      parsed,
       rawPreview: rawText.slice(0, 500),
       debug: {
         textLength: rawText.length,
-        parsedSuccess: !!parsed,
+        hasContact: !!parsed.contact.name,
       },
     });
   } catch (err) {
     return NextResponse.json(
-      {
-        error: "UNKNOWN_ERROR",
-        detail: String(err),
-      },
+      { error: "UNKNOWN_ERROR", detail: String(err) },
       { status: 500 }
     );
   }
