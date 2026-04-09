@@ -162,12 +162,92 @@ function renderCreative(r: ParsedResume): string {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
+function renderSharp(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  return `
+    <div style="font-family:Arial,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+      <div style="background:#000;color:#fff;padding:28px 40px;">
+        <h1 style="font-size:26px;font-weight:900;letter-spacing:-1px;text-transform:uppercase;margin:0 0 6px;">${esc(contact.name)}</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:#aaa;font-family:monospace;">
+          ${[contact.email,contact.phone,contact.location,contact.linkedin,contact.website].filter(Boolean).map(esc).map(v=>`<span>${v}</span>`).join("")}
+        </div>
+      </div>
+      <div style="padding:32px 40px;">
+        ${summary?`<section style="margin-bottom:24px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:14px;height:14px;background:#000;flex-shrink:0;"></div><h2 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:3px;margin:0;">Summary</h2></div><p style="color:#555;padding-left:24px;">${esc(summary)}</p></section>`:""}
+        ${experience.length?`<section style="margin-bottom:24px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;"><div style="width:14px;height:14px;background:#000;flex-shrink:0;"></div><h2 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:3px;margin:0;">Experience</h2></div><div style="padding-left:24px;">${experience.map(j=>`<div style="margin-bottom:18px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:900;font-size:14px;">${esc(j.title)}</span><span style="font-size:11px;color:#aaa;font-family:monospace;">${esc(j.startDate)} – ${esc(j.endDate as string)}</span></div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#777;margin-bottom:6px;">${esc(j.company)}</div><ul style="margin:0;padding:0;list-style:none;">${j.bullets.map(b=>`<li style="display:flex;gap:6px;color:#555;margin-bottom:3px;"><span style="font-weight:900;color:#000;flex-shrink:0;">+</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</div></section>`:""}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+          <div>
+            ${education.length?`<section style="margin-bottom:20px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:14px;height:14px;background:#000;flex-shrink:0;"></div><h2 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:3px;margin:0;">Education</h2></div><div style="padding-left:24px;">${education.map(e=>`<div style="margin-bottom:10px;"><div style="font-weight:700;">${esc(e.degree)} in ${esc(e.field)}</div><div style="font-size:11px;color:#777;">${esc(e.institution)}</div><div style="font-size:10px;color:#aaa;font-family:monospace;">${esc(e.graduationYear)}</div></div>`).join("")}</div></section>`:""}
+            ${certifications?.length?`<section><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:14px;height:14px;background:#000;flex-shrink:0;"></div><h2 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:3px;margin:0;">Certifications</h2></div><ul style="padding-left:24px;margin:0;">${li(certifications)}</ul></section>`:""}
+          </div>
+          <div>
+            ${skills.length?`<section style="margin-bottom:20px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:14px;height:14px;background:#000;flex-shrink:0;"></div><h2 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:3px;margin:0;">Skills</h2></div><div style="padding-left:24px;display:flex;flex-wrap:wrap;gap:6px;">${skills.map(s=>`<span style="border:2px solid #000;font-size:10px;font-weight:700;padding:2px 8px;">${esc(s)}</span>`).join("")}</div></section>`:""}
+            ${projects?.length?`<section><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:14px;height:14px;background:#000;flex-shrink:0;"></div><h2 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:3px;margin:0;">Projects</h2></div><div style="padding-left:24px;">${projects.map(p=>`<div style="margin-bottom:10px;"><div style="font-weight:700;">${esc(p.name)}</div><p style="font-size:11px;color:#555;">${esc(p.description)}</p></div>`).join("")}</div></section>`:""}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderNavy(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  return `
+    <div style="font-family:Arial,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;display:flex;min-height:1000px;">
+      <div style="width:220px;background:#0f2044;color:#fff;flex-shrink:0;padding:0;">
+        <div style="padding:28px 20px;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <h1 style="font-size:15px;font-weight:700;margin:0 0 10px;">${esc(contact.name)}</h1>
+          <div style="font-size:11px;color:#93c5fd;">
+            ${[contact.email,contact.phone,contact.location,contact.linkedin,contact.website].filter(Boolean).map(esc).map(v=>`<div style="margin-bottom:3px;">${v}</div>`).join("")}
+          </div>
+        </div>
+        ${skills.length?`<div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.1);"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#fbbf24;margin-bottom:10px;">Skills</div>${skills.map(s=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;"><div style="width:5px;height:5px;border-radius:50%;background:#fbbf24;flex-shrink:0;"></div><span style="font-size:11px;color:#bfdbfe;">${esc(s)}</span></div>`).join("")}</div>`:""}
+        ${education.length?`<div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.1);"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#fbbf24;margin-bottom:10px;">Education</div>${education.map(e=>`<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:600;color:#fff;">${esc(e.degree)}</div><div style="font-size:11px;color:#93c5fd;">${esc(e.field)}</div><div style="font-size:11px;color:#60a5fa;">${esc(e.institution)}</div><div style="font-size:10px;color:#3b82f6;">${esc(e.graduationYear)}</div></div>`).join("")}</div>`:""}
+        ${certifications?.length?`<div style="padding:18px 20px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#fbbf24;margin-bottom:10px;">Certifications</div><ul style="margin:0;padding-left:14px;font-size:11px;color:#93c5fd;">${li(certifications)}</ul></div>`:""}
+      </div>
+      <div style="flex:1;padding:28px 32px;">
+        ${summary?`<section style="margin-bottom:22px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#0f2044;margin-bottom:4px;">Profile</h2><div style="width:36px;height:2px;background:#fbbf24;margin-bottom:10px;"></div><p style="color:#555;">${esc(summary)}</p></section>`:""}
+        ${experience.length?`<section style="margin-bottom:22px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#0f2044;margin-bottom:4px;">Experience</h2><div style="width:36px;height:2px;background:#fbbf24;margin-bottom:12px;"></div>${experience.map(j=>`<div style="margin-bottom:18px;padding-left:10px;border-left:2px solid #fbbf24;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:700;">${esc(j.title)}</span><span style="font-size:11px;color:#9ca3af;">${esc(j.startDate)} – ${esc(j.endDate as string)}</span></div><div style="font-size:11px;font-weight:600;color:#0f2044;margin-bottom:5px;">${esc(j.company)}</div><ul style="margin:0;padding:0;list-style:none;">${j.bullets.map(b=>`<li style="display:flex;gap:6px;color:#555;margin-bottom:3px;font-size:12px;"><span style="color:#f59e0b;flex-shrink:0;">▸</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>`:""}
+        ${projects?.length?`<section><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#0f2044;margin-bottom:4px;">Projects</h2><div style="width:36px;height:2px;background:#fbbf24;margin-bottom:12px;"></div>${projects.map(p=>`<div style="margin-bottom:12px;"><div style="font-weight:700;">${esc(p.name)}</div><p style="color:#555;font-size:12px;margin:2px 0;">${esc(p.description)}</p><div style="display:flex;flex-wrap:wrap;gap:4px;">${p.technologies.map(t=>`<span style="background:#eff6ff;color:#1e3a8a;font-size:10px;padding:2px 6px;border-radius:3px;">${esc(t)}</span>`).join("")}</div></div>`).join("")}</section>`:""}
+      </div>
+    </div>`;
+}
+
+function renderTerra(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  return `
+    <div style="font-family:Georgia,serif;color:#3d2b1f;background:#fdf8f3;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+      <div style="background:#8b4513;color:#fff;padding:28px 40px;">
+        <h1 style="font-size:26px;font-weight:700;margin:0 0 8px;">${esc(contact.name)}</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#fcd9b0;">
+          ${[contact.email,contact.phone,contact.location,contact.linkedin,contact.website].filter(Boolean).map(esc).map(v=>`<span>${v}</span>`).join("")}
+        </div>
+      </div>
+      <div style="padding:32px 40px;">
+        ${summary?`<section style="margin-bottom:24px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#8b4513;margin-bottom:4px;">About</h2><div style="height:1px;background:#d4956a;margin-bottom:10px;"></div><p style="color:#555;font-style:italic;">${esc(summary)}</p></section>`:""}
+        ${experience.length?`<section style="margin-bottom:24px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#8b4513;margin-bottom:4px;">Experience</h2><div style="height:1px;background:#d4956a;margin-bottom:14px;"></div>${experience.map(j=>`<div style="margin-bottom:18px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:700;">${esc(j.title)}</span><span style="font-size:11px;color:#9ca3af;font-family:Arial,sans-serif;">${esc(j.startDate)} – ${esc(j.endDate as string)}</span></div><div style="color:#8b4513;font-weight:600;margin-bottom:5px;">${esc(j.company)}</div><ul style="margin:0;padding:0;list-style:none;">${j.bullets.map(b=>`<li style="display:flex;gap:6px;color:#555;margin-bottom:3px;"><span style="color:#d4956a;font-weight:700;flex-shrink:0;">›</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>`:""}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+          <div>
+            ${education.length?`<section style="margin-bottom:20px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#8b4513;margin-bottom:4px;">Education</h2><div style="height:1px;background:#d4956a;margin-bottom:10px;"></div>${education.map(e=>`<div style="margin-bottom:10px;"><div style="font-weight:700;">${esc(e.degree)} in ${esc(e.field)}</div><div style="color:#777;">${esc(e.institution)}</div><div style="font-size:11px;color:#aaa;font-family:Arial,sans-serif;">${esc(e.graduationYear)}</div></div>`).join("")}</section>`:""}
+            ${certifications?.length?`<section><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#8b4513;margin-bottom:4px;">Certifications</h2><div style="height:1px;background:#d4956a;margin-bottom:10px;"></div><ul style="margin:0;padding-left:16px;">${li(certifications)}</ul></section>`:""}
+          </div>
+          <div>
+            ${skills.length?`<section style="margin-bottom:20px;"><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#8b4513;margin-bottom:4px;">Skills</h2><div style="height:1px;background:#d4956a;margin-bottom:10px;"></div><div style="display:flex;flex-wrap:wrap;gap:6px;">${skills.map(s=>`<span style="background:#f5e6d3;color:#8b4513;font-size:11px;padding:3px 10px;border-radius:20px;font-family:Arial,sans-serif;">${esc(s)}</span>`).join("")}</div></section>`:""}
+            ${projects?.length?`<section><h2 style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#8b4513;margin-bottom:4px;">Projects</h2><div style="height:1px;background:#d4956a;margin-bottom:10px;"></div>${projects.map(p=>`<div style="margin-bottom:10px;"><div style="font-weight:700;">${esc(p.name)}</div><p style="font-size:11px;color:#555;">${esc(p.description)}</p></div>`).join("")}</section>`:""}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
 const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
   classic: renderClassic,
   modern: renderModern,
   minimal: renderMinimal,
   executive: renderExecutive,
   creative: renderCreative,
+  sharp: renderSharp,
+  navy: renderNavy,
+  terra: renderTerra,
 };
 
 /** Render a ParsedResume to a full self-contained HTML document */
