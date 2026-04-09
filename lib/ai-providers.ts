@@ -7,7 +7,7 @@ const GROQ_REMOTE_MODEL: Record<string, string> = {
 };
 
 const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
-  "openrouter-gemma-4-27b": "google/gemma-3-27b-it:free",
+  "openrouter-gemma-4-27b": "google/gemma-4-26b-it:free",
   "openrouter-qwen-7b": "qwen/qwen-2.5-7b-instruct",
   "openrouter-mistral-small": "mistralai/mistral-small-3.1-24b-instruct",
   "openrouter-llama-4-maverick": "meta-llama/llama-4-maverick",
