@@ -6,18 +6,18 @@ export const runtime = "nodejs";
 
 const MAX_SIZE = 5 * 1024 * 1024;
 
-/* ---------------- NORMALIZER (CRITICAL FIX) ---------------- */
+/* ---------------- HARD SAFE NORMALIZER ---------------- */
 function normalizeParsed(data: any): ParsedResume {
   return {
     contact: {
-      name: data?.contact?.name || "",
-      email: data?.contact?.email || "",
-      phone: data?.contact?.phone || "",
-      location: data?.contact?.location || "",
-      linkedin: data?.contact?.linkedin || "",
-      website: data?.contact?.website || "",
+      name: data?.contact?.name ?? "",
+      email: data?.contact?.email ?? "",
+      phone: data?.contact?.phone ?? "",
+      location: data?.contact?.location ?? "",
+      linkedin: data?.contact?.linkedin ?? "",
+      website: data?.contact?.website ?? "",
     },
-    summary: data?.summary || "",
+    summary: data?.summary ?? "",
     experience: Array.isArray(data?.experience) ? data.experience : [],
     education: Array.isArray(data?.education) ? data.education : [],
     skills: Array.isArray(data?.skills) ? data.skills : [],
@@ -26,103 +26,52 @@ function normalizeParsed(data: any): ParsedResume {
   };
 }
 
-/* ---------------- PDF + OCR ---------------- */
-async function extractPdfText(buffer: Buffer): Promise<string> {
-  try {
-    const pdfModule = await import("pdf-parse");
-    const pdfFn = (pdfModule as any).default || pdfModule;
+/* ---------------- PDF ---------------- */
+async function extractPdfText(buffer: Buffer) {
+  const pdfModule = await import("pdf-parse");
+  const pdfFn = (pdfModule as any).default || pdfModule;
 
-    const data = await pdfFn(buffer);
-    let text = data?.text || "";
+  const data = await pdfFn(buffer);
+  let text = data?.text || "";
 
-    console.log("[PDF TEXT]:", text.length);
-
-    if (!text.trim()) {
-      console.log("[OCR] fallback...");
-
-      try {
-        const Tesseract = await import("tesseract.js");
-        const result = await Tesseract.recognize(buffer, "eng");
-
-        text = result.data.text || "";
-        console.log("[OCR TEXT]:", text.length);
-      } catch (err) {
-        console.error("[OCR FAILED]:", err);
-      }
-    }
-
-    return text;
-  } catch (err) {
-    console.error("[PDF ERROR]:", err);
-    throw err;
+  if (!text.trim()) {
+    try {
+      const Tesseract = await import("tesseract.js");
+      const result = await Tesseract.recognize(buffer, "eng");
+      text = result.data.text || "";
+    } catch {}
   }
+
+  return text;
 }
 
 /* ---------------- DOCX ---------------- */
-async function extractDocxText(buffer: Buffer): Promise<string> {
-  try {
-    const mammoth = await import("mammoth");
-    const result = await mammoth.extractRawText({ buffer });
-
-    const text = result.value || "";
-    console.log("[DOCX TEXT]:", text.length);
-
-    return text;
-  } catch (err) {
-    console.error("[DOCX ERROR]:", err);
-    throw err;
-  }
+async function extractDocxText(buffer: Buffer) {
+  const mammoth = await import("mammoth");
+  const result = await mammoth.extractRawText({ buffer });
+  return result.value || "";
 }
 
 /* ---------------- EXTRACT ---------------- */
-async function extractText(file: File): Promise<string> {
+async function extractText(file: File) {
   const buffer = Buffer.from(await file.arrayBuffer());
   const name = file.name.toLowerCase();
 
   if (name.endsWith(".pdf")) return extractPdfText(buffer);
   if (name.endsWith(".docx")) return extractDocxText(buffer);
 
-  const text = buffer.toString("utf-8");
-  console.log("[TXT TEXT]:", text.length);
-
-  return text;
+  return buffer.toString("utf-8");
 }
 
-/* ---------------- JSON CLEAN ---------------- */
-function cleanJson(text: string): string {
-  return text.replace(/```json|```/g, "").trim();
-}
-
+/* ---------------- JSON SAFE ---------------- */
 function safeParse(text: string) {
   try {
     return JSON.parse(text);
   } catch {
     const match = text.match(/\{[\s\S]*\}/);
-    return match ? JSON.parse(match[0]) : null;
+    return match ? JSON.parse(match[0]) : {};
   }
 }
-
-/* ---------------- PROMPT ---------------- */
-const SYSTEM_PROMPT = `
-Extract resume into STRICT JSON.
-
-RULES:
-- ALWAYS include ALL fields
-- Use "" or [] if missing
-- NO explanation
-- NO markdown
-
-Schema:
-{
-  "contact": { "name": string, "email": string, "phone": string, "location": string, "linkedin": string, "website": string },
-  "summary": string,
-  "experience": [],
-  "education": [],
-  "skills": [],
-  "certifications": [],
-  "projects": []
-}
-`;
 
 /* ---------------- API ---------------- */
 export async function POST(req: NextRequest) {
@@ -140,61 +89,40 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "FILE_TOO_LARGE" }, { status: 400 });
     }
 
-    /* -------- TEXT EXTRACTION -------- */
-    let rawText = "";
-
-    try {
-      rawText = await extractText(file);
-    } catch (err) {
-      return NextResponse.json(
-        { error: "EXTRACTION_FAILED", detail: String(err) },
-        { status: 422 }
-      );
-    }
+    /* -------- TEXT -------- */
+    let rawText = await extractText(file);
 
     if (!rawText || rawText.length < 20) {
       return NextResponse.json(
-        {
-          error: "NO_TEXT_EXTRACTED",
-          debug: { length: rawText.length },
-        },
+        { error: "NO_TEXT_EXTRACTED" },
         { status: 422 }
       );
     }
 
-    /* -------- AI PARSE -------- */
-    let parsed: ParsedResume | null = null;
+    /* -------- AI -------- */
+    let parsed: ParsedResume;
 
     try {
       const provider = createProvider(modelId);
 
       const response = await provider.complete(
         rawText.slice(0, 15000),
-        SYSTEM_PROMPT
+        "Return strict JSON resume. No explanation."
       );
 
-      const cleaned = cleanJson(response);
-      const rawParsed = safeParse(cleaned);
-
-      parsed = normalizeParsed(rawParsed || {});
-    } catch (err) {
-      console.error("[AI ERROR]:", err);
+      const rawParsed = safeParse(response);
+      parsed = normalizeParsed(rawParsed);
+    } catch {
       parsed = normalizeParsed({});
     }
 
-    /* -------- RESPONSE -------- */
     return NextResponse.json({
       success: true,
       parsed,
-      rawPreview: rawText.slice(0, 500),
-      debug: {
-        textLength: rawText.length,
-        hasContact: !!parsed.contact.name,
-      },
     });
   } catch (err) {
     return NextResponse.json(
-      { error: "UNKNOWN_ERROR", detail: String(err) },
+      { error: "SERVER_ERROR", detail: String(err) },
       { status: 500 }
     );
   }
