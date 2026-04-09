@@ -61,6 +61,8 @@ export default function ChatPage() {
       {/* Body — resizable chat + preview */}
       <ResizablePanels
         defaultLeftWidth={420}
+        leftLabel="Chat"
+        rightLabel="Resume Preview"
         left={
           <div className="flex flex-col h-full">
             <ChatBot mode={mode} onComplete={handleComplete} hideModelSelector />

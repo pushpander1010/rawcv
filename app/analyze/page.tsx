@@ -148,6 +148,8 @@ export default function AnalyzePage() {
       {/* Body — resizable panels */}
       <ResizablePanels
         defaultLeftWidth={460}
+        leftLabel="Analysis"
+        rightLabel="Resume Preview"
         left={
           <div className="p-6">
           {/* ATS */}
