@@ -25,9 +25,17 @@ const THEME_MAP: Record<ThemeId, React.ComponentType<{ resume: ParsedResume }>> 
 export default function ResumePreview({ resume, theme }: Props) {
   const ThemeComponent = THEME_MAP[theme] ?? ClassicTheme;
 
+  // Normalize: ensure required arrays are never undefined regardless of AI output
+  const safe: ParsedResume = {
+    ...resume,
+    experience: resume.experience ?? [],
+    education: resume.education ?? [],
+    skills: resume.skills ?? [],
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-      <ThemeComponent resume={resume} />
+      <ThemeComponent resume={safe} />
     </div>
   );
 }

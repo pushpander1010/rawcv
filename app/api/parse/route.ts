@@ -106,7 +106,14 @@ export async function POST(req: NextRequest) {
   try {
     const provider = createProvider(modelId);
     const json = await provider.complete(rawText, SYSTEM_PROMPT);
-    parsed = JSON.parse(json) as ParsedResume;
+    const raw_parsed = JSON.parse(json) as ParsedResume;
+    // Ensure required arrays are never undefined
+    parsed = {
+      ...raw_parsed,
+      experience: raw_parsed.experience ?? [],
+      education: raw_parsed.education ?? [],
+      skills: raw_parsed.skills ?? [],
+    };
   } catch (err) {
     const detail = err instanceof Error ? err.message : String(err);
     console.error("[parse] AI error:", detail);
