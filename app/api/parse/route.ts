@@ -13,11 +13,12 @@ const ALLOWED_TYPES = [
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Use require() to hit the "require" export condition → CJS build with PDFParse class.
-  // Dynamic import() would resolve the ESM entry which has a different shape.
   // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
   const { PDFParse } = require("pdf-parse") as any;
-  const parser = new PDFParse({ data: new Uint8Array(buffer) });
+  // Pass Buffer directly — PDFParse auto-converts it to Uint8Array internally.
+  // Pre-converting to Uint8Array can lose the Buffer identity check and cause
+  // "no url parameter provided" errors.
+  const parser = new PDFParse({ data: buffer });
   const result = await parser.getText();
   return result?.text ?? "";
 }
@@ -88,9 +89,14 @@ export async function POST(req: NextRequest) {
     rawText = await extractText(file);
     console.log("[parse] extracted chars:", rawText.length);
   } catch (err) {
-    console.error("[parse] extraction error:", err);
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error("[parse] extraction error:", detail);
     return NextResponse.json(
-      { error: "parse_failed", message: "Could not extract text from the file. Try a different file or format." },
+      {
+        error: "parse_failed",
+        message: "Could not extract text from the file. Try a different file or format.",
+        ...(process.env.NODE_ENV !== "production" && { detail }),
+      },
       { status: 422 }
     );
   }
