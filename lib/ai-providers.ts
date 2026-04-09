@@ -16,19 +16,19 @@ const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
 
 function safeJsonParse(text: string): string {
   if (!text || text.trim() === "") return "{}";
-  
+
   // Try to extract JSON from markdown code blocks
   const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
   if (jsonMatch) {
     text = jsonMatch[1].trim();
   }
-  
+
   // Try to find JSON object in the response
   const objectMatch = text.match(/\{[\s\S]*\}/);
   if (objectMatch) {
     text = objectMatch[0];
   }
-  
+
   try {
     JSON.parse(text);
     return text;
@@ -83,7 +83,7 @@ class GroqProvider implements AIProvider {
     const { default: OpenAI } = await import("openai");
     const client = new OpenAI({
       apiKey,
-      baseURL: "[api.groq.com](https://api.groq.com/openai/v1)",
+      baseURL: "https://api.groq.com/openai/v1",
     });
 
     return withRetry(async () => {
@@ -125,12 +125,12 @@ class OpenRouterProvider implements AIProvider {
 
     // Use native fetch for OpenRouter - more reliable than OpenAI SDK
     const response = await withRetry(async () => {
-      const res = await fetch("[openrouter.ai](https://openrouter.ai/api/v1/chat/completions)", {
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "[rawcv.com](https://rawcv.com)",
+          "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "https://rawcv.com",
           "X-Title": "rawcv",
         },
         body: JSON.stringify({
@@ -146,9 +146,7 @@ class OpenRouterProvider implements AIProvider {
 
       if (!res.ok) {
         const errorText = await res.text();
-        throw new Error(
-          `OpenRouter API error (${res.status}): ${errorText}`
-        );
+        throw new Error(`OpenRouter API error (${res.status}): ${errorText}`);
       }
 
       return res.json();
