@@ -246,7 +246,7 @@ class OpenRouterProvider implements AIProvider {
 
     const client = new OpenAI({
       apiKey,
-      baseURL: "https://openrouter.ai/api/v1",
+      baseURL: "https://openrouter.ai/api/v1/models",
       defaultHeaders: {
         "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "https://localhost",
         "X-Title": "rawcv",
