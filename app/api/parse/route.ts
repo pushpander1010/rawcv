@@ -14,27 +14,32 @@ const ALLOWED_TYPES = [
 
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
 
-/* ---------------- PDF (TS + ESM SAFE) ---------------- */
+/* ---------------- PDF + OCR ---------------- */
 async function extractPdfText(buffer: Buffer): Promise<string> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf.mjs") as any;
-    const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
-    const doc = await loadingTask.promise;
+    const pdfModule = await import("pdf-parse");
+    const pdfFn = (pdfModule as any).default || pdfModule;
 
-    const pages: string[] = [];
-    for (let i = 1; i <= doc.numPages; i++) {
-      const page = await doc.getPage(i);
-      const content = await page.getTextContent();
-      const pageText = content.items
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((item: any) => ("str" in item ? item.str : ""))
-        .join(" ");
-      pages.push(pageText);
+    const data = await pdfFn(buffer);
+    let text = data?.text || "";
+
+    console.log("[parse] pdf chars:", text.length);
+
+    // 🔥 OCR fallback if empty
+    if (!text.trim()) {
+      console.log("[parse] OCR fallback triggered...");
+
+      const Tesseract = await import("tesseract.js");
+
+      const result = await Tesseract.recognize(buffer, "eng", {
+        logger: (m) => console.log("[OCR]", m.status, m.progress),
+      });
+
+      text = result.data.text || "";
+
+      console.log("[parse] OCR chars:", text.length);
     }
 
-    const text = pages.join("\n");
-    console.log("[parse] pdf chars:", text.length);
     return text;
   } catch (err) {
     console.error("[parse] pdf error:", err);
@@ -86,7 +91,7 @@ function safeJsonParse(text: string): ParsedResume {
     return JSON.parse(text);
   } catch {
     const match = text.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error("No valid JSON found");
+    if (!match) throw new Error("No valid JSON found in AI response");
 
     return JSON.parse(match[0]);
   }
@@ -169,7 +174,7 @@ export async function POST(req: NextRequest) {
         {
           error: "empty_text",
           message:
-            "No text extracted. Likely scanned PDF. Upload text-based resume.",
+            "No text extracted. Likely scanned or unsupported file.",
         },
         { status: 422 }
       );
