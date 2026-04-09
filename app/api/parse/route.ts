@@ -48,22 +48,32 @@ function normalizeParsed(data: any): ParsedResume {
 }
 
 /* ---------------- PDF ---------------- */
-async function extractPdfText(buffer: Buffer) {
-  const pdfModule = await import("pdf-parse");
-  const pdfFn = (pdfModule as any).default || pdfModule;
-
-  const data = await pdfFn(buffer);
-  let text = data?.text || "";
-
-  if (!text.trim()) {
-    try {
-      const Tesseract = await import("tesseract.js");
-      const result = await Tesseract.recognize(buffer, "eng");
-      text = result.data.text || "";
-    } catch {}
+async function extractPdfText(buffer: Buffer): Promise<string> {
+  // Use pdfjs-dist directly — more reliable in serverless than pdf-parse wrapper
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let pdfjsLib: any;
+  try {
+    pdfjsLib = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  } catch {
+    pdfjsLib = await import("pdfjs-dist");
   }
 
-  return text;
+  const getDocument = pdfjsLib.getDocument ?? pdfjsLib.default?.getDocument;
+  if (!getDocument) throw new Error("pdfjs-dist getDocument not found");
+
+  const loadingTask = getDocument({ data: new Uint8Array(buffer) });
+  const doc = await loadingTask.promise;
+
+  const pages: string[] = [];
+  for (let i = 1; i <= doc.numPages; i++) {
+    const page = await doc.getPage(i);
+    const content = await page.getTextContent();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pageText = content.items.map((item: any) => item.str ?? "").join(" ");
+    pages.push(pageText);
+  }
+
+  return pages.join("\n").trim();
 }
 
 /* ---------------- DOCX ---------------- */
