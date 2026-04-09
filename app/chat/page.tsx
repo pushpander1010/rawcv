@@ -23,7 +23,7 @@ export default function ChatPage() {
   }
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden">
+    <main className="h-screen flex flex-col overflow-hidden" style={{ height: "100dvh" }}>
       {/* Header */}
       <header className="border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between gap-4 bg-white dark:bg-gray-950">
         <div className="flex items-center gap-3">

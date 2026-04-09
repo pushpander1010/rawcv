@@ -109,7 +109,7 @@ export default function AnalyzePage() {
   }
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-950">
+    <main className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-950" style={{ height: "100dvh" }}>
       {/* Header */}
       <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
         <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-3">

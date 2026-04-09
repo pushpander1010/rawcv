@@ -57,12 +57,12 @@ export default function ResizablePanels({
 
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
-      {/* Mobile tab switcher */}
-      <div className="flex md:hidden sticky top-0 z-10 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex-shrink-0">
+      {/* Mobile tab switcher — always visible, never scrolls */}
+      <div className="flex md:hidden flex-shrink-0 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 z-10">
         <button
           type="button"
           onClick={() => setMobileTab("left")}
-          className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
+          className={`flex-1 py-3 text-sm font-medium transition-colors ${
             mobileTab === "left"
               ? "border-b-2 border-violet-600 text-violet-600"
               : "text-gray-500 dark:text-gray-400"
@@ -73,7 +73,7 @@ export default function ResizablePanels({
         <button
           type="button"
           onClick={() => setMobileTab("right")}
-          className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
+          className={`flex-1 py-3 text-sm font-medium transition-colors ${
             mobileTab === "right"
               ? "border-b-2 border-violet-600 text-violet-600"
               : "text-gray-500 dark:text-gray-400"
@@ -83,9 +83,9 @@ export default function ResizablePanels({
         </button>
       </div>
 
-      {/* Mobile: single panel view */}
+      {/* Mobile: single panel — scrolls independently below the fixed tab bar */}
       <div className="flex md:hidden flex-1 min-h-0 overflow-hidden">
-        <div className={`flex-1 overflow-y-auto bg-white dark:bg-gray-900 ${mobileTab === "left" ? "block" : "hidden"}`}>
+        <div className={`flex-1 overflow-y-auto bg-white dark:bg-gray-900 ${mobileTab === "left" ? "flex flex-col" : "hidden"}`}>
           {left}
         </div>
         <div className={`flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-950 ${mobileTab === "right" ? "block" : "hidden"}`}>
