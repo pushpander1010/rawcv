@@ -62,6 +62,26 @@ function enforceJson(systemPrompt: string): string {
 IMPORTANT: Return ONLY valid JSON. No markdown, no explanation, no code blocks. Just the raw JSON object.`;
 }
 
+function buildMessages(
+  prompt: string,
+  systemPrompt: string,
+  isFree: boolean
+): { role: string; content: string }[] {
+  if (isFree) {
+    // Some free model providers don't support system role — merge into user turn
+    return [
+      {
+        role: "user",
+        content: `${enforceJson(systemPrompt)}\n\n${prompt}`,
+      },
+    ];
+  }
+  return [
+    { role: "system", content: enforceJson(systemPrompt) },
+    { role: "user", content: prompt },
+  ];
+}
+
 export interface AIProvider {
   modelId: ModelId;
   complete(prompt: string, systemPrompt: string): Promise<string>;
@@ -123,7 +143,9 @@ class OpenRouterProvider implements AIProvider {
     const remote = OPENROUTER_REMOTE_MODEL[this.modelId];
     if (!remote) throw new Error(`Unknown OpenRouter model: ${this.modelId}`);
 
-    // Use native fetch for OpenRouter - more reliable than OpenAI SDK
+    const isFree = remote.endsWith(":free");
+    const messages = buildMessages(prompt, systemPrompt, isFree);
+
     const response = await withRetry(async () => {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
@@ -137,10 +159,7 @@ class OpenRouterProvider implements AIProvider {
           model: remote,
           max_tokens: 2000,
           temperature: 0.7,
-          messages: [
-            { role: "system", content: enforceJson(systemPrompt) },
-            { role: "user", content: prompt },
-          ],
+          messages,
         }),
       });
 
