@@ -124,10 +124,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "openrouter-gemma-4-27b", "Chat bot");
+    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "Chat bot");
     if (chargeError) return chargeError;
 
-    const provider = createProvider(model ?? "openrouter-gemma-4-27b");
+    const provider = createProvider(model ?? "groq-llama-3.1-8b");
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : SYSTEM_PROMPT;
 
     const conversationHistory = messages

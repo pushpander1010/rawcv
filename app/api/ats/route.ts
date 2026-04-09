@@ -161,13 +161,13 @@ export async function POST(req: NextRequest) {
   let baseScore = calculateBaseScore(ruleIssues);
 
   // Charge credits before calling AI
-  const chargeError = await chargeCredits(model ?? "openrouter-gemma-4-27b", "ATS analysis");
+  const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "ATS analysis");
   if (chargeError) return chargeError;
 
   // AI-powered nuanced scoring
   let aiIssues: ATSIssue[] = [];
   try {
-    const provider = createProvider(model ?? "openrouter-gemma-4-27b");
+    const provider = createProvider(model ?? "groq-llama-3.1-8b");
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}\n\nRaw text excerpt:\n${raw.slice(0, 2000)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const aiResult = JSON.parse(json) as {

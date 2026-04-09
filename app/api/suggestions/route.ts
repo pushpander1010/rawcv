@@ -51,10 +51,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "openrouter-gemma-4-27b", "AI suggestions");
+    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "AI suggestions");
     if (chargeError) return chargeError;
 
-    const provider = createProvider(model ?? "openrouter-gemma-4-27b");
+    const provider = createProvider(model ?? "groq-llama-3.1-8b");
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const result = JSON.parse(json) as {

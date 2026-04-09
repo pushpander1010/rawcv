@@ -37,7 +37,7 @@ const defaultState: ResumeState = {
   suggestions: [],
   tailoredResume: null,
   selectedTheme: "classic",
-  selectedModel: "openrouter-gemma-4-27b",
+  selectedModel: "groq-llama-3.1-8b",
   jd: "",
   lastOperationCost: null,
 };
