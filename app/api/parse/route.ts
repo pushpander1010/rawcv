@@ -11,13 +11,60 @@ const ALLOWED_TYPES = [
   "text/plain",
 ];
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
+const MAX_OCR_PAGES = 6;
+const OCR_SCALE = 2;
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
-  const pdfParse = require("pdf-parse") as any;
-  const fn = pdfParse.default ?? pdfParse;
+  const pdfParseModule = (await import("pdf-parse")) as any;
+  const fn = pdfParseModule.default ?? pdfParseModule;
   const result = await fn(buffer);
-  return result.text;
+  const text = result?.text ?? "";
+  if (text.trim()) {
+    return text;
+  }
+
+  console.log("[parse] pdf-parse failed to find text; falling back to OCR");
+  return ocrPdfBuffer(buffer);
+}
+
+async function ocrPdfBuffer(buffer: Buffer): Promise<string> {
+  const pdfjsModule = await import("pdfjs-dist/build/pdf.mjs");
+  const pdfjsLib = (pdfjsModule.default ?? pdfjsModule) as any;
+  const { createCanvas } = await import("canvas");
+  const { createWorker } = (await import("tesseract.js")) as any;
+
+  const loadingTask = pdfjsLib.getDocument({ data: buffer });
+  const doc = await loadingTask.promise;
+  const worker = createWorker();
+
+  try {
+    await worker.load();
+    await worker.loadLanguage("eng");
+    await worker.initialize("eng");
+
+    const pagesToProcess = Math.min(doc.numPages, MAX_OCR_PAGES);
+    let ocrText = "";
+
+    for (let pageNumber = 1; pageNumber <= pagesToProcess; pageNumber++) {
+      const page = await doc.getPage(pageNumber);
+      const viewport = page.getViewport({ scale: OCR_SCALE });
+      const canvas = createCanvas(viewport.width, viewport.height);
+      const context = canvas.getContext("2d");
+      if (!context) {
+        continue;
+      }
+
+      await page.render({ canvasContext: context, viewport }).promise;
+      const imageBuffer = canvas.toBuffer("image/png");
+      const { data } = await worker.recognize(imageBuffer, "eng");
+      ocrText += data.text + "\n";
+    }
+
+    return ocrText.trim();
+  } finally {
+    await worker.terminate();
+    doc.destroy();
+  }
 }
 
 async function extractText(file: File): Promise<string> {
