@@ -58,7 +58,7 @@ export default function ResizablePanels({
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
       {/* Mobile tab switcher */}
-      <div className="flex md:hidden border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex-shrink-0">
+      <div className="flex md:hidden sticky top-0 z-10 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex-shrink-0">
         <button
           type="button"
           onClick={() => setMobileTab("left")}
