@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
   }
 
   const file = formData.get("file") as File | null;
-  const modelId = (formData.get("model") as ModelId | null) ?? "gemini-2.5-flash";
+  const modelId = (formData.get("model") as ModelId | null) ?? "openrouter-gemma-4-27b";
 
   if (!file) {
     return NextResponse.json({ error: "missing_file", message: "No file provided" }, { status: 400 });

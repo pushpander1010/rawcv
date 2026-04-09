@@ -124,10 +124,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "gemini-2.5-flash", "Chat bot");
+    const chargeError = await chargeCredits(model ?? "openrouter-gemma-4-27b", "Chat bot");
     if (chargeError) return chargeError;
 
-    const provider = createProvider(model ?? "gemini-2.5-flash");
+    const provider = createProvider(model ?? "openrouter-gemma-4-27b");
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : SYSTEM_PROMPT;
 
     const conversationHistory = messages
