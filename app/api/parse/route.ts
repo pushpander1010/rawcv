@@ -11,60 +11,15 @@ const ALLOWED_TYPES = [
   "text/plain",
 ];
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
-const MAX_OCR_PAGES = 6;
-const OCR_SCALE = 2;
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  const pdfParseModule = (await import("pdf-parse")) as any;
-  const fn = pdfParseModule.default ?? pdfParseModule;
-  const result = await fn(buffer);
-  const text = result?.text ?? "";
-  if (text.trim()) {
-    return text;
-  }
-
-  console.log("[parse] pdf-parse failed to find text; falling back to OCR");
-  return ocrPdfBuffer(buffer);
-}
-
-async function ocrPdfBuffer(buffer: Buffer): Promise<string> {
-  const pdfjsModule = await import("pdfjs-dist/build/pdf.mjs");
-  const pdfjsLib = (pdfjsModule.default ?? pdfjsModule) as any;
-  const { createCanvas } = await import("canvas");
-  const { createWorker } = (await import("tesseract.js")) as any;
-
-  const loadingTask = pdfjsLib.getDocument({ data: buffer });
-  const doc = await loadingTask.promise;
-  const worker = createWorker();
-
-  try {
-    await worker.load();
-    await worker.loadLanguage("eng");
-    await worker.initialize("eng");
-
-    const pagesToProcess = Math.min(doc.numPages, MAX_OCR_PAGES);
-    let ocrText = "";
-
-    for (let pageNumber = 1; pageNumber <= pagesToProcess; pageNumber++) {
-      const page = await doc.getPage(pageNumber);
-      const viewport = page.getViewport({ scale: OCR_SCALE });
-      const canvas = createCanvas(viewport.width, viewport.height);
-      const context = canvas.getContext("2d");
-      if (!context) {
-        continue;
-      }
-
-      await page.render({ canvasContext: context, viewport }).promise;
-      const imageBuffer = canvas.toBuffer("image/png");
-      const { data } = await worker.recognize(imageBuffer, "eng");
-      ocrText += data.text + "\n";
-    }
-
-    return ocrText.trim();
-  } finally {
-    await worker.terminate();
-    doc.destroy();
-  }
+  // Use require() to hit the "require" export condition → CJS build with PDFParse class.
+  // Dynamic import() would resolve the ESM entry which has a different shape.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
+  const { PDFParse } = require("pdf-parse") as any;
+  const parser = new PDFParse({ data: new Uint8Array(buffer) });
+  const result = await parser.getText();
+  return result?.text ?? "";
 }
 
 async function extractText(file: File): Promise<string> {
@@ -153,9 +108,14 @@ export async function POST(req: NextRequest) {
     const json = await provider.complete(rawText, SYSTEM_PROMPT);
     parsed = JSON.parse(json) as ParsedResume;
   } catch (err) {
-    console.error("[parse] AI error:", err);
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error("[parse] AI error:", detail);
     return NextResponse.json(
-      { error: "ai_unavailable", message: "AI extraction failed. Please try again." },
+      {
+        error: "ai_unavailable",
+        message: "AI extraction failed. Please try again.",
+        ...(process.env.NODE_ENV !== "production" && { detail }),
+      },
       { status: 502 }
     );
   }
