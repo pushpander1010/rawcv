@@ -64,7 +64,7 @@ interface RelevanceScoreCardProps {
 }
 
 export default function RelevanceScoreCard({ result, loading = false }: RelevanceScoreCardProps) {
-  const { score, missingKeywords, missingSkills, recommendations } = result;
+  const { score, missingKeywords = [], missingSkills = [], recommendations = [] } = result;
   const showRecommendations = score < 70 && recommendations.length > 0;
 
   const label =

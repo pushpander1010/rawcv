@@ -73,7 +73,7 @@ interface ATSScoreCardProps {
 }
 
 export default function ATSScoreCard({ result, loading = false }: ATSScoreCardProps) {
-  const { score, issues } = result;
+  const { score, issues = [] } = result;
   const showIssues = score < 60 && issues.length > 0;
 
   const label =
