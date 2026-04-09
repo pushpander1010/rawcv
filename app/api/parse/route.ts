@@ -6,16 +6,8 @@ export const runtime = "nodejs";
 
 const MAX_SIZE = 5 * 1024 * 1024;
 
-const ALLOWED_TYPES = [
-  "application/pdf",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "text/plain",
-];
-
-const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
-
 /* ---------------- PDF + OCR ---------------- */
-async function extractPdfText(buffer: Buffer): Promise<string> {
+async function extractPdfText(buffer: Buffer) {
   try {
     const pdfModule = await import("pdf-parse");
     const pdfFn = (pdfModule as any).default || pdfModule;
@@ -23,209 +15,146 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
     const data = await pdfFn(buffer);
     let text = data?.text || "";
 
-    console.log("[parse] pdf chars:", text.length);
+    console.log("[PDF TEXT LENGTH]:", text.length);
 
-    // 🔥 OCR fallback if empty
+    // OCR fallback
     if (!text.trim()) {
-      console.log("[parse] OCR fallback triggered...");
+      console.log("[OCR] Running fallback...");
 
-      const Tesseract = await import("tesseract.js");
+      try {
+        const Tesseract = await import("tesseract.js");
+        const result = await Tesseract.recognize(buffer, "eng");
 
-      const result = await Tesseract.recognize(buffer, "eng", {
-        logger: (m) => console.log("[OCR]", m.status, m.progress),
-      });
-
-      text = result.data.text || "";
-
-      console.log("[parse] OCR chars:", text.length);
+        text = result.data.text || "";
+        console.log("[OCR TEXT LENGTH]:", text.length);
+      } catch (ocrErr) {
+        console.error("[OCR FAILED]:", ocrErr);
+      }
     }
 
     return text;
   } catch (err) {
-    console.error("[parse] pdf error:", err);
+    console.error("[PDF FAILED]:", err);
     throw err;
   }
 }
 
 /* ---------------- DOCX ---------------- */
-async function extractDocxText(buffer: Buffer): Promise<string> {
+async function extractDocxText(buffer: Buffer) {
   try {
     const mammoth = await import("mammoth");
-    const result = await mammoth.extractRawText({ buffer });
+    const result = await mammoth.extractRawText({ buffer});
 
     const text = result.value || "";
-    console.log("[parse] docx chars:", text.length);
+    console.log("[DOCX TEXT LENGTH]:", text.length);
 
     return text;
   } catch (err) {
-    console.error("[parse] docx error:", err);
+    console.error("[DOCX FAILED]:", err);
     throw err;
   }
 }
 
-/* ---------------- TEXT EXTRACTOR ---------------- */
-async function extractText(file: File): Promise<string> {
+/* ---------------- EXTRACT ---------------- */
+async function extractText(file: File) {
   const buffer = Buffer.from(await file.arrayBuffer());
   const name = file.name.toLowerCase();
 
   if (name.endsWith(".pdf")) return extractPdfText(buffer);
   if (name.endsWith(".docx")) return extractDocxText(buffer);
 
-  const text = buffer.toString("utf-8");
-  console.log("[parse] txt chars:", text.length);
-
-  return text;
+  return buffer.toString("utf-8");
 }
 
-/* ---------------- JSON CLEANER ---------------- */
-function cleanJsonOutput(text: string): string {
-  return text
-    .replace(/```json/g, "")
-    .replace(/```/g, "")
-    .trim();
+/* ---------------- CLEAN JSON ---------------- */
+function cleanJson(text: string) {
+  return text.replace(/```json|```/g, "").trim();
 }
 
-/* ---------------- SAFE JSON PARSER ---------------- */
-function safeJsonParse(text: string): ParsedResume {
+function safeParse(text: string) {
   try {
     return JSON.parse(text);
   } catch {
     const match = text.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error("No valid JSON found in AI response");
-
-    return JSON.parse(match[0]);
+    return match ? JSON.parse(match[0]) : null;
   }
 }
 
-/* ---------------- PROMPT ---------------- */
-const SYSTEM_PROMPT = `You are a resume parser.
-
-STRICT RULES:
-- Output ONLY valid JSON
-- NO markdown
-- NO explanation
-- NO extra text
-
-Schema:
-{
-  "contact": { "name": string, "email": string, "phone"?: string, "location"?: string, "linkedin"?: string, "website"?: string },
-  "summary"?: string,
-  "experience": [{ "company": string, "title": string, "startDate": string, "endDate": string, "bullets": string[] }],
-  "education": [{ "institution": string, "degree": string, "field": string, "graduationYear": string }],
-  "skills": string[],
-  "certifications"?: string[],
-  "projects"?: [{ "name": string, "description": string, "technologies": string[] }]
-}`;
-
 /* ---------------- API ---------------- */
 export async function POST(req: NextRequest) {
-  let formData: FormData;
-
   try {
-    formData = await req.formData();
-  } catch {
-    return NextResponse.json(
-      { error: "invalid_request", message: "Expected multipart/form-data" },
-      { status: 400 }
-    );
-  }
+    const formData = await req.formData();
+    const file = formData.get("file") as File;
 
-  const file = formData.get("file") as File | null;
-  const modelId =
-    (formData.get("model") as ModelId | null) ?? "groq-llama-3.1-8b";
+    if (!file) {
+      return NextResponse.json({ error: "NO_FILE" }, { status: 400 });
+    }
 
-  if (!file) {
-    return NextResponse.json(
-      { error: "missing_file", message: "No file provided" },
-      { status: 400 }
-    );
-  }
+    if (file.size > MAX_SIZE) {
+      return NextResponse.json({ error: "FILE_TOO_LARGE" }, { status: 400 });
+    }
 
-  if (file.size > MAX_SIZE) {
-    return NextResponse.json(
-      { error: "file_too_large", message: "Max 5MB allowed" },
-      { status: 400 }
-    );
-  }
-
-  const ext = "." + file.name.split(".").pop()?.toLowerCase();
-
-  const validType =
-    ALLOWED_TYPES.includes(file.type) || ALLOWED_EXTENSIONS.includes(ext);
-
-  if (!validType) {
-    return NextResponse.json(
-      {
-        error: "unsupported_format",
-        message: "Upload PDF, DOCX or TXT only",
-      },
-      { status: 400 }
-    );
-  }
-
-  /* -------- TEXT EXTRACTION -------- */
-  let rawText: string;
-
-  try {
-    rawText = await extractText(file);
-
-    if (!rawText.trim()) {
+    /* -------- TEXT EXTRACTION -------- */
+    let rawText = "";
+    try {
+      rawText = await extractText(file);
+    } catch (err) {
       return NextResponse.json(
         {
-          error: "empty_text",
-          message:
-            "No text extracted. Likely scanned or unsupported file.",
+          error: "EXTRACTION_FAILED",
+          detail: String(err),
         },
         { status: 422 }
       );
     }
 
-    console.log("[parse] total chars:", rawText.length);
+    if (!rawText || rawText.length < 20) {
+      return NextResponse.json(
+        {
+          error: "NO_TEXT_EXTRACTED",
+          debug: {
+            length: rawText?.length || 0,
+            hint: "Likely scanned PDF or unsupported format",
+          },
+        },
+        { status: 422 }
+      );
+    }
+
+    /* -------- AI PARSE -------- */
+    let parsed = null;
+
+    try {
+      const provider = createProvider("groq-llama-3.1-8b");
+
+      const response = await provider.complete(
+        rawText.slice(0, 15000), // 🔥 prevent token overflow
+        `Return ONLY JSON resume data. No explanation.`
+      );
+
+      const cleaned = cleanJson(response);
+      parsed = safeParse(cleaned);
+    } catch (err) {
+      console.error("[AI FAILED]:", err);
+    }
+
+    /* -------- FINAL RESPONSE -------- */
+    return NextResponse.json({
+      success: true,
+      parsed: parsed || null,
+      rawPreview: rawText.slice(0, 500),
+      debug: {
+        textLength: rawText.length,
+        parsedSuccess: !!parsed,
+      },
+    });
   } catch (err) {
     return NextResponse.json(
       {
-        error: "parse_failed",
-        message: "File parsing failed",
+        error: "UNKNOWN_ERROR",
         detail: String(err),
       },
-      { status: 422 }
+      { status: 500 }
     );
   }
-
-  /* -------- AI PARSING -------- */
-  let parsed: ParsedResume;
-
-  try {
-    const provider = createProvider(modelId);
-
-    const response = await provider.complete(rawText, SYSTEM_PROMPT);
-
-    console.log("[AI RAW]:", response.slice(0, 300));
-
-    const cleaned = cleanJsonOutput(response);
-    const json = safeJsonParse(cleaned);
-
-    parsed = {
-      ...json,
-      experience: json.experience ?? [],
-      education: json.education ?? [],
-      skills: json.skills ?? [],
-    };
-  } catch (err) {
-    console.error("[AI ERROR]:", err);
-
-    return NextResponse.json(
-      {
-        error: "ai_failed",
-        message: "AI parsing failed",
-        detail: String(err),
-      },
-      { status: 502 }
-    );
-  }
-
-  return NextResponse.json({
-    parsed,
-    rawPreview: rawText.slice(0, 500),
-  });
 }
