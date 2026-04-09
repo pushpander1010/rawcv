@@ -161,13 +161,13 @@ export async function POST(req: NextRequest) {
   let baseScore = calculateBaseScore(ruleIssues);
 
   // Charge credits before calling AI
-  const chargeError = await chargeCredits(model ?? "gemini-1.5-flash", "ATS analysis");
+  const chargeError = await chargeCredits(model ?? "gemini-2.5-flash", "ATS analysis");
   if (chargeError) return chargeError;
 
   // AI-powered nuanced scoring
   let aiIssues: ATSIssue[] = [];
   try {
-    const provider = createProvider(model ?? "gemini-1.5-flash");
+    const provider = createProvider(model ?? "gemini-2.5-flash");
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}\n\nRaw text excerpt:\n${raw.slice(0, 2000)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const aiResult = JSON.parse(json) as {
@@ -189,3 +189,4 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json(result);
 }
+

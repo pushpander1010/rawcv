@@ -3,8 +3,8 @@
 export type ModelId =
   | "gpt-4o-mini"
   | "gpt-4o"
-  | "gemini-1.5-flash"
-  | "gemini-1.5-pro"
+  | "gemini-2.5-flash"
+  | "gemini-2.5-pro"
   | "claude-haiku"
   | "claude-sonnet"
   | "groq-llama-3.1-8b"

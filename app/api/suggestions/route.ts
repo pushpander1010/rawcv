@@ -51,10 +51,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "gemini-1.5-flash", "AI suggestions");
+    const chargeError = await chargeCredits(model ?? "gemini-2.5-flash", "AI suggestions");
     if (chargeError) return chargeError;
 
-    const provider = createProvider(model ?? "gemini-1.5-flash");
+    const provider = createProvider(model ?? "gemini-2.5-flash");
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const result = JSON.parse(json) as {
@@ -92,3 +92,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

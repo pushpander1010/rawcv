@@ -124,10 +124,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "gemini-1.5-flash", "Chat bot");
+    const chargeError = await chargeCredits(model ?? "gemini-2.5-flash", "Chat bot");
     if (chargeError) return chargeError;
 
-    const provider = createProvider(model ?? "gemini-1.5-flash");
+    const provider = createProvider(model ?? "gemini-2.5-flash");
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : SYSTEM_PROMPT;
 
     const conversationHistory = messages
@@ -192,10 +192,17 @@ export async function POST(req: NextRequest) {
       resumeUpdate: parsed.resumeUpdate ?? null,
       isComplete: parsed.isComplete ?? false,
     } satisfies ChatResponse);
-  } catch {
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error("[chat] AI error:", detail);
     return NextResponse.json(
-      { error: "ai_unavailable", message: "Chat is unavailable. Please try again." },
+      {
+        error: "ai_unavailable",
+        message: "Chat is unavailable. Please try again.",
+        ...(process.env.NODE_ENV !== "production" && { detail }),
+      },
       { status: 502 }
     );
   }
 }
+

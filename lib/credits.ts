@@ -6,13 +6,13 @@ import type { ModelId } from "@/types";
 
 // Credits charged per AI operation per model
 const OPERATION_COSTS: Record<ModelId, number> = {
-  "gemini-1.5-flash": 1,
+  "gemini-2.5-flash": 1,
   "groq-llama-3.1-8b": 1,
   "openrouter-qwen-7b": 1,
   "gpt-4o-mini":      2,
   "claude-haiku":     2,
   "groq-llama-3.3-70b": 2,
-  "gemini-1.5-pro":   8,
+  "gemini-2.5-pro":   8,
   "claude-sonnet":    10,
   "gpt-4o":           15,
 };
@@ -24,6 +24,7 @@ export function getOperationCost(model: ModelId): number {
 /**
  * Checks that the current session user has enough credits for the operation.
  * If not, returns a 402 NextResponse. Otherwise deducts and returns null.
+ * Dev admin (id = "dev-admin") bypasses all DB checks.
  */
 export async function chargeCredits(
   model: ModelId,
@@ -44,6 +45,9 @@ export async function chargeCredits(
       { status: 401 }
     );
   }
+
+  // Dev admin has unlimited credits — skip DB entirely
+  if (userId === "dev-admin") return null;
 
   const user = await getUserById(userId);
   const cost = getOperationCost(model);

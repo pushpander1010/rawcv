@@ -37,7 +37,7 @@ const defaultState: ResumeState = {
   suggestions: [],
   tailoredResume: null,
   selectedTheme: "classic",
-  selectedModel: "gemini-1.5-flash",
+  selectedModel: "gemini-2.5-flash",
   jd: "",
   lastOperationCost: null,
 };

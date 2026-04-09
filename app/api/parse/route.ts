@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
   }
 
   const file = formData.get("file") as File | null;
-  const modelId = (formData.get("model") as ModelId | null) ?? "gemini-1.5-flash";
+  const modelId = (formData.get("model") as ModelId | null) ?? "gemini-2.5-flash";
 
   if (!file) {
     return NextResponse.json({ error: "missing_file", message: "No file provided" }, { status: 400 });
@@ -122,3 +122,4 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ parsed, raw: rawText });
 }
+

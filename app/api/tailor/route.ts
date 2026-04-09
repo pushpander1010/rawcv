@@ -53,10 +53,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "gemini-1.5-flash", "JD tailoring");
+    const chargeError = await chargeCredits(model ?? "gemini-2.5-flash", "JD tailoring");
     if (chargeError) return chargeError;
 
-    const provider = createProvider(model ?? "gemini-1.5-flash");
+    const provider = createProvider(model ?? "gemini-2.5-flash");
     const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 4000)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
 
@@ -121,3 +121,4 @@ function applyChanges(base: ParsedResume, changes: TailorChange[]): ParsedResume
 
   return resume;
 }
+

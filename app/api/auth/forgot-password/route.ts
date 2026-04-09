@@ -36,3 +36,4 @@ export async function POST(req: NextRequest) {
     message: "If that email is registered, you'll receive a reset link shortly.",
   });
 }
+

@@ -30,3 +30,4 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ message: "Password updated. You can now sign in." });
 }
+
