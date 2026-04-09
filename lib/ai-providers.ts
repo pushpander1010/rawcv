@@ -7,7 +7,7 @@ const GROQ_REMOTE_MODEL: Record<string, string> = {
 };
 
 const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
-  "openrouter-gemma-4-27b": "google/gemma-4-26b-it:free",
+  "openrouter-nvidia-30b": "nvidia/nemotron-3-nano-30b-a3b:free",
   "openrouter-qwen-7b": "qwen/qwen-2.5-7b-instruct",
   "openrouter-mistral-small": "mistralai/mistral-small-3.1-24b-instruct",
   "openrouter-llama-4-maverick": "meta-llama/llama-4-maverick",
@@ -158,7 +158,7 @@ class OpenRouterProvider implements AIProvider {
 
   estimatedCost(inputTokens: number, outputTokens: number): number {
     const rates: Record<string, [number, number]> = {
-      "openrouter-gemma-4-27b": [0, 0],
+      "openrouter-nvidia-30b": [0, 0],
       "openrouter-qwen-7b": [0.0001, 0.0001],
       "openrouter-mistral-small": [0.0001, 0.0003],
       "openrouter-llama-4-maverick": [0.00018, 0.00059],

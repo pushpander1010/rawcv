@@ -4,7 +4,7 @@ export type ModelId =
   | "groq-llama-3.1-8b"
   | "groq-llama-3.3-70b"
   | "groq-deepseek-r1"
-  | "openrouter-gemma-4-27b"
+  | "openrouter-nvidia-30b"
   | "openrouter-qwen-7b"
   | "openrouter-mistral-small"
   | "openrouter-llama-4-maverick"

@@ -6,12 +6,10 @@ import type { ModelId } from "@/types";
 
 // Credits charged per AI operation per model
 const OPERATION_COSTS: Record<ModelId, number> = {
-  // Groq
-  "groq-llama-3.1-8b":  1,
-  "groq-llama-3.3-70b": 2,
-  "groq-deepseek-r1":   2,
-  // OpenRouter
-  "openrouter-gemma-4-27b":      0,
+  "groq-llama-3.1-8b":           1,
+  "groq-llama-3.3-70b":          2,
+  "groq-deepseek-r1":            2,
+  "openrouter-nvidia-30b":       0,
   "openrouter-qwen-7b":          1,
   "openrouter-mistral-small":    2,
   "openrouter-llama-4-maverick": 3,

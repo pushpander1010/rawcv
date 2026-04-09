@@ -16,7 +16,7 @@ interface ModelMeta {
 
 const MODELS: ModelMeta[] = [
   // Free
-  { id: "openrouter-gemma-4-27b",      name: "Gemma 4 27B (50/day limit)", provider: "OpenRouter", tier: "free",     estimatedCredits: 0 },
+  { id: "openrouter-nvidia-30b",       name: "Nvidia Nemotron 30B (Free)", provider: "OpenRouter", tier: "free",     estimatedCredits: 0 },
   { id: "groq-llama-3.1-8b",           name: "Llama 3.1 8B",       provider: "Groq",       tier: "free",     estimatedCredits: 1 },
   // Cheap
   { id: "openrouter-qwen-7b",          name: "Qwen 2.5 7B",        provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1 },
