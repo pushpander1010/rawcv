@@ -18,11 +18,32 @@ function normalizeParsed(data: any): ParsedResume {
       website: data?.contact?.website ?? "",
     },
     summary: data?.summary ?? "",
-    experience: Array.isArray(data?.experience) ? data.experience : [],
-    education: Array.isArray(data?.education) ? data.education : [],
+    experience: Array.isArray(data?.experience)
+      ? data.experience.map((e: any) => ({
+          company: e?.company ?? "",
+          title: e?.title ?? "",
+          startDate: e?.startDate ?? "",
+          endDate: e?.endDate ?? "",
+          bullets: Array.isArray(e?.bullets) ? e.bullets : [],
+        }))
+      : [],
+    education: Array.isArray(data?.education)
+      ? data.education.map((e: any) => ({
+          institution: e?.institution ?? "",
+          degree: e?.degree ?? "",
+          field: e?.field ?? "",
+          graduationYear: e?.graduationYear ?? "",
+        }))
+      : [],
     skills: Array.isArray(data?.skills) ? data.skills : [],
     certifications: Array.isArray(data?.certifications) ? data.certifications : [],
-    projects: Array.isArray(data?.projects) ? data.projects : [],
+    projects: Array.isArray(data?.projects)
+      ? data.projects.map((p: any) => ({
+          name: p?.name ?? "",
+          description: p?.description ?? "",
+          technologies: Array.isArray(p?.technologies) ? p.technologies : [],
+        }))
+      : [],
   };
 }
 
@@ -107,7 +128,17 @@ export async function POST(req: NextRequest) {
 
       const response = await provider.complete(
         rawText.slice(0, 15000),
-        "Return strict JSON resume. No explanation."
+        `You are a resume parser. Extract structured information and return ONLY valid JSON matching this exact schema:
+{
+  "contact": { "name": string, "email": string, "phone": string, "location": string, "linkedin": string, "website": string },
+  "summary": string,
+  "experience": [{ "company": string, "title": string, "startDate": string, "endDate": string, "bullets": string[] }],
+  "education": [{ "institution": string, "degree": string, "field": string, "graduationYear": string }],
+  "skills": string[],
+  "certifications": string[],
+  "projects": [{ "name": string, "description": string, "technologies": string[] }]
+}
+Return ONLY the JSON object. No markdown, no explanation.`
       );
 
       const rawParsed = safeParse(response);
