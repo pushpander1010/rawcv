@@ -6,15 +6,15 @@ import type { ModelId } from "@/types";
 
 // Credits charged per AI operation per model
 const OPERATION_COSTS: Record<ModelId, number> = {
-  "groq-llama-3.1-8b":           1,  // displayed as 0.5
-  "groq-llama-3.3-70b":          2,
+  "groq-llama-3.1-8b":           1,
+  "groq-llama-3.3-70b":          1,
   "groq-deepseek-r1":            2,
-  "openrouter-nvidia-30b":       1,  // displayed as 0.5 (free model)
-  "openrouter-qwen-7b":          2,
-  "openrouter-mistral-small":    2,
-  "openrouter-llama-4-maverick": 3,
-  "openrouter-deepseek-v3":      4,
-  "together-gemma-3n":           1,  // displayed as 0.5 (free model)
+  "openrouter-nvidia-30b":       1,
+  "openrouter-qwen-7b":          1,
+  "openrouter-mistral-small":    1,
+  "openrouter-llama-4-maverick": 2,
+  "openrouter-deepseek-v3":      3,
+  "together-gemma-3n":           1,
 };
 
 export function getOperationCost(model: ModelId): number {
