@@ -26,7 +26,7 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
 ];
 
 export default function AnalyzePage() {
-  const { state, setState } = useResume();
+  const { state, setState, refreshCredits } = useResume();
   const [activeTab, setActiveTab] = useState<Tab>("ats");
   const [atsLoading, setAtsLoading] = useState(false);
   const [atsError, setAtsError] = useState<string | null>(null);
@@ -68,6 +68,7 @@ export default function AnalyzePage() {
       if (!res.ok) { const err = await res.json(); throw new Error(err.message ?? "ATS analysis failed"); }
       const result = await res.json();
       setState((prev) => ({ ...prev, atsResult: result }));
+      refreshCredits();
     } catch (e) { setAtsError(e instanceof Error ? e.message : "Something went wrong"); }
     finally { setAtsLoading(false); }
   }
@@ -81,6 +82,7 @@ export default function AnalyzePage() {
       if (!res.ok) { const err = await res.json(); throw new Error(err.message ?? "Relevance analysis failed"); }
       const result = await res.json();
       setState((prev) => ({ ...prev, relevanceResult: result }));
+      refreshCredits();
     } catch (e) { setRelevanceError(e instanceof Error ? e.message : "Something went wrong"); }
     finally { setRelevanceLoading(false); }
   }
@@ -92,6 +94,7 @@ export default function AnalyzePage() {
       if (!res.ok) { const err = await res.json(); throw new Error(err.message ?? "Suggestions failed"); }
       const result = await res.json();
       setState((prev) => ({ ...prev, suggestions: result }));
+      refreshCredits();
     } catch (e) { setSuggestionsError(e instanceof Error ? e.message : "Something went wrong"); }
     finally { setSuggestionsLoading(false); }
   }
@@ -103,6 +106,7 @@ export default function AnalyzePage() {
       if (!res.ok) { const err = await res.json(); throw new Error(err.message ?? "Enhancement failed"); }
       const result = await res.json();
       setEnhancements(result);
+      refreshCredits();
     } catch (e) { setEnhancementError(e instanceof Error ? e.message : "Something went wrong"); }
     finally { setEnhancementLoading(false); }
   }

@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
+import { useResume } from "@/context/ResumeContext";
 import type { CreditTransaction } from "@/lib/user-store";
 
 // ─── Bundle definitions (mirrored from API) ───────────────────────────────────
@@ -60,18 +61,17 @@ function CreditsPageContent() {
   const success = searchParams.get("success") === "1";
   const cancelled = searchParams.get("cancelled") === "1";
 
-  const [balance, setBalance] = useState<number | null>(null);
+  const { state, refreshCredits } = useResume();
   const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [purchasing, setPurchasing] = useState<string | null>(null);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
 
-  const fetchCredits = useCallback(async () => {
+  const fetchTransactions = useCallback(async () => {
     try {
       const res = await fetch("/api/credits");
       if (res.ok) {
         const data = await res.json();
-        setBalance(data.balance);
         setTransactions(data.transactions);
       }
     } finally {
@@ -80,8 +80,9 @@ function CreditsPageContent() {
   }, []);
 
   useEffect(() => {
-    fetchCredits();
-  }, [fetchCredits]);
+    fetchTransactions();
+    refreshCredits();
+  }, [fetchTransactions, refreshCredits]);
 
   async function handlePurchase(bundleId: string) {
     setPurchasing(bundleId);
@@ -180,7 +181,7 @@ function CreditsPageContent() {
           <div className="h-8 w-24 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
         ) : (
           <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            {balance ?? 0}{" "}
+            {state.creditBalance ?? 0}{" "}
             <span className="text-base font-normal text-gray-500 dark:text-gray-400">credits</span>
           </p>
         )}

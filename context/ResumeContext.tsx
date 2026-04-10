@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import type {
   ParsedResume,
   ATSResult,
@@ -21,12 +21,14 @@ export interface ResumeState {
   selectedTheme: ThemeId;
   selectedModel: ModelId;
   jd: string;
-  lastOperationCost: number | null; // actual credits consumed by the last AI operation
+  lastOperationCost: number | null;
+  creditBalance: number | null;
 }
 
 interface ResumeContextValue {
   state: ResumeState;
   setState: React.Dispatch<React.SetStateAction<ResumeState>>;
+  refreshCredits: () => void;
 }
 
 const defaultState: ResumeState = {
@@ -40,6 +42,7 @@ const defaultState: ResumeState = {
   selectedModel: "groq-llama-3.1-8b",
   jd: "",
   lastOperationCost: null,
+  creditBalance: null,
 };
 
 const ResumeContext = createContext<ResumeContextValue | null>(null);
@@ -47,8 +50,25 @@ const ResumeContext = createContext<ResumeContextValue | null>(null);
 export function ResumeProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<ResumeState>(defaultState);
 
+  const refreshCredits = useCallback(async () => {
+    try {
+      const res = await fetch("/api/credits");
+      if (res.ok) {
+        const data = await res.json();
+        setState((prev) => ({ ...prev, creditBalance: data.balance }));
+      }
+    } catch {
+      // silently ignore — credits will show on next successful fetch
+    }
+  }, []);
+
+  // Fetch on mount
+  useEffect(() => {
+    refreshCredits();
+  }, [refreshCredits]);
+
   return (
-    <ResumeContext.Provider value={{ state, setState }}>
+    <ResumeContext.Provider value={{ state, setState, refreshCredits }}>
       {children}
     </ResumeContext.Provider>
   );

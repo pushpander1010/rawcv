@@ -21,7 +21,7 @@ const WELCOME_CUSTOMIZE =
   "Hi! I can help you customize your resume. What would you like to change or improve? You can also ask me to undo any change I make.";
 
 export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSelector = false }: Props) {
-  const { state, setState } = useResume();
+  const { state, setState, refreshCredits } = useResume();
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -107,6 +107,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
           setIsComplete(true);
           onComplete?.();
         }
+        refreshCredits();
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong");
       } finally {
@@ -114,7 +115,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
         inputRef.current?.focus();
       }
     },
-    [messages, localResume, loading, mode, state.selectedModel, setState, onComplete, sectionHistory]
+    [messages, localResume, loading, mode, state.selectedModel, setState, onComplete, sectionHistory, refreshCredits]
   );
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
