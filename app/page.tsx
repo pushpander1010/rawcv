@@ -15,19 +15,22 @@ const features = [
 
 const pricingPlans = [
   {
-    name: "Starter", price: "$5", credits: "100 credits",
-    description: "Perfect for a single job application sprint.", highlight: false,
-    features: ["100 AI credits", "All analysis features", "5 theme downloads", "Chat-based building"],
+    name: "Starter", price: "₹99", credits: "30 credits",
+    priceUsd: "$1",
+    description: "Perfect for a quick resume check.", highlight: false,
+    features: ["30 AI credits", "All analysis features", "Theme downloads", "Chat-based building"],
   },
   {
-    name: "Pro", price: "$15", credits: "400 credits",
+    name: "Pro", price: "₹499", credits: "200 credits",
+    priceUsd: "$5",
     description: "Best value for active job seekers.", highlight: true,
-    features: ["400 AI credits", "All analysis features", "Unlimited downloads", "Priority AI models", "Chat-based building"],
+    features: ["200 AI credits", "All analysis features", "Unlimited downloads", "Priority AI models", "Chat-based building"],
   },
   {
-    name: "Power", price: "$35", credits: "1,000 credits",
-    description: "For recruiters and career coaches.", highlight: false,
-    features: ["1,000 AI credits", "All analysis features", "Unlimited downloads", "All premium AI models", "Chat-based building"],
+    name: "Power", price: "₹999", credits: "350 credits",
+    priceUsd: "$10",
+    description: "For power users and career coaches.", highlight: false,
+    features: ["350 AI credits", "All analysis features", "Unlimited downloads", "All premium AI models", "Chat-based building"],
   },
 ];
 
@@ -155,6 +158,7 @@ export default function LandingPage() {
                 <div className="mb-4">
                   <p className="font-semibold text-base">{plan.name}</p>
                   <p className="text-3xl font-extrabold mt-1">{plan.price}<span className="text-sm font-normal text-gray-400 ml-1">/ {plan.credits}</span></p>
+                  <p className="text-xs text-gray-400 mt-0.5">{plan.priceUsd} USD</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{plan.description}</p>
                 </div>
                 <ul className="space-y-2 mb-6 flex-1">

@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { getUserByEmail } from "./user-store";
 
-const INITIAL_CREDITS = 10;
+const INITIAL_CREDITS = 20;
 // Dev-only admin credentials — only active when NODE_ENV !== "production"
 const DEV_ADMIN_EMAIL = process.env.DEV_ADMIN_EMAIL ?? "admin@localhost";
 const DEV_ADMIN_PASSWORD = process.env.DEV_ADMIN_PASSWORD ?? "admin";

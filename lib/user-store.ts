@@ -26,7 +26,7 @@ export interface CreditTransaction {
   createdAt: string;
 }
 
-const INITIAL_CREDITS = 10;
+const INITIAL_CREDITS = 20;
 
 function normalizeEmail(email: string): string {
   return email.toLowerCase();

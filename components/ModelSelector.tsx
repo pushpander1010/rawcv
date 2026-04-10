@@ -10,16 +10,27 @@ interface ModelMeta {
   id: ModelId;
   name: string;
   provider: string;
-  tier: "free";
+  tier: "free" | "low-cost" | "medium" | "paid";
   estimatedCredits: number;
 }
 
 const MODELS: ModelMeta[] = [
-  { id: "groq-llama-3.1-8b", name: "Llama 3.1 8B", provider: "Groq", tier: "free", estimatedCredits: 0 },
+  { id: "groq-llama-3.1-8b",           name: "Llama 3.1 8B",           provider: "Groq",       tier: "free",     estimatedCredits: 0.5 },
+  { id: "openrouter-nvidia-30b",        name: "Nvidia Nemotron 30B",    provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
+  { id: "together-gemma-3n",            name: "Gemma 3n E4B",           provider: "Together",   tier: "free",     estimatedCredits: 0.5 },
+  { id: "openrouter-qwen-7b",           name: "Qwen 2.5 7B",            provider: "OpenRouter", tier: "low-cost", estimatedCredits: 2 },
+  { id: "groq-llama-3.3-70b",           name: "Llama 3.3 70B",          provider: "Groq",       tier: "low-cost", estimatedCredits: 2 },
+  { id: "openrouter-mistral-small",     name: "Mistral Small 24B",      provider: "OpenRouter", tier: "low-cost", estimatedCredits: 2 },
+  { id: "groq-deepseek-r1",             name: "DeepSeek R1 70B",        provider: "Groq",       tier: "medium",   estimatedCredits: 2 },
+  { id: "openrouter-llama-4-maverick",  name: "Llama 4 Maverick",       provider: "OpenRouter", tier: "medium",   estimatedCredits: 3 },
+  { id: "openrouter-deepseek-v3",       name: "DeepSeek V3",            provider: "OpenRouter", tier: "paid",     estimatedCredits: 4 },
 ];
 
 const TIER_STYLES: Record<ModelMeta["tier"], string> = {
-  "free": "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+  "free":     "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+  "low-cost": "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+  "medium":   "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+  "paid":     "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
 };
 
 const PROVIDER_ICONS: Record<string, string> = {
@@ -161,6 +172,13 @@ export default function ModelSelector({ label, onChange }: ModelSelectorProps) {
             })}
           </ul>
         </>
+      )}
+
+      {/* Free model availability notice */}
+      {selected.tier === "free" && (
+        <p className="mt-1.5 text-xs text-amber-600 dark:text-amber-400">
+          ⚠ Free models are subject to availability and may be slower during peak hours.
+        </p>
       )}
 
       {/* Last operation cost badge */}
