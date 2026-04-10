@@ -11,17 +11,17 @@ import EnhancementList from "@/components/EnhancementList";
 import ThemePicker from "@/components/ThemePicker";
 import ResumePreview from "@/components/ResumePreview";
 import DownloadButton from "@/components/DownloadButton";
-import ChatBot from "@/components/ChatBot";
-import type { ATSResult, RelevanceResult, Suggestion } from "@/types";
+import ChatBot from "@/components/ChatBot";import type { ATSResult, RelevanceResult, Suggestion } from "@/types";
 import ResizablePanels from "@/components/ResizablePanels";
 
-type Tab = "ats" | "relevance" | "suggestions" | "enhance" | "theme";
+type Tab = "ats" | "relevance" | "suggestions" | "enhance" | "theme" | "chat";
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: "ats",         label: "ATS Score",    icon: "📊" },
   { id: "relevance",   label: "JD Match",     icon: "🎯" },
   { id: "suggestions", label: "Suggestions",  icon: "✨" },
   { id: "enhance",     label: "Enhance",      icon: "🔧" },
+  { id: "chat",        label: "User Input",   icon: "💬" },
   { id: "theme",       label: "Theme",        icon: "🎨" },
 ];
 
@@ -151,7 +151,7 @@ export default function AnalyzePage() {
         leftLabel="Analysis"
         rightLabel="Resume Preview"
         left={
-          <div className="p-6">
+          <div className={activeTab === "chat" ? "flex flex-col h-full" : "p-6"}>
           {/* ATS */}
           {activeTab === "ats" && (
             <div>
@@ -233,6 +233,15 @@ export default function AnalyzePage() {
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Pick a visual style for your resume.</p>
               <ThemePicker />
             </div>
+          )}
+
+          {/* User Input chat */}
+          {activeTab === "chat" && (
+            <ChatBot
+              mode="customize"
+              hideModelSelector
+              onEnd={() => setActiveTab("ats")}
+            />
           )}
           </div>
         }

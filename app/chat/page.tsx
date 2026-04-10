@@ -65,7 +65,7 @@ export default function ChatPage() {
         rightLabel="Resume Preview"
         left={
           <div className="flex flex-col h-full">
-            <ChatBot mode={mode} onComplete={handleComplete} hideModelSelector />
+            <ChatBot mode={mode} onComplete={handleComplete} onEnd={() => router.back()} hideModelSelector />
           </div>
         }
         right={

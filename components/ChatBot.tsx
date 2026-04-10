@@ -9,6 +9,7 @@ import type { ChatMessage, ChatResponse } from "@/app/api/chat/route";
 interface Props {
   mode?: "build" | "customize";
   onComplete?: () => void;
+  onEnd?: () => void;
   /** Hide the model selector (e.g. when the parent already shows one) */
   hideModelSelector?: boolean;
 }
@@ -19,7 +20,7 @@ const WELCOME_BUILD =
 const WELCOME_CUSTOMIZE =
   "Hi! I can help you customize your resume. What would you like to change or improve? You can also ask me to undo any change I make.";
 
-export default function ChatBot({ mode = "build", onComplete, hideModelSelector = false }: Props) {
+export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSelector = false }: Props) {
   const { state, setState } = useResume();
 
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -186,31 +187,42 @@ export default function ChatBot({ mode = "build", onComplete, hideModelSelector 
       )}
 
       {/* Input area */}
-      <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex gap-2 items-end">
-        <textarea
-          ref={inputRef}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={
-            mode === "customize"
-              ? "Ask me to change anything, or say 'undo'…"
-              : "Type a message… (Enter to send)"
-          }
-          rows={2}
-          disabled={loading || isComplete}
-          aria-label="Chat message input"
-          className="flex-1 resize-none rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-        />
-        <button
-          type="button"
-          onClick={() => sendMessage(input)}
-          disabled={!input.trim() || loading || isComplete}
-          aria-label="Send message"
-          className="shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Send
-        </button>
+      <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex flex-col gap-2">
+        <div className="flex gap-2 items-end">
+          <textarea
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={
+              mode === "customize"
+                ? "Ask me to change anything, or say 'undo'…"
+                : "Type a message… (Enter to send)"
+            }
+            rows={2}
+            disabled={loading || isComplete}
+            aria-label="Chat message input"
+            className="flex-1 resize-none rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          />
+          <button
+            type="button"
+            onClick={() => sendMessage(input)}
+            disabled={!input.trim() || loading || isComplete}
+            aria-label="Send message"
+            className="shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Send
+          </button>
+        </div>
+        {onEnd && (
+          <button
+            type="button"
+            onClick={onEnd}
+            className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-500 dark:hover:text-red-400 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+          >
+            End Chat
+          </button>
+        )}
       </div>
     </div>
   );
