@@ -22,9 +22,38 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "rawcv — AI-Powered Resume Platform",
+  title: "rawcv — AI-Powered Resume Builder & ATS Optimizer",
   description:
-    "Upload your resume, get an ATS score, match it to any job description, enhance it with AI, and download a polished PDF.",
+    "Build, analyze, and optimize your resume with AI. Get ATS scores, match resumes to job descriptions, enhance bullet points, and download polished PDFs. Free to start.",
+  keywords: [
+    "resume builder", "AI resume", "ATS score", "resume optimizer",
+    "job description match", "resume checker", "CV builder", "resume AI",
+    "ATS friendly resume", "resume enhancement"
+  ],
+  authors: [{ name: "rawcv" }],
+  creator: "rawcv",
+  metadataBase: new URL("https://www.rawcv.com"),
+  alternates: { canonical: "https://www.rawcv.com" },
+  openGraph: {
+    type: "website",
+    url: "https://www.rawcv.com",
+    title: "rawcv — AI-Powered Resume Builder & ATS Optimizer",
+    description:
+      "Build, analyze, and optimize your resume with AI. Get ATS scores, match resumes to job descriptions, and download polished PDFs.",
+    siteName: "rawcv",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "rawcv — AI Resume Platform" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "rawcv — AI-Powered Resume Builder & ATS Optimizer",
+    description: "Build, analyze, and optimize your resume with AI. Free to start.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export default function RootLayout({

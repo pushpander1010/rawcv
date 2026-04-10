@@ -1,8 +1,13 @@
-"use client";
-
+import type { Metadata } from "next";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
-import ResumeUploader from "@/components/ResumeUploader";
+import { HeroCTA, FooterCTA, PricingCTA, FooterNav } from "@/components/LandingCTA";
+
+export const metadata: Metadata = {
+  title: "rawcv — AI Resume Builder, ATS Score & Job Match Optimizer",
+  description:
+    "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, and download a polished PDF resume.",
+  alternates: { canonical: "https://www.rawcv.com" },
+};
 
 const features = [
   { icon: "📊", title: "ATS Score Analysis", description: "Instantly see how your resume scores against Applicant Tracking Systems with actionable fixes." },
@@ -15,36 +20,37 @@ const features = [
 
 const pricingPlans = [
   {
-    name: "Starter", price: "₹99", credits: "30 credits",
-    priceUsd: "$1",
+    name: "Starter", price: "₹99", credits: "30 credits", priceUsd: "$1",
     description: "Perfect for a quick resume check.", highlight: false,
     features: ["30 AI credits", "All analysis features", "Theme downloads", "Chat-based building"],
   },
   {
-    name: "Pro", price: "₹499", credits: "200 credits",
-    priceUsd: "$5",
+    name: "Pro", price: "₹499", credits: "200 credits", priceUsd: "$5",
     description: "Best value for active job seekers.", highlight: true,
     features: ["200 AI credits", "All analysis features", "Unlimited downloads", "Priority AI models", "Chat-based building"],
   },
   {
-    name: "Power", price: "₹999", credits: "350 credits",
-    priceUsd: "$10",
+    name: "Power", price: "₹999", credits: "350 credits", priceUsd: "$10",
     description: "For power users and career coaches.", highlight: false,
     features: ["350 AI credits", "All analysis features", "Unlimited downloads", "All premium AI models", "Chat-based building"],
   },
 ];
 
-export default function LandingPage() {
-  const { data: session, status } = useSession();
-  const isLoggedIn = status === "authenticated";
+const faqs = [
+  { q: "Is rawcv free to use?", a: "Yes — every new account gets 20 free credits. Free-tier AI models cost 0.5–1 credit per operation, so you can run many analyses before needing to top up." },
+  { q: "What file formats are supported?", a: "rawcv accepts PDF, DOCX, and TXT files up to 5 MB." },
+  { q: "How does ATS scoring work?", a: "We run rule-based checks (missing sections, keyword density, date formatting) combined with AI analysis to give you a score out of 100 with specific issues to fix." },
+  { q: "Will my resume data be stored?", a: "Resume data is held in your browser session only. We do not permanently store your resume content on our servers." },
+  { q: "Can I use rawcv on mobile?", a: "Yes — rawcv is fully responsive. The chat and analysis tools work on any device." },
+];
 
+export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
 
       {/* Hero */}
       <section className="relative overflow-hidden pt-20 pb-24 px-6">
         <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-gradient-to-br from-violet-200/60 via-blue-100/40 to-transparent dark:from-violet-900/30 dark:via-blue-900/20 blur-3xl" />
-
         <div className="relative max-w-3xl mx-auto text-center">
           <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase">
             AI-Powered Resume Platform
@@ -60,40 +66,7 @@ export default function LandingPage() {
             Upload your CV, get an ATS score, match it to any job description, enhance it with AI,
             and download a polished PDF — all in minutes.
           </p>
-
-          {/* CTA — different for logged-in vs logged-out */}
-          {isLoggedIn ? (
-            <div className="max-w-lg mx-auto">
-              <p className="text-sm text-gray-400 dark:text-gray-500 mb-4">
-                Welcome back{session?.user?.name ? `, ${session.user.name.split(" ")[0]}` : ""}! Drop your resume below or{" "}
-                <Link href="/chat" className="text-violet-600 hover:underline">build from scratch</Link>.
-              </p>
-              <ResumeUploader />
-              <div className="mt-4 flex gap-3 justify-center">
-                <Link href="/analyze" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium transition-colors">
-                  Go to dashboard →
-                </Link>
-                <Link href="/chat" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                  💬 Build from scratch
-                </Link>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-              <Link
-                href="/register"
-                className="inline-flex items-center justify-center px-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors"
-              >
-                Get started free
-              </Link>
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center px-7 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              >
-                Sign in
-              </Link>
-            </div>
-          )}
+          <HeroCTA />
         </div>
       </section>
 
@@ -122,19 +95,19 @@ export default function LandingPage() {
       <section className="py-20 px-6" aria-labelledby="how-heading">
         <div className="max-w-3xl mx-auto text-center">
           <h2 id="how-heading" className="text-3xl font-bold mb-12">Three steps to a better resume</h2>
-          <ol className="flex flex-col sm:flex-row gap-8 text-left">
+          <ol className="flex flex-col sm:flex-row gap-8 text-left" itemScope itemType="https://schema.org/HowTo">
             {[
               { step: "1", title: "Upload your resume", body: "Drag and drop a PDF, DOCX, or TXT file. We parse it into structured data in seconds." },
               { step: "2", title: "Analyze & improve", body: "Run ATS scoring, paste a job description for relevance analysis, and apply AI suggestions." },
               { step: "3", title: "Download your PDF", body: "Pick a theme, accept the changes you like, and download a polished, ATS-safe PDF." },
             ].map((item) => (
-              <li key={item.step} className="flex-1 flex gap-4">
+              <li key={item.step} className="flex-1 flex gap-4" itemProp="step" itemScope itemType="https://schema.org/HowToStep">
                 <span aria-hidden="true" className="flex-shrink-0 w-9 h-9 rounded-full bg-violet-600 text-white text-sm font-bold flex items-center justify-center">
                   {item.step}
                 </span>
                 <div>
-                  <h3 className="font-semibold mb-1">{item.title}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{item.body}</p>
+                  <h3 className="font-semibold mb-1" itemProp="name">{item.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed" itemProp="text">{item.body}</p>
                 </div>
               </li>
             ))}
@@ -147,7 +120,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <h2 id="pricing-heading" className="text-3xl font-bold text-center mb-3">Pay only for what you use</h2>
           <p className="text-center text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto">
-            Credits are consumed per AI operation. Choose a bundle that fits your job search.
+            Credits are consumed per AI operation. Every new account starts with 20 free credits.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {pricingPlans.map((plan) => (
@@ -171,62 +144,37 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href={isLoggedIn ? "/credits" : "/register"}
-                  className={`block text-center py-2.5 rounded-xl text-sm font-medium transition-colors ${plan.highlight ? "bg-violet-600 hover:bg-violet-700 text-white" : "border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"}`}
-                >
-                  Get started
-                </Link>
+                <PricingCTA highlight={plan.highlight} />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer CTA */}
-      <section className="py-20 px-6 text-center">
-        <h2 className="text-3xl font-bold mb-4">
-          {isLoggedIn ? "Ready to analyze your resume?" : "Ready to upgrade your resume?"}
-        </h2>
-        <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
-          {isLoggedIn
-            ? "Head to your dashboard to run ATS analysis, get AI suggestions, and download a polished PDF."
-            : "Create a free account and get started in under a minute."}
-        </p>
-        {isLoggedIn ? (
-          <div className="flex gap-4 justify-center">
-            <Link href="/analyze" className="inline-flex items-center px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors">
-              Go to dashboard →
-            </Link>
-            <Link href="/chat" className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              💬 Build from scratch
-            </Link>
-          </div>
-        ) : (
-          <div className="flex gap-4 justify-center">
-            <Link href="/register" className="inline-flex items-center px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors">
-              Create free account
-            </Link>
-            <Link href="/login" className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              Sign in
-            </Link>
-          </div>
-        )}
+      {/* FAQ — structured data for Google */}
+      <section className="py-20 px-6" aria-labelledby="faq-heading">
+        <div className="max-w-2xl mx-auto">
+          <h2 id="faq-heading" className="text-3xl font-bold text-center mb-10">Frequently asked questions</h2>
+          <dl className="space-y-6" itemScope itemType="https://schema.org/FAQPage">
+            {faqs.map((faq) => (
+              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question">
+                <dt className="font-semibold text-gray-900 dark:text-gray-100 mb-1" itemProp="name">{faq.q}</dt>
+                <dd className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+                  <span itemProp="text">{faq.a}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
+
+      <FooterCTA />
 
       {/* Footer */}
       <footer className="border-t border-gray-100 dark:border-gray-800 py-8 px-6">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
           <span className="font-bold text-gray-700 dark:text-gray-300">rawcv</span>
-          <nav className="flex gap-6" aria-label="Footer navigation">
-            <Link href="/credits" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Pricing</Link>
-            {isLoggedIn ? (
-              <Link href="/analyze" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Dashboard</Link>
-            ) : (
-              <Link href="/register" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Sign up</Link>
-            )}
-            <Link href="/login" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Sign in</Link>
-          </nav>
+          <FooterNav />
           <p>© {new Date().getFullYear()} rawcv. All rights reserved.</p>
         </div>
       </footer>
