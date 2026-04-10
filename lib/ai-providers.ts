@@ -118,20 +118,25 @@ class TogetherProvider implements AIProvider {
     const apiKey = process.env.TOGETHER_API_KEY;
     if (!apiKey) throw new Error("TOGETHER_API_KEY is not set");
 
-    const Together = (await import("together-ai")).default;
-    const client = new Together({ apiKey });
-
     return withRetry(async () => {
-      const res = await client.chat.completions.create({
-        model: "google/gemma-3n-E4B-it",
-        max_tokens: 2000,
-        messages: [
-          { role: "system", content: enforceJson(systemPrompt) },
-          { role: "user", content: prompt },
-        ],
+      const res = await fetch("https://api.together.xyz/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemma-3n-E4B-it",
+          max_tokens: 2000,
+          messages: [
+            { role: "system", content: enforceJson(systemPrompt) },
+            { role: "user", content: prompt },
+          ],
+        }),
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return safeJsonParse((res.choices[0] as any)?.message?.content ?? "{}");
+      if (!res.ok) throw new Error(`Together error (${res.status}): ${await res.text()}`);
+      const data = await res.json();
+      return safeJsonParse(data?.choices?.[0]?.message?.content ?? "{}");
     });
   }
 
