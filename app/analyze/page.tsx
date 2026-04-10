@@ -38,7 +38,6 @@ export default function AnalyzePage() {
   const [enhancements, setEnhancements] = useState<Suggestion[]>([]);
   const [enhancementLoading, setEnhancementLoading] = useState(false);
   const [enhancementError, setEnhancementError] = useState<string | null>(null);
-  const [chatOpen, setChatOpen] = useState(false);
 
   if (!state.parsed) {
     return (
@@ -121,11 +120,6 @@ export default function AnalyzePage() {
           <div className="flex items-center gap-3 flex-shrink-0">
             <div className="w-44"><ModelSelector label="Model" /></div>
             <DownloadButton />
-            <button type="button" onClick={() => setChatOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500">
-              <span aria-hidden="true">💬</span>
-              <span className="hidden sm:inline">Chat</span>
-            </button>
           </div>
         </div>
 
@@ -252,24 +246,6 @@ export default function AnalyzePage() {
         }
       />
 
-      {/* Chat slide-in */}
-      {chatOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setChatOpen(false)} aria-hidden="true" />
-          <div className="relative flex flex-col w-full max-w-md h-full bg-white dark:bg-gray-950 shadow-2xl">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-base font-semibold">💬 Chat to customize</h2>
-              <button type="button" onClick={() => setChatOpen(false)} aria-label="Close chat"
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="flex-1 min-h-0"><ChatBot mode="customize" onComplete={() => setChatOpen(false)} /></div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
