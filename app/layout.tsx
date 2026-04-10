@@ -34,6 +34,13 @@ export const metadata: Metadata = {
   creator: "rawcv",
   metadataBase: new URL("https://www.rawcv.com"),
   alternates: { canonical: "https://www.rawcv.com" },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico" },
+    ],
+    apple: "/favicon.svg",
+  },
   openGraph: {
     type: "website",
     url: "https://www.rawcv.com",
@@ -41,13 +48,13 @@ export const metadata: Metadata = {
     description:
       "Build, analyze, and optimize your resume with AI. Get ATS scores, match resumes to job descriptions, and download polished PDFs.",
     siteName: "rawcv",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "rawcv — AI Resume Platform" }],
+    images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: "rawcv — AI Resume Platform" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "rawcv — AI-Powered Resume Builder & ATS Optimizer",
     description: "Build, analyze, and optimize your resume with AI. Free to start.",
-    images: ["/og-image.png"],
+    images: ["/og-image.svg"],
   },
   robots: {
     index: true,
@@ -78,8 +85,9 @@ export default function RootLayout({
               <header className="sticky top-0 z-30 w-full border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm">
                 <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
                   <div className="flex items-center gap-6">
-                    <Link href="/" className="font-bold text-lg tracking-tight text-gray-900 dark:text-gray-100">
-                      rawcv
+                    <Link href="/" className="flex items-center gap-2">
+                      <img src="/favicon.svg" alt="rawcv logo" width={28} height={28} className="rounded-md" />
+                      <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-gray-100">rawcv</span>
                     </Link>
                     <nav className="hidden sm:flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400" aria-label="Main navigation">
                       <Link href="/analyze" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">

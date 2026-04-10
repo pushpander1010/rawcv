@@ -70,6 +70,69 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Hero resume mockup */}
+      <section className="pb-16 px-6 bg-white dark:bg-gray-950">
+        <div className="max-w-4xl mx-auto">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
+            {/* Browser chrome */}
+            <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+              <span className="w-3 h-3 rounded-full bg-red-400" />
+              <span className="w-3 h-3 rounded-full bg-yellow-400" />
+              <span className="w-3 h-3 rounded-full bg-green-400" />
+              <div className="flex-1 mx-4 h-6 rounded-md bg-gray-200 dark:bg-gray-700 flex items-center px-3">
+                <span className="text-xs text-gray-400">rawcv.com/analyze</span>
+              </div>
+            </div>
+            {/* App UI mockup */}
+            <div className="flex h-72 overflow-hidden">
+              {/* Left panel — tools */}
+              <div className="w-64 border-r border-gray-100 dark:border-gray-800 p-4 flex flex-col gap-3 bg-white dark:bg-gray-900">
+                <div className="h-6 w-24 rounded-lg bg-violet-100 dark:bg-violet-900/40" />
+                <div className="h-4 w-full rounded bg-gray-100 dark:bg-gray-800" />
+                <div className="h-4 w-5/6 rounded bg-gray-100 dark:bg-gray-800" />
+                <div className="h-4 w-4/6 rounded bg-gray-100 dark:bg-gray-800" />
+                <div className="mt-2 h-10 w-full rounded-xl bg-violet-600 opacity-80" />
+                <div className="mt-auto flex items-center gap-2 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+                  <span className="text-emerald-600 text-lg">📊</span>
+                  <div>
+                    <div className="h-3 w-16 rounded bg-emerald-200 dark:bg-emerald-800 mb-1" />
+                    <div className="text-xs font-bold text-emerald-600">ATS Score: 92</div>
+                  </div>
+                </div>
+              </div>
+              {/* Right panel — resume preview */}
+              <div className="flex-1 p-5 bg-gray-50 dark:bg-gray-950 overflow-hidden">
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 h-full">
+                  {/* Resume header */}
+                  <div className="border-b-2 border-gray-800 dark:border-gray-200 pb-3 mb-3">
+                    <div className="h-5 w-40 rounded bg-gray-800 dark:bg-gray-200 mb-2" />
+                    <div className="flex gap-3">
+                      <div className="h-3 w-24 rounded bg-gray-300 dark:bg-gray-600" />
+                      <div className="h-3 w-20 rounded bg-gray-300 dark:bg-gray-600" />
+                      <div className="h-3 w-28 rounded bg-gray-300 dark:bg-gray-600" />
+                    </div>
+                  </div>
+                  {/* Experience section */}
+                  <div className="mb-3">
+                    <div className="h-3 w-20 rounded bg-gray-400 dark:bg-gray-500 mb-2" />
+                    <div className="h-3 w-full rounded bg-gray-200 dark:bg-gray-700 mb-1" />
+                    <div className="h-3 w-5/6 rounded bg-gray-200 dark:bg-gray-700 mb-1" />
+                    <div className="h-3 w-4/6 rounded bg-gray-200 dark:bg-gray-700" />
+                  </div>
+                  {/* Skills */}
+                  <div className="flex gap-2 flex-wrap">
+                    {["React", "TypeScript", "Node.js", "Python", "AWS"].map(s => (
+                      <span key={s} className="px-2 py-0.5 rounded-full text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300">{s}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="text-center text-xs text-gray-400 mt-3">Live preview updates as you chat or apply suggestions</p>
+        </div>
+      </section>
+
       {/* Features */}
       <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="features-heading">
         <div className="max-w-5xl mx-auto">
