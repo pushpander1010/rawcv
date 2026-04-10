@@ -56,39 +56,20 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "Resume enhancement");
-    if (chargeError) return chargeError;
-
     const provider = createProvider(model ?? "groq-llama-3.1-8b");
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
-
-    const result = JSON.parse(json) as {
-      suggestions: Array<{
-        section: string;
-        original: string;
-        improved: string;
-        reason: string;
-      }>;
-    };
-
+    const result = JSON.parse(json) as { suggestions: Array<{ section: string; original: string; improved: string; reason: string }> };
     const raw = Array.isArray(result.suggestions) ? result.suggestions : [];
-
     const suggestions: Suggestion[] = raw.slice(0, 15).map((s) => ({
-      id: randomUUID(),
-      section: s.section ?? "general",
-      original: s.original ?? "",
-      improved: s.improved ?? "",
-      reason: s.reason ?? "",
+      id: randomUUID(), section: s.section ?? "general", original: s.original ?? "", improved: s.improved ?? "", reason: s.reason ?? "",
     }));
-
     if (suggestions.length < 3) {
-      return NextResponse.json(
-        { error: "ai_unavailable", message: "Could not generate enough enhancements. Please try again." },
-        { status: 502 }
-      );
+      return NextResponse.json({ error: "ai_unavailable", message: "Could not generate enough enhancements. Please try again." }, { status: 502 });
     }
-
+    // Charge only after successful AI response
+    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "Resume enhancement");
+    if (chargeError) return chargeError;
     return NextResponse.json(suggestions);
   } catch {
     return NextResponse.json(

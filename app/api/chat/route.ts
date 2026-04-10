@@ -124,9 +124,6 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "Chat bot");
-    if (chargeError) return chargeError;
-
     const provider = createProvider(model ?? "groq-llama-3.1-8b");
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : SYSTEM_PROMPT;
 
@@ -143,6 +140,10 @@ export async function POST(req: NextRequest) {
     const prompt = `${resumeContext}\nConversation:\n${conversationHistory}\n\nRespond as the assistant:`;
 
     const raw = await provider.complete(prompt, systemPrompt);
+
+    // Charge only after AI responds successfully
+    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "Chat bot");
+    if (chargeError) return chargeError;
 
     if (mode === "customize") {
       let parsed: CustomizeAIResponse;

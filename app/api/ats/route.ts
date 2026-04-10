@@ -159,10 +159,6 @@ export async function POST(req: NextRequest) {
   const ruleIssues = runRuleChecks(parsed, raw);
   let baseScore = calculateBaseScore(ruleIssues);
 
-  // Charge credits before calling AI
-  const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "ATS analysis");
-  if (chargeError) return chargeError;
-
   // AI-powered nuanced scoring
   let aiIssues: ATSIssue[] = [];
   try {
@@ -179,6 +175,10 @@ export async function POST(req: NextRequest) {
   } catch {
     // AI scoring is best-effort; fall back to rule-based score only
   }
+
+  // Charge credits only after AI responds
+  const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "ATS analysis");
+  if (chargeError) return chargeError;
 
   const allIssues: ATSIssue[] = [...ruleIssues, ...aiIssues];
   const result: ATSResult = {

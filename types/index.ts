@@ -1,14 +1,6 @@
 // ─── Model & Theme IDs ───────────────────────────────────────────────────────
 
-export type ModelId =
-  | "groq-llama-3.1-8b"
-  | "groq-llama-3.3-70b"
-  | "groq-deepseek-r1"
-  | "openrouter-nvidia-30b"
-  | "openrouter-qwen-7b"
-  | "openrouter-mistral-small"
-  | "openrouter-llama-4-maverick"
-  | "openrouter-deepseek-v3";
+export type ModelId = "groq-llama-3.1-8b";
 
 export type ThemeId =
   | "classic"
@@ -69,14 +61,14 @@ export interface ATSIssue {
 }
 
 export interface ATSResult {
-  score: number; // 0–100
+  score: number;
   issues: ATSIssue[];
 }
 
 // ─── Relevance ────────────────────────────────────────────────────────────────
 
 export interface RelevanceResult {
-  score: number; // 0–100
+  score: number;
   missingKeywords: string[];
   missingSkills: string[];
   recommendations: string[];

@@ -53,38 +53,19 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "JD tailoring");
-    if (chargeError) return chargeError;
-
     const provider = createProvider(model ?? "groq-llama-3.1-8b");
     const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 4000)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
-
-    const result = JSON.parse(json) as {
-      changes: Array<{
-        section: string;
-        field: string;
-        original: string;
-        tailored: string;
-      }>;
-    };
-
+    const result = JSON.parse(json) as { changes: Array<{ section: string; field: string; original: string; tailored: string }> };
     const rawChanges = Array.isArray(result.changes) ? result.changes : [];
-
     const changes: TailorChange[] = rawChanges.slice(0, 15).map((c) => ({
-      id: randomUUID(),
-      section: c.section ?? "experience",
-      field: c.field ?? "",
-      original: c.original ?? "",
-      tailored: c.tailored ?? "",
-      accepted: false,
+      id: randomUUID(), section: c.section ?? "experience", field: c.field ?? "", original: c.original ?? "", tailored: c.tailored ?? "", accepted: false,
     }));
-
-    // Build finalResume by applying all changes to the parsed resume
     const finalResume = applyChanges(parsed, changes);
-
     const tailoredResume: TailoredResume = { changes, finalResume };
-
+    // Charge only after successful AI response
+    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "JD tailoring");
+    if (chargeError) return chargeError;
     return NextResponse.json(tailoredResume);
   } catch {
     return NextResponse.json(

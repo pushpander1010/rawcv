@@ -40,21 +40,21 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "JD relevance analysis");
-    if (chargeError) return chargeError;
-
     const provider = createProvider(model ?? "groq-llama-3.1-8b");
     const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 4000)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const result = JSON.parse(json) as RelevanceResult;
 
-    // Clamp score to valid range
     const safeResult: RelevanceResult = {
       score: Math.max(0, Math.min(100, Math.round(result.score ?? 0))),
       missingKeywords: Array.isArray(result.missingKeywords) ? result.missingKeywords : [],
       missingSkills: Array.isArray(result.missingSkills) ? result.missingSkills : [],
       recommendations: Array.isArray(result.recommendations) ? result.recommendations : [],
     };
+
+    // Charge only after successful AI response
+    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "JD relevance analysis");
+    if (chargeError) return chargeError;
 
     return NextResponse.json(safeResult);
   } catch {

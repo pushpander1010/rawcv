@@ -15,10 +15,14 @@ export async function GET(_req: NextRequest) {
     return NextResponse.json({ error: "unauthorized", message: "Invalid session" }, { status: 401 });
   }
 
+  // Dev admin — no DB, return unlimited credits
+  if (userId === "dev-admin") {
+    return NextResponse.json({ balance: 999, transactions: [] });
+  }
+
   const user = await getUserById(userId);
   const balance = user?.creditBalance ?? 0;
   const transactions = await getTransactions(userId);
 
   return NextResponse.json({ balance, transactions });
 }
-
