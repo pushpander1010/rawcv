@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { Suggestion } from "@/types";
 
@@ -112,8 +112,18 @@ interface SuggestionsListProps {
 }
 
 export default function SuggestionsList({ suggestions, loading = false }: SuggestionsListProps) {
-  const { setState, pushUndo } = useResume();
-  const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
+  const { state, setState, pushUndo } = useResume();
+
+  /** Derive applied state from actual resume content instead of local tracking */
+  function isApplied(suggestion: Suggestion): boolean {
+    const parsed = state.parsed;
+    if (!parsed) return false;
+    const section = suggestion.section.toLowerCase();
+    if (section === "summary") return parsed.summary === suggestion.improved;
+    if (section === "experience") return parsed.experience.some((exp) => exp.bullets.includes(suggestion.improved));
+    if (section === "skills") return parsed.skills.includes(suggestion.improved);
+    return false;
+  }
 
   function applyToContext(suggestion: Suggestion) {
     pushUndo();
@@ -126,7 +136,6 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
       if (section === "summary") {
         parsed.summary = suggestion.improved;
       } else if (section === "experience") {
-        // Replace the first bullet that matches the original text
         parsed.experience = parsed.experience.map((exp) => {
           const bulletIdx = exp.bullets.findIndex((b) => b === suggestion.original);
           if (bulletIdx === -1) return exp;
@@ -143,15 +152,12 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
         }
       }
 
-      // Also store in suggestions array for tracking
       const updatedSuggestions = prev.suggestions.map((s) =>
         s.id === suggestion.id ? { ...s, improved: suggestion.improved } : s
       );
 
       return { ...prev, parsed, suggestions: updatedSuggestions };
     });
-
-    setAppliedIds((prev) => new Set(prev).add(suggestion.id));
   }
 
   if (loading) {
@@ -178,7 +184,7 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
     );
   }
 
-  const appliedCount = appliedIds.size;
+  const appliedCount = suggestions.filter(isApplied).length;
 
   return (
     <section aria-label="AI Improvement Suggestions">
