@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { Suggestion } from "@/types";
 
