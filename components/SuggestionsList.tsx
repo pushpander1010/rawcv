@@ -207,7 +207,7 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
           <SuggestionCard
             key={suggestion.id}
             suggestion={suggestion}
-            applied={appliedIds.has(suggestion.id)}
+            applied={isApplied(suggestion)}
             onApply={applyToContext}
           />
         ))}
