@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import type {
   ParsedResume,
   ATSResult,
@@ -28,6 +28,12 @@ export interface ResumeState {
 interface ResumeContextValue {
   state: ResumeState;
   setState: React.Dispatch<React.SetStateAction<ResumeState>>;
+  /** Push the current parsed resume onto the undo stack before making a change */
+  pushUndo: () => void;
+  /** Undo the last resume change */
+  undo: () => void;
+  /** Whether there is anything to undo */
+  canUndo: boolean;
   refreshCredits: () => void;
 }
 
@@ -45,10 +51,36 @@ const defaultState: ResumeState = {
   creditBalance: null,
 };
 
+const MAX_UNDO = 20;
+
 const ResumeContext = createContext<ResumeContextValue | null>(null);
 
 export function ResumeProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<ResumeState>(defaultState);
+  // Stack of previous parsed resumes for undo
+  const undoStack = useRef<ParsedResume[]>([]);
+  const [canUndo, setCanUndo] = useState(false);
+
+  const pushUndo = useCallback(() => {
+    setState((prev) => {
+      if (prev.parsed) {
+        undoStack.current = [
+          ...undoStack.current.slice(-MAX_UNDO + 1),
+          JSON.parse(JSON.stringify(prev.parsed)),
+        ];
+        setCanUndo(true);
+      }
+      return prev;
+    });
+  }, []);
+
+  const undo = useCallback(() => {
+    if (undoStack.current.length === 0) return;
+    const previous = undoStack.current[undoStack.current.length - 1];
+    undoStack.current = undoStack.current.slice(0, -1);
+    setCanUndo(undoStack.current.length > 0);
+    setState((prev) => ({ ...prev, parsed: previous }));
+  }, []);
 
   const refreshCredits = useCallback(async () => {
     try {
@@ -68,7 +100,7 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
   }, [refreshCredits]);
 
   return (
-    <ResumeContext.Provider value={{ state, setState, refreshCredits }}>
+    <ResumeContext.Provider value={{ state, setState, pushUndo, undo, canUndo, refreshCredits }}>
       {children}
     </ResumeContext.Provider>
   );

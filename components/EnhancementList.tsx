@@ -114,10 +114,11 @@ interface EnhancementListProps {
 }
 
 export default function EnhancementList({ enhancements, loading = false }: EnhancementListProps) {
-  const { setState } = useResume();
+  const { setState, pushUndo } = useResume();
   const [statuses, setStatuses] = useState<Record<string, CardStatus>>({});
 
   function acceptChange(suggestion: Suggestion) {
+    pushUndo();
     const section = suggestion.section.toLowerCase();
 
     setState((prev) => {

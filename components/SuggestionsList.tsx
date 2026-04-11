@@ -112,10 +112,11 @@ interface SuggestionsListProps {
 }
 
 export default function SuggestionsList({ suggestions, loading = false }: SuggestionsListProps) {
-  const { setState } = useResume();
+  const { setState, pushUndo } = useResume();
   const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
 
   function applyToContext(suggestion: Suggestion) {
+    pushUndo();
     const section = suggestion.section.toLowerCase();
 
     setState((prev) => {

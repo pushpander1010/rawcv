@@ -6,6 +6,7 @@ import ModelSelector from "@/components/ModelSelector";
 import TailorDiff from "@/components/TailorDiff";
 import ResumePreview from "@/components/ResumePreview";
 import DownloadButton from "@/components/DownloadButton";
+import UndoButton from "@/components/UndoButton";
 import type { TailoredResume } from "@/types";
 
 export default function TailorPage() {
@@ -61,7 +62,10 @@ export default function TailorPage() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
           JD-Tailored Resume
         </h1>
-        <DownloadButton />
+        <div className="flex items-center gap-2">
+          <UndoButton />
+          <DownloadButton />
+        </div>
       </div>
 
       <div className="mb-6 max-w-sm">

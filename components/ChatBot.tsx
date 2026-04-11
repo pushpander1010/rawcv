@@ -21,7 +21,7 @@ const WELCOME_CUSTOMIZE =
   "Hi! I can help you customize your resume. What would you like to change or improve? You can also ask me to undo any change I make.";
 
 export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSelector = false }: Props) {
-  const { state, setState, refreshCredits } = useResume();
+  const { state, setState, refreshCredits, pushUndo } = useResume();
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -87,6 +87,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
 
         // Merge resume update into local state
         if (data.resumeUpdate) {
+          pushUndo();
           setLocalResume((prev) => {
             const merged = mergeResumeUpdate(prev, data.resumeUpdate!);
             // Sync to global context so preview updates live

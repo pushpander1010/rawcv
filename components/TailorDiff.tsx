@@ -152,7 +152,7 @@ interface TailorDiffProps {
 }
 
 export default function TailorDiff({ changes, loading = false }: TailorDiffProps) {
-  const { setState } = useResume();
+  const { setState, pushUndo } = useResume();
 
   function updateChange(id: string, patch: Partial<TailorChange>) {
     setState((prev) => {
@@ -171,6 +171,7 @@ export default function TailorDiff({ changes, loading = false }: TailorDiffProps
     const change = changes.find((c) => c.id === id);
     if (!change) return;
 
+    pushUndo();
     // Apply the change to parsed resume in context
     setState((prev) => {
       if (!prev.parsed || !prev.tailoredResume) return prev;
