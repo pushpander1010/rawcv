@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -18,6 +18,11 @@ function GoogleIcon() {
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") router.replace("/analyze");
+  }, [status, router]);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
