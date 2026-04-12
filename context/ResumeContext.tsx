@@ -53,16 +53,71 @@ const defaultState: ResumeState = {
 
 const MAX_UNDO = 20;
 
+const STORAGE_KEY = "rawcv_resume_state";
+
+// Fields we want to persist (skip transient UI/credit fields)
+const PERSIST_KEYS: (keyof ResumeState)[] = [
+  "raw", "parsed", "atsResult", "relevanceResult",
+  "suggestions", "tailoredResume", "selectedTheme", "selectedModel", "jd",
+];
+
+function loadPersistedState(): Partial<ResumeState> {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return {};
+    return JSON.parse(raw) as Partial<ResumeState>;
+  } catch {
+    return {};
+  }
+}
+
+function persistState(state: ResumeState) {
+  try {
+    const toSave: Partial<ResumeState> = {};
+    for (const key of PERSIST_KEYS) {
+      (toSave as Record<string, unknown>)[key] = state[key];
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+  } catch {
+    // storage quota or SSR — ignore
+  }
+}
+
 const ResumeContext = createContext<ResumeContextValue | null>(null);
 
 export function ResumeProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<ResumeState>(defaultState);
+  const [state, setStateRaw] = useState<ResumeState>(defaultState);
+  const hydrated = useRef(false);
+
+  // Rehydrate from localStorage once on mount (client only)
+  useEffect(() => {
+    if (hydrated.current) return;
+    hydrated.current = true;
+    const saved = loadPersistedState();
+    if (Object.keys(saved).length > 0) {
+      setStateRaw((prev) => ({ ...prev, ...saved }));
+    }
+  }, []);
+
+  // Persist to localStorage whenever relevant state changes
+  useEffect(() => {
+    if (!hydrated.current) return;
+    persistState(state);
+  }, [state]);
+
+  // Wrap setState so persistence fires through the same path
+  const setState: React.Dispatch<React.SetStateAction<ResumeState>> = useCallback((action) => {
+    setStateRaw((prev) => {
+      const next = typeof action === "function" ? action(prev) : action;
+      return next;
+    });
+  }, []);
   // Stack of previous parsed resumes for undo
   const undoStack = useRef<ParsedResume[]>([]);
   const [canUndo, setCanUndo] = useState(false);
 
   const pushUndo = useCallback(() => {
-    setState((prev) => {
+    setStateRaw((prev) => {
       if (prev.parsed) {
         undoStack.current = [
           ...undoStack.current.slice(-MAX_UNDO + 1),
@@ -79,7 +134,7 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     const previous = undoStack.current[undoStack.current.length - 1];
     undoStack.current = undoStack.current.slice(0, -1);
     setCanUndo(undoStack.current.length > 0);
-    setState((prev) => ({ ...prev, parsed: previous }));
+    setStateRaw((prev) => ({ ...prev, parsed: previous }));
   }, []);
 
   const refreshCredits = useCallback(async () => {
