@@ -1,7 +1,7 @@
 import type { ModelId } from "@/types";
 
 const GROQ_REMOTE_MODEL: Record<string, string> = {
-  "groq-llama-3.1-8b":  "llama-3.1-8b-instant"
+  "groq-llama-3.1-8b": "llama-3.1-8b-instant",
 };
 
 const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
@@ -66,7 +66,9 @@ class GroqProvider implements AIProvider {
           { role: "user", content: prompt },
         ],
       });
-      return safeJsonParse(res.choices[0]?.message?.content ?? "{}");
+      const content = res.choices[0]?.message?.content;
+      if (!content) throw new Error(`Groq returned empty content for model: ${remote}`);
+      return safeJsonParse(content);
     });
   }
 
@@ -84,9 +86,10 @@ class OpenRouterProvider implements AIProvider {
     const remote = OPENROUTER_REMOTE_MODEL[this.modelId];
     if (!remote) throw new Error(`Unknown OpenRouter model: ${this.modelId}`);
 
+    // Free models don't support the system role — inject instructions into the user turn
     const isFree = remote.endsWith(":free");
     const messages = isFree
-      ? [{ role: "user", content: `${enforceJson(systemPrompt)}\n\n${prompt}` }]
+      ? [{ role: "user", content: `[INST] ${enforceJson(systemPrompt)} [/INST]\n\n${prompt}` }]
       : [{ role: "system", content: enforceJson(systemPrompt) }, { role: "user", content: prompt }];
 
     return withRetry(async () => {
@@ -102,7 +105,9 @@ class OpenRouterProvider implements AIProvider {
       });
       if (!res.ok) throw new Error(`OpenRouter error (${res.status}): ${await res.text()}`);
       const data = await res.json();
-      return safeJsonParse(data?.choices?.[0]?.message?.content ?? "{}");
+      const content = data?.choices?.[0]?.message?.content;
+      if (!content) throw new Error(`OpenRouter returned empty content for model: ${remote}`);
+      return safeJsonParse(content);
     });
   }
 
