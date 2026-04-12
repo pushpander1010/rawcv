@@ -17,6 +17,7 @@ export interface ResumeState {
   atsResult: ATSResult | null;
   relevanceResult: RelevanceResult | null;
   suggestions: Suggestion[];
+  enhancements: Suggestion[];
   tailoredResume: TailoredResume | null;
   selectedTheme: ThemeId;
   selectedModel: ModelId;
@@ -43,6 +44,7 @@ const defaultState: ResumeState = {
   atsResult: null,
   relevanceResult: null,
   suggestions: [],
+  enhancements: [],
   tailoredResume: null,
   selectedTheme: "classic",
   selectedModel: "groq-llama-3.1-8b",
@@ -58,7 +60,7 @@ const STORAGE_KEY = "rawcv_resume_state";
 // Fields we want to persist (skip transient UI/credit fields)
 const PERSIST_KEYS: (keyof ResumeState)[] = [
   "raw", "parsed", "atsResult", "relevanceResult",
-  "suggestions", "tailoredResume", "selectedTheme", "selectedModel", "jd",
+  "suggestions", "enhancements", "tailoredResume", "selectedTheme", "selectedModel", "jd",
 ];
 
 function loadPersistedState(): Partial<ResumeState> {

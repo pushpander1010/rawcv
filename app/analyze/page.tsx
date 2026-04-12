@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useResume } from "@/context/ResumeContext";
 import ModelSelector from "@/components/ModelSelector";
@@ -36,9 +36,14 @@ export default function AnalyzePage() {
   const [relevanceError, setRelevanceError] = useState<string | null>(null);
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [suggestionsError, setSuggestionsError] = useState<string | null>(null);
-  const [enhancements, setEnhancements] = useState<Suggestion[]>([]);
   const [enhancementLoading, setEnhancementLoading] = useState(false);
   const [enhancementError, setEnhancementError] = useState<string | null>(null);
+
+  // Sync jdInput when persisted jd rehydrates after mount
+  useEffect(() => {
+    if (state.jd && !jdInput) setJdInput(state.jd);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.jd]);
 
   if (!state.parsed) {
     return (
@@ -106,7 +111,7 @@ export default function AnalyzePage() {
       const res = await fetch("/api/enhance", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, model: state.selectedModel }) });
       if (!res.ok) { const err = await res.json(); throw new Error(err.message ?? "Enhancement failed"); }
       const result = await res.json();
-      setEnhancements(result);
+      setState((prev) => ({ ...prev, enhancements: result }));
       refreshCredits();
     } catch (e) { setEnhancementError(e instanceof Error ? e.message : "Something went wrong"); }
     finally { setEnhancementLoading(false); }
@@ -215,12 +220,12 @@ export default function AnalyzePage() {
             <div>
               <h2 className="text-base font-semibold mb-1">Resume Enhancement</h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Strengthen bullet points and summary with stronger language.</p>
-              {!enhancements.length && !enhancementLoading && (
+              {!state.enhancements.length && !enhancementLoading && (
                 <button type="button" onClick={runEnhancement} className="w-full px-4 py-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-sm transition-colors">Enhance Resume</button>
               )}
               {enhancementError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{enhancementError}</p>}
-              {(enhancements.length > 0 || enhancementLoading) && <EnhancementList enhancements={enhancements} loading={enhancementLoading} />}
-              {enhancements.length > 0 && (
+              {(state.enhancements.length > 0 || enhancementLoading) && <EnhancementList enhancements={state.enhancements} loading={enhancementLoading} />}
+              {state.enhancements.length > 0 && (
                 <button type="button" onClick={runEnhancement} className="mt-4 w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Re-run enhancement</button>
               )}
             </div>
