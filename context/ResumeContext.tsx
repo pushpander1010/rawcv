@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
+import { useSession } from "next-auth/react";
 import type {
   ParsedResume,
   ATSResult,
@@ -55,7 +56,9 @@ const defaultState: ResumeState = {
 
 const MAX_UNDO = 20;
 
-const STORAGE_KEY = "rawcv_resume_state";
+function storageKey(userId: string | undefined) {
+  return userId ? `rawcv_resume_state_${userId}` : null;
+}
 
 // Fields we want to persist (skip transient UI/credit fields)
 const PERSIST_KEYS: (keyof ResumeState)[] = [
@@ -63,9 +66,11 @@ const PERSIST_KEYS: (keyof ResumeState)[] = [
   "suggestions", "enhancements", "tailoredResume", "selectedTheme", "selectedModel", "jd",
 ];
 
-function loadPersistedState(): Partial<ResumeState> {
+function loadPersistedState(userId: string | undefined): Partial<ResumeState> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const key = storageKey(userId);
+    if (!key) return {};
+    const raw = localStorage.getItem(key);
     if (!raw) return {};
     return JSON.parse(raw) as Partial<ResumeState>;
   } catch {
@@ -73,13 +78,15 @@ function loadPersistedState(): Partial<ResumeState> {
   }
 }
 
-function persistState(state: ResumeState) {
+function persistState(state: ResumeState, userId: string | undefined) {
   try {
+    const key = storageKey(userId);
+    if (!key) return;
     const toSave: Partial<ResumeState> = {};
-    for (const key of PERSIST_KEYS) {
-      (toSave as Record<string, unknown>)[key] = state[key];
+    for (const k of PERSIST_KEYS) {
+      (toSave as Record<string, unknown>)[k] = state[k];
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+    localStorage.setItem(key, JSON.stringify(toSave));
   } catch {
     // storage quota or SSR — ignore
   }
@@ -88,24 +95,35 @@ function persistState(state: ResumeState) {
 const ResumeContext = createContext<ResumeContextValue | null>(null);
 
 export function ResumeProvider({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession();
+  const userId = (session?.user as { id?: string } | undefined)?.id;
+
   const [state, setStateRaw] = useState<ResumeState>(defaultState);
-  const hydrated = useRef(false);
+  const hydrated = useRef<string | null>(null); // tracks which userId we've hydrated for
 
-  // Rehydrate from localStorage once on mount (client only)
+  // Rehydrate from localStorage when userId is known (or changes)
   useEffect(() => {
-    if (hydrated.current) return;
-    hydrated.current = true;
-    const saved = loadPersistedState();
-    if (Object.keys(saved).length > 0) {
-      setStateRaw((prev) => ({ ...prev, ...saved }));
+    if (status === "loading") return; // wait until session is resolved
+    const key = userId ?? "__guest__";
+    if (hydrated.current === key) return;
+    hydrated.current = key;
+
+    // Clear state first so previous user's data doesn't flash
+    setStateRaw(defaultState);
+
+    if (userId) {
+      const saved = loadPersistedState(userId);
+      if (Object.keys(saved).length > 0) {
+        setStateRaw((prev) => ({ ...prev, ...saved }));
+      }
     }
-  }, []);
+  }, [userId, status]);
 
-  // Persist to localStorage whenever relevant state changes
+  // Persist to localStorage whenever relevant state changes (only for logged-in users)
   useEffect(() => {
-    if (!hydrated.current) return;
-    persistState(state);
-  }, [state]);
+    if (!hydrated.current || !userId) return;
+    persistState(state, userId);
+  }, [state, userId]);
 
   // Wrap setState so persistence fires through the same path
   const setState: React.Dispatch<React.SetStateAction<ResumeState>> = useCallback((action) => {
