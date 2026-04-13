@@ -93,6 +93,8 @@ export function FooterNav() {
         : <Link href="/register" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Sign up</Link>
       }
       <Link href="/login" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Sign in</Link>
+      <Link href="/privacy" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Privacy</Link>
+      <Link href="/terms" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Terms</Link>
     </nav>
   );
 }
