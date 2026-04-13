@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     // Auto-verify in dev when SKIP_EMAIL_VERIFICATION=true (no Resend needed)
     await updateUser(email, { emailVerified: true, verificationToken: undefined });
     return NextResponse.json(
-      { message: "Account created. You can now sign in." },
+      { message: "Account created. You can now sign in.", autoVerified: true },
       { status: 201 }
     );
   }

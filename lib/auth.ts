@@ -37,13 +37,14 @@ export const authOptions: NextAuthOptions = {
 
         const user = await getUserByEmail(credentials.email);
         if (!user) return null;
-        if (!user.emailVerified) return null;
 
         const passwordMatch = await bcrypt.compare(
           credentials.password,
           user.hashedPassword!
         );
         if (!passwordMatch) return null;
+
+        if (!user.emailVerified) throw new Error("email_not_verified");
 
         return { id: user.id, email: user.email, name: user.name };
       },

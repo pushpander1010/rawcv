@@ -28,7 +28,11 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(
-    errorParam === "CredentialsSignin" ? "Invalid email or password." : null
+    errorParam === "email_not_verified"
+      ? "Your email isn't verified yet. Please check your inbox for the verification link."
+      : errorParam === "CredentialsSignin"
+      ? "Invalid email or password."
+      : null
   );
   const [loading, setLoading] = useState(false);
 
@@ -61,7 +65,11 @@ function LoginForm() {
     });
     setLoading(false);
     if (result?.error) {
-      setError("Invalid email or password.");
+      if (result.error === "email_not_verified") {
+        setError("Your email isn't verified yet. Please check your inbox for the verification link.");
+      } else {
+        setError("Invalid email or password.");
+      }
     } else {
       // Hard redirect so the session cookie is picked up cleanly
       window.location.href = callbackUrl;

@@ -56,8 +56,11 @@ export default function RegisterPage() {
     }
 
     setSuccess(data.message);
-    // In dev, auto-verified — redirect to login after a short delay
-    setTimeout(() => router.push("/login"), 1500);
+    // Only auto-redirect if account was auto-verified (dev mode)
+    if (data.autoVerified) {
+      setTimeout(() => router.push("/login"), 1500);
+    }
+    // Otherwise stay on page so user can read the "check your email" message
   }
 
   async function handleGoogleSignUp() {
@@ -79,7 +82,10 @@ export default function RegisterPage() {
 
         {success && (
           <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
-            {success}
+            <p className="font-medium">{success}</p>
+            {success.toLowerCase().includes("email") && (
+              <p className="mt-1 text-green-600">Please verify your email before signing in.</p>
+            )}
           </div>
         )}
 
