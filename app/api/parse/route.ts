@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
     const modelId =
-      (formData.get("model") as ModelId | null) ?? "openrouter-liquid-1.2b";
+      (formData.get("model") as ModelId | null) ?? "openrouter-mistral-nemo";
 
     if (!file) {
       return NextResponse.json({ error: "NO_FILE" }, { status: 400 });
