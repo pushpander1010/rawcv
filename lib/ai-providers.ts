@@ -1,22 +1,20 @@
 import type { ModelId } from "@/types";
 
 const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
-  "openrouter-mistral-nemo":      "mistralai/mistral-nemo",
   "openrouter-llama-8b":         "meta-llama/llama-3.1-8b-instruct",
   "openrouter-gemma-9b":         "google/gemma-2-9b-it",
   "openrouter-qwen-8b":          "qwen/qwen3-8b",
   "openrouter-qwen-3.5":         "qwen/qwen3.5-flash-02-23",
   "openrouter-mistral-24b":      "mistralai/mistral-small-3.2-24b-instruct",
   "openrouter-llama-4-maverick": "meta-llama/llama-4-maverick",
-  "openrouter-deepseek-v3":      "deepseek/deepseek-chat-v3-0324",
 };
 
 const TOGETHER_REMOTE_MODEL: Record<string, string> = {
   "together-gemma-3n":    "google/gemma-3n-E4B-it",
-  "together-llama-70b":   "meta-llama/Llama-3.3-70B-Instruct-Turbo",
-  "together-deepseek-v3": "deepseek-ai/DeepSeek-V3.1",
-  "together-qwen3-235b":  "Qwen/Qwen3-235B-A22B-Instruct-2507-tput",
-  "together-gemma4-31b":  "google/gemma-4-31B-it",
+  "together-liquid-24b":"LiquidAI/LFM2-24B-A2B",
+  "together-llama-8b":"meta-llama/Meta-Llama-3-8B-Instruct-Lite",
+  "together-qwen-9b":"Qwen/Qwen3.5-9B",
+  "together-mistral-24b":"mistralai/Mistral-Small-24B-Instruct-2501"
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

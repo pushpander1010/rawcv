@@ -129,8 +129,8 @@ export async function POST(req: NextRequest) {
     /* ── AI parse ── */
     let parsed: ParsedResume;
     try {
-      // Use Together Llama 70B — reliable structured JSON output
-      const provider = createProvider("together-llama-70b");
+      // Use together-gemma-3n for parsing
+      const provider = createProvider("together-gemma-3n");
       const response = await provider.complete(
         rawText.slice(0, 12000),
         `You are a resume parser. Extract ALL information from the resume and return ONLY a valid JSON object.

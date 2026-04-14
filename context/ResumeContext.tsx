@@ -46,7 +46,7 @@ const defaultState: ResumeState = {
   enhancements: [],
   tailoredResume: null,
   selectedTheme: "classic",
-  selectedModel: "openrouter-mistral-nemo",
+  selectedModel: "together-gemma-3n",
   jd: "",
   lastOperationCost: null,
   creditBalance: null,
