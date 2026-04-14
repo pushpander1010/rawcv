@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   const auth = await requireAuth();
   if (auth instanceof NextResponse) return auth;
 
-  let body: { parsed: ParsedResume; model: ModelId };
+  let body: { parsed: ParsedResume };
   try {
     body = await req.json();
   } catch {

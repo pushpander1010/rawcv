@@ -12,7 +12,6 @@ export interface ChatMessage {
 export interface ChatRequest {
   messages: ChatMessage[];
   resumeState: Partial<ParsedResume>;
-  model: ModelId;
   mode: "build" | "customize";
   sectionHistory?: Record<string, unknown>;
 }
