@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { Suggestion } from "@/types";
 import AILoader from "@/components/AILoader";
+import { findIndex } from "@/lib/fuzzy-match";
 
 // ─── Section badge ────────────────────────────────────────────────────────────
 
@@ -137,15 +138,18 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
       if (section === "summary") {
         parsed.summary = suggestion.improved;
       } else if (section === "experience") {
+        let applied = false;
         parsed.experience = parsed.experience.map((exp) => {
-          const bulletIdx = exp.bullets.findIndex((b) => b === suggestion.original);
+          if (applied) return exp;
+          const bulletIdx = findIndex(exp.bullets, suggestion.original);
           if (bulletIdx === -1) return exp;
+          applied = true;
           const bullets = [...exp.bullets];
           bullets[bulletIdx] = suggestion.improved;
           return { ...exp, bullets };
         });
       } else if (section === "skills") {
-        const skillIdx = parsed.skills.findIndex((s) => s === suggestion.original);
+        const skillIdx = findIndex(parsed.skills, suggestion.original);
         if (skillIdx !== -1) {
           const skills = [...parsed.skills];
           skills[skillIdx] = suggestion.improved;

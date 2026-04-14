@@ -3,6 +3,7 @@ import type { ModelId, ParsedResume, TailoredResume, TailorChange } from "@/type
 import { createProvider } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
 import { chargeCredits } from "@/lib/credits";
+import { requireAuth, sanitiseModel, sanitiseJD } from "@/lib/api-guard";
 
 const SYSTEM_PROMPT = `You are an expert resume tailoring specialist. Given a resume and a job description, rewrite the resume's experience bullets and professional summary to better align with the role.
 
@@ -33,19 +34,21 @@ Rules:
 - Each tailored version must remain factually accurate to the original`;
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth();
+  if (auth instanceof NextResponse) return auth;
+
   let body: { parsed: ParsedResume; jd: string; model: ModelId };
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json(
-      { error: "invalid_request", message: "Expected JSON body" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "invalid_request", message: "Expected JSON body" }, { status: 400 });
   }
 
-  const { parsed, jd, model } = body;
+  const { parsed } = body;
+  const model = sanitiseModel(body.model);
+  const jd = sanitiseJD(body.jd);
 
-  if (!parsed || !jd?.trim()) {
+  if (!parsed || !jd) {
     return NextResponse.json(
       { error: "missing_fields", message: "parsed and jd fields are required" },
       { status: 400 }
@@ -53,7 +56,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const provider = createProvider(model ?? "openrouter-liquid-1.2b");
+    const provider = createProvider(model);
     const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 4000)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const result = JSON.parse(json) as { changes: Array<{ section: string; field: string; original: string; tailored: string }> };
@@ -64,7 +67,7 @@ export async function POST(req: NextRequest) {
     const finalResume = applyChanges(parsed, changes);
     const tailoredResume: TailoredResume = { changes, finalResume };
     // Charge only after successful AI response
-    const chargeError = await chargeCredits(model ?? "openrouter-liquid-1.2b", "JD tailoring");
+    const chargeError = await chargeCredits(model, "JD tailoring");
     if (chargeError) return chargeError;
     return NextResponse.json(tailoredResume);
   } catch {

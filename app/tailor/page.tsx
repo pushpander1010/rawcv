@@ -7,7 +7,6 @@ import TailorDiff from "@/components/TailorDiff";
 import ResumePreview from "@/components/ResumePreview";
 import DownloadButton from "@/components/DownloadButton";
 import UndoButton from "@/components/UndoButton";
-import type { TailoredResume } from "@/types";
 
 export default function TailorPage() {
   const { state, setState } = useResume();
@@ -33,22 +32,13 @@ export default function TailorPage() {
       const res = await fetch("/api/tailor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          parsed: state.parsed,
-          jd: jdInput,
-          model: state.selectedModel,
-        }),
+        body: JSON.stringify({ parsed: state.parsed, jd: jdInput, model: state.selectedModel }),
       });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message ?? "Tailoring failed");
-      }
-
-      const result: TailoredResume = await res.json();
-      setState((prev) => ({ ...prev, tailoredResume: result }));
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message ?? "Tailoring failed");
+      setState((prev) => ({ ...prev, tailoredResume: data }));
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong");
+      setError(e instanceof Error ? e.message : "Tailoring failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -100,9 +90,11 @@ export default function TailorPage() {
         </button>
 
         {error && (
-          <p className="mt-2 text-sm text-red-600 dark:text-red-400" role="alert">
-            {error}
-          </p>
+          <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+            <span className="shrink-0">⚠</span>
+            <span className="flex-1">{error}</span>
+            <button onClick={runTailor} className="shrink-0 text-xs underline hover:no-underline">Retry</button>
+          </div>
         )}
       </div>
 

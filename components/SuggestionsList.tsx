@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { Suggestion } from "@/types";
 import AILoader from "@/components/AILoader";
+import { findIndex, normalise } from "@/lib/fuzzy-match";
 
 // ─── Section badge ────────────────────────────────────────────────────────────
 
@@ -128,9 +129,11 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
     const parsed = state.parsed;
     if (!parsed) return false;
     const section = suggestion.section.toLowerCase();
-    if (section === "summary") return parsed.summary === suggestion.improved;
-    if (section === "experience") return parsed.experience.some((exp) => exp.bullets.includes(suggestion.improved));
-    if (section === "skills") return parsed.skills.includes(suggestion.improved);
+    if (section === "summary") return normalise(parsed.summary ?? "") === normalise(suggestion.improved);
+    if (section === "experience") return parsed.experience.some((exp) =>
+      exp.bullets.some((b) => normalise(b) === normalise(suggestion.improved))
+    );
+    if (section === "skills") return parsed.skills.some((s) => normalise(s) === normalise(suggestion.improved));
     return false;
   }
 
@@ -145,15 +148,18 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
       if (section === "summary") {
         parsed.summary = suggestion.improved;
       } else if (section === "experience") {
+        let applied = false;
         parsed.experience = parsed.experience.map((exp) => {
-          const bulletIdx = exp.bullets.findIndex((b) => b === suggestion.original);
+          if (applied) return exp;
+          const bulletIdx = findIndex(exp.bullets, suggestion.original);
           if (bulletIdx === -1) return exp;
+          applied = true;
           const bullets = [...exp.bullets];
           bullets[bulletIdx] = suggestion.improved;
           return { ...exp, bullets };
         });
       } else if (section === "skills") {
-        const skillIdx = parsed.skills.findIndex((s) => s === suggestion.original);
+        const skillIdx = findIndex(parsed.skills, suggestion.original);
         if (skillIdx !== -1) {
           const skills = [...parsed.skills];
           skills[skillIdx] = suggestion.improved;

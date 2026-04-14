@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { ModelId, ParsedResume } from "@/types";
 import { createProvider } from "@/lib/ai-providers";
 import { chargeCredits } from "@/lib/credits";
+import { requireAuth, sanitiseModel, sanitiseMessages } from "@/lib/api-guard";
 
 export interface ChatMessage {
   role: "user" | "assistant";
@@ -104,27 +105,26 @@ interface CustomizeAIResponse {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth();
+  if (auth instanceof NextResponse) return auth;
+
   let body: ChatRequest;
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json(
-      { error: "invalid_request", message: "Expected JSON body" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "invalid_request", message: "Expected JSON body" }, { status: 400 });
   }
 
-  const { messages, resumeState, model, mode = "build", sectionHistory = {} } = body;
-
-  if (!Array.isArray(messages)) {
-    return NextResponse.json(
-      { error: "missing_fields", message: "messages array is required" },
-      { status: 400 }
-    );
+  const messages = sanitiseMessages(body.messages);
+  if (!messages) {
+    return NextResponse.json({ error: "missing_fields", message: "messages array is required" }, { status: 400 });
   }
+
+  const model = sanitiseModel(body.model);
+  const { resumeState, mode = "build", sectionHistory = {} } = body;
 
   try {
-    const provider = createProvider(model ?? "openrouter-liquid-1.2b");
+    const provider = createProvider(model);
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : SYSTEM_PROMPT;
 
     const conversationHistory = messages
@@ -142,7 +142,7 @@ export async function POST(req: NextRequest) {
     const raw = await provider.complete(prompt, systemPrompt);
 
     // Charge only after AI responds successfully
-    const chargeError = await chargeCredits(model ?? "openrouter-liquid-1.2b", "Chat bot");
+    const chargeError = await chargeCredits(model, "Chat bot");
     if (chargeError) return chargeError;
 
     if (mode === "customize") {

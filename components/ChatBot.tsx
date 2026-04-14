@@ -180,9 +180,11 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
 
       {/* Error */}
       {error && (
-        <p className="px-4 py-2 text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20">
-          {error}
-        </p>
+        <div role="alert" className="px-4 py-2 flex items-center gap-2 text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-t border-red-100 dark:border-red-900">
+          <span>⚠</span>
+          <span className="flex-1">{error}</span>
+          <button onClick={() => setError(null)} className="shrink-0 underline hover:no-underline">Dismiss</button>
+        </div>
       )}
 
       {/* Input area */}

@@ -71,11 +71,11 @@ export default function AnalyzePage() {
     setAtsLoading(true); setAtsError(null);
     try {
       const res = await fetch("/api/ats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, raw: state.raw, model: state.selectedModel }) });
-      if (!res.ok) { const err = await res.json(); throw new Error(err.message ?? "ATS analysis failed"); }
-      const result = await res.json();
-      setState((prev) => ({ ...prev, atsResult: result }));
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message ?? "ATS analysis failed");
+      setState((prev) => ({ ...prev, atsResult: data }));
       refreshCredits();
-    } catch (e) { setAtsError(e instanceof Error ? e.message : "Something went wrong"); }
+    } catch (e) { setAtsError(e instanceof Error ? e.message : "ATS analysis failed. Please try again."); }
     finally { setAtsLoading(false); }
   }
 
@@ -85,11 +85,11 @@ export default function AnalyzePage() {
     setState((prev) => ({ ...prev, jd: jdInput }));
     try {
       const res = await fetch("/api/relevance", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, jd: jdInput, model: state.selectedModel }) });
-      if (!res.ok) { const err = await res.json(); throw new Error(err.message ?? "Relevance analysis failed"); }
-      const result = await res.json();
-      setState((prev) => ({ ...prev, relevanceResult: result }));
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message ?? "Relevance analysis failed");
+      setState((prev) => ({ ...prev, relevanceResult: data }));
       refreshCredits();
-    } catch (e) { setRelevanceError(e instanceof Error ? e.message : "Something went wrong"); }
+    } catch (e) { setRelevanceError(e instanceof Error ? e.message : "Relevance analysis failed. Please try again."); }
     finally { setRelevanceLoading(false); }
   }
 
@@ -97,11 +97,11 @@ export default function AnalyzePage() {
     setSuggestionsLoading(true); setSuggestionsError(null);
     try {
       const res = await fetch("/api/suggestions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, model: state.selectedModel }) });
-      if (!res.ok) { const err = await res.json(); throw new Error(err.message ?? "Suggestions failed"); }
-      const result = await res.json();
-      setState((prev) => ({ ...prev, suggestions: result }));
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message ?? "Suggestions failed");
+      setState((prev) => ({ ...prev, suggestions: data }));
       refreshCredits();
-    } catch (e) { setSuggestionsError(e instanceof Error ? e.message : "Something went wrong"); }
+    } catch (e) { setSuggestionsError(e instanceof Error ? e.message : "Could not generate suggestions. Please try again."); }
     finally { setSuggestionsLoading(false); }
   }
 
@@ -109,11 +109,11 @@ export default function AnalyzePage() {
     setEnhancementLoading(true); setEnhancementError(null);
     try {
       const res = await fetch("/api/enhance", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, model: state.selectedModel }) });
-      if (!res.ok) { const err = await res.json(); throw new Error(err.message ?? "Enhancement failed"); }
-      const result = await res.json();
-      setState((prev) => ({ ...prev, enhancements: result }));
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message ?? "Enhancement failed");
+      setState((prev) => ({ ...prev, enhancements: data }));
       refreshCredits();
-    } catch (e) { setEnhancementError(e instanceof Error ? e.message : "Something went wrong"); }
+    } catch (e) { setEnhancementError(e instanceof Error ? e.message : "Could not enhance resume. Please try again."); }
     finally { setEnhancementLoading(false); }
   }
 
@@ -165,7 +165,13 @@ export default function AnalyzePage() {
               {!state.atsResult && !atsLoading && (
                 <button type="button" onClick={runATS} className="w-full px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors">Run ATS Analysis</button>
               )}
-              {atsError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{atsError}</p>}
+              {atsError && (
+                <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+                  <span className="shrink-0">⚠</span>
+                  <span className="flex-1">{atsError}</span>
+                  <button onClick={runATS} className="shrink-0 text-xs underline hover:no-underline">Retry</button>
+                </div>
+              )}
               {(state.atsResult || atsLoading) && <ATSScoreCard result={state.atsResult ?? { score: 0, issues: [] }} loading={atsLoading} />}
               {state.atsResult && (
                 <button type="button" onClick={runATS} className="mt-4 w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Re-run analysis</button>
@@ -186,7 +192,13 @@ export default function AnalyzePage() {
                 <button type="button" onClick={runRelevance} disabled={!jdInput.trim()}
                   className="w-full px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white font-medium text-sm transition-colors">Analyze Relevance</button>
               )}
-              {relevanceError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{relevanceError}</p>}
+              {relevanceError && (
+                <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+                  <span className="shrink-0">⚠</span>
+                  <span className="flex-1">{relevanceError}</span>
+                  <button onClick={runRelevance} className="shrink-0 text-xs underline hover:no-underline">Retry</button>
+                </div>
+              )}
               {(state.relevanceResult || relevanceLoading) && (
                 <RelevanceScoreCard result={state.relevanceResult ?? { score: 0, missingKeywords: [], missingSkills: [], recommendations: [] }} loading={relevanceLoading} />
               )}
@@ -207,7 +219,13 @@ export default function AnalyzePage() {
               {!state.suggestions.length && !suggestionsLoading && (
                 <button type="button" onClick={runSuggestions} className="w-full px-4 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-medium text-sm transition-colors">Get AI Suggestions</button>
               )}
-              {suggestionsError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{suggestionsError}</p>}
+              {suggestionsError && (
+                <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+                  <span className="shrink-0">⚠</span>
+                  <span className="flex-1">{suggestionsError}</span>
+                  <button onClick={runSuggestions} className="shrink-0 text-xs underline hover:no-underline">Retry</button>
+                </div>
+              )}
               {(state.suggestions.length > 0 || suggestionsLoading) && <SuggestionsList suggestions={state.suggestions} loading={suggestionsLoading} />}
               {state.suggestions.length > 0 && (
                 <button type="button" onClick={runSuggestions} className="mt-4 w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Re-run suggestions</button>
@@ -223,7 +241,13 @@ export default function AnalyzePage() {
               {!state.enhancements.length && !enhancementLoading && (
                 <button type="button" onClick={runEnhancement} className="w-full px-4 py-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-sm transition-colors">Enhance Resume</button>
               )}
-              {enhancementError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{enhancementError}</p>}
+              {enhancementError && (
+                <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+                  <span className="shrink-0">⚠</span>
+                  <span className="flex-1">{enhancementError}</span>
+                  <button onClick={runEnhancement} className="shrink-0 text-xs underline hover:no-underline">Retry</button>
+                </div>
+              )}
               {(state.enhancements.length > 0 || enhancementLoading) && <EnhancementList enhancements={state.enhancements} loading={enhancementLoading} />}
               {state.enhancements.length > 0 && (
                 <button type="button" onClick={runEnhancement} className="mt-4 w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Re-run enhancement</button>

@@ -3,6 +3,7 @@ import type { ModelId, ParsedResume, Suggestion } from "@/types";
 import { createProvider } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
 import { chargeCredits } from "@/lib/credits";
+import { requireAuth, sanitiseModel } from "@/lib/api-guard";
 
 const SYSTEM_PROMPT = `You are an expert resume writer specializing in enhancement without a job description. Your goal is to improve the overall quality and impact of the resume.
 
@@ -36,17 +37,18 @@ Rules:
 - Each suggestion must target a specific, identifiable piece of text from the resume`;
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth();
+  if (auth instanceof NextResponse) return auth;
+
   let body: { parsed: ParsedResume; model: ModelId };
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json(
-      { error: "invalid_request", message: "Expected JSON body" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "invalid_request", message: "Expected JSON body" }, { status: 400 });
   }
 
-  const { parsed, model } = body;
+  const { parsed } = body;
+  const model = sanitiseModel(body.model);
 
   if (!parsed) {
     return NextResponse.json(
@@ -56,7 +58,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const provider = createProvider(model ?? "openrouter-liquid-1.2b");
+    const provider = createProvider(model);
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const result = JSON.parse(json) as { suggestions: Array<{ section: string; original: string; improved: string; reason: string }> };
@@ -68,7 +70,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "ai_unavailable", message: "Could not generate enough enhancements. Please try again." }, { status: 502 });
     }
     // Charge only after successful AI response
-    const chargeError = await chargeCredits(model ?? "openrouter-liquid-1.2b", "Resume enhancement");
+    const chargeError = await chargeCredits(model, "Resume enhancement");
     if (chargeError) return chargeError;
     return NextResponse.json(suggestions);
   } catch {
