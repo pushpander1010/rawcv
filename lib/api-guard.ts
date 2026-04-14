@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import type { ModelId } from "@/types";
 
-const VALID_MODELS: Set<ModelId> = new Set([
+const VALID_MODELS = new Set<ModelId>([
   "openrouter-liquid-1.2b",
   "openrouter-qwen-7b",
   "openrouter-mistral-small",
   "openrouter-llama-4-maverick",
   "openrouter-deepseek-v3",
   "together-gemma-3n",
-]);
+] as ModelId[]);
 
 const MAX_JD_LENGTH = 8000;
 const MAX_MESSAGES = 50;
