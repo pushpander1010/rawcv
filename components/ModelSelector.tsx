@@ -16,7 +16,7 @@ interface ModelMeta {
 
 const MODELS: ModelMeta[] = [
   // Low (1 credit)
-  { id: "openrouter-liquid-1.2b",      name: "LFM 2.5 1.2B Thinking",  provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
+  { id: "openrouter-mistral-nemo",      name: "Mistral Nemo",            provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
   { id: "openrouter-llama-8b",         name: "Llama 3.1 8B",           provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
   { id: "openrouter-gemma-9b",         name: "Gemma 2 9B",             provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
   { id: "together-gemma-3n",           name: "Gemma 3n E4B",           provider: "Together",   tier: "low",    estimatedCredits: 1 },

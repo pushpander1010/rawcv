@@ -2,7 +2,7 @@
 
 export type ModelId =
   // OpenRouter
-  | "openrouter-liquid-1.2b"
+  | "openrouter-mistral-nemo"
   | "openrouter-llama-8b"
   | "openrouter-gemma-9b"
   | "openrouter-qwen-8b"
