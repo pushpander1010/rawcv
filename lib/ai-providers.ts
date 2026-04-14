@@ -4,6 +4,13 @@ const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
   "openrouter-mistral-small": "mistralai/mistral-small-24b-instruct-2501",
 };
 
+/** Returns the remote model string for the primary OpenRouter model.
+ *  OPENROUTER_MODEL env var overrides the hardcoded default. */
+function getOpenRouterModel(modelId: string): string {
+  if (process.env.OPENROUTER_MODEL) return process.env.OPENROUTER_MODEL;
+  return OPENROUTER_REMOTE_MODEL[modelId] ?? "mistralai/mistral-small-24b-instruct-2501";
+}
+
 const TOGETHER_REMOTE_MODEL: Record<string, string> = {
   "together-gemma-3n": "google/gemma-3n-E4B-it",
 };
@@ -72,7 +79,7 @@ class OpenRouterProvider implements AIProvider {
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey) throw new Error("OPENROUTER_API_KEY is not set");
 
-    const remote = OPENROUTER_REMOTE_MODEL[this.modelId];
+    const remote = getOpenRouterModel(this.modelId);
     if (!remote) throw new Error(`Unknown OpenRouter model: ${this.modelId}`);
 
     const isFree = remote.endsWith(":free");
