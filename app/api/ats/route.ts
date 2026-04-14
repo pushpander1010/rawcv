@@ -1,3 +1,5 @@
+export const maxDuration = 60;
+
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, ATSResult, ATSIssue } from "@/types";
 import { complete } from "@/lib/ai-providers";
@@ -158,17 +160,29 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Run rule-based checks — instant, no AI needed
+  // Rule-based checks (instant)
   const ruleIssues = runRuleChecks(parsed, raw);
-  const baseScore = calculateBaseScore(ruleIssues);
+  let baseScore = calculateBaseScore(ruleIssues);
 
-  // Charge credits
+  // AI-powered nuanced scoring (best-effort — falls back to rule-based if it fails)
+  let aiIssues: ATSIssue[] = [];
+  try {
+    const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}\n\nRaw text excerpt:\n${raw.slice(0, 2000)}`;
+    const json = await complete(prompt, SYSTEM_PROMPT);
+    const aiResult = JSON.parse(json) as { additionalIssues: ATSIssue[]; scoreAdjustment: number };
+    aiIssues = Array.isArray(aiResult.additionalIssues) ? aiResult.additionalIssues : [];
+    const adjustment = Math.max(-20, Math.min(10, aiResult.scoreAdjustment ?? 0));
+    baseScore = Math.max(0, Math.min(100, baseScore + adjustment));
+  } catch {
+    // fall back to rule-based score only
+  }
+
   const chargeError = await chargeCredits("ATS analysis");
   if (chargeError) return chargeError;
 
   return NextResponse.json({
     score: Math.round(baseScore),
-    issues: ruleIssues,
+    issues: [...ruleIssues, ...aiIssues],
   } satisfies ATSResult);
 }
 

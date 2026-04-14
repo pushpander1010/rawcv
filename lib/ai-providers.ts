@@ -1,6 +1,5 @@
 /**
  * Single AI provider — model is set via OPENROUTER_MODEL env variable.
- * No model selection, no routing, no dead code.
  */
 
 function safeJsonParse(text: string): string {
@@ -37,33 +36,41 @@ export async function complete(
   const fullSystem = `${systemPrompt}\n\nIMPORTANT: Return ONLY valid JSON. No markdown, no explanation, no code blocks. Just the raw JSON object.`;
 
   return withRetry(async () => {
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "https://rawcv.com",
-        "X-Title": "rawcv",
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: options?.maxTokens ?? 2000,
-        temperature: 0.7,
-        messages: [
-          { role: "system", content: fullSystem },
-          { role: "user", content: prompt },
-        ],
-      }),
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 55000);
 
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(`OpenRouter error (${res.status}): ${err}`);
+    try {
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "https://rawcv.com",
+          "X-Title": "rawcv",
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: options?.maxTokens ?? 2000,
+          temperature: 0.7,
+          messages: [
+            { role: "system", content: fullSystem },
+            { role: "user", content: prompt },
+          ],
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`OpenRouter error (${res.status}): ${err}`);
+      }
+
+      const data = await res.json();
+      const content = data?.choices?.[0]?.message?.content;
+      if (!content) throw new Error("OpenRouter returned empty content");
+      return safeJsonParse(content);
+    } finally {
+      clearTimeout(timeout);
     }
-
-    const data = await res.json();
-    const content = data?.choices?.[0]?.message?.content;
-    if (!content) throw new Error("OpenRouter returned empty content");
-    return safeJsonParse(content);
   });
 }
