@@ -169,21 +169,15 @@ export async function POST(req: NextRequest) {
       "JSON response:",
     ].filter(Boolean).join("\n\n");
 
-    const raw = await complete(prompt, systemPrompt);
+    const aiResult = await complete(prompt, systemPrompt);
 
     // Charge only after AI responds successfully
     const chargeError = await chargeCredits("Chat bot");
     if (chargeError) return chargeError;
 
     if (mode === "customize") {
-      let parsed: CustomizeAIResponse;
-      try {
-        parsed = JSON.parse(raw) as CustomizeAIResponse;
-      } catch {
-        parsed = { message: raw, resumeUpdate: null, undoSection: null, isComplete: false };
-      }
+      const parsed = (aiResult ?? {}) as CustomizeAIResponse;
 
-      // Validate resumeUpdate — reject if it's not a plain object
       if (parsed.resumeUpdate !== null && typeof parsed.resumeUpdate !== "object") {
         parsed.resumeUpdate = null;
       }
@@ -214,14 +208,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Build mode
-    let parsed: { message: string; resumeUpdate: Partial<ParsedResume> | null; isComplete: boolean };
-    try {
-      parsed = JSON.parse(raw);
-    } catch {
-      parsed = { message: raw, resumeUpdate: null, isComplete: false };
-    }
+    const parsed = (aiResult ?? {}) as { message: string; resumeUpdate: Partial<ParsedResume> | null; isComplete: boolean };
 
-    // Validate resumeUpdate
     if (parsed.resumeUpdate !== null && typeof parsed.resumeUpdate !== "object") {
       parsed.resumeUpdate = null;
     }

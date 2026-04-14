@@ -62,8 +62,7 @@ export async function POST(req: NextRequest) {
   try {
     
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}`;
-    const json = await complete(prompt, SYSTEM_PROMPT);
-    const result = JSON.parse(json) as { suggestions: Array<{ section: string; original: string; improved: string; reason: string }> };
+    const result = await complete(prompt, SYSTEM_PROMPT) as { suggestions: Array<{ section: string; original: string; improved: string; reason: string }> };
     const raw = Array.isArray(result.suggestions) ? result.suggestions : [];
     const suggestions: Suggestion[] = raw.slice(0, 15).map((s) => ({
       id: randomUUID(), section: s.section ?? "general", original: s.original ?? "", improved: s.improved ?? "", reason: s.reason ?? "",

@@ -47,8 +47,7 @@ export async function POST(req: NextRequest) {
   try {
     
     const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 4000)}`;
-    const json = await complete(prompt, SYSTEM_PROMPT);
-    const result = JSON.parse(json) as RelevanceResult;
+    const result = await complete(prompt, SYSTEM_PROMPT) as RelevanceResult;
 
     const safeResult: RelevanceResult = {
       score: Math.max(0, Math.min(100, Math.round(result.score ?? 0))),

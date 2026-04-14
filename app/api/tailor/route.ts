@@ -60,8 +60,7 @@ export async function POST(req: NextRequest) {
   try {
     
     const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 4000)}`;
-    const json = await complete(prompt, SYSTEM_PROMPT);
-    const result = JSON.parse(json) as { changes: Array<{ section: string; field: string; original: string; tailored: string }> };
+    const result = await complete(prompt, SYSTEM_PROMPT) as { changes: Array<{ section: string; field: string; original: string; tailored: string }> };
     const rawChanges = Array.isArray(result.changes) ? result.changes : [];
     const changes: TailorChange[] = rawChanges.slice(0, 15).map((c) => ({
       id: randomUUID(), section: c.section ?? "experience", field: c.field ?? "", original: c.original ?? "", tailored: c.tailored ?? "", accepted: false,

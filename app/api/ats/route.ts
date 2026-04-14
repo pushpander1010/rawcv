@@ -169,8 +169,7 @@ export async function POST(req: NextRequest) {
   let aiIssues: ATSIssue[] = [];
   try {
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}\n\nRaw text excerpt:\n${raw.slice(0, 2000)}`;
-    const json = await complete(prompt, SYSTEM_PROMPT);
-    const aiResult = JSON.parse(json) as { additionalIssues: ATSIssue[]; scoreAdjustment: number };
+    const aiResult = await complete(prompt, SYSTEM_PROMPT) as { additionalIssues: ATSIssue[]; scoreAdjustment: number };
     aiIssues = Array.isArray(aiResult.additionalIssues) ? aiResult.additionalIssues : [];
     const adjustment = Math.max(-20, Math.min(10, aiResult.scoreAdjustment ?? 0));
     baseScore = Math.max(0, Math.min(100, baseScore + adjustment));
