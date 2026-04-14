@@ -281,10 +281,14 @@ export function renderThemeHtml(resume: ParsedResume, theme: ThemeId): string {
   <title>${esc(safe.contact.name)} — Resume</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #fff; }
+    html, body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
     ul { padding-left: 18px; }
     li { margin-bottom: 2px; }
     p { margin: 0; }
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
   </style>
 </head>
 <body>${body}</body>

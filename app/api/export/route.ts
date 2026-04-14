@@ -34,15 +34,27 @@ export async function POST(req: NextRequest) {
     const puppeteer = await import("puppeteer");
     const browser = await puppeteer.default.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-gpu",
+        "--font-render-hinting=none", // sharper font rendering
+      ],
     });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
+
+    // Ensure fonts are loaded before capturing
+    await page.evaluateHandle("document.fonts.ready");
+
     pdfBuffer = Buffer.from(
       await page.pdf({
         format: "A4",
-        printBackground: true,
+        printBackground: true,    // needed for coloured sidebar themes
+        tagged: true,             // embeds structure tags → selectable text on mobile
         margin: { top: "0", right: "0", bottom: "0", left: "0" },
+        preferCSSPageSize: false,
+        scale: 0.98,              // slight scale-down reduces file size without visible quality loss
       })
     );
     await browser.close();
