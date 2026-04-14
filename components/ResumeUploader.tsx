@@ -20,13 +20,15 @@ interface ResumeUploaderProps {
 
 export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
   const router = useRouter();
-  const { state, setState } = useResume();
+  const { state, setState, pushUndo } = useResume();
   const { showToast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
 
   const activeModel = modelId ?? state.selectedModel;
+  const hasResume = !!state.parsed;
 
   function validateFile(file: File): string | null {
     const ext = "." + file.name.split(".").pop()?.toLowerCase();
@@ -48,7 +50,22 @@ export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
         return;
       }
 
+      // If a resume is already loaded, ask for confirmation first
+      if (hasResume) {
+        setPendingFile(file);
+        return;
+      }
+
+      await parseAndLoad(file);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeModel, hasResume]
+  );
+
+  const parseAndLoad = useCallback(
+    async (file: File) => {
       setLoading(true);
+      setPendingFile(null);
       try {
         const form = new FormData();
         form.append("file", file);
@@ -62,10 +79,19 @@ export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
           return;
         }
 
+        // Push current resume onto undo stack before overwriting
+        pushUndo();
+
         setState((prev) => ({
           ...prev,
           raw: data.raw,
           parsed: data.parsed as ParsedResume,
+          // Clear analysis results — they belong to the old resume
+          atsResult: null,
+          relevanceResult: null,
+          suggestions: [],
+          enhancements: [],
+          tailoredResume: null,
         }));
 
         router.push("/analyze");
@@ -75,7 +101,7 @@ export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
         setLoading(false);
       }
     },
-    [activeModel, setState, router, showToast]
+    [activeModel, setState, pushUndo, router, showToast]
   );
 
   // Drag-and-drop handlers
@@ -94,12 +120,12 @@ export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) handleFile(file);
-    // reset so same file can be re-selected
     e.target.value = "";
   };
 
   return (
-    <div
+    <>
+      <div
       role="button"
       tabIndex={0}
       aria-label="Upload resume — drag and drop or click to browse"
@@ -170,5 +196,36 @@ export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
         </>
       )}
     </div>
+
+    {/* Confirmation dialog — shown when a resume is already loaded */}
+    {pendingFile && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 max-w-sm w-full">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            Replace current resume?
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
+            You have a resume loaded with edits. Uploading <span className="font-medium text-gray-700 dark:text-gray-200">{pendingFile.name}</span> will replace it. Your current version will be saved to undo history.
+          </p>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => parseAndLoad(pendingFile)}
+              className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Yes, replace
+            </button>
+            <button
+              type="button"
+              onClick={() => setPendingFile(null)}
+              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
