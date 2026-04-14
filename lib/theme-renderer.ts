@@ -250,15 +250,35 @@ const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
   terra: renderTerra,
 };
 
+/** Sanitise a resume so theme renderers never receive undefined arrays */
+function sanitiseResume(resume: ParsedResume): ParsedResume {
+  return {
+    ...resume,
+    contact: resume.contact ?? { name: "", email: "" },
+    experience: Array.isArray(resume.experience) ? resume.experience.map((j) => ({
+      ...j,
+      bullets: Array.isArray(j.bullets) ? j.bullets : [],
+    })) : [],
+    education:  Array.isArray(resume.education)  ? resume.education  : [],
+    skills:     Array.isArray(resume.skills)     ? resume.skills     : [],
+    certifications: Array.isArray(resume.certifications) ? resume.certifications : undefined,
+    projects: Array.isArray(resume.projects) ? resume.projects.map((p) => ({
+      ...p,
+      technologies: Array.isArray(p.technologies) ? p.technologies : [],
+    })) : undefined,
+  };
+}
+
 /** Render a ParsedResume to a full self-contained HTML document */
 export function renderThemeHtml(resume: ParsedResume, theme: ThemeId): string {
-  const body = RENDERERS[theme]?.(resume) ?? RENDERERS.classic(resume);
+  const safe = sanitiseResume(resume);
+  const body = RENDERERS[theme]?.(safe) ?? RENDERERS.classic(safe);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${esc(resume.contact.name)} — Resume</title>
+  <title>${esc(safe.contact.name)} — Resume</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #fff; }

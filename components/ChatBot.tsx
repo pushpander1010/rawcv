@@ -74,38 +74,33 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
           }),
         });
 
+        const data = await res.json();
+
         if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.message ?? "Chat failed");
+          throw new Error(data.message ?? `Request failed (${res.status})`);
         }
 
-        const data: ChatResponse = await res.json();
+        const chatData = data as ChatResponse;
 
         // Update section history if returned (customize mode)
-        if (data.sectionHistory !== undefined) {
-          setSectionHistory(data.sectionHistory);
+        if (chatData.sectionHistory !== undefined) {
+          setSectionHistory(chatData.sectionHistory);
         }
 
-        // Merge resume update into local state
-        if (data.resumeUpdate) {
+        // Merge resume update into local state and sync to global context
+        if (chatData.resumeUpdate) {
           pushUndo();
-          setLocalResume((prev) => {
-            const merged = mergeResumeUpdate(prev, data.resumeUpdate!);
-            // Sync to global context so preview updates live
-            setState((s) => ({
-              ...s,
-              parsed: merged as ParsedResume,
-            }));
-            return merged;
-          });
+          const merged = mergeResumeUpdate(localResume, chatData.resumeUpdate);
+          setLocalResume(merged);
+          setState((s) => ({ ...s, parsed: merged as ParsedResume }));
         }
 
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: data.message },
+          { role: "assistant", content: chatData.message },
         ]);
 
-        if (data.isComplete) {
+        if (chatData.isComplete) {
           setIsComplete(true);
           onComplete?.();
         }
@@ -238,15 +233,26 @@ function mergeResumeUpdate(
 
   for (const key of Object.keys(update) as Array<keyof ParsedResume>) {
     const val = update[key];
+    // Skip null/undefined — never overwrite existing data with nothing
     if (val === undefined || val === null) continue;
 
     if (key === "contact" && typeof val === "object" && !Array.isArray(val)) {
+      // Shallow-merge contact fields
       merged.contact = { ...(merged.contact as object), ...(val as object) } as ParsedResume["contact"];
+    } else if (Array.isArray(val)) {
+      // Ensure every array item is a valid object before storing
+      (merged as Record<string, unknown>)[key] = val.filter(
+        (item) => item !== null && item !== undefined
+      );
     } else {
-      // For arrays and primitives, replace outright (AI returns full arrays)
       (merged as Record<string, unknown>)[key] = val;
     }
   }
+
+  // Guarantee required arrays are never undefined so theme renderers don't crash
+  merged.experience = Array.isArray(merged.experience) ? merged.experience : [];
+  merged.education  = Array.isArray(merged.education)  ? merged.education  : [];
+  merged.skills     = Array.isArray(merged.skills)     ? merged.skills     : [];
 
   return merged;
 }
