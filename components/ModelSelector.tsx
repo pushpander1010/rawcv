@@ -10,35 +10,33 @@ interface ModelMeta {
   id: ModelId;
   name: string;
   provider: string;
-  tier: "free" | "low-cost" | "medium" | "paid";
+  tier: "low" | "medium" | "high";
   estimatedCredits: number;
 }
 
 const MODELS: ModelMeta[] = [
-  // Free tier
-  { id: "openrouter-liquid-1.2b",      name: "LFM 2.5 1.2B Thinking",  provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
-  { id: "openrouter-llama-8b",         name: "Llama 3.1 8B",           provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
-  { id: "openrouter-gemma-9b",         name: "Gemma 2 9B",             provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
-  { id: "together-gemma-3n",           name: "Gemma 3n E4B",           provider: "Together",   tier: "free",     estimatedCredits: 1   },
-  // Low-cost
-  { id: "openrouter-qwen-8b",          name: "Qwen3 8B",               provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1   },
-  { id: "openrouter-qwen-3.5",         name: "Qwen 3.5 Flash",         provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1   },
-  { id: "openrouter-mistral-24b",      name: "Mistral Small 24B",      provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1   },
-  // Medium
-  { id: "openrouter-llama-4-maverick", name: "Llama 4 Maverick",       provider: "OpenRouter", tier: "medium",   estimatedCredits: 2   },
-  { id: "together-llama-70b",          name: "Llama 3.3 70B Turbo",    provider: "Together",   tier: "medium",   estimatedCredits: 2   },
-  { id: "together-gemma4-31b",         name: "Gemma 4 31B",            provider: "Together",   tier: "medium",   estimatedCredits: 2   },
-  // Paid
-  { id: "openrouter-deepseek-v3",      name: "DeepSeek V3",            provider: "OpenRouter", tier: "paid",     estimatedCredits: 3   },
-  { id: "together-deepseek-v3",        name: "DeepSeek V3.1",          provider: "Together",   tier: "paid",     estimatedCredits: 3   },
-  { id: "together-qwen3-235b",         name: "Qwen3 235B",             provider: "Together",   tier: "paid",     estimatedCredits: 3   },
+  // Low (1 credit)
+  { id: "openrouter-liquid-1.2b",      name: "LFM 2.5 1.2B Thinking",  provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
+  { id: "openrouter-llama-8b",         name: "Llama 3.1 8B",           provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
+  { id: "openrouter-gemma-9b",         name: "Gemma 2 9B",             provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
+  { id: "together-gemma-3n",           name: "Gemma 3n E4B",           provider: "Together",   tier: "low",    estimatedCredits: 1 },
+  { id: "openrouter-qwen-8b",          name: "Qwen3 8B",               provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
+  { id: "openrouter-qwen-3.5",         name: "Qwen 3.5 Flash",         provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
+  // Medium (2–3 credits)
+  { id: "openrouter-mistral-24b",      name: "Mistral Small 24B",      provider: "OpenRouter", tier: "medium", estimatedCredits: 2 },
+  { id: "openrouter-llama-4-maverick", name: "Llama 4 Maverick",       provider: "OpenRouter", tier: "medium", estimatedCredits: 3 },
+  { id: "together-llama-70b",          name: "Llama 3.3 70B Turbo",    provider: "Together",   tier: "medium", estimatedCredits: 3 },
+  { id: "together-gemma4-31b",         name: "Gemma 4 31B",            provider: "Together",   tier: "medium", estimatedCredits: 3 },
+  // High (5 credits)
+  { id: "openrouter-deepseek-v3",      name: "DeepSeek V3",            provider: "OpenRouter", tier: "high",   estimatedCredits: 5 },
+  { id: "together-deepseek-v3",        name: "DeepSeek V3.1",          provider: "Together",   tier: "high",   estimatedCredits: 5 },
+  { id: "together-qwen3-235b",         name: "Qwen3 235B",             provider: "Together",   tier: "high",   estimatedCredits: 5 },
 ];
 
 const TIER_STYLES: Record<ModelMeta["tier"], string> = {
-  "free":     "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
-  "low-cost": "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
-  "medium":   "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
-  "paid":     "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
+  "low":    "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+  "medium": "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+  "high":   "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
 };
 
 const PROVIDER_ICONS: Record<string, string> = {
@@ -179,13 +177,6 @@ export default function ModelSelector({ label, onChange }: ModelSelectorProps) {
             })}
           </ul>
         </>
-      )}
-
-      {/* Free model availability notice */}
-      {selected.tier === "free" && (
-        <p className="mt-1.5 text-xs text-amber-600 dark:text-amber-400">
-          ⚠ Free models are subject to availability and may be slower during peak hours.
-        </p>
       )}
 
       {/* Last operation cost badge */}
