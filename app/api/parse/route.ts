@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume } from "@/types";
 import { complete } from "@/lib/ai-providers";
+import { requireAuth } from "@/lib/api-guard";
 
 export const runtime = "nodejs";
+export const maxDuration = 60;
 
 const MAX_SIZE = 5 * 1024 * 1024;
 
@@ -92,6 +94,9 @@ function safeParse(text: string) {
 
 /* ---------------- API ---------------- */
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth();
+  if (auth instanceof NextResponse) return auth;
+
   try {
     const formData = await req.formData();
     const file    = formData.get("file") as File | null;
@@ -129,8 +134,6 @@ export async function POST(req: NextRequest) {
     /* ── AI parse ── */
     let parsed: ParsedResume;
     try {
-      // Use openrouter-sao-8b for fast parsing
-      
       const response = await complete(
         rawText.slice(0, 12000),
         `You are a resume parser. Extract ALL information from the resume and return ONLY a valid JSON object.
