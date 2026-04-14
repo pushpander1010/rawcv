@@ -4,17 +4,8 @@ import { authOptions } from "@/lib/auth";
 import type { ModelId } from "@/types";
 
 const VALID_MODELS = new Set<ModelId>([
-  "openrouter-sao-8b",
-  "openrouter-gemma-9b",
-  "openrouter-qwen-8b",
-  "openrouter-qwen-3.5",
-  "openrouter-mistral-24b",
-  "openrouter-llama-4-maverick",
+  "openrouter-qwen-235b",
   "together-gemma-3n",
-  "together-liquid-24b",
-  "together-llama-8b",
-  "together-qwen-9b",
-  "together-mistral-24b",
 ] as ModelId[]);
 
 const MAX_JD_LENGTH = 8000;
@@ -51,7 +42,7 @@ export function sanitiseModel(model: unknown): ModelId {
   if (typeof model === "string" && VALID_MODELS.has(model as ModelId)) {
     return model as ModelId;
   }
-  return "together-gemma-3n";
+  return "openrouter-qwen-235b";
 }
 
 /**

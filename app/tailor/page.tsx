@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
-import ModelSelector from "@/components/ModelSelector";
 import TailorDiff from "@/components/TailorDiff";
 import ResumePreview from "@/components/ResumePreview";
 import DownloadButton from "@/components/DownloadButton";
@@ -61,7 +60,6 @@ export default function TailorPage() {
       </div>
 
       <div className="mb-6 max-w-sm">
-        <ModelSelector label="AI Model" />
       </div>
 
       {/* JD input */}

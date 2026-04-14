@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useResume } from "@/context/ResumeContext";
-import ModelSelector from "@/components/ModelSelector";
 import ATSScoreCard from "@/components/ATSScoreCard";
 import RelevanceScoreCard from "@/components/RelevanceScoreCard";
 import SuggestionsList from "@/components/SuggestionsList";
@@ -130,7 +129,6 @@ export default function AnalyzePage() {
             </h1>
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-44"><ModelSelector label="Model" /></div>
             <UndoButton />
             <ResetButton />
             <DownloadButton />

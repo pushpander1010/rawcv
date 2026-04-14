@@ -46,7 +46,7 @@ const defaultState: ResumeState = {
   enhancements: [],
   tailoredResume: null,
   selectedTheme: "classic",
-  selectedModel: "together-gemma-3n",
+  selectedModel: "openrouter-qwen-235b",
   jd: "",
   lastOperationCost: null,
   creditBalance: null,

@@ -1,19 +1,8 @@
 // ─── Model & Theme IDs ───────────────────────────────────────────────────────
 
 export type ModelId =
-  // OpenRouter
-  | "openrouter-sao-8b"
-  | "openrouter-gemma-9b"
-  | "openrouter-qwen-8b"
-  | "openrouter-qwen-3.5"
-  | "openrouter-mistral-24b"
-  | "openrouter-llama-4-maverick"
-  // Together AI
-  | "together-gemma-3n"
-  | "together-liquid-24b"
-  | "together-llama-8b"
-  | "together-qwen-9b"
-  | "together-mistral-24b";
+  | "openrouter-qwen-235b"
+  | "together-gemma-3n"; // kept for parse fallback
 
 export type ThemeId =
   | "classic"

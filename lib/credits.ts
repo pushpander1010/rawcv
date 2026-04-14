@@ -6,19 +6,8 @@ import type { ModelId } from "@/types";
 
 // Credits charged per AI operation per model
 const OPERATION_COSTS: Record<ModelId, number> = {
-  // OpenRouter
-  "openrouter-sao-8b":           1,
-  "openrouter-gemma-9b":         1,
-  "openrouter-qwen-8b":          1,
-  "openrouter-qwen-3.5":         1,
-  "openrouter-mistral-24b":      2,
-  "openrouter-llama-4-maverick": 3,
-  // Together AI
-  "together-gemma-3n":           1,
-  "together-liquid-24b":         2,
-  "together-llama-8b":           1,
-  "together-qwen-9b":            1,
-  "together-mistral-24b":        2,
+  "openrouter-qwen-235b": 3,
+  "together-gemma-3n":    1,
 };
 
 export function getOperationCost(model: ModelId): number {

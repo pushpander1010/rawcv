@@ -1,20 +1,11 @@
 import type { ModelId } from "@/types";
 
 const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
-  "openrouter-sao-8b":         "sao10k/l3-lunaris-8b",
-  "openrouter-gemma-9b":         "google/gemma-2-9b-it",
-  "openrouter-qwen-8b":          "qwen/qwen3-8b",
-  "openrouter-qwen-3.5":         "qwen/qwen3.5-flash-02-23",
-  "openrouter-mistral-24b":      "mistralai/mistral-small-3.2-24b-instruct",
-  "openrouter-llama-4-maverick": "meta-llama/llama-4-maverick",
+  "openrouter-qwen-235b": "qwen/qwen3-235b-a22b-2507",
 };
 
 const TOGETHER_REMOTE_MODEL: Record<string, string> = {
-  "together-gemma-3n":    "google/gemma-3n-E4B-it",
-  "together-liquid-24b":"LiquidAI/LFM2-24B-A2B",
-  "together-llama-8b":"meta-llama/Meta-Llama-3-8B-Instruct-Lite",
-  "together-qwen-9b":"Qwen/Qwen3.5-9B",
-  "together-mistral-24b":"mistralai/Mistral-Small-24B-Instruct-2501"
+  "together-gemma-3n": "google/gemma-3n-E4B-it",
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

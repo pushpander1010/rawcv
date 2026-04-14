@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useResume } from "@/context/ResumeContext";
 import ChatBot from "@/components/ChatBot";
 import ResumePreview from "@/components/ResumePreview";
-import ModelSelector from "@/components/ModelSelector";
 import ThemePicker from "@/components/ThemePicker";
 import ResizablePanels from "@/components/ResizablePanels";
 import UndoButton from "@/components/UndoButton";
@@ -45,9 +44,6 @@ export default function ChatPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="w-52">
-            <ModelSelector />
-          </div>
           <UndoButton />
             <ResetButton />
           {state.parsed && (
