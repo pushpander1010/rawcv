@@ -134,32 +134,52 @@ export async function POST(req: NextRequest) {
     /* ── AI parse ── */
     let parsed: ParsedResume;
     try {
-      const response = await complete(
-        rawText.slice(0, 12000),
-        `You are a resume parser. Extract ALL information from the resume and return ONLY a valid JSON object.
+      const apiKey = process.env.OPENROUTER_API_KEY;
+      const model  = process.env.OPENROUTER_MODEL;
+      if (!apiKey || !model) throw new Error("OpenRouter not configured");
 
-REQUIRED OUTPUT SCHEMA:
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "https://rawcv.com",
+          "X-Title": "rawcv",
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 4000,
+          temperature: 0.1, // low temp for deterministic extraction
+          response_format: { type: "json_object" }, // force JSON mode
+          messages: [
+            {
+              role: "system",
+              content: `You are a resume parser. Extract ALL information from the resume text and return a JSON object with this exact structure:
 {
-  "contact": { "name": string, "email": string, "phone": string, "location": string, "linkedin": string, "website": string },
-  "summary": string,
-  "experience": [{ "company": string, "title": string, "startDate": string, "endDate": string, "bullets": string[] }],
-  "education": [{ "institution": string, "degree": string, "field": string, "graduationYear": string }],
-  "skills": string[],
-  "certifications": string[],
-  "projects": [{ "name": string, "description": string, "technologies": string[] }]
+  "contact": { "name": "", "email": "", "phone": "", "location": "", "linkedin": "", "website": "" },
+  "summary": "",
+  "experience": [{ "company": "", "title": "", "startDate": "", "endDate": "", "bullets": [""] }],
+  "education": [{ "institution": "", "degree": "", "field": "", "graduationYear": "" }],
+  "skills": [""],
+  "certifications": [""],
+  "projects": [{ "name": "", "description": "", "technologies": [""] }]
 }
+Extract every job, every bullet point, every skill. Use empty string for missing fields, empty array for missing arrays.`,
+            },
+            {
+              role: "user",
+              content: `Parse this resume:\n\n${rawText.slice(0, 12000)}`,
+            },
+          ],
+        }),
+      });
 
-RULES:
-- Return ONLY the JSON object, nothing else
-- Extract every job, bullet point, skill, and education entry
-- Use empty string "" for missing text fields
-- Use empty array [] for missing array fields
-- skills must be a flat array of strings`,
-        { maxTokens: 4000 }
-      );
-      console.log("[parse] AI response length:", response.length, "| first 200:", response.slice(0, 200));
-      parsed = normalizeParsed(safeParse(response));
-      console.log("[parse] parsed result — experience:", parsed.experience.length, "skills:", parsed.skills.length);
+      if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${await res.text()}`);
+      const data = await res.json();
+      const content = data?.choices?.[0]?.message?.content ?? "{}";
+      console.log("[parse] AI response length:", content.length, "| first 300:", content.slice(0, 300));
+      parsed = normalizeParsed(safeParse(content));
+      console.log("[parse] result — experience:", parsed.experience.length, "skills:", parsed.skills.length);
     } catch (err) {
       console.error("[parse] AI failed:", err);
       parsed = normalizeParsed({});
