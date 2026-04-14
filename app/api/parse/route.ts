@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ModelId, ParsedResume } from "@/types";
+import type { ParsedResume } from "@/types";
 import { createProvider } from "@/lib/ai-providers";
 
 export const runtime = "nodejs";
@@ -94,8 +94,9 @@ function safeParse(text: string) {
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const file    = formData.get("file")  as File    | null;
-    const modelId = (formData.get("model") as ModelId | null) ?? "openrouter-mistral-nemo";
+    const file    = formData.get("file") as File | null;
+    // modelId param kept for API compatibility but parse always uses a reliable model
+    void formData.get("model");
 
     if (!file) {
       return NextResponse.json({ error: "NO_FILE", message: "No file provided." }, { status: 400 });
@@ -128,10 +129,13 @@ export async function POST(req: NextRequest) {
     /* ── AI parse ── */
     let parsed: ParsedResume;
     try {
-      const provider = createProvider(modelId);
+      // Use Together Llama 70B — reliable structured JSON output
+      const provider = createProvider("together-llama-70b");
       const response = await provider.complete(
-        rawText.slice(0, 15000),
-        `You are a resume parser. Extract structured information and return ONLY valid JSON matching this exact schema:
+        rawText.slice(0, 12000),
+        `You are a resume parser. Extract ALL information from the resume and return ONLY a valid JSON object.
+
+REQUIRED OUTPUT SCHEMA:
 {
   "contact": { "name": string, "email": string, "phone": string, "location": string, "linkedin": string, "website": string },
   "summary": string,
@@ -141,10 +145,18 @@ export async function POST(req: NextRequest) {
   "certifications": string[],
   "projects": [{ "name": string, "description": string, "technologies": string[] }]
 }
-Return ONLY the JSON object. No markdown, no explanation.`,
+
+RULES:
+- Return ONLY the JSON object, nothing else
+- Extract every job, bullet point, skill, and education entry
+- Use empty string "" for missing text fields
+- Use empty array [] for missing array fields
+- skills must be a flat array of strings`,
         { maxTokens: 4000 }
       );
+      console.log("[parse] AI response length:", response.length, "| first 200:", response.slice(0, 200));
       parsed = normalizeParsed(safeParse(response));
+      console.log("[parse] parsed result — experience:", parsed.experience.length, "skills:", parsed.skills.length);
     } catch (err) {
       console.error("[parse] AI failed:", err);
       parsed = normalizeParsed({});
