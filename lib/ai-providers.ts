@@ -5,7 +5,7 @@ const DefaultSchema = z.any();
 // ─── Models ───────────────────────────────────────────────────────────────────
 const MODEL_PARSE    = "google/gemini-2.5-flash-lite";           // resume parsing
 const MODEL_CHAT     = "mistralai/mistral-small-24b-instruct-2501"; // chat / build / customize
-const MODEL_ANALYSIS = "qwen/qwen-turbo";             // ATS, JD relevance, suggestions, enhance
+const MODEL_ANALYSIS = "google/gemma-4-26b-a4b-it";             // ATS, JD relevance, suggestions, enhance
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -61,7 +61,8 @@ async function callOpenRouter<T>(
 
   return withRetry(async () => {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 45000);
+    const timeoutMs = model === MODEL_ANALYSIS ? 120000 : 45000;
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const body: Record<string, unknown> = {
         model,
