@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume } from "@/types";
 import { complete } from "@/lib/ai-providers";
 import { requireAuth } from "@/lib/api-guard";
+import { chargeCredits } from "@/lib/credits";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -128,6 +129,10 @@ export async function POST(req: NextRequest) {
         { status: 422 }
       );
     }
+
+    /* ── Charge credits before AI work ── */
+    const chargeError = await chargeCredits("Resume parse");
+    if (chargeError) return chargeError;
 
     /* ── AI parse ── */
     let parsed: ParsedResume;
