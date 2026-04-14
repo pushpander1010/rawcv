@@ -6,10 +6,6 @@ import { prisma } from "@/lib/prisma";
 import { getUserByEmail } from "./user-store";
 
 const INITIAL_CREDITS = 20;
-// Dev-only admin credentials — only active when NODE_ENV !== "production"
-const DEV_ADMIN_EMAIL = process.env.DEV_ADMIN_EMAIL ?? "admin@localhost";
-const DEV_ADMIN_PASSWORD = process.env.DEV_ADMIN_PASSWORD ?? "admin";
-const ALLOW_DEV_ADMIN_LOGIN = process.env.NODE_ENV !== "production";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -25,15 +21,6 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-
-        // Dev admin — fully in-memory, no DB required
-        if (
-          ALLOW_DEV_ADMIN_LOGIN &&
-          credentials.email === DEV_ADMIN_EMAIL &&
-          credentials.password === DEV_ADMIN_PASSWORD
-        ) {
-          return { id: "dev-admin", email: DEV_ADMIN_EMAIL, name: "Admin" };
-        }
 
         const user = await getUserByEmail(credentials.email);
         if (!user) return null;

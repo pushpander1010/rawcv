@@ -17,7 +17,6 @@ export function getOperationCost(model: ModelId): number {
 /**
  * Checks that the current session user has enough credits for the operation.
  * If not, returns a 402 NextResponse. Otherwise deducts and returns null.
- * Dev admin (id = "dev-admin") bypasses all DB checks.
  */
 export async function chargeCredits(
   model: ModelId,
@@ -38,9 +37,6 @@ export async function chargeCredits(
       { status: 401 }
     );
   }
-
-  // Dev admin has unlimited credits — skip DB entirely
-  if (userId === "dev-admin") return null;
 
   const user = await getUserById(userId);
   const cost = getOperationCost(model);

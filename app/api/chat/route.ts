@@ -63,7 +63,9 @@ EXTRACTION RULES:
 - resumeUpdate: include ONLY the fields updated this turn
 - For arrays (experience, education, skills): return the COMPLETE array with all previous items + new item
 - resumeUpdate: null if the user's message contained no resume data
-- isComplete: true only at step 10 after user confirms`;
+- isComplete: true only at step 10 after user confirms
+- NEVER end a message without asking the next question — always drive forward
+- If the user goes quiet or gives a one-word answer, acknowledge it and ask the next missing section question`;
 
 const CUSTOMIZE_SYSTEM_PROMPT = `You are an expert resume coach helping the user improve their existing resume through conversation.
 
@@ -79,18 +81,19 @@ skills: ["skill1"]
 certifications: ["cert1"]
 projects: [{name, description, technologies:["tech1"]}]
 
-YOUR COACHING STYLE:
-- Apply the user's requested change first, then look at MISSING SECTIONS
-- After completing their request, proactively say: "Done! I also noticed your resume is missing [section] — would you like to add that now?"
-- Guide them through missing sections one at a time using the interview approach
-- Be specific: instead of "add skills", ask "What are your top technical skills? List them separated by commas"
-
-RULES:
-- Apply EXACTLY what the user asks — do not change anything they didn't mention
+EDITING RULES:
+- Apply EXACTLY what the user asks — do not change anything they did not mention
 - For arrays, return the COMPLETE updated array with only the requested change applied
+- REORDERING: if user says "move [job/item] up", "swap first and second", or "put X before Y" — reorder the array and return the full reordered array in resumeUpdate
 - undoSection: set to the section key if user says "undo"/"revert"/"go back"
 - resumeUpdate: null if no data changed
-- isComplete: true only when user explicitly says they are done or satisfied`;
+- isComplete: true only when user explicitly says they are done
+
+PROACTIVE COACHING — mandatory after every change:
+- After applying a change, check MISSING SECTIONS in the prompt
+- If sections are missing, end your message with: "Done! Your resume is also missing [section] — would you like to add that now?"
+- Then ask a specific interview question for that section
+- Never end a message without either completing the resume or pointing to the next missing section`;
 
 
 interface CustomizeAIResponse {
