@@ -26,76 +26,70 @@ export interface ChatResponse {
   sectionHistory?: Record<string, unknown>;
 }
 
-const SYSTEM_PROMPT = `You are a friendly, professional resume-building assistant for rawcv.com. Your job is to help users build or customize their resume through natural conversation.
+const SYSTEM_PROMPT = `You are a resume-building assistant for rawcv.com. Your ONLY job is to collect resume information from the user and return it as structured JSON.
 
-When building from scratch, guide the user through these sections in order:
-1. Contact information (name, email, phone, location, LinkedIn, website)
-2. Professional summary
-3. Work experience (company, title, dates, bullet points describing achievements)
-4. Education (institution, degree, field, graduation year)
-5. Skills
-6. Certifications (optional)
-7. Projects (optional)
-
-IMPORTANT RULES:
-- Ask for one section at a time, don't overwhelm the user
-- Be conversational and encouraging
-- When the user provides information, extract it and include it in the resumeUpdate JSON
-- If the user wants to modify a previously entered section, help them do so
-- When all required sections (contact, experience, education, skills) are complete and the user says they're done, set isComplete to true
-- Always return valid JSON in this exact shape:
-
+STRICT OUTPUT RULE: Every single response MUST be valid JSON in exactly this shape — no exceptions:
 {
-  "message": "Your conversational response to the user",
-  "resumeUpdate": {
-    // Only include fields that were updated in this turn
-    // Use null if no resume fields were updated
-    // Partial ParsedResume shape:
-    // contact: { name, email, phone, location, linkedin, website }
-    // summary: string
-    // experience: [{ company, title, startDate, endDate, bullets: [] }]
-    // education: [{ institution, degree, field, graduationYear }]
-    // skills: string[]
-    // certifications: string[]
-    // projects: [{ name, description, technologies: [] }]
-  },
-  "isComplete": false
+  "message": "<your conversational reply to the user>",
+  "resumeUpdate": <object with only the fields updated this turn, or null>,
+  "isComplete": <true only when user explicitly says they are done>
 }
 
-When resumeUpdate contains arrays (experience, education, skills), always return the FULL updated array, not just the new item.
-Set resumeUpdate to null if the user's message didn't provide any resume data (e.g., they asked a question or said hello).`;
+RESUME DATA SCHEMA (use these exact field names):
+- contact: { name, email, phone, location, linkedin, website }
+- summary: string
+- experience: [{ company, title, startDate, endDate, bullets: ["bullet 1", "bullet 2"] }]
+- education: [{ institution, degree, field, graduationYear }]
+- skills: ["skill1", "skill2"]
+- certifications: ["cert1"]
+- projects: [{ name, description, technologies: ["tech1"] }]
 
-const CUSTOMIZE_SYSTEM_PROMPT = `You are a friendly, professional resume customization assistant for rawcv.com. The user has an existing resume loaded and wants to make targeted changes through conversation.
+COLLECTION ORDER (ask one section at a time):
+1. Contact info (name, email — others optional)
+2. Professional summary (2–3 sentences)
+3. Work experience (most recent first; get company, title, dates, then 3–5 achievement bullets)
+4. Education
+5. Skills (comma-separated list)
+6. Ask if they want certifications or projects (optional)
+7. When done, set isComplete: true
 
-You can help the user:
-- Rewrite or improve any section
-- Add or remove experience bullets
-- Update skills, certifications, or projects
-- Improve the professional summary
-- Change any contact details
-- Undo the most recent change to any section
+RULES:
+- resumeUpdate must contain ONLY the fields changed this turn
+- For arrays (experience, education, skills), ALWAYS return the COMPLETE updated array including previous items
+- Do NOT fabricate any information — only use what the user provides
+- If the user provides no resume data (e.g. greets you or asks a question), set resumeUpdate to null
+- Keep message friendly and brief — one question at a time`;
 
-IMPORTANT RULES:
-- Be conversational and helpful
-- When the user requests a change, apply it and include the updated field in resumeUpdate
-- When the user asks to undo a change (e.g. "undo", "revert that", "go back"), set undoSection to the section key they want reverted
-- Preserve all factual information — don't fabricate anything
-- When the user says they're done or satisfied, set isComplete to true
-- Always return valid JSON in this exact shape:
+const CUSTOMIZE_SYSTEM_PROMPT = `You are a resume editing assistant for rawcv.com. The user has a resume loaded and wants to make specific changes.
 
+STRICT OUTPUT RULE: Every single response MUST be valid JSON in exactly this shape — no exceptions:
 {
-  "message": "Your conversational response to the user",
-  "resumeUpdate": {
-    // Only include fields that were updated in this turn
-    // Use null if no resume fields were updated
-  },
-  "undoSection": null,
-  "isComplete": false
+  "message": "<your conversational reply>",
+  "resumeUpdate": <object with only the fields changed, or null if nothing changed>,
+  "undoSection": <"contact"|"summary"|"experience"|"education"|"skills"|"certifications"|"projects"|null>,
+  "isComplete": <true only when user says they are done>
 }
 
-Valid undoSection values: "contact", "summary", "experience", "education", "skills", "certifications", "projects", or null.
-When resumeUpdate contains arrays (experience, education, skills), always return the FULL updated array.
-Set resumeUpdate to null if no resume data changed.`;
+RESUME DATA SCHEMA (use these exact field names):
+- contact: { name, email, phone, location, linkedin, website }
+- summary: string
+- experience: [{ company, title, startDate, endDate, bullets: ["bullet 1"] }]
+- education: [{ institution, degree, field, graduationYear }]
+- skills: ["skill1", "skill2"]
+- certifications: ["cert1"]
+- projects: [{ name, description, technologies: ["tech1"] }]
+
+EDITING RULES:
+- Apply EXACTLY what the user asks — do not add, remove, or change anything they did not mention
+- For arrays (experience, education, skills), return the COMPLETE updated array with the change applied
+- To add a bullet: copy all existing bullets and append the new one
+- To remove a bullet: copy all existing bullets and remove only the specified one
+- To edit a bullet: copy all existing bullets and replace only the specified one
+- Do NOT rewrite or "improve" content unless the user explicitly asks
+- If the user says "undo" or "revert", set undoSection to the relevant section key
+- Set resumeUpdate to null if the user's message requires no data change
+- Do NOT fabricate information`;
+
 
 interface CustomizeAIResponse {
   message: string;
@@ -127,17 +121,26 @@ export async function POST(req: NextRequest) {
     const provider = createProvider(model);
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : SYSTEM_PROMPT;
 
-    const conversationHistory = messages
-      .map((m) => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
-      .join("\n\n");
-
-    const resumeContext = Object.keys(resumeState ?? {}).length > 0
-      ? `\nCurrent resume state:\n${JSON.stringify(resumeState, null, 2)}\n`
+    // Build a clear resume context block
+    const hasResume = Object.keys(resumeState ?? {}).length > 0;
+    const resumeContext = hasResume
+      ? `CURRENT RESUME STATE (JSON — edit this based on user instructions):\n${JSON.stringify(resumeState, null, 2)}`
       : mode === "build"
-      ? "\nThe resume is currently empty — guide the user to build it from scratch.\n"
-      : "";
+      ? "CURRENT RESUME STATE: empty — guide the user to build it from scratch."
+      : "CURRENT RESUME STATE: empty.";
 
-    const prompt = `${resumeContext}\nConversation:\n${conversationHistory}\n\nRespond as the assistant:`;
+    // Last user message is the actual instruction; history provides context
+    const lastUserMsg = messages[messages.length - 1]?.content ?? "";
+    const historyLines = messages.slice(0, -1)
+      .map((m) => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
+      .join("\n");
+
+    const prompt = [
+      resumeContext,
+      historyLines ? `\nCONVERSATION HISTORY:\n${historyLines}` : "",
+      `\nUSER: ${lastUserMsg}`,
+      "\nRespond with valid JSON only:",
+    ].filter(Boolean).join("\n");
 
     const raw = await provider.complete(prompt, systemPrompt);
 
@@ -153,6 +156,11 @@ export async function POST(req: NextRequest) {
         parsed = { message: raw, resumeUpdate: null, undoSection: null, isComplete: false };
       }
 
+      // Validate resumeUpdate — reject if it's not a plain object
+      if (parsed.resumeUpdate !== null && typeof parsed.resumeUpdate !== "object") {
+        parsed.resumeUpdate = null;
+      }
+
       // Handle undo: restore the previous value for the requested section
       let finalUpdate = parsed.resumeUpdate ?? null;
       const updatedHistory = { ...sectionHistory };
@@ -161,10 +169,8 @@ export async function POST(req: NextRequest) {
         const section = parsed.undoSection;
         const previousValue = sectionHistory[section];
         finalUpdate = { [section]: previousValue } as Partial<ParsedResume>;
-        // Remove from history after undo (one level deep)
         delete updatedHistory[section];
       } else if (finalUpdate) {
-        // Save current values to history before applying the update
         for (const key of Object.keys(finalUpdate) as Array<keyof ParsedResume>) {
           if (resumeState && resumeState[key] !== undefined) {
             updatedHistory[key] = resumeState[key];
@@ -173,7 +179,7 @@ export async function POST(req: NextRequest) {
       }
 
       return NextResponse.json({
-        message: parsed.message ?? "I'm here to help! What would you like to change?",
+        message: parsed.message ?? "Done! What else would you like to change?",
         resumeUpdate: finalUpdate,
         isComplete: parsed.isComplete ?? false,
         sectionHistory: updatedHistory,
@@ -188,8 +194,13 @@ export async function POST(req: NextRequest) {
       parsed = { message: raw, resumeUpdate: null, isComplete: false };
     }
 
+    // Validate resumeUpdate
+    if (parsed.resumeUpdate !== null && typeof parsed.resumeUpdate !== "object") {
+      parsed.resumeUpdate = null;
+    }
+
     return NextResponse.json({
-      message: parsed.message ?? "I'm here to help! What would you like to do?",
+      message: parsed.message ?? "Got it! What's next?",
       resumeUpdate: parsed.resumeUpdate ?? null,
       isComplete: parsed.isComplete ?? false,
     } satisfies ChatResponse);
