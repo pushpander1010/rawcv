@@ -37,7 +37,7 @@ function parseAndValidate<T>(text: string, schema: z.ZodSchema<T>): T {
   }
 }
 
-async function withRetry<T>(fn: () => Promise<T>, retries = 2): Promise<T> {
+async function withRetry<T>(fn: () => Promise<T>, retries = 1): Promise<T> {
   let lastErr: unknown;
 
   for (let i = 0; i <= retries; i++) {
@@ -48,7 +48,7 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 2): Promise<T> {
       console.warn(`⚠️ Retry ${i + 1} failed:`, e);
 
       if (i < retries) {
-        await new Promise((r) => setTimeout(r, 2000 * (i + 1)));
+        await new Promise((r) => setTimeout(r, 1000));
       }
     }
   }
@@ -65,7 +65,7 @@ export async function complete<T = any>(
   }
 ): Promise<T> {
   const apiKey = process.env.OPENROUTER_API_KEY;
-  const model = "qwen/qwen3.5-9b";
+  const model = "qwen/qwen3-8b";
 
   if (!apiKey) throw new Error("OPENROUTER_API_KEY not set");
 
@@ -82,7 +82,7 @@ STRICT RULES:
 
   return withRetry(async () => {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 80000);
+    const timeout = setTimeout(() => controller.abort(), 45000);
 
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
