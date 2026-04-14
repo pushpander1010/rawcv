@@ -100,6 +100,18 @@ interface CustomizeAIResponse {
   isComplete: boolean;
 }
 
+// Compute missing sections so the AI always knows exactly what to ask next
+function getMissingSections(r: Partial<ParsedResume>): string[] {
+  const missing: string[] = [];
+  if (!r.contact?.name) missing.push("contact name");
+  if (!r.contact?.email) missing.push("email");
+  if (!r.summary) missing.push("professional summary");
+  if (!r.experience?.length) missing.push("work experience");
+  if (!r.education?.length) missing.push("education");
+  if (!r.skills?.length) missing.push("skills");
+  return missing;
+}
+
 export async function POST(req: NextRequest) {
   const auth = await requireAuth();
   if (auth instanceof NextResponse) return auth;
@@ -129,17 +141,6 @@ export async function POST(req: NextRequest) {
     const collected = resumeState ?? {};
 
     // Compute missing sections server-side so the AI always knows exactly what to ask next
-    function getMissingSections(r: Partial<ParsedResume>): string[] {
-      const missing: string[] = [];
-      if (!r.contact?.name) missing.push("contact name");
-      if (!r.contact?.email) missing.push("email");
-      if (!r.summary) missing.push("professional summary");
-      if (!r.experience?.length) missing.push("work experience");
-      if (!r.education?.length) missing.push("education");
-      if (!r.skills?.length) missing.push("skills");
-      return missing;
-    }
-
     const missing = getMissingSections(collected as Partial<ParsedResume>);
     const missingBlock = missing.length > 0
       ? `MISSING SECTIONS (ask about these next, in order): ${missing.join(" → ")}`
