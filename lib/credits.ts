@@ -7,7 +7,7 @@ import type { ModelId } from "@/types";
 // Credits charged per AI operation per model
 const OPERATION_COSTS: Record<ModelId, number> = {
   // OpenRouter
-  "openrouter-llama-8b":         1,
+  "openrouter-sao-8b":           1,
   "openrouter-gemma-9b":         1,
   "openrouter-qwen-8b":          1,
   "openrouter-qwen-3.5":         1,

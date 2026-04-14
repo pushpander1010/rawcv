@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import type { ModelId } from "@/types";
 
 const VALID_MODELS = new Set<ModelId>([
-  "openrouter-llama-8b",
+  "openrouter-sao-8b",
   "openrouter-gemma-9b",
   "openrouter-qwen-8b",
   "openrouter-qwen-3.5",

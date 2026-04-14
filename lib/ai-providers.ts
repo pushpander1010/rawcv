@@ -1,7 +1,7 @@
 import type { ModelId } from "@/types";
 
 const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
-  "openrouter-llama-8b":         "meta-llama/llama-3.1-8b-instruct",
+  "openrouter-sao-8b":         "sao10k/l3-lunaris-8b",
   "openrouter-gemma-9b":         "google/gemma-2-9b-it",
   "openrouter-qwen-8b":          "qwen/qwen3-8b",
   "openrouter-qwen-3.5":         "qwen/qwen3.5-flash-02-23",

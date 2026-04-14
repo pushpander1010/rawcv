@@ -2,7 +2,7 @@
 
 export type ModelId =
   // OpenRouter
-  | "openrouter-llama-8b"
+  | "openrouter-sao-8b"
   | "openrouter-gemma-9b"
   | "openrouter-qwen-8b"
   | "openrouter-qwen-3.5"

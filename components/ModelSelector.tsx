@@ -16,7 +16,7 @@ interface ModelMeta {
 
 const MODELS: ModelMeta[] = [
   // Low (1 credit)
-  { id: "openrouter-llama-8b",         name: "Llama 3.1 8B",           provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
+  { id: "openrouter-sao-8b",           name: "Lunaris 8B",             provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
   { id: "openrouter-gemma-9b",         name: "Gemma 2 9B",             provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
   { id: "openrouter-qwen-8b",          name: "Qwen3 8B",               provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
   { id: "openrouter-qwen-3.5",         name: "Qwen 3.5 Flash",         provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
