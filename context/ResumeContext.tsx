@@ -48,7 +48,7 @@ const defaultState: ResumeState = {
   enhancements: [],
   tailoredResume: null,
   selectedTheme: "classic",
-  selectedModel: "groq-llama-3.1-8b",
+  selectedModel: "openrouter-liquid-1.2b",
   jd: "",
   lastOperationCost: null,
   creditBalance: null,

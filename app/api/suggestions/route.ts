@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const provider = createProvider(model ?? "groq-llama-3.1-8b");
+    const provider = createProvider(model ?? "openrouter-liquid-1.2b");
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const result = JSON.parse(json) as { suggestions: Array<{ section: string; original: string; improved: string; reason: string }> };
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "ai_unavailable", message: "Could not generate enough suggestions. Please try again." }, { status: 502 });
     }
     // Charge only after successful AI response
-    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "AI suggestions");
+    const chargeError = await chargeCredits(model ?? "openrouter-liquid-1.2b", "AI suggestions");
     if (chargeError) return chargeError;
     return NextResponse.json(suggestions);
   } catch {

@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const provider = createProvider(model ?? "groq-llama-3.1-8b");
+    const provider = createProvider(model ?? "openrouter-liquid-1.2b");
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : SYSTEM_PROMPT;
 
     const conversationHistory = messages
@@ -142,7 +142,7 @@ export async function POST(req: NextRequest) {
     const raw = await provider.complete(prompt, systemPrompt);
 
     // Charge only after AI responds successfully
-    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "Chat bot");
+    const chargeError = await chargeCredits(model ?? "openrouter-liquid-1.2b", "Chat bot");
     if (chargeError) return chargeError;
 
     if (mode === "customize") {

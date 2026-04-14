@@ -1,11 +1,7 @@
 import type { ModelId } from "@/types";
 
-const GROQ_REMOTE_MODEL: Record<string, string> = {
-  "groq-llama-3.1-8b": "llama-3.1-8b-instant",
-};
-
 const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
-  "openrouter-nvidia-30b":       "nvidia/nemotron-3-nano-30b-a3b:free",
+  "openrouter-liquid-1.2b":       "liquid/lfm-2.5-1.2b-thinking:free",
   "openrouter-qwen-7b":          "qwen/qwen-2.5-7b-instruct",
   "openrouter-mistral-small":    "mistralai/mistral-small-3.1-24b-instruct",
   "openrouter-llama-4-maverick": "meta-llama/llama-4-maverick",
@@ -40,39 +36,6 @@ export interface AIProvider {
   modelId: ModelId;
   complete(prompt: string, systemPrompt: string): Promise<string>;
   estimatedCost(inputTokens: number, outputTokens: number): number;
-}
-
-// ─── Groq ─────────────────────────────────────────────────────────────────────
-
-class GroqProvider implements AIProvider {
-  constructor(public modelId: ModelId) {}
-
-  async complete(prompt: string, systemPrompt: string): Promise<string> {
-    const apiKey = process.env.GROQ_API_KEY;
-    if (!apiKey) throw new Error("GROQ_API_KEY is not set");
-    const remote = GROQ_REMOTE_MODEL[this.modelId];
-    if (!remote) throw new Error(`Unknown Groq model: ${this.modelId}`);
-
-    const { default: OpenAI } = await import("openai");
-    const client = new OpenAI({ apiKey, baseURL: "https://api.groq.com/openai/v1" });
-
-    return withRetry(async () => {
-      const res = await client.chat.completions.create({
-        model: remote,
-        max_tokens: 2000,
-        temperature: 0.7,
-        messages: [
-          { role: "system", content: enforceJson(systemPrompt) },
-          { role: "user", content: prompt },
-        ],
-      });
-      const content = res.choices[0]?.message?.content;
-      if (!content) throw new Error(`Groq returned empty content for model: ${remote}`);
-      return safeJsonParse(content);
-    });
-  }
-
-  estimatedCost(): number { return 0; }
 }
 
 // ─── OpenRouter ───────────────────────────────────────────────────────────────
@@ -151,7 +114,6 @@ class TogetherProvider implements AIProvider {
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
 export function createProvider(modelId: ModelId): AIProvider {
-  if (modelId.startsWith("groq-")) return new GroqProvider(modelId);
   if (modelId.startsWith("openrouter-")) return new OpenRouterProvider(modelId);
   if (modelId.startsWith("together-")) return new TogetherProvider(modelId);
   throw new Error(`Unknown model: ${modelId}`);

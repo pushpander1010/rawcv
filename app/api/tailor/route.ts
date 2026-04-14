@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const provider = createProvider(model ?? "groq-llama-3.1-8b");
+    const provider = createProvider(model ?? "openrouter-liquid-1.2b");
     const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 4000)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const result = JSON.parse(json) as { changes: Array<{ section: string; field: string; original: string; tailored: string }> };
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     const finalResume = applyChanges(parsed, changes);
     const tailoredResume: TailoredResume = { changes, finalResume };
     // Charge only after successful AI response
-    const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "JD tailoring");
+    const chargeError = await chargeCredits(model ?? "openrouter-liquid-1.2b", "JD tailoring");
     if (chargeError) return chargeError;
     return NextResponse.json(tailoredResume);
   } catch {

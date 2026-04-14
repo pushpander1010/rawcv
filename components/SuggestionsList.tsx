@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { Suggestion } from "@/types";
+import AILoader from "@/components/AILoader";
 
 // ─── Section badge ────────────────────────────────────────────────────────────
 
@@ -162,14 +163,8 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
 
   if (loading) {
     return (
-      <section aria-label="AI Suggestions" className="space-y-3">
-        <div className="h-5 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 animate-pulse"
-          />
-        ))}
+      <section aria-label="AI Suggestions" className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+        <AILoader type="suggestions" />
       </section>
     );
   }

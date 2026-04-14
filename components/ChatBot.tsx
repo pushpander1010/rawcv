@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useResume } from "@/context/ResumeContext";
 import ModelSelector from "@/components/ModelSelector";
+import AILoader from "@/components/AILoader";
 import type { ParsedResume } from "@/types";
 import type { ChatMessage, ChatResponse } from "@/app/api/chat/route";
 
@@ -159,13 +160,9 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
         ))}
 
         {loading && (
-          <div className="flex justify-start">
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-bl-sm px-4 py-3">
-              <span className="flex gap-1 items-center" aria-label="Typing">
-                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]" />
-                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]" />
-                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]" />
-              </span>
+          <div className="flex justify-start w-full">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-bl-sm px-4 py-2 w-full max-w-xs">
+              <AILoader type="chat" interval={1400} />
             </div>
           </div>
         )}

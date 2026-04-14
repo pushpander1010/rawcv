@@ -162,7 +162,7 @@ export async function POST(req: NextRequest) {
   // AI-powered nuanced scoring
   let aiIssues: ATSIssue[] = [];
   try {
-    const provider = createProvider(model ?? "groq-llama-3.1-8b");
+    const provider = createProvider(model ?? "openrouter-liquid-1.2b");
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}\n\nRaw text excerpt:\n${raw.slice(0, 2000)}`;
     const json = await provider.complete(prompt, SYSTEM_PROMPT);
     const aiResult = JSON.parse(json) as {
@@ -177,7 +177,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Charge credits only after AI responds
-  const chargeError = await chargeCredits(model ?? "groq-llama-3.1-8b", "ATS analysis");
+  const chargeError = await chargeCredits(model ?? "openrouter-liquid-1.2b", "ATS analysis");
   if (chargeError) return chargeError;
 
   const allIssues: ATSIssue[] = [...ruleIssues, ...aiIssues];

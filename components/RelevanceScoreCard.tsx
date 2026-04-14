@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { RelevanceResult } from "@/types";
+import AILoader from "@/components/AILoader";
 
 // ─── Circular gauge (reused pattern from ATSScoreCard) ────────────────────────
 
@@ -75,16 +76,8 @@ export default function RelevanceScoreCard({ result, loading = false }: Relevanc
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 animate-pulse">
-        <div className="h-5 w-40 bg-gray-200 dark:bg-gray-700 rounded mb-4" />
-        <div className="flex justify-center mb-4">
-          <div className="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-700" />
-        </div>
-        <div className="space-y-2">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-8 bg-gray-100 dark:bg-gray-800 rounded-xl" />
-          ))}
-        </div>
+      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+        <AILoader type="relevance" />
       </div>
     );
   }

@@ -15,13 +15,10 @@ interface ModelMeta {
 }
 
 const MODELS: ModelMeta[] = [
-  { id: "groq-llama-3.1-8b",           name: "Llama 3.1 8B",           provider: "Groq",       tier: "free",     estimatedCredits: 0.5 },
-  { id: "openrouter-nvidia-30b",        name: "Nvidia Nemotron 30B",    provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
+  { id: "openrouter-liquid-1.2b",        name: "LFM 2.5 1.2B Thinking",  provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
   { id: "together-gemma-3n",            name: "Gemma 3n E4B",           provider: "Together",   tier: "free",     estimatedCredits: 1 },
   { id: "openrouter-qwen-7b",           name: "Qwen 2.5 7B",            provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1 },
-  { id: "groq-llama-3.3-70b",           name: "Llama 3.3 70B",          provider: "Groq",       tier: "low-cost", estimatedCredits: 0.5 },
   { id: "openrouter-mistral-small",     name: "Mistral Small 24B",      provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1 },
-  { id: "groq-deepseek-r1",             name: "DeepSeek R1 70B",        provider: "Groq",       tier: "medium",   estimatedCredits: 2 },
   { id: "openrouter-llama-4-maverick",  name: "Llama 4 Maverick",       provider: "OpenRouter", tier: "medium",   estimatedCredits: 2 },
   { id: "openrouter-deepseek-v3",       name: "DeepSeek V3",            provider: "OpenRouter", tier: "paid",     estimatedCredits: 3 },
 ];
@@ -37,7 +34,6 @@ const PROVIDER_ICONS: Record<string, string> = {
   OpenAI:    "🟢",
   Google:    "🔵",
   Anthropic: "🟠",
-  Groq:      "⚡",
   OpenRouter: "🔗",
   Together:  "🤝",
 };

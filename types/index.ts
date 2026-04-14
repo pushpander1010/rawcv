@@ -1,10 +1,7 @@
 // ─── Model & Theme IDs ───────────────────────────────────────────────────────
 
 export type ModelId =
-  | "groq-llama-3.1-8b"
-  | "groq-llama-3.3-70b"
-  | "groq-deepseek-r1"
-  | "openrouter-nvidia-30b"
+  | "openrouter-liquid-1.2b"
   | "openrouter-qwen-7b"
   | "openrouter-mistral-small"
   | "openrouter-llama-4-maverick"
