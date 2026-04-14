@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useResume } from "@/context/ResumeContext";
 import ModelSelector from "@/components/ModelSelector";
 import AILoader from "@/components/AILoader";
+import CreditWarningBanner from "@/components/CreditWarningBanner";
 import type { ParsedResume } from "@/types";
 import type { ChatMessage, ChatResponse } from "@/app/api/chat/route";
 
@@ -184,20 +185,10 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
       </div>
 
       {/* Out of credits banner */}
-      {outOfCredits && (
-        <div role="alert" className="px-4 py-3 flex items-center gap-3 text-sm bg-amber-50 dark:bg-amber-900/20 border-t border-amber-200 dark:border-amber-800">
-          <span className="text-lg">💳</span>
-          <span className="flex-1 text-amber-800 dark:text-amber-200">
-            You&apos;ve run out of credits.
-          </span>
-          <a
-            href="/credits"
-            className="shrink-0 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
-          >
-            Buy credits
-          </a>
-        </div>
-      )}
+      {outOfCredits
+        ? <CreditWarningBanner balance={0} />
+        : <CreditWarningBanner balance={state.creditBalance} />
+      }
 
       {/* Error */}
       {error && (

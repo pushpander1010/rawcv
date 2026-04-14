@@ -123,11 +123,14 @@ export async function deductCredits(
   try {
     return await prisma.$transaction(async (tx) => {
       const user = await tx.user.findUnique({ where: { id: userId } });
-      if (!user || user.creditBalance < amount) return false;
+      if (!user) return false;
+      // Round to avoid float precision issues
+      const balance = Math.round(user.creditBalance * 100) / 100;
+      if (balance < amount) return false;
 
       await tx.user.update({
         where: { id: userId },
-        data: { creditBalance: user.creditBalance - amount },
+        data: { creditBalance: Math.round((user.creditBalance - amount) * 100) / 100 },
       });
       await tx.creditTransaction.create({
         data: {

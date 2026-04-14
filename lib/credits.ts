@@ -57,13 +57,15 @@ export async function chargeCredits(
 
   const user = await getUserById(userId);
   const cost = getOperationCost(model);
+  // Round to 2 decimal places to avoid float precision issues (e.g. 3.9999... < 4)
+  const balance = Math.round((user?.creditBalance ?? 0) * 100) / 100;
 
-  if (!user || user.creditBalance < cost) {
+  if (!user || balance < cost) {
     return NextResponse.json(
       {
         error: "insufficient_credits",
         message: "You don't have enough credits. Please purchase more to continue.",
-        balance: user?.creditBalance ?? 0,
+        balance,
         required: cost,
       },
       { status: 402 }

@@ -14,6 +14,7 @@ import DownloadButton from "@/components/DownloadButton";
 import ChatBot from "@/components/ChatBot";import type { ATSResult, RelevanceResult, Suggestion } from "@/types";
 import ResizablePanels from "@/components/ResizablePanels";
 import UndoButton from "@/components/UndoButton";
+import CreditWarningBanner from "@/components/CreditWarningBanner";
 
 type Tab = "ats" | "relevance" | "suggestions" | "enhance" | "theme" | "chat";
 
@@ -135,8 +136,7 @@ export default function AnalyzePage() {
         </div>
 
         {/* Tab bar */}
-        <nav className="flex gap-1 px-6 overflow-x-auto scrollbar-hide" aria-label="Analysis tools" role="tablist">
-          {TABS.map((tab) => (
+        <nav className="flex gap-1 px-6 overflow-x-auto scrollbar-hide" aria-label="Analysis tools" role="tablist">          {TABS.map((tab) => (
             <button key={tab.id} role="tab" aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-violet-500 ${
@@ -151,6 +151,7 @@ export default function AnalyzePage() {
       </div>
 
       {/* Body — resizable panels */}
+      <CreditWarningBanner balance={state.creditBalance} />
       <ResizablePanels
         defaultLeftWidth={460}
         leftLabel="Analysis"
