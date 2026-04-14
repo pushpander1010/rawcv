@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume } from "@/types";
+import { complete } from "@/lib/ai-providers";
 import { requireAuth } from "@/lib/api-guard";
 
 export const runtime = "nodejs";
@@ -78,28 +79,26 @@ async function extractText(file: File): Promise<string> {
   return buffer.toString("utf-8");
 }
 
-/* ---------------- JSON SAFE ---------------- */
-function safeParse(text: string) {
-  try {
-    return JSON.parse(text);
-  } catch {
-    const match = text.match(/\{[\s\S]*\}/);
-    if (match) {
-      try { return JSON.parse(match[0]); } catch { /* fall through */ }
-    }
-    return {};
-  }
-}
-
 /* ---------------- API ---------------- */
+const SYSTEM_PROMPT = `You are a resume parser. Extract ALL information from the resume text and return a JSON object with this exact structure:
+{
+  "contact": { "name": "", "email": "", "phone": "", "location": "", "linkedin": "", "website": "" },
+  "summary": "",
+  "experience": [{ "company": "", "title": "", "startDate": "", "endDate": "", "bullets": [""] }],
+  "education": [{ "institution": "", "degree": "", "field": "", "graduationYear": "" }],
+  "skills": [""],
+  "certifications": [""],
+  "projects": [{ "name": "", "description": "", "technologies": [""] }]
+}
+Extract every job, every bullet point, every skill. Use empty string for missing fields, empty array for missing arrays.`;
+
 export async function POST(req: NextRequest) {
   const auth = await requireAuth();
   if (auth instanceof NextResponse) return auth;
 
   try {
     const formData = await req.formData();
-    const file    = formData.get("file") as File | null;
-    // modelId param kept for API compatibility but parse always uses a reliable model
+    const file = formData.get("file") as File | null;
     void formData.get("model");
 
     if (!file) {
@@ -133,61 +132,10 @@ export async function POST(req: NextRequest) {
     /* ── AI parse ── */
     let parsed: ParsedResume;
     try {
-      const apiKey = process.env.OPENROUTER_API_KEY;
-      const model  = "google/gemini-flash-1.5";
-      if (!apiKey) throw new Error("OpenRouter not configured");
-
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 45000); // 45s hard limit
-
-      let res: Response;
-      try {
-        res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          signal: controller.signal,
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "https://rawcv.com",
-            "X-Title": "rawcv",
-          },
-          body: JSON.stringify({
-            model,
-            max_tokens: 2000,
-            temperature: 0.1,
-            response_format: { type: "json_object" },
-            messages: [
-            {
-              role: "system",
-              content: `You are a resume parser. Extract ALL information from the resume text and return a JSON object with this exact structure:
-{
-  "contact": { "name": "", "email": "", "phone": "", "location": "", "linkedin": "", "website": "" },
-  "summary": "",
-  "experience": [{ "company": "", "title": "", "startDate": "", "endDate": "", "bullets": [""] }],
-  "education": [{ "institution": "", "degree": "", "field": "", "graduationYear": "" }],
-  "skills": [""],
-  "certifications": [""],
-  "projects": [{ "name": "", "description": "", "technologies": [""] }]
-}
-Extract every job, every bullet point, every skill. Use empty string for missing fields, empty array for missing arrays.`,
-            },
-            {
-              role: "user",
-              content: `Parse this resume:\n\n${rawText.slice(0, 12000)}`,
-            },
-          ],
-        }),
-      });
-      } finally {
-        clearTimeout(timeout);
-      }
-
-      if (!res!.ok) throw new Error(`OpenRouter ${res!.status}: ${await res!.text()}`);
-      const data = await res!.json();
-      const content = data?.choices?.[0]?.message?.content ?? "{}";
-      console.log("[parse] AI response length:", content.length, "| first 300:", content.slice(0, 300));
-      parsed = normalizeParsed(safeParse(content));
-      console.log("[parse] result — experience:", parsed.experience.length, "skills:", parsed.skills.length);
+      const prompt = `Parse this resume:\n\n${rawText.slice(0, 12000)}`;
+      const result = await complete(prompt, SYSTEM_PROMPT, { maxTokens: 2000 });
+      console.log("[parse] result — experience:", (result as any)?.experience?.length, "skills:", (result as any)?.skills?.length);
+      parsed = normalizeParsed(result);
     } catch (err) {
       console.error("[parse] AI failed:", err);
       parsed = normalizeParsed({});
