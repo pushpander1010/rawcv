@@ -4,7 +4,7 @@ import React, { useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useResume } from "@/context/ResumeContext";
 import { useToast } from "@/components/Toast";
-import type { ModelId, ParsedResume } from "@/types";
+import type { ParsedResume } from "@/types";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".txt"];
@@ -14,11 +14,9 @@ const ALLOWED_MIME = [
   "text/plain",
 ];
 
-interface ResumeUploaderProps {
-  modelId?: ModelId;
-}
+interface ResumeUploaderProps {}
 
-export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
+export default function ResumeUploader(_props: ResumeUploaderProps) {
   const router = useRouter();
   const { state, setState, pushUndo } = useResume();
   const { showToast } = useToast();
@@ -27,7 +25,6 @@ export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
   const [loading, setLoading] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
 
-  const activeModel = modelId ?? state.selectedModel;
   const hasResume = !!state.parsed;
 
   function validateFile(file: File): string | null {
@@ -59,7 +56,7 @@ export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
       await parseAndLoad(file);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeModel, hasResume]
+    [hasResume]
   );
 
   const parseAndLoad = useCallback(
@@ -69,7 +66,6 @@ export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
       try {
         const form = new FormData();
         form.append("file", file);
-        form.append("model", activeModel);
 
         const res = await fetch("/api/parse", { method: "POST", body: form });
         const data = await res.json();
@@ -101,7 +97,7 @@ export default function ResumeUploader({ modelId }: ResumeUploaderProps) {
         setLoading(false);
       }
     },
-    [activeModel, setState, pushUndo, router, showToast]
+    [setState, pushUndo, router, showToast]
   );
 
   // Drag-and-drop handlers

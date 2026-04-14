@@ -9,7 +9,6 @@ import type {
   Suggestion,
   TailoredResume,
   ThemeId,
-  ModelId,
 } from "@/types";
 
 export interface ResumeState {
@@ -21,7 +20,6 @@ export interface ResumeState {
   enhancements: Suggestion[];
   tailoredResume: TailoredResume | null;
   selectedTheme: ThemeId;
-  selectedModel: ModelId;
   jd: string;
   lastOperationCost: number | null;
   creditBalance: number | null;
@@ -46,7 +44,6 @@ const defaultState: ResumeState = {
   enhancements: [],
   tailoredResume: null,
   selectedTheme: "classic",
-  selectedModel: "openrouter-mistral-small",
   jd: "",
   lastOperationCost: null,
   creditBalance: null,
@@ -61,7 +58,7 @@ function storageKey(userId: string | undefined) {
 // Fields we want to persist (skip transient UI/credit fields)
 const PERSIST_KEYS: (keyof ResumeState)[] = [
   "raw", "parsed", "atsResult", "relevanceResult",
-  "suggestions", "enhancements", "tailoredResume", "selectedTheme", "selectedModel", "jd",
+  "suggestions", "enhancements", "tailoredResume", "selectedTheme", "jd",
 ];
 
 function loadPersistedState(userId: string | undefined): Partial<ResumeState> {
@@ -161,7 +158,6 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     // Keep model/theme preferences, wipe resume data
     setStateRaw((prev) => ({
       ...defaultState,
-      selectedModel: prev.selectedModel,
       selectedTheme: prev.selectedTheme,
       creditBalance: prev.creditBalance,
     }));

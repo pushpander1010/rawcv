@@ -34,7 +34,7 @@ export default function TailorPage() {
         method: "POST",
         signal: ctrl.signal,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ parsed: state.parsed, jd: jdInput, model: state.selectedModel }),
+        body: JSON.stringify({ parsed: state.parsed, jd: jdInput }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Tailoring failed");

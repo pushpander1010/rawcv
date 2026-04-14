@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useResume } from "@/context/ResumeContext";
-import ModelSelector from "@/components/ModelSelector";
 import AILoader from "@/components/AILoader";
 import CreditWarningBanner from "@/components/CreditWarningBanner";
 import type { ParsedResume } from "@/types";
@@ -12,10 +11,9 @@ interface Props {
   mode?: "build" | "customize";
   onComplete?: () => void;
   onEnd?: () => void;
-  hideModelSelector?: boolean;
 }
 
-export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSelector = false }: Props) {
+export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   const { state, setState, refreshCredits, pushUndo } = useResume();
 
   // Always seed localResume from existing state — so chat knows what's already filled
@@ -96,7 +94,6 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
           body: JSON.stringify({
             messages: nextMessages,
             resumeState: localResume,
-            model: state.selectedModel,
             mode,
             sectionHistory,
           }),
@@ -148,7 +145,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
         inputRef.current?.focus();
       }
     },
-    [messages, localResume, loading, mode, state.selectedModel, setState, onComplete, sectionHistory, refreshCredits]
+    [messages, localResume, loading, mode, setState, onComplete, sectionHistory, refreshCredits]
   );
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -160,12 +157,6 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
 
   return (
     <div className="flex flex-col h-full min-h-0">
-      {/* Model selector — shown unless parent already provides one */}
-      {!hideModelSelector && (
-        <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-          <ModelSelector label="AI Model" />
-        </div>
-      )}
 
       {/* Message list */}
       <div
