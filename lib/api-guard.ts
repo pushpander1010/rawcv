@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import type { ModelId } from "@/types";
 
 const VALID_MODELS = new Set<ModelId>([
-  "openrouter-qwen-235b",
+  "openrouter-mistral-small",
   "together-gemma-3n",
 ] as ModelId[]);
 
@@ -42,7 +42,7 @@ export function sanitiseModel(model: unknown): ModelId {
   if (typeof model === "string" && VALID_MODELS.has(model as ModelId)) {
     return model as ModelId;
   }
-  return "openrouter-qwen-235b";
+  return "openrouter-mistral-small";
 }
 
 /**

@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
     let parsed: ParsedResume;
     try {
       // Use openrouter-sao-8b for fast parsing
-      const provider = createProvider("openrouter-qwen-235b");
+      const provider = createProvider("openrouter-mistral-small");
       const response = await provider.complete(
         rawText.slice(0, 12000),
         `You are a resume parser. Extract ALL information from the resume and return ONLY a valid JSON object.

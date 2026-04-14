@@ -1,7 +1,7 @@
 import type { ModelId } from "@/types";
 
 const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
-  "openrouter-qwen-235b": "qwen/qwen3-235b-a22b-2507",
+  "openrouter-mistral-small": "mistralai/mistral-small-24b-instruct-2501",
 };
 
 const TOGETHER_REMOTE_MODEL: Record<string, string> = {

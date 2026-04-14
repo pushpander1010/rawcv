@@ -15,7 +15,7 @@ interface ModelMeta {
 }
 
 const MODELS: ModelMeta[] = [
-  { id: "openrouter-qwen-235b", name: "Qwen3 235B", provider: "OpenRouter", tier: "low", estimatedCredits: 3 },
+  { id: "openrouter-mistral-small", name: "Mistral Small 24B", provider: "OpenRouter", tier: "low", estimatedCredits: 2 },
   { id: "together-gemma-3n",    name: "Gemma 3n",   provider: "Together",   tier: "low", estimatedCredits: 1 },
 ];
 

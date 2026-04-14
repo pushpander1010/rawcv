@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
   const { resumeState, mode = "build", sectionHistory = {} } = body;
 
   // Always use a reliable model for chat — user's selected model may be too weak
-  const chatModel = model.startsWith("together-") ? model : "openrouter-qwen-235b";
+  const chatModel = model.startsWith("together-") ? model : "openrouter-mistral-small";
 
   try {
     const provider = createProvider(chatModel);

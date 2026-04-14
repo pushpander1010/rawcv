@@ -1,7 +1,7 @@
 // ─── Model & Theme IDs ───────────────────────────────────────────────────────
 
 export type ModelId =
-  | "openrouter-qwen-235b"
+  | "openrouter-mistral-small"
   | "together-gemma-3n"; // kept for parse fallback
 
 export type ThemeId =

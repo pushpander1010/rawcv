@@ -46,7 +46,7 @@ const defaultState: ResumeState = {
   enhancements: [],
   tailoredResume: null,
   selectedTheme: "classic",
-  selectedModel: "openrouter-qwen-235b",
+  selectedModel: "openrouter-mistral-small",
   jd: "",
   lastOperationCost: null,
   creditBalance: null,
