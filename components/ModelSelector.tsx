@@ -15,12 +15,23 @@ interface ModelMeta {
 }
 
 const MODELS: ModelMeta[] = [
-  { id: "openrouter-liquid-1.2b",        name: "LFM 2.5 1.2B Thinking",  provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
-  { id: "together-gemma-3n",            name: "Gemma 3n E4B",           provider: "Together",   tier: "free",     estimatedCredits: 1 },
-  { id: "openrouter-qwen-7b",           name: "Qwen 2.5 7B",            provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1 },
-  { id: "openrouter-mistral-small",     name: "Mistral Small 24B",      provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1 },
-  { id: "openrouter-llama-4-maverick",  name: "Llama 4 Maverick",       provider: "OpenRouter", tier: "medium",   estimatedCredits: 2 },
-  { id: "openrouter-deepseek-v3",       name: "DeepSeek V3",            provider: "OpenRouter", tier: "paid",     estimatedCredits: 3 },
+  // Free tier
+  { id: "openrouter-liquid-1.2b",      name: "LFM 2.5 1.2B Thinking",  provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
+  { id: "openrouter-llama-8b",         name: "Llama 3.1 8B",           provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
+  { id: "openrouter-gemma-9b",         name: "Gemma 2 9B",             provider: "OpenRouter", tier: "free",     estimatedCredits: 0.5 },
+  { id: "together-gemma-3n",           name: "Gemma 3n E4B",           provider: "Together",   tier: "free",     estimatedCredits: 1   },
+  // Low-cost
+  { id: "openrouter-qwen-8b",          name: "Qwen3 8B",               provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1   },
+  { id: "openrouter-qwen-3.5",         name: "Qwen 3.5 Flash",         provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1   },
+  { id: "openrouter-mistral-24b",      name: "Mistral Small 24B",      provider: "OpenRouter", tier: "low-cost", estimatedCredits: 1   },
+  // Medium
+  { id: "openrouter-llama-4-maverick", name: "Llama 4 Maverick",       provider: "OpenRouter", tier: "medium",   estimatedCredits: 2   },
+  { id: "together-llama-70b",          name: "Llama 3.3 70B Turbo",    provider: "Together",   tier: "medium",   estimatedCredits: 2   },
+  { id: "together-gemma4-31b",         name: "Gemma 4 31B",            provider: "Together",   tier: "medium",   estimatedCredits: 2   },
+  // Paid
+  { id: "openrouter-deepseek-v3",      name: "DeepSeek V3",            provider: "OpenRouter", tier: "paid",     estimatedCredits: 3   },
+  { id: "together-deepseek-v3",        name: "DeepSeek V3.1",          provider: "Together",   tier: "paid",     estimatedCredits: 3   },
+  { id: "together-qwen3-235b",         name: "Qwen3 235B",             provider: "Together",   tier: "paid",     estimatedCredits: 3   },
 ];
 
 const TIER_STYLES: Record<ModelMeta["tier"], string> = {

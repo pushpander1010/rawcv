@@ -1,12 +1,21 @@
 // ─── Model & Theme IDs ───────────────────────────────────────────────────────
 
 export type ModelId =
+  // OpenRouter
   | "openrouter-liquid-1.2b"
-  | "openrouter-qwen-7b"
-  | "openrouter-mistral-small"
+  | "openrouter-llama-8b"
+  | "openrouter-gemma-9b"
+  | "openrouter-qwen-8b"
+  | "openrouter-qwen-3.5"
+  | "openrouter-mistral-24b"
   | "openrouter-llama-4-maverick"
   | "openrouter-deepseek-v3"
-  | "together-gemma-3n";
+  // Together AI
+  | "together-gemma-3n"
+  | "together-llama-70b"
+  | "together-deepseek-v3"
+  | "together-qwen3-235b"
+  | "together-gemma4-31b";
 
 export type ThemeId =
   | "classic"

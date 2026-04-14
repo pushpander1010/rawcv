@@ -1,11 +1,22 @@
 import type { ModelId } from "@/types";
 
 const OPENROUTER_REMOTE_MODEL: Record<string, string> = {
-  "openrouter-liquid-1.2b":       "liquid/lfm-2.5-1.2b-thinking:free",
-  "openrouter-qwen-7b":           "qwen/qwen-2.5-7b-instruct",
-  "openrouter-mistral-small":     "mistralai/mistral-small-3.1-24b-instruct",
-  "openrouter-llama-4-maverick":  "meta-llama/llama-4-maverick",
-  "openrouter-deepseek-v3":       "deepseek/deepseek-chat-v3-0324",
+  "openrouter-liquid-1.2b":      "liquid/lfm-2.5-1.2b-thinking:free",
+  "openrouter-llama-8b":         "meta-llama/llama-3.1-8b-instruct",
+  "openrouter-gemma-9b":         "google/gemma-2-9b-it",
+  "openrouter-qwen-8b":          "qwen/qwen3-8b",
+  "openrouter-qwen-3.5":         "qwen/qwen3.5-flash-02-23",
+  "openrouter-mistral-24b":      "mistralai/mistral-small-3.2-24b-instruct",
+  "openrouter-llama-4-maverick": "meta-llama/llama-4-maverick",
+  "openrouter-deepseek-v3":      "deepseek/deepseek-chat-v3-0324",
+};
+
+const TOGETHER_REMOTE_MODEL: Record<string, string> = {
+  "together-gemma-3n":    "google/gemma-3n-E4B-it",
+  "together-llama-70b":   "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "together-deepseek-v3": "deepseek-ai/DeepSeek-V3.1",
+  "together-qwen3-235b":  "Qwen/Qwen3-235B-A22B-Instruct-2507-tput",
+  "together-gemma4-31b":  "google/gemma-4-31B-it",
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -137,6 +148,9 @@ class TogetherProvider implements AIProvider {
     const apiKey = process.env.TOGETHER_API_KEY;
     if (!apiKey) throw new Error("TOGETHER_API_KEY is not set");
 
+    const remote = TOGETHER_REMOTE_MODEL[this.modelId];
+    if (!remote) throw new Error(`Unknown Together model: ${this.modelId}`);
+
     return withRetry(async () => {
       const res = await fetch("https://api.together.xyz/v1/chat/completions", {
         method: "POST",
@@ -145,7 +159,7 @@ class TogetherProvider implements AIProvider {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model:      "google/gemma-3n-E4B-it",
+          model:      remote,
           max_tokens: 2000,
           messages: [
             { role: "system", content: enforceJson(systemPrompt) },
