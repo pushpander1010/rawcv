@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ModelId, ParsedResume } from "@/types";
-import { createProvider } from "@/lib/ai-providers";
+import type { ParsedResume } from "@/types";
+import { complete } from "@/lib/ai-providers";
 import { chargeCredits } from "@/lib/credits";
-import { requireAuth, sanitiseModel, sanitiseMessages } from "@/lib/api-guard";
+import { requireAuth, sanitiseMessages } from "@/lib/api-guard";
 
 export interface ChatMessage {
   role: "user" | "assistant";
@@ -130,15 +130,9 @@ export async function POST(req: NextRequest) {
   if (!messages) {
     return NextResponse.json({ error: "missing_fields", message: "messages array is required" }, { status: 400 });
   }
-
-  const model = sanitiseModel(body.model);
   const { resumeState, mode = "build", sectionHistory = {} } = body;
-
-  // Always use a reliable model for chat — user's selected model may be too weak
-  const chatModel = model.startsWith("together-") ? model : "openrouter-mistral-small";
-
   try {
-    const provider = createProvider(chatModel);
+    
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : BUILD_SYSTEM_PROMPT;
 
     const collected = resumeState ?? {};
@@ -173,10 +167,10 @@ export async function POST(req: NextRequest) {
       "JSON response:",
     ].filter(Boolean).join("\n\n");
 
-    const raw = await provider.complete(prompt, systemPrompt);
+    const raw = await complete(prompt, systemPrompt);
 
     // Charge only after AI responds successfully
-    const chargeError = await chargeCredits(chatModel, "Chat bot");
+    const chargeError = await chargeCredits("Chat bot");
     if (chargeError) return chargeError;
 
     if (mode === "customize") {

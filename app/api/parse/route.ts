@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume } from "@/types";
-import { createProvider } from "@/lib/ai-providers";
+import { complete } from "@/lib/ai-providers";
 
 export const runtime = "nodejs";
 
@@ -130,8 +130,8 @@ export async function POST(req: NextRequest) {
     let parsed: ParsedResume;
     try {
       // Use openrouter-sao-8b for fast parsing
-      const provider = createProvider("openrouter-mistral-small");
-      const response = await provider.complete(
+      
+      const response = await complete(
         rawText.slice(0, 12000),
         `You are a resume parser. Extract ALL information from the resume and return ONLY a valid JSON object.
 

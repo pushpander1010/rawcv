@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ModelId, ParsedResume, TailoredResume, TailorChange } from "@/types";
-import { createProvider } from "@/lib/ai-providers";
+import type { ParsedResume, TailoredResume, TailorChange } from "@/types";
+import { complete } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
 import { chargeCredits } from "@/lib/credits";
-import { requireAuth, sanitiseModel, sanitiseJD } from "@/lib/api-guard";
+import { requireAuth, sanitiseJD } from "@/lib/api-guard";
 
 const SYSTEM_PROMPT = `You are an expert resume tailoring specialist. Given a resume and a job description, rewrite the resume's experience bullets and professional summary to better align with the role.
 
@@ -45,7 +45,6 @@ export async function POST(req: NextRequest) {
   }
 
   const { parsed } = body;
-  const model = sanitiseModel(body.model);
   const jd = sanitiseJD(body.jd);
 
   if (!parsed || !jd) {
@@ -56,9 +55,9 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const provider = createProvider(model);
+    
     const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 4000)}`;
-    const json = await provider.complete(prompt, SYSTEM_PROMPT);
+    const json = await complete(prompt, SYSTEM_PROMPT);
     const result = JSON.parse(json) as { changes: Array<{ section: string; field: string; original: string; tailored: string }> };
     const rawChanges = Array.isArray(result.changes) ? result.changes : [];
     const changes: TailorChange[] = rawChanges.slice(0, 15).map((c) => ({
@@ -67,7 +66,7 @@ export async function POST(req: NextRequest) {
     const finalResume = applyChanges(parsed, changes);
     const tailoredResume: TailoredResume = { changes, finalResume };
     // Charge only after successful AI response
-    const chargeError = await chargeCredits(model, "JD tailoring");
+    const chargeError = await chargeCredits("JD tailoring");
     if (chargeError) return chargeError;
     return NextResponse.json(tailoredResume);
   } catch {

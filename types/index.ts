@@ -1,8 +1,6 @@
-// ─── Model & Theme IDs ───────────────────────────────────────────────────────
+// ─── Theme IDs ───────────────────────────────────────────────────────────────
 
-export type ModelId =
-  | "openrouter-mistral-small"
-  | "together-gemma-3n"; // kept for parse fallback
+export type ModelId = string; // kept for backwards compat — actual model set via OPENROUTER_MODEL env var
 
 export type ThemeId =
   | "classic"

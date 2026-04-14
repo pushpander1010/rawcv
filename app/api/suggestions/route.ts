@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ModelId, ParsedResume, Suggestion } from "@/types";
-import { createProvider } from "@/lib/ai-providers";
+import type { ParsedResume, Suggestion } from "@/types";
+import { complete } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
 import { chargeCredits } from "@/lib/credits";
-import { requireAuth, sanitiseModel } from "@/lib/api-guard";
+import { requireAuth } from "@/lib/api-guard";
 
 const SYSTEM_PROMPT = `You are an expert resume coach. Analyze the provided resume and generate improvement suggestions covering:
 - Clarity and conciseness of bullet points
@@ -43,7 +43,6 @@ export async function POST(req: NextRequest) {
   }
 
   const { parsed } = body;
-  const model = sanitiseModel(body.model);
 
   if (!parsed) {
     return NextResponse.json(
@@ -53,9 +52,9 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const provider = createProvider(model);
+    
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}`;
-    const json = await provider.complete(prompt, SYSTEM_PROMPT);
+    const json = await complete(prompt, SYSTEM_PROMPT);
     const result = JSON.parse(json) as { suggestions: Array<{ section: string; original: string; improved: string; reason: string }> };
     const raw = Array.isArray(result.suggestions) ? result.suggestions : [];
     const suggestions: Suggestion[] = raw.slice(0, 15).map((s) => ({
@@ -65,7 +64,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "ai_unavailable", message: "Could not generate enough suggestions. Please try again." }, { status: 502 });
     }
     // Charge only after successful AI response
-    const chargeError = await chargeCredits(model, "AI suggestions");
+    const chargeError = await chargeCredits("AI suggestions");
     if (chargeError) return chargeError;
     return NextResponse.json(suggestions);
   } catch {
