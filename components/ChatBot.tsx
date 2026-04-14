@@ -12,24 +12,50 @@ interface Props {
   mode?: "build" | "customize";
   onComplete?: () => void;
   onEnd?: () => void;
-  /** Hide the model selector (e.g. when the parent already shows one) */
   hideModelSelector?: boolean;
 }
-
-const WELCOME_BUILD =
-  "Hi! I'm your resume assistant. Let's build your resume together. To get started, what's your full name?";
-
-const WELCOME_CUSTOMIZE =
-  "Hi! I can help you customize your resume. What would you like to change or improve? You can also ask me to undo any change I make.";
 
 export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSelector = false }: Props) {
   const { state, setState, refreshCredits, pushUndo } = useResume();
 
+  // Always seed localResume from existing state — so chat knows what's already filled
+  const existingResume = state.parsed ?? null;
+
+  function buildWelcome(): string {
+    if (!existingResume) {
+      return "Hi! I'm your resume assistant. Let's build your resume together. To get started, what's your full name?";
+    }
+
+    const filled: string[] = [];
+    const missing: string[] = [];
+
+    if (existingResume.contact?.name) filled.push("name"); else missing.push("name");
+    if (existingResume.contact?.email) filled.push("email"); else missing.push("email");
+    if (existingResume.summary) filled.push("summary"); else missing.push("summary");
+    if (existingResume.experience?.length) filled.push(`${existingResume.experience.length} job${existingResume.experience.length > 1 ? "s" : ""}`); else missing.push("work experience");
+    if (existingResume.education?.length) filled.push("education"); else missing.push("education");
+    if (existingResume.skills?.length) filled.push("skills"); else missing.push("skills");
+
+    if (mode === "customize") {
+      return `Hi! I can see your resume for ${existingResume.contact?.name || "you"} is loaded with ${filled.join(", ")}. What would you like to change or improve?`;
+    }
+
+    if (missing.length === 0) {
+      return `Hi! Your resume looks complete with ${filled.join(", ")}. Would you like to improve anything, or shall I mark it as done?`;
+    }
+
+    return `Hi! I can see your resume already has ${filled.join(", ")}. Let's fill in the missing parts — starting with ${missing[0]}. ${
+      missing[0] === "name" ? "What's your full name?" :
+      missing[0] === "email" ? "What's your email address?" :
+      missing[0] === "summary" ? "Can you write a 2–3 sentence professional summary?" :
+      missing[0] === "work experience" ? "Tell me about your most recent job — company name, title, and dates?" :
+      missing[0] === "education" ? "Where did you study? Tell me your institution, degree, and graduation year." :
+      "What are your key skills? List them separated by commas."
+    }`;
+  }
+
   const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: "assistant",
-      content: mode === "build" ? WELCOME_BUILD : WELCOME_CUSTOMIZE,
-    },
+    { role: "assistant", content: buildWelcome() },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,12 +63,11 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
   const [outOfCredits, setOutOfCredits] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
-  // Per-section undo history: maps section key → value before last change
   const [sectionHistory, setSectionHistory] = useState<Record<string, unknown>>({});
 
-  // Local resume state built up during the chat session
+  // Always start from existing resume data so the AI knows what's already filled
   const [localResume, setLocalResume] = useState<Partial<ParsedResume>>(
-    mode === "customize" && state.parsed ? state.parsed : {}
+    existingResume ?? {}
   );
 
   const bottomRef = useRef<HTMLDivElement>(null);
