@@ -70,7 +70,7 @@ function enforceJson(systemPrompt: string): string {
 
 export interface AIProvider {
   modelId: ModelId;
-  complete(prompt: string, systemPrompt: string): Promise<string>;
+  complete(prompt: string, systemPrompt: string, options?: { maxTokens?: number }): Promise<string>;
   estimatedCost(inputTokens: number, outputTokens: number): number;
 }
 
@@ -79,22 +79,16 @@ export interface AIProvider {
 class OpenRouterProvider implements AIProvider {
   constructor(public modelId: ModelId) {}
 
-  async complete(prompt: string, systemPrompt: string): Promise<string> {
+  async complete(prompt: string, systemPrompt: string, options?: { maxTokens?: number }): Promise<string> {
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey) throw new Error("OPENROUTER_API_KEY is not set");
 
     const remote = OPENROUTER_REMOTE_MODEL[this.modelId];
     if (!remote) throw new Error(`Unknown OpenRouter model: ${this.modelId}`);
 
-    // Free models often don't support the system role — merge into user turn cleanly
     const isFree = remote.endsWith(":free");
     const messages = isFree
-      ? [
-          {
-            role: "user",
-            content: `${enforceJson(systemPrompt)}\n\n${prompt}`,
-          },
-        ]
+      ? [{ role: "user", content: `${enforceJson(systemPrompt)}\n\n${prompt}` }]
       : [
           { role: "system", content: enforceJson(systemPrompt) },
           { role: "user",   content: prompt },
@@ -111,7 +105,7 @@ class OpenRouterProvider implements AIProvider {
         },
         body: JSON.stringify({
           model:       remote,
-          max_tokens:  2000,
+          max_tokens:  options?.maxTokens ?? 2000,
           temperature: 0.7,
           messages,
         }),
@@ -144,7 +138,7 @@ class OpenRouterProvider implements AIProvider {
 class TogetherProvider implements AIProvider {
   constructor(public modelId: ModelId) {}
 
-  async complete(prompt: string, systemPrompt: string): Promise<string> {
+  async complete(prompt: string, systemPrompt: string, options?: { maxTokens?: number }): Promise<string> {
     const apiKey = process.env.TOGETHER_API_KEY;
     if (!apiKey) throw new Error("TOGETHER_API_KEY is not set");
 
@@ -160,7 +154,7 @@ class TogetherProvider implements AIProvider {
         },
         body: JSON.stringify({
           model:      remote,
-          max_tokens: 2000,
+          max_tokens: options?.maxTokens ?? 2000,
           messages: [
             { role: "system", content: enforceJson(systemPrompt) },
             { role: "user",   content: prompt },

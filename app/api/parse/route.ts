@@ -130,13 +130,14 @@ export async function POST(req: NextRequest) {
 
     /* -------- AI -------- */
     let parsed: ParsedResume;
+    let parseSuccess = false;
 
     try {
       const provider = createProvider(modelId);
 
       const response = await provider.complete(
-        rawText.slice(0, 15000),
-        `You are a resume parser. Extract structured information and return ONLY valid JSON matching this exact schema:
+        `Parse this resume text into structured JSON:\n\n${rawText.slice(0, 15000)}`,
+        `You are a resume parser. Extract ALL information from the resume text and return ONLY a valid JSON object with this exact schema:
 {
   "contact": { "name": string, "email": string, "phone": string, "location": string, "linkedin": string, "website": string },
   "summary": string,
@@ -146,13 +147,42 @@ export async function POST(req: NextRequest) {
   "certifications": string[],
   "projects": [{ "name": string, "description": string, "technologies": string[] }]
 }
-Return ONLY the JSON object. No markdown, no explanation.`
+Rules:
+- Extract every job, education entry, skill, and bullet point you can find
+- If a field is not present in the resume, use an empty string or empty array
+- skills must be a flat array of strings, not objects
+- Return ONLY the JSON object, no markdown, no explanation`,
+        { maxTokens: 4000 }
       );
 
+      console.log("[parse] AI raw response length:", response.length);
       const rawParsed = safeParse(response);
       parsed = normalizeParsed(rawParsed);
-    } catch {
+
+      // Check if we got meaningful data
+      parseSuccess = !!(
+        parsed.contact.name ||
+        parsed.experience.length > 0 ||
+        parsed.skills.length > 0 ||
+        parsed.education.length > 0
+      );
+
+      if (!parseSuccess) {
+        console.warn("[parse] AI returned empty/useless data. Raw response:", response.slice(0, 500));
+      }
+    } catch (aiErr) {
+      console.error("[parse] AI threw:", aiErr);
       parsed = normalizeParsed({});
+    }
+
+    if (!parseSuccess) {
+      return NextResponse.json(
+        {
+          error: "PARSE_FAILED",
+          message: "Could not extract resume data from this file. Try a different model or re-save the file as plain text.",
+        },
+        { status: 422 }
+      );
     }
 
     return NextResponse.json({
