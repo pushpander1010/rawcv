@@ -147,12 +147,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "invalid_request", message: "Expected JSON body" }, { status: 400 });
   }
 
-  const { parsed, raw } = body;
+  const { parsed } = body;
   const model = sanitiseModel(body.model);
+  // raw may be empty when resume was built via chat — fall back to serialized parsed data
+  const raw = body.raw || JSON.stringify(body.parsed ?? {});
 
-  if (!parsed || !raw) {
+  if (!parsed) {
     return NextResponse.json(
-      { error: "missing_fields", message: "parsed and raw fields are required" },
+      { error: "missing_fields", message: "parsed field is required" },
       { status: 400 }
     );
   }
