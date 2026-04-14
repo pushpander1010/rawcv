@@ -103,7 +103,8 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
           pushUndo();
           const merged = mergeResumeUpdate(localResume, chatData.resumeUpdate);
           setLocalResume(merged);
-          setState((s) => ({ ...s, parsed: merged as ParsedResume }));
+          // Always cast to full ParsedResume with safe defaults before setting global state
+          setState((s) => ({ ...s, parsed: toFullResume(merged) }));
         }
 
         setMessages((prev) => [
@@ -239,6 +240,23 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
       </div>
     </div>
   );
+}
+
+/** Ensure a partial resume always has the required arrays so theme renderers never crash */
+function toFullResume(partial: Partial<ParsedResume>): ParsedResume {
+  return {
+    contact: partial.contact ?? { name: "", email: "" },
+    summary: partial.summary ?? "",
+    experience: Array.isArray(partial.experience) ? partial.experience.map(j => ({
+      company: j.company ?? "", title: j.title ?? "",
+      startDate: j.startDate ?? "", endDate: j.endDate ?? "",
+      bullets: Array.isArray(j.bullets) ? j.bullets : [],
+    })) : [],
+    education: Array.isArray(partial.education) ? partial.education : [],
+    skills: Array.isArray(partial.skills) ? partial.skills : [],
+    certifications: Array.isArray(partial.certifications) ? partial.certifications : undefined,
+    projects: Array.isArray(partial.projects) ? partial.projects : undefined,
+  };
 }
 
 // Deep-merge a partial resume update into the existing state

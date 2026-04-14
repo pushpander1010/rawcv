@@ -117,8 +117,11 @@ export async function POST(req: NextRequest) {
   const model = sanitiseModel(body.model);
   const { resumeState, mode = "build", sectionHistory = {} } = body;
 
+  // Always use a reliable model for chat — user's selected model may be too weak
+  const chatModel = model.startsWith("together-") ? model : "together-llama-70b";
+
   try {
-    const provider = createProvider(model);
+    const provider = createProvider(chatModel);
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : SYSTEM_PROMPT;
 
     // Build a clear resume context block
@@ -145,7 +148,7 @@ export async function POST(req: NextRequest) {
     const raw = await provider.complete(prompt, systemPrompt);
 
     // Charge only after AI responds successfully
-    const chargeError = await chargeCredits(model, "Chat bot");
+    const chargeError = await chargeCredits(chatModel, "Chat bot");
     if (chargeError) return chargeError;
 
     if (mode === "customize") {
