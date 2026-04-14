@@ -15,19 +15,8 @@ interface ModelMeta {
 }
 
 const MODELS: ModelMeta[] = [
-  // Low (1 credit)
-  { id: "openrouter-sao-8b",           name: "Lunaris 8B",             provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
-  { id: "openrouter-gemma-9b",         name: "Gemma 2 9B",             provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
-  { id: "openrouter-qwen-8b",          name: "Qwen3 8B",               provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
-  { id: "openrouter-qwen-3.5",         name: "Qwen 3.5 Flash",         provider: "OpenRouter", tier: "low",    estimatedCredits: 1 },
-  { id: "together-gemma-3n",           name: "Gemma 3n E4B",           provider: "Together",   tier: "low",    estimatedCredits: 1 },
-  { id: "together-llama-8b",           name: "Llama 3 8B",             provider: "Together",   tier: "low",    estimatedCredits: 1 },
-  { id: "together-qwen-9b",            name: "Qwen 3.5 9B",            provider: "Together",   tier: "low",    estimatedCredits: 1 },
-  // Medium (2–3 credits)
-  { id: "openrouter-mistral-24b",      name: "Mistral Small 24B",      provider: "OpenRouter", tier: "medium", estimatedCredits: 2 },
-  { id: "openrouter-llama-4-maverick", name: "Llama 4 Maverick",       provider: "OpenRouter", tier: "medium", estimatedCredits: 3 },
-  { id: "together-liquid-24b",         name: "LFM2 24B",               provider: "Together",   tier: "medium", estimatedCredits: 2 },
-  { id: "together-mistral-24b",        name: "Mistral Small 24B",      provider: "Together",   tier: "medium", estimatedCredits: 2 },
+  { id: "openrouter-qwen-235b", name: "Qwen3 235B", provider: "OpenRouter", tier: "low", estimatedCredits: 3 },
+  { id: "together-gemma-3n",    name: "Gemma 3n",   provider: "Together",   tier: "low", estimatedCredits: 1 },
 ];
 
 const TIER_STYLES: Record<ModelMeta["tier"], string> = {
