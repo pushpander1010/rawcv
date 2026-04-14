@@ -33,6 +33,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [outOfCredits, setOutOfCredits] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
   // Per-section undo history: maps section key → value before last change
@@ -60,6 +61,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
       setInput("");
       setLoading(true);
       setError(null);
+      setOutOfCredits(false);
 
       try {
         const res = await fetch("/api/chat", {
@@ -77,7 +79,15 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
         const data = await res.json();
 
         if (!res.ok) {
-          throw new Error(data.message ?? `Request failed (${res.status})`);
+          // Roll back the user message so they can retry after fixing the issue
+          setMessages((prev) => prev.slice(0, -1));
+          setInput(text.trim());
+          if (res.status === 402) {
+            setOutOfCredits(true);
+          } else {
+            throw new Error(data.message ?? `Request failed (${res.status})`);
+          }
+          return;
         }
 
         const chatData = data as ChatResponse;
@@ -173,6 +183,22 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
         <div ref={bottomRef} />
       </div>
 
+      {/* Out of credits banner */}
+      {outOfCredits && (
+        <div role="alert" className="px-4 py-3 flex items-center gap-3 text-sm bg-amber-50 dark:bg-amber-900/20 border-t border-amber-200 dark:border-amber-800">
+          <span className="text-lg">💳</span>
+          <span className="flex-1 text-amber-800 dark:text-amber-200">
+            You&apos;ve run out of credits.
+          </span>
+          <a
+            href="/credits"
+            className="shrink-0 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
+          >
+            Buy credits
+          </a>
+        </div>
+      )}
+
       {/* Error */}
       {error && (
         <div role="alert" className="px-4 py-2 flex items-center gap-2 text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-t border-red-100 dark:border-red-900">
@@ -196,14 +222,14 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
                 : "Type a message… (Enter to send)"
             }
             rows={2}
-            disabled={loading || isComplete}
+            disabled={loading || isComplete || outOfCredits}
             aria-label="Chat message input"
             className="flex-1 resize-none rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => sendMessage(input)}
-            disabled={!input.trim() || loading || isComplete}
+            disabled={!input.trim() || loading || isComplete || outOfCredits}
             aria-label="Send message"
             className="shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
