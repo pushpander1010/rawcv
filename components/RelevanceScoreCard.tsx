@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { RelevanceResult } from "@/types";
 import AILoader from "@/components/AILoader";
@@ -65,6 +65,23 @@ interface RelevanceScoreCardProps {
 }
 
 export default function RelevanceScoreCard({ result, loading = false }: RelevanceScoreCardProps) {
+  const [showLoader, setShowLoader] = useState(false);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (loading) { setShowLoader(true); setDone(false); }
+    else if (showLoader) setDone(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
+
+  if (showLoader) {
+    return (
+      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+        <AILoader type="relevance" done={done} onDone={() => setShowLoader(false)} />
+      </div>
+    );
+  }
+
   const { score, missingKeywords = [], missingSkills = [], recommendations = [] } = result;
   const showRecommendations = score < 70 && recommendations.length > 0;
 
@@ -73,14 +90,6 @@ export default function RelevanceScoreCard({ result, loading = false }: Relevanc
     score >= 70 ? "Good match" :
     score >= 50 ? "Moderate match" :
     "Weak match";
-
-  if (loading) {
-    return (
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-        <AILoader type="relevance" />
-      </div>
-    );
-  }
 
   return (
     <section

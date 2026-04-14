@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { TailorChange } from "@/types";
 import AILoader from "@/components/AILoader";
@@ -154,6 +154,14 @@ interface TailorDiffProps {
 
 export default function TailorDiff({ changes, loading = false }: TailorDiffProps) {
   const { setState, pushUndo } = useResume();
+  const [showLoader, setShowLoader] = useState(false);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (loading) { setShowLoader(true); setDone(false); }
+    else if (showLoader) setDone(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
 
   function updateChange(id: string, patch: Partial<TailorChange>) {
     setState((prev) => {
@@ -211,10 +219,10 @@ export default function TailorDiff({ changes, loading = false }: TailorDiffProps
     updateChange(id, { tailored: value });
   }
 
-  if (loading) {
+  if (showLoader) {
     return (
       <section aria-label="Tailored changes" className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-        <AILoader type="tailor" />
+        <AILoader type="tailor" done={done} onDone={() => setShowLoader(false)} />
       </section>
     );
   }
