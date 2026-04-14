@@ -1,56 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ModelId, ParsedResume } from "@/types";
-import { createProvider } from "@/lib/ai-providers";
+import type { ParsedResume } from "@/types";
 
 export const runtime = "nodejs";
 
 const MAX_SIZE = 5 * 1024 * 1024;
 
-/* ---------------- HARD SAFE NORMALIZER ---------------- */
-function normalizeParsed(data: any): ParsedResume {
-  return {
-    contact: {
-      name: data?.contact?.name ?? "",
-      email: data?.contact?.email ?? "",
-      phone: data?.contact?.phone ?? "",
-      location: data?.contact?.location ?? "",
-      linkedin: data?.contact?.linkedin ?? "",
-      website: data?.contact?.website ?? "",
-    },
-    summary: data?.summary ?? "",
-    experience: Array.isArray(data?.experience)
-      ? data.experience.map((e: any) => ({
-          company: e?.company ?? "",
-          title: e?.title ?? "",
-          startDate: e?.startDate ?? "",
-          endDate: e?.endDate ?? "",
-          bullets: Array.isArray(e?.bullets) ? e.bullets : [],
-        }))
-      : [],
-    education: Array.isArray(data?.education)
-      ? data.education.map((e: any) => ({
-          institution: e?.institution ?? "",
-          degree: e?.degree ?? "",
-          field: e?.field ?? "",
-          graduationYear: e?.graduationYear ?? "",
-        }))
-      : [],
-    skills: Array.isArray(data?.skills) ? data.skills : [],
-    certifications: Array.isArray(data?.certifications) ? data.certifications : [],
-    projects: Array.isArray(data?.projects)
-      ? data.projects.map((p: any) => ({
-          name: p?.name ?? "",
-          description: p?.description ?? "",
-          technologies: Array.isArray(p?.technologies) ? p.technologies : [],
-        }))
-      : [],
-  };
-}
+// ─── PDF extraction ───────────────────────────────────────────────────────────
 
-/* ---------------- PDF ---------------- */
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // mupdf = same engine as Python's PyMuPDF (fitz) — handles image PDFs,
-  // complex layouts, and embedded fonts far better than pdfjs-dist.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mupdf = await import("mupdf") as any;
   const doc = mupdf.Document.openDocument(buffer, "application/pdf");
@@ -62,137 +19,255 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
   return text.trim();
 }
 
-/* ---------------- DOCX ---------------- */
-async function extractDocxText(buffer: Buffer) {
+// ─── DOCX extraction ──────────────────────────────────────────────────────────
+
+async function extractDocxText(buffer: Buffer): Promise<string> {
   const mammoth = await import("mammoth");
   const result = await mammoth.extractRawText({ buffer });
   return result.value || "";
 }
 
-/* ---------------- EXTRACT ---------------- */
-async function extractText(file: File) {
+// ─── File router ──────────────────────────────────────────────────────────────
+
+async function extractText(file: File): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
   const name = file.name.toLowerCase();
-
-  if (name.endsWith(".pdf")) return extractPdfText(buffer);
+  if (name.endsWith(".pdf"))  return extractPdfText(buffer);
   if (name.endsWith(".docx")) return extractDocxText(buffer);
-
   return buffer.toString("utf-8");
 }
 
-/* ---------------- JSON SAFE ---------------- */
-function safeParse(text: string) {
-  try {
-    return JSON.parse(text);
-  } catch {
-    const match = text.match(/\{[\s\S]*\}/);
-    return match ? JSON.parse(match[0]) : {};
+// ─── Rule-based parser ────────────────────────────────────────────────────────
+
+function parseResume(raw: string): ParsedResume {
+  const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+  // ── Contact ──────────────────────────────────────────────────────────────────
+  const emailMatch  = raw.match(/[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}/);
+  const phoneMatch  = raw.match(/(\+?\d[\d\s\-().]{7,}\d)/);
+  const linkedinMatch = raw.match(/linkedin\.com\/in\/[\w-]+/i);
+  const websiteMatch  = raw.match(/https?:\/\/(?!linkedin)[^\s,)>]+/i);
+
+  // Name heuristic: first non-empty line that looks like a name (2–4 words, no @/:)
+  let name = "";
+  for (const line of lines.slice(0, 6)) {
+    if (/[@:/|]/.test(line)) continue;
+    if (/^\d/.test(line)) continue;
+    const words = line.split(/\s+/);
+    if (words.length >= 2 && words.length <= 5 && words.every(w => /^[A-Za-z.'-]+$/.test(w))) {
+      name = line;
+      break;
+    }
   }
+
+  // Location heuristic: line with city/state pattern
+  const locationMatch = raw.match(/([A-Z][a-zA-Z\s]+,\s*[A-Z]{2}(?:\s+\d{5})?)/);
+
+  const contact = {
+    name,
+    email:    emailMatch?.[0]    ?? "",
+    phone:    phoneMatch?.[1]?.trim() ?? "",
+    location: locationMatch?.[1] ?? "",
+    linkedin: linkedinMatch?.[0] ?? "",
+    website:  websiteMatch?.[0]  ?? "",
+  };
+
+  // ── Section detection ─────────────────────────────────────────────────────────
+  const SECTION_HEADERS: Record<string, RegExp> = {
+    summary:        /^(summary|profile|objective|about|professional\s+summary)/i,
+    experience:     /^(experience|work\s+experience|employment|work\s+history|professional\s+experience)/i,
+    education:      /^(education|academic|qualifications)/i,
+    skills:         /^(skills|technical\s+skills|core\s+competencies|technologies|expertise)/i,
+    certifications: /^(certifications?|certificates?|licenses?|credentials)/i,
+    projects:       /^(projects?|personal\s+projects?|key\s+projects?)/i,
+  };
+
+  type SectionKey = keyof typeof SECTION_HEADERS;
+
+  // Split raw text into sections
+  const sections: Record<string, string[]> = {
+    summary: [], experience: [], education: [],
+    skills: [], certifications: [], projects: [],
+  };
+
+  let currentSection: SectionKey | null = null;
+
+  for (const line of lines) {
+    // Check if this line is a section header
+    let matched: SectionKey | null = null;
+    for (const [key, re] of Object.entries(SECTION_HEADERS)) {
+      if (re.test(line) && line.length < 60) {
+        matched = key as SectionKey;
+        break;
+      }
+    }
+    if (matched) {
+      currentSection = matched;
+      continue;
+    }
+    if (currentSection) {
+      sections[currentSection].push(line);
+    }
+  }
+
+  // ── Summary ───────────────────────────────────────────────────────────────────
+  const summary = sections.summary.join(" ").trim();
+
+  // ── Skills ────────────────────────────────────────────────────────────────────
+  const skillsRaw = sections.skills.join(" ");
+  const skills = skillsRaw
+    .split(/[,|•·\n\/]/)
+    .map(s => s.trim())
+    .filter(s => s.length > 1 && s.length < 60);
+
+  // ── Certifications ────────────────────────────────────────────────────────────
+  const certifications = sections.certifications
+    .filter(l => l.length > 3)
+    .map(l => l.replace(/^[-•*]\s*/, "").trim());
+
+  // ── Experience ────────────────────────────────────────────────────────────────
+  const DATE_RE = /(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|\d{4})[a-z]*\.?\s*\d{0,4}/i;
+  const DATE_RANGE_RE = new RegExp(
+    `(${DATE_RE.source})[\\s\\-–—]+(${DATE_RE.source}|present|current|now)`,
+    "i"
+  );
+
+  function parseExperienceBlocks(lines: string[]) {
+    const jobs: ParsedResume["experience"] = [];
+    let current: ParsedResume["experience"][0] | null = null;
+
+    for (const line of lines) {
+      const dateRange = line.match(DATE_RANGE_RE);
+      // A line with a date range likely starts a new job entry
+      if (dateRange) {
+        if (current) jobs.push(current);
+        const startDate = dateRange[1].trim();
+        const endDate   = dateRange[2].trim();
+        // Try to extract title and company from the same line or nearby
+        const withoutDate = line.replace(DATE_RANGE_RE, "").replace(/[-–—|,]+/g, " ").trim();
+        const parts = withoutDate.split(/\s{2,}|[|,]/).map(p => p.trim()).filter(Boolean);
+        current = {
+          title:     parts[0] ?? "",
+          company:   parts[1] ?? "",
+          startDate,
+          endDate,
+          bullets:   [],
+        };
+      } else if (current) {
+        // Bullet point
+        if (/^[-•*▸▪◆+]/.test(line) || /^\d+\./.test(line)) {
+          current.bullets.push(line.replace(/^[-•*▸▪◆+\d.]\s*/, "").trim());
+        } else if (!current.company && line.length < 80 && !/^\d/.test(line)) {
+          // Might be the company name on the next line
+          current.company = line;
+        }
+      }
+    }
+    if (current) jobs.push(current);
+    return jobs;
+  }
+
+  const experience = parseExperienceBlocks(sections.experience);
+
+  // ── Education ─────────────────────────────────────────────────────────────────
+  function parseEducationBlocks(lines: string[]) {
+    const entries: ParsedResume["education"] = [];
+    let current: ParsedResume["education"][0] | null = null;
+
+    const DEGREE_RE = /\b(bachelor|master|b\.?s\.?|m\.?s\.?|b\.?e\.?|m\.?e\.?|b\.?tech|m\.?tech|ph\.?d|mba|associate|diploma|b\.?a\.?|m\.?a\.?)\b/i;
+    const YEAR_RE   = /\b(19|20)\d{2}\b/;
+
+    for (const line of lines) {
+      const yearMatch   = line.match(YEAR_RE);
+      const degreeMatch = line.match(DEGREE_RE);
+
+      if (degreeMatch || (yearMatch && !current)) {
+        if (current) entries.push(current);
+        current = {
+          institution:    "",
+          degree:         degreeMatch?.[0] ?? "",
+          field:          "",
+          graduationYear: yearMatch?.[0] ?? "",
+        };
+        // Try to extract field from same line
+        const withoutDegree = line.replace(DEGREE_RE, "").replace(/\bin\b/i, "").trim();
+        if (withoutDegree.length > 2 && withoutDegree.length < 80) {
+          current.field = withoutDegree.replace(/[,|]/g, "").trim();
+        }
+      } else if (current) {
+        if (!current.institution && line.length < 100) {
+          current.institution = line;
+        } else if (!current.graduationYear && yearMatch) {
+          current.graduationYear = yearMatch[0];
+        }
+      }
+    }
+    if (current) entries.push(current);
+    return entries;
+  }
+
+  const education = parseEducationBlocks(sections.education);
+
+  // ── Projects ──────────────────────────────────────────────────────────────────
+  function parseProjectBlocks(lines: string[]) {
+    const projects: ParsedResume["projects"] = [];
+    let current: NonNullable<ParsedResume["projects"]>[0] | null = null;
+
+    for (const line of lines) {
+      if (/^[-•*]/.test(line) && current) {
+        current.description += " " + line.replace(/^[-•*]\s*/, "").trim();
+      } else if (line.length < 80 && !/^[-•*]/.test(line)) {
+        if (current) projects.push(current);
+        current = { name: line, description: "", technologies: [] };
+      }
+    }
+    if (current) projects.push(current);
+    return projects;
+  }
+
+  const projects = parseProjectBlocks(sections.projects);
+
+  return { contact, summary, experience, education, skills, certifications, projects };
 }
 
-/* ---------------- API ---------------- */
+// ─── API ──────────────────────────────────────────────────────────────────────
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    const modelId =
-      (formData.get("model") as ModelId | null) ?? "openrouter-mistral-nemo";
 
     if (!file) {
-      return NextResponse.json({ error: "NO_FILE" }, { status: 400 });
+      return NextResponse.json({ error: "NO_FILE", message: "No file provided." }, { status: 400 });
     }
-
     if (file.size > MAX_SIZE) {
-      return NextResponse.json({ error: "FILE_TOO_LARGE" }, { status: 400 });
+      return NextResponse.json({ error: "FILE_TOO_LARGE", message: "File exceeds 5 MB limit." }, { status: 400 });
     }
 
-    /* -------- TEXT -------- */
     let rawText: string;
     try {
       rawText = await extractText(file);
-      console.log("[parse] extracted", rawText.length, "chars from", file.name);
-    } catch (extractErr) {
-      const detail = extractErr instanceof Error ? extractErr.message : String(extractErr);
-      console.error("[parse] extraction threw:", detail);
+    } catch (err) {
       return NextResponse.json(
-        { error: "EXTRACTION_FAILED", detail },
+        { error: "EXTRACTION_FAILED", message: "Could not read this file. Try saving as PDF or TXT." },
         { status: 422 }
       );
     }
 
     if (!rawText || rawText.length < 20) {
-      console.warn("[parse] text too short:", rawText?.length ?? 0, "chars");
       return NextResponse.json(
-        { error: "NO_TEXT_EXTRACTED", length: rawText?.length ?? 0 },
+        { error: "NO_TEXT_EXTRACTED", message: "No readable text found in this file." },
         { status: 422 }
       );
     }
 
-    /* -------- AI -------- */
-    let parsed: ParsedResume;
-    let parseSuccess = false;
+    const parsed = parseResume(rawText);
 
-    try {
-      const provider = createProvider(modelId);
-
-      const response = await provider.complete(
-        `Parse this resume text into structured JSON:\n\n${rawText.slice(0, 15000)}`,
-        `You are a resume parser. Extract ALL information from the resume text and return ONLY a valid JSON object with this exact schema:
-{
-  "contact": { "name": string, "email": string, "phone": string, "location": string, "linkedin": string, "website": string },
-  "summary": string,
-  "experience": [{ "company": string, "title": string, "startDate": string, "endDate": string, "bullets": string[] }],
-  "education": [{ "institution": string, "degree": string, "field": string, "graduationYear": string }],
-  "skills": string[],
-  "certifications": string[],
-  "projects": [{ "name": string, "description": string, "technologies": string[] }]
-}
-Rules:
-- Extract every job, education entry, skill, and bullet point you can find
-- If a field is not present in the resume, use an empty string or empty array
-- skills must be a flat array of strings, not objects
-- Return ONLY the JSON object, no markdown, no explanation`,
-        { maxTokens: 4000 }
-      );
-
-      console.log("[parse] AI raw response length:", response.length);
-      const rawParsed = safeParse(response);
-      parsed = normalizeParsed(rawParsed);
-
-      // Check if we got meaningful data
-      parseSuccess = !!(
-        parsed.contact.name ||
-        parsed.experience.length > 0 ||
-        parsed.skills.length > 0 ||
-        parsed.education.length > 0
-      );
-
-      if (!parseSuccess) {
-        console.warn("[parse] AI returned empty/useless data. Raw response:", response.slice(0, 500));
-      }
-    } catch (aiErr) {
-      console.error("[parse] AI threw:", aiErr);
-      parsed = normalizeParsed({});
-    }
-
-    if (!parseSuccess) {
-      return NextResponse.json(
-        {
-          error: "PARSE_FAILED",
-          message: "Could not extract resume data from this file. Try a different model or re-save the file as plain text.",
-        },
-        { status: 422 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      parsed,
-      raw: rawText,
-    });
+    return NextResponse.json({ success: true, parsed, raw: rawText });
   } catch (err) {
+    console.error("[parse] unexpected error:", err);
     return NextResponse.json(
-      { error: "SERVER_ERROR", detail: String(err) },
+      { error: "SERVER_ERROR", message: "Something went wrong. Please try again." },
       { status: 500 }
     );
   }
