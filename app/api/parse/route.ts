@@ -135,8 +135,8 @@ export async function POST(req: NextRequest) {
     let parsed: ParsedResume;
     try {
       const apiKey = process.env.OPENROUTER_API_KEY;
-      const model  = process.env.OPENROUTER_MODEL;
-      if (!apiKey || !model) throw new Error("OpenRouter not configured");
+      const model  = "qwen/qwen3.5-9b";
+      if (!apiKey) throw new Error("OpenRouter not configured");
 
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",

@@ -1,6 +1,6 @@
 // ─── Theme IDs ───────────────────────────────────────────────────────────────
 
-export type ModelId = string; // kept for backwards compat — actual model set via OPENROUTER_MODEL env var
+export type ModelId = string; // kept for backwards compat
 
 export type ThemeId =
   | "classic"

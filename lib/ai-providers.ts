@@ -65,10 +65,9 @@ export async function complete<T = any>(
   }
 ): Promise<T> {
   const apiKey = process.env.OPENROUTER_API_KEY;
-  const model = process.env.OPENROUTER_MODEL;
+  const model = "qwen/qwen3.5-9b";
 
   if (!apiKey) throw new Error("OPENROUTER_API_KEY not set");
-  if (!model) throw new Error("OPENROUTER_MODEL not set");
 
   const schema = options?.schema ?? DefaultSchema;
 
