@@ -1,12 +1,54 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ParsedResume } from "@/types";
+import type { ModelId, ParsedResume } from "@/types";
+import { createProvider } from "@/lib/ai-providers";
 
 export const runtime = "nodejs";
 
 const MAX_SIZE = 5 * 1024 * 1024;
 
-// ─── File extraction ──────────────────────────────────────────────────────────
+/* ---------------- HARD SAFE NORMALIZER ---------------- */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function normalizeParsed(data: any): ParsedResume {
+  return {
+    contact: {
+      name:     data?.contact?.name     ?? "",
+      email:    data?.contact?.email    ?? "",
+      phone:    data?.contact?.phone    ?? "",
+      location: data?.contact?.location ?? "",
+      linkedin: data?.contact?.linkedin ?? "",
+      website:  data?.contact?.website  ?? "",
+    },
+    summary: data?.summary ?? "",
+    experience: Array.isArray(data?.experience)
+      ? data.experience.map((e: any) => ({
+          company:   e?.company   ?? "",
+          title:     e?.title     ?? "",
+          startDate: e?.startDate ?? "",
+          endDate:   e?.endDate   ?? "",
+          bullets:   Array.isArray(e?.bullets) ? e.bullets : [],
+        }))
+      : [],
+    education: Array.isArray(data?.education)
+      ? data.education.map((e: any) => ({
+          institution:    e?.institution    ?? "",
+          degree:         e?.degree         ?? "",
+          field:          e?.field          ?? "",
+          graduationYear: e?.graduationYear ?? "",
+        }))
+      : [],
+    skills:         Array.isArray(data?.skills)         ? data.skills         : [],
+    certifications: Array.isArray(data?.certifications) ? data.certifications : [],
+    projects: Array.isArray(data?.projects)
+      ? data.projects.map((p: any) => ({
+          name:         p?.name         ?? "",
+          description:  p?.description  ?? "",
+          technologies: Array.isArray(p?.technologies) ? p.technologies : [],
+        }))
+      : [],
+  };
+}
 
+/* ---------------- PDF ---------------- */
 async function extractPdfText(buffer: Buffer): Promise<string> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mupdf = await import("mupdf") as any;
@@ -19,12 +61,14 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
   return text.trim();
 }
 
+/* ---------------- DOCX ---------------- */
 async function extractDocxText(buffer: Buffer): Promise<string> {
   const mammoth = await import("mammoth");
   const result = await mammoth.extractRawText({ buffer });
   return result.value || "";
 }
 
+/* ---------------- EXTRACT ---------------- */
 async function extractText(file: File): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
   const name = file.name.toLowerCase();
@@ -33,39 +77,25 @@ async function extractText(file: File): Promise<string> {
   return buffer.toString("utf-8");
 }
 
-// ─── Minimal contact extraction ───────────────────────────────────────────────
-// Just pull the obvious fields from the raw text so the preview shows something.
-
-function extractContact(raw: string): ParsedResume["contact"] {
-  const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-
-  const email    = raw.match(/[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}/)?.[0] ?? "";
-  const phone    = raw.match(/(\+?[\d][\d\s\-().]{6,}[\d])/)?.[1]?.trim() ?? "";
-  const linkedin = raw.match(/linkedin\.com\/in\/[\w%-]+/i)?.[0] ?? "";
-  const website  = raw.match(/https?:\/\/(?!linkedin\.com)[^\s,)<>"]+/i)?.[0] ?? "";
-  const location = raw.match(/([A-Z][a-zA-Z\s]{2,20},\s*[A-Z]{2}(?:\s+\d{5})?)/)?.[1] ?? "";
-
-  // Name: first short line that looks like a person's name
-  let name = "";
-  for (const line of lines.slice(0, 8)) {
-    if (/[@:/|\\]/.test(line) || /^\d/.test(line) || line.length > 60) continue;
-    const words = line.split(/\s+/);
-    if (words.length >= 2 && words.length <= 5 &&
-        words.every(w => /^[A-Za-z.'-]{1,20}$/.test(w))) {
-      name = line;
-      break;
+/* ---------------- JSON SAFE ---------------- */
+function safeParse(text: string) {
+  try {
+    return JSON.parse(text);
+  } catch {
+    const match = text.match(/\{[\s\S]*\}/);
+    if (match) {
+      try { return JSON.parse(match[0]); } catch { /* fall through */ }
     }
+    return {};
   }
-
-  return { name, email, phone, location, linkedin, website };
 }
 
-// ─── API ──────────────────────────────────────────────────────────────────────
-
+/* ---------------- API ---------------- */
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const file = formData.get("file") as File | null;
+    const file    = formData.get("file")  as File    | null;
+    const modelId = (formData.get("model") as ModelId | null) ?? "openrouter-mistral-nemo";
 
     if (!file) {
       return NextResponse.json({ error: "NO_FILE", message: "No file provided." }, { status: 400 });
@@ -74,10 +104,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "FILE_TOO_LARGE", message: "File exceeds 5 MB limit." }, { status: 400 });
     }
 
+    /* ── Extract text ── */
     let rawText: string;
     try {
       rawText = await extractText(file);
-    } catch {
+      console.log("[parse] extracted", rawText.length, "chars from", file.name);
+    } catch (err) {
+      const detail = err instanceof Error ? err.message : String(err);
+      console.error("[parse] extraction failed:", detail);
       return NextResponse.json(
         { error: "EXTRACTION_FAILED", message: "Could not read this file. Try saving as PDF or TXT." },
         { status: 422 }
@@ -91,21 +125,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const contact = extractContact(rawText);
-
-    // Put the full raw text as the summary so the user can see and edit everything.
-    // The AI features (ATS, suggestions, chat) all work from the raw text anyway.
-    const parsed: ParsedResume = {
-      contact,
-      summary:        rawText,   // full text — user can clean up via chat
-      experience:     [],
-      education:      [],
-      skills:         [],
-      certifications: [],
-      projects:       [],
-    };
-
-    console.log("[parse] extracted", rawText.length, "chars, name:", contact.name);
+    /* ── AI parse ── */
+    let parsed: ParsedResume;
+    try {
+      const provider = createProvider(modelId);
+      const response = await provider.complete(
+        rawText.slice(0, 15000),
+        `You are a resume parser. Extract structured information and return ONLY valid JSON matching this exact schema:
+{
+  "contact": { "name": string, "email": string, "phone": string, "location": string, "linkedin": string, "website": string },
+  "summary": string,
+  "experience": [{ "company": string, "title": string, "startDate": string, "endDate": string, "bullets": string[] }],
+  "education": [{ "institution": string, "degree": string, "field": string, "graduationYear": string }],
+  "skills": string[],
+  "certifications": string[],
+  "projects": [{ "name": string, "description": string, "technologies": string[] }]
+}
+Return ONLY the JSON object. No markdown, no explanation.`,
+        { maxTokens: 4000 }
+      );
+      parsed = normalizeParsed(safeParse(response));
+    } catch (err) {
+      console.error("[parse] AI failed:", err);
+      parsed = normalizeParsed({});
+    }
 
     return NextResponse.json({ success: true, parsed, raw: rawText });
   } catch (err) {
