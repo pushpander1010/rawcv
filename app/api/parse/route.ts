@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume } from "@/types";
-import { complete } from "@/lib/ai-providers";
 import { requireAuth } from "@/lib/api-guard";
 
 export const runtime = "nodejs";
@@ -135,23 +134,29 @@ export async function POST(req: NextRequest) {
     let parsed: ParsedResume;
     try {
       const apiKey = process.env.OPENROUTER_API_KEY;
-      const model  = "qwen/qwen3.5-9b";
+      const model  = "google/gemini-flash-1.5";
       if (!apiKey) throw new Error("OpenRouter not configured");
 
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "https://rawcv.com",
-          "X-Title": "rawcv",
-        },
-        body: JSON.stringify({
-          model,
-          max_tokens: 4000,
-          temperature: 0.1, // low temp for deterministic extraction
-          response_format: { type: "json_object" }, // force JSON mode
-          messages: [
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 45000); // 45s hard limit
+
+      let res: Response;
+      try {
+        res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          signal: controller.signal,
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "https://rawcv.com",
+            "X-Title": "rawcv",
+          },
+          body: JSON.stringify({
+            model,
+            max_tokens: 2000,
+            temperature: 0.1,
+            response_format: { type: "json_object" },
+            messages: [
             {
               role: "system",
               content: `You are a resume parser. Extract ALL information from the resume text and return a JSON object with this exact structure:
@@ -173,9 +178,12 @@ Extract every job, every bullet point, every skill. Use empty string for missing
           ],
         }),
       });
+      } finally {
+        clearTimeout(timeout);
+      }
 
-      if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${await res.text()}`);
-      const data = await res.json();
+      if (!res!.ok) throw new Error(`OpenRouter ${res!.status}: ${await res!.text()}`);
+      const data = await res!.json();
       const content = data?.choices?.[0]?.message?.content ?? "{}";
       console.log("[parse] AI response length:", content.length, "| first 300:", content.slice(0, 300));
       parsed = normalizeParsed(safeParse(content));
