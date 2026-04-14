@@ -1,26 +1,32 @@
 import { z } from "zod";
 
 /**
- * Optional: Define schema (example)
- * Replace this with your resume schema
+ * Optional: Define schema (fallback)
  */
 const DefaultSchema = z.any();
 
 /**
- * Extract JSON safely from model output
+ * Extract JSON safely from model output, handling markdown blocks
+ * and grabbing text exclusively between the first { and last }
  */
 function extractJson(text: string): string {
   if (!text?.trim()) throw new Error("Empty response");
 
-  // Remove markdown blocks
-  const block = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (block) text = block[1].trim();
+  let cleaned = text.trim();
 
-  // Extract first JSON object
-  const obj = text.match(/\{[\s\S]*\}/);
-  if (obj) text = obj[0];
+  // Remove markdown blocks using hex codes (\x60) for backticks to prevent parser issues
+  const block = cleaned.match(/\x60\x60\x60(?:json)?\s*([\s\S]*?)\x60\x60\x60/);
+  if (block) cleaned = block[1].trim();
 
-  return text;
+  // Extract first valid JSON object boundaries
+  const firstBrace = cleaned.indexOf("{");
+  const lastBrace = cleaned.lastIndexOf("}");
+  
+  if (firstBrace !== -1 && lastBrace !== -1) {
+    cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+  }
+
+  return cleaned;
 }
 
 /**
@@ -32,12 +38,15 @@ function parseAndValidate<T>(text: string, schema: z.ZodSchema<T>): T {
     const parsed = JSON.parse(cleaned);
     return schema.parse(parsed);
   } catch (err) {
-    console.error("❌ Invalid JSON:\n", text);
+    console.error("❌ Invalid JSON Payload Received:\n", text);
     throw new Error("Invalid JSON from model");
   }
 }
 
-async function withRetry<T>(fn: () => Promise<T>, retries = 1): Promise<T> {
+/**
+ * Wrapper to auto-retry network/AI failures
+ */
+async function withRetry<T>(fn: () => Promise<T>, retries = 2): Promise<T> {
   let lastErr: unknown;
 
   for (let i = 0; i <= retries; i++) {
@@ -45,10 +54,10 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 1): Promise<T> {
       return await fn();
     } catch (e) {
       lastErr = e;
-      console.warn(`⚠️ Retry ${i + 1} failed:`, e);
+      console.warn(`⚠️ AI Request Retry ${i + 1} failed:`, e instanceof Error ? e.message : String(e));
 
       if (i < retries) {
-        await new Promise((r) => setTimeout(r, 1000));
+        await new Promise((r) => setTimeout(r, 1500));
       }
     }
   }
@@ -65,7 +74,9 @@ export async function complete<T = any>(
   }
 ): Promise<T> {
   const apiKey = process.env.OPENROUTER_API_KEY;
-  const model = "qwen/qwen3-8b";
+  
+  // Strongly recommended: Use a model built for fast, strict JSON extraction
+  const model = "google/gemini-2.5-flash";
 
   if (!apiKey) throw new Error("OPENROUTER_API_KEY not set");
 
@@ -75,30 +86,29 @@ export async function complete<T = any>(
 
 STRICT RULES:
 - Return ONLY valid JSON
-- No markdown
-- No explanation
-- No trailing text
-- Must match schema strictly`;
+- No markdown wrappers (do not use markdown code blocks)
+- No explanation or conversational text
+- Must match the requested schema strictly`;
 
   return withRetry(async () => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 45000);
 
     try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      const res = await fetch("[https://openrouter.ai/api/v1/chat/completions](https://openrouter.ai/api/v1/chat/completions)", {
         method: "POST",
         signal: controller.signal,
         headers: {
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "https://rawcv.com",
+          "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "[https://rawcv.com](https://rawcv.com)",
           "X-Title": "rawcv",
         },
         body: JSON.stringify({
           model,
-          max_tokens: options?.maxTokens ?? 2000,
-          temperature: 0.2,
-          response_format: { type: "json_object" },
+          max_tokens: options?.maxTokens ?? 2500,
+          temperature: 0.1, // Lower temperature to prevent hallucinated data
+          response_format: { type: "json_object" }, 
           messages: [
             { role: "system", content: fullSystem },
             { role: "user", content: prompt },
@@ -112,12 +122,9 @@ STRICT RULES:
       }
 
       const data = await res.json();
-      console.log("🔍 RAW RESPONSE:", JSON.stringify(data, null, 2));
-
       const content = data?.choices?.[0]?.message?.content;
 
       if (!content) {
-        console.error("❌ Empty content:", data);
         throw new Error("Empty response from model");
       }
 
