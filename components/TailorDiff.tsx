@@ -155,12 +155,9 @@ interface TailorDiffProps {
 export default function TailorDiff({ changes, loading = false }: TailorDiffProps) {
   const { setState, pushUndo } = useResume();
   const [showLoader, setShowLoader] = useState(false);
-  const [done, setDone] = useState(false);
-
   useEffect(() => {
-    if (loading) { setShowLoader(true); setDone(false); }
-    else if (showLoader) setDone(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (loading) setShowLoader(true);
+    else setShowLoader(false);
   }, [loading]);
 
   function updateChange(id: string, patch: Partial<TailorChange>) {
@@ -222,7 +219,7 @@ export default function TailorDiff({ changes, loading = false }: TailorDiffProps
   if (showLoader) {
     return (
       <section aria-label="Tailored changes" className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-        <AILoader type="tailor" done={done} onDone={() => setShowLoader(false)} />
+        <AILoader type="tailor" />
       </section>
     );
   }

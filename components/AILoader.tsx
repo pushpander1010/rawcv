@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// ─── Step sequences per operation type ───────────────────────────────────────
-
 const STEPS: Record<string, string[]> = {
   ats: [
     "Reading your resume…",
@@ -75,19 +73,14 @@ const STEPS: Record<string, string[]> = {
   ],
 };
 
-// ─── Props ────────────────────────────────────────────────────────────────────
-
 interface AILoaderProps {
   type?: keyof typeof STEPS;
-  /** Normal ms between step advances — default 1800 */
+  /** ms between step advances during loading — default 1800 */
   interval?: number;
-  /** When true, fast-forward remaining steps then call onDone */
+  /** When true, dismiss immediately and call onDone */
   done?: boolean;
-  /** Called after the fast-forward completes — parent should unmount the loader */
   onDone?: () => void;
 }
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function AILoader({
   type = "default",
@@ -98,79 +91,54 @@ export default function AILoader({
   const steps = STEPS[type] ?? STEPS.default;
   const [stepIdx, setStepIdx] = useState(0);
   const [visible, setVisible] = useState(true);
-  const fastForwarding = useRef(false);
+  const calledDone = useRef(false);
 
-  // Reset when type changes
+  // Reset on type change
   useEffect(() => {
     setStepIdx(0);
-    fastForwarding.current = false;
+    setVisible(true);
+    calledDone.current = false;
   }, [type]);
 
-  // Normal cadence — advance one step at a time
+  // When done fires — call onDone immediately, no animation
   useEffect(() => {
-    if (done) return; // hand off to fast-forward effect
-    if (stepIdx >= steps.length - 1) return; // hold on last step
+    if (!done || calledDone.current) return;
+    calledDone.current = true;
+    onDone?.();
+  }, [done, onDone]);
+
+  // Normal step cadence while loading
+  useEffect(() => {
+    if (done) return;
+    if (stepIdx >= steps.length - 1) return;
     const t = setTimeout(() => {
       setVisible(false);
-      setTimeout(() => {
+      const t2 = setTimeout(() => {
         setStepIdx((i) => Math.min(i + 1, steps.length - 1));
         setVisible(true);
-      }, 200);
+      }, 180);
+      return () => clearTimeout(t2);
     }, interval);
     return () => clearTimeout(t);
   }, [stepIdx, steps.length, interval, done]);
-
-  // Fast-forward when done=true
-  useEffect(() => {
-    if (!done || fastForwarding.current) return;
-    fastForwarding.current = true;
-
-    let current = stepIdx;
-    const FAST = 120; // ms per step during fast-forward
-
-    function advance() {
-      if (current >= steps.length - 1) {
-        // Reached the end — brief pause then notify parent
-        setTimeout(() => onDone?.(), 300);
-        return;
-      }
-      setVisible(false);
-      setTimeout(() => {
-        current += 1;
-        setStepIdx(current);
-        setVisible(true);
-        setTimeout(advance, FAST);
-      }, 80); // short fade-out
-    }
-
-    // Small initial delay so the user sees the transition start
-    setTimeout(advance, 200);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [done]);
 
   const progress = Math.round(((stepIdx + 1) / steps.length) * 100);
 
   return (
     <div className="flex flex-col items-center justify-center gap-5 py-10 px-4 select-none">
-      {/* Animated orb */}
+      {/* Spinner */}
       <div className="relative w-16 h-16">
         <span className="absolute inset-0 rounded-full bg-violet-400/20 animate-ping" />
         <svg
           className="absolute inset-0 w-full h-full animate-spin"
-          style={{ animationDuration: done ? "0.4s" : "1.2s" }}
+          style={{ animationDuration: "1.2s" }}
           viewBox="0 0 64 64"
           fill="none"
           aria-hidden="true"
         >
-          <circle
-            cx="32" cy="32" r="26"
-            stroke="url(#loaderGrad)"
-            strokeWidth="5"
-            strokeLinecap="round"
-            strokeDasharray="100 64"
-          />
+          <circle cx="32" cy="32" r="26" stroke="url(#lg)" strokeWidth="5" strokeLinecap="round" strokeDasharray="100 64" />
           <defs>
-            <linearGradient id="loaderGrad" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#7c3aed" />
               <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
             </linearGradient>
@@ -194,11 +162,8 @@ export default function AILoader({
       {/* Progress bar */}
       <div className="w-48 h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-500"
-          style={{
-            width: `${progress}%`,
-            transition: done ? "width 80ms linear" : "width 500ms ease-out",
-          }}
+          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-[width] duration-500 ease-out"
+          style={{ width: `${progress}%` }}
           role="progressbar"
           aria-valuenow={progress}
           aria-valuemin={0}
@@ -206,7 +171,6 @@ export default function AILoader({
         />
       </div>
 
-      {/* Step counter */}
       <p className="text-xs text-gray-400 dark:text-gray-500 tabular-nums">
         {stepIdx + 1} / {steps.length}
       </p>

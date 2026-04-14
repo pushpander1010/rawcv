@@ -119,12 +119,9 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
   const { setState, pushUndo } = useResume();
   const [statuses, setStatuses] = useState<Record<string, CardStatus>>({});
   const [showLoader, setShowLoader] = useState(false);
-  const [done, setDone] = useState(false);
-
   useEffect(() => {
-    if (loading) { setShowLoader(true); setDone(false); }
-    else if (showLoader) setDone(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (loading) setShowLoader(true);
+    else setShowLoader(false);
   }, [loading]);
 
   function acceptChange(suggestion: Suggestion) {
@@ -170,7 +167,7 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
   if (showLoader) {
     return (
       <section aria-label="Resume Enhancements" className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-        <AILoader type="enhancements" done={done} onDone={() => setShowLoader(false)} />
+        <AILoader type="enhancements" />
       </section>
     );
   }

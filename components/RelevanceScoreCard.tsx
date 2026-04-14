@@ -66,18 +66,15 @@ interface RelevanceScoreCardProps {
 
 export default function RelevanceScoreCard({ result, loading = false }: RelevanceScoreCardProps) {
   const [showLoader, setShowLoader] = useState(false);
-  const [done, setDone] = useState(false);
-
   useEffect(() => {
-    if (loading) { setShowLoader(true); setDone(false); }
-    else if (showLoader) setDone(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (loading) setShowLoader(true);
+    else setShowLoader(false);
   }, [loading]);
 
   if (showLoader) {
     return (
       <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-        <AILoader type="relevance" done={done} onDone={() => setShowLoader(false)} />
+        <AILoader type="relevance" />
       </div>
     );
   }
