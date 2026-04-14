@@ -70,52 +70,60 @@ export default function AnalyzePage() {
 
   async function runATS() {
     setAtsLoading(true); setAtsError(null);
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 30000);
     try {
-      const res = await fetch("/api/ats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, raw: state.raw, model: state.selectedModel }) });
+      const res = await fetch("/api/ats", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, raw: state.raw, model: state.selectedModel }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "ATS analysis failed");
       setState((prev) => ({ ...prev, atsResult: data }));
       refreshCredits();
-    } catch (e) { setAtsError(e instanceof Error ? e.message : "ATS analysis failed. Please try again."); }
-    finally { setAtsLoading(false); }
+    } catch (e) { setAtsError(e instanceof Error ? (e.name === "AbortError" ? "Request timed out. Please try again." : e.message) : "ATS analysis failed. Please try again."); }
+    finally { clearTimeout(timer); setAtsLoading(false); }
   }
 
   async function runRelevance() {
     if (!jdInput.trim()) return;
     setRelevanceLoading(true); setRelevanceError(null);
     setState((prev) => ({ ...prev, jd: jdInput }));
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 30000);
     try {
-      const res = await fetch("/api/relevance", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, jd: jdInput, model: state.selectedModel }) });
+      const res = await fetch("/api/relevance", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, jd: jdInput, model: state.selectedModel }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Relevance analysis failed");
       setState((prev) => ({ ...prev, relevanceResult: data }));
       refreshCredits();
-    } catch (e) { setRelevanceError(e instanceof Error ? e.message : "Relevance analysis failed. Please try again."); }
-    finally { setRelevanceLoading(false); }
+    } catch (e) { setRelevanceError(e instanceof Error ? (e.name === "AbortError" ? "Request timed out. Please try again." : e.message) : "Relevance analysis failed. Please try again."); }
+    finally { clearTimeout(timer); setRelevanceLoading(false); }
   }
 
   async function runSuggestions() {
     setSuggestionsLoading(true); setSuggestionsError(null);
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 30000);
     try {
-      const res = await fetch("/api/suggestions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, model: state.selectedModel }) });
+      const res = await fetch("/api/suggestions", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, model: state.selectedModel }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Suggestions failed");
       setState((prev) => ({ ...prev, suggestions: data }));
       refreshCredits();
-    } catch (e) { setSuggestionsError(e instanceof Error ? e.message : "Could not generate suggestions. Please try again."); }
-    finally { setSuggestionsLoading(false); }
+    } catch (e) { setSuggestionsError(e instanceof Error ? (e.name === "AbortError" ? "Request timed out. Please try again." : e.message) : "Could not generate suggestions. Please try again."); }
+    finally { clearTimeout(timer); setSuggestionsLoading(false); }
   }
 
   async function runEnhancement() {
     setEnhancementLoading(true); setEnhancementError(null);
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 30000);
     try {
-      const res = await fetch("/api/enhance", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, model: state.selectedModel }) });
+      const res = await fetch("/api/enhance", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, model: state.selectedModel }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Enhancement failed");
       setState((prev) => ({ ...prev, enhancements: data }));
       refreshCredits();
-    } catch (e) { setEnhancementError(e instanceof Error ? e.message : "Could not enhance resume. Please try again."); }
-    finally { setEnhancementLoading(false); }
+    } catch (e) { setEnhancementError(e instanceof Error ? (e.name === "AbortError" ? "Request timed out. Please try again." : e.message) : "Could not enhance resume. Please try again."); }
+    finally { clearTimeout(timer); setEnhancementLoading(false); }
   }
 
   return (

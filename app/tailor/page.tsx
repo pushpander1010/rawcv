@@ -27,10 +27,12 @@ export default function TailorPage() {
     setLoading(true);
     setError(null);
     setState((prev) => ({ ...prev, jd: jdInput }));
-
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 30000);
     try {
       const res = await fetch("/api/tailor", {
         method: "POST",
+        signal: ctrl.signal,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ parsed: state.parsed, jd: jdInput, model: state.selectedModel }),
       });
@@ -38,8 +40,9 @@ export default function TailorPage() {
       if (!res.ok) throw new Error(data.message ?? "Tailoring failed");
       setState((prev) => ({ ...prev, tailoredResume: data }));
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Tailoring failed. Please try again.");
+      setError(e instanceof Error ? (e.name === "AbortError" ? "Request timed out. Please try again." : e.message) : "Tailoring failed. Please try again.");
     } finally {
+      clearTimeout(timer);
       setLoading(false);
     }
   }
