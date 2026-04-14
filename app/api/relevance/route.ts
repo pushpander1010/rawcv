@@ -3,7 +3,7 @@ export const maxDuration = 60;
 
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, RelevanceResult } from "@/types";
-import { complete } from "@/lib/ai-providers";
+import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseJD } from "@/lib/api-guard";
 
