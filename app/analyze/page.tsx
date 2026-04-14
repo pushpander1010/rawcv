@@ -14,6 +14,7 @@ import DownloadButton from "@/components/DownloadButton";
 import ChatBot from "@/components/ChatBot";import type { ATSResult, RelevanceResult, Suggestion } from "@/types";
 import ResizablePanels from "@/components/ResizablePanels";
 import UndoButton from "@/components/UndoButton";
+import ResetButton from "@/components/ResetButton";
 import CreditWarningBanner from "@/components/CreditWarningBanner";
 
 type Tab = "ats" | "relevance" | "suggestions" | "enhance" | "theme" | "chat";
@@ -131,6 +132,7 @@ export default function AnalyzePage() {
           <div className="flex items-center gap-3 flex-shrink-0">
             <div className="w-44"><ModelSelector label="Model" /></div>
             <UndoButton />
+            <ResetButton />
             <DownloadButton />
           </div>
         </div>

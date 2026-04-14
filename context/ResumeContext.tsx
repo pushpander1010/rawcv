@@ -30,12 +30,10 @@ export interface ResumeState {
 interface ResumeContextValue {
   state: ResumeState;
   setState: React.Dispatch<React.SetStateAction<ResumeState>>;
-  /** Push the current parsed resume onto the undo stack before making a change */
   pushUndo: () => void;
-  /** Undo the last resume change */
   undo: () => void;
-  /** Whether there is anything to undo */
   canUndo: boolean;
+  reset: () => void;
   refreshCredits: () => void;
 }
 
@@ -157,6 +155,25 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     setStateRaw((prev) => ({ ...prev, parsed: previous }));
   }, []);
 
+  const reset = useCallback(() => {
+    undoStack.current = [];
+    setCanUndo(false);
+    // Keep model/theme preferences, wipe resume data
+    setStateRaw((prev) => ({
+      ...defaultState,
+      selectedModel: prev.selectedModel,
+      selectedTheme: prev.selectedTheme,
+      creditBalance: prev.creditBalance,
+    }));
+    // Clear persisted storage for this user
+    if (userId) {
+      try {
+        const key = storageKey(userId);
+        if (key) localStorage.removeItem(key);
+      } catch { /* ignore */ }
+    }
+  }, [userId]);
+
   const refreshCredits = useCallback(async () => {
     try {
       const res = await fetch("/api/credits");
@@ -175,7 +192,7 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
   }, [refreshCredits]);
 
   return (
-    <ResumeContext.Provider value={{ state, setState, pushUndo, undo, canUndo, refreshCredits }}>
+    <ResumeContext.Provider value={{ state, setState, pushUndo, undo, canUndo, reset, refreshCredits }}>
       {children}
     </ResumeContext.Provider>
   );

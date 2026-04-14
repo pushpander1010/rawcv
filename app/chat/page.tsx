@@ -9,6 +9,7 @@ import ModelSelector from "@/components/ModelSelector";
 import ThemePicker from "@/components/ThemePicker";
 import ResizablePanels from "@/components/ResizablePanels";
 import UndoButton from "@/components/UndoButton";
+import ResetButton from "@/components/ResetButton";
 
 export default function ChatPage() {
   const { state } = useResume();
@@ -48,6 +49,7 @@ export default function ChatPage() {
             <ModelSelector />
           </div>
           <UndoButton />
+            <ResetButton />
           {state.parsed && (
             <button
               type="button"

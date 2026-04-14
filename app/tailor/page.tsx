@@ -7,6 +7,7 @@ import TailorDiff from "@/components/TailorDiff";
 import ResumePreview from "@/components/ResumePreview";
 import DownloadButton from "@/components/DownloadButton";
 import UndoButton from "@/components/UndoButton";
+import ResetButton from "@/components/ResetButton";
 
 export default function TailorPage() {
   const { state, setState } = useResume();
@@ -54,6 +55,7 @@ export default function TailorPage() {
         </h1>
         <div className="flex items-center gap-2">
           <UndoButton />
+            <ResetButton />
           <DownloadButton />
         </div>
       </div>
