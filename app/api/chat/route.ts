@@ -14,7 +14,6 @@ export interface ChatRequest {
   resumeState: Partial<ParsedResume>;
   model: ModelId;
   mode: "build" | "customize";
-  /** Per-section undo history: maps section key → previous value before last change */
   sectionHistory?: Record<string, unknown>;
 }
 
@@ -26,69 +25,61 @@ export interface ChatResponse {
   sectionHistory?: Record<string, unknown>;
 }
 
-const SYSTEM_PROMPT = `You are a resume-building assistant for rawcv.com. Your ONLY job is to collect resume information from the user and return it as structured JSON.
+const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Collect resume information conversationally and return structured JSON.
 
-STRICT OUTPUT RULE: Every single response MUST be valid JSON in exactly this shape — no exceptions:
-{
-  "message": "<your conversational reply to the user>",
-  "resumeUpdate": <object with only the fields updated this turn, or null>,
-  "isComplete": <true only when user explicitly says they are done>
-}
+OUTPUT FORMAT — every response must be exactly this JSON shape:
+{"message":"<reply to user>","resumeUpdate":<partial resume object or null>,"isComplete":<boolean>}
 
-RESUME DATA SCHEMA (use these exact field names):
-- contact: { name, email, phone, location, linkedin, website }
-- summary: string
-- experience: [{ company, title, startDate, endDate, bullets: ["bullet 1", "bullet 2"] }]
-- education: [{ institution, degree, field, graduationYear }]
-- skills: ["skill1", "skill2"]
-- certifications: ["cert1"]
-- projects: [{ name, description, technologies: ["tech1"] }]
+RESUME SCHEMA:
+contact: {name,email,phone,location,linkedin,website}
+summary: string
+experience: [{company,title,startDate,endDate,bullets:["achievement 1","achievement 2"]}]
+education: [{institution,degree,field,graduationYear}]
+skills: ["skill1","skill2"]
+certifications: ["cert1"]
+projects: [{name,description,technologies:["tech1"]}]
 
-COLLECTION ORDER (ask one section at a time):
-1. Contact info (name, email — others optional)
-2. Professional summary (2–3 sentences)
-3. Work experience (most recent first; get company, title, dates, then 3–5 achievement bullets)
-4. Education
-5. Skills (comma-separated list)
-6. Ask if they want certifications or projects (optional)
-7. When done, set isComplete: true
+COLLECTION FLOW — follow this order strictly:
+Step 1: Ask for full name → extract to contact.name
+Step 2: Ask for email → extract to contact.email  
+Step 3: Ask for phone, location, LinkedIn (all optional, one question) → extract to contact
+Step 4: Ask for professional summary (2-3 sentences about their role/expertise)
+Step 5: Ask for most recent job — company, title, start/end dates, then 3-5 bullet points describing achievements
+Step 6: Ask if they have more jobs → repeat step 5 for each
+Step 7: Ask for education — institution, degree, field, graduation year
+Step 8: Ask for skills (comma-separated list)
+Step 9: Ask if they want to add certifications or projects (optional)
+Step 10: Confirm they are done → set isComplete:true
+
+CRITICAL RULES:
+- Look at COLLECTED SO FAR to know what step you are on — never re-ask for data already collected
+- resumeUpdate must contain ONLY the fields updated THIS turn
+- For experience/education/skills arrays, return the COMPLETE array (all previous items + new item)
+- Extract data from whatever the user writes — don't ask them to reformat
+- If user says "skip" or "no", move to next step
+- Set resumeUpdate to null if no new data was provided
+- isComplete only when user confirms they are finished`;
+
+const CUSTOMIZE_SYSTEM_PROMPT = `You are a resume editing assistant. Apply the user's requested changes and return structured JSON.
+
+OUTPUT FORMAT — every response must be exactly this JSON shape:
+{"message":"<reply>","resumeUpdate":<changed fields only, or null>,"undoSection":<section key or null>,"isComplete":<boolean>}
+
+RESUME SCHEMA:
+contact: {name,email,phone,location,linkedin,website}
+summary: string
+experience: [{company,title,startDate,endDate,bullets:["bullet"]}]
+education: [{institution,degree,field,graduationYear}]
+skills: ["skill1"]
+certifications: ["cert1"]
+projects: [{name,description,technologies:["tech1"]}]
 
 RULES:
-- resumeUpdate must contain ONLY the fields changed this turn
-- For arrays (experience, education, skills), ALWAYS return the COMPLETE updated array including previous items
-- Do NOT fabricate any information — only use what the user provides
-- If the user provides no resume data (e.g. greets you or asks a question), set resumeUpdate to null
-- Keep message friendly and brief — one question at a time`;
-
-const CUSTOMIZE_SYSTEM_PROMPT = `You are a resume editing assistant for rawcv.com. The user has a resume loaded and wants to make specific changes.
-
-STRICT OUTPUT RULE: Every single response MUST be valid JSON in exactly this shape — no exceptions:
-{
-  "message": "<your conversational reply>",
-  "resumeUpdate": <object with only the fields changed, or null if nothing changed>,
-  "undoSection": <"contact"|"summary"|"experience"|"education"|"skills"|"certifications"|"projects"|null>,
-  "isComplete": <true only when user says they are done>
-}
-
-RESUME DATA SCHEMA (use these exact field names):
-- contact: { name, email, phone, location, linkedin, website }
-- summary: string
-- experience: [{ company, title, startDate, endDate, bullets: ["bullet 1"] }]
-- education: [{ institution, degree, field, graduationYear }]
-- skills: ["skill1", "skill2"]
-- certifications: ["cert1"]
-- projects: [{ name, description, technologies: ["tech1"] }]
-
-EDITING RULES:
-- Apply EXACTLY what the user asks — do not add, remove, or change anything they did not mention
-- For arrays (experience, education, skills), return the COMPLETE updated array with the change applied
-- To add a bullet: copy all existing bullets and append the new one
-- To remove a bullet: copy all existing bullets and remove only the specified one
-- To edit a bullet: copy all existing bullets and replace only the specified one
-- Do NOT rewrite or "improve" content unless the user explicitly asks
-- If the user says "undo" or "revert", set undoSection to the relevant section key
-- Set resumeUpdate to null if the user's message requires no data change
-- Do NOT fabricate information`;
+- Apply EXACTLY what the user asks, nothing more
+- For arrays, return the COMPLETE updated array with only the requested change applied
+- undoSection: set to the section key if user says "undo"/"revert"/"go back"
+- resumeUpdate: null if no data changed
+- isComplete: true only when user says they are done`;
 
 
 interface CustomizeAIResponse {
@@ -122,28 +113,33 @@ export async function POST(req: NextRequest) {
 
   try {
     const provider = createProvider(chatModel);
-    const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : SYSTEM_PROMPT;
+    const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : BUILD_SYSTEM_PROMPT;
 
-    // Build a clear resume context block
-    const hasResume = Object.keys(resumeState ?? {}).length > 0;
-    const resumeContext = hasResume
-      ? `CURRENT RESUME STATE (JSON — edit this based on user instructions):\n${JSON.stringify(resumeState, null, 2)}`
-      : mode === "build"
-      ? "CURRENT RESUME STATE: empty — guide the user to build it from scratch."
-      : "CURRENT RESUME STATE: empty.";
+    // Show AI exactly what's been collected so far
+    const collected = resumeState ?? {};
+    const hasAnyData = Object.keys(collected).some(k => {
+      const v = (collected as Record<string, unknown>)[k];
+      return v && (typeof v === "string" ? v.trim() : Array.isArray(v) ? v.length > 0 : true);
+    });
 
-    // Last user message is the actual instruction; history provides context
-    const lastUserMsg = messages[messages.length - 1]?.content ?? "";
-    const historyLines = messages.slice(0, -1)
-      .map((m) => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
-      .join("\n");
+    const stateBlock = mode === "build"
+      ? `COLLECTED SO FAR:\n${hasAnyData ? JSON.stringify(collected, null, 2) : "(nothing yet — start from step 1)"}`
+      : `CURRENT RESUME:\n${JSON.stringify(collected, null, 2)}`;
+
+    // Keep only last 6 turns to avoid prompt bloat
+    const recentHistory = messages.slice(-7, -1);
+    const historyBlock = recentHistory.length > 0
+      ? `CONVERSATION:\n${recentHistory.map(m => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`).join("\n")}`
+      : "";
+
+    const lastMsg = messages[messages.length - 1]?.content ?? "";
 
     const prompt = [
-      resumeContext,
-      historyLines ? `\nCONVERSATION HISTORY:\n${historyLines}` : "",
-      `\nUSER: ${lastUserMsg}`,
-      "\nRespond with valid JSON only:",
-    ].filter(Boolean).join("\n");
+      stateBlock,
+      historyBlock,
+      `User: ${lastMsg}`,
+      "JSON response:",
+    ].filter(Boolean).join("\n\n");
 
     const raw = await provider.complete(prompt, systemPrompt);
 

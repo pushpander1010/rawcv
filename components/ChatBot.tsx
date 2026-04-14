@@ -99,11 +99,10 @@ export default function ChatBot({ mode = "build", onComplete, onEnd, hideModelSe
         }
 
         // Merge resume update into local state and sync to global context
-        if (chatData.resumeUpdate) {
+        if (chatData.resumeUpdate && Object.keys(chatData.resumeUpdate).length > 0) {
           pushUndo();
           const merged = mergeResumeUpdate(localResume, chatData.resumeUpdate);
           setLocalResume(merged);
-          // Always cast to full ParsedResume with safe defaults before setting global state
           setState((s) => ({ ...s, parsed: toFullResume(merged) }));
         }
 
