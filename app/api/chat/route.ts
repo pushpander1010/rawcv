@@ -82,8 +82,6 @@ RULES:
 - resumeUpdate: null if no data changed
 - isComplete: true only when user says they are done
 - After applying a change, check CURRENT RESUME for empty sections (no summary, no skills, no experience) and suggest filling them in — but only if the user's request is already handled`;
-- resumeUpdate: null if no data changed
-- isComplete: true only when user says they are done`;
 
 
 interface CustomizeAIResponse {
