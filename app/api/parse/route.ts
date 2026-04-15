@@ -51,6 +51,24 @@ function normalizeParsed(data: any): ParsedResume {
   };
 }
 
+/* ---------------- MAGIC BYTES ---------------- */
+const MAGIC: Record<string, number[][]> = {
+  pdf:  [[0x25, 0x50, 0x44, 0x46]],                          // %PDF
+  docx: [[0x50, 0x4B, 0x03, 0x04], [0x50, 0x4B, 0x05, 0x06]], // PK zip
+};
+
+function detectMime(buf: Buffer): "pdf" | "docx" | "txt" | null {
+  for (const [type, sigs] of Object.entries(MAGIC)) {
+    if (sigs.some(sig => sig.every((b, i) => buf[i] === b))) {
+      return type as "pdf" | "docx";
+    }
+  }
+  // Plain text: allow if mostly printable ASCII/UTF-8
+  const sample = buf.slice(0, 512);
+  const nonPrintable = Array.from(sample).filter(b => b < 9 || (b > 13 && b < 32)).length;
+  return nonPrintable / sample.length < 0.1 ? "txt" : null;
+}
+
 /* ---------------- PDF ---------------- */
 async function extractPdfText(buffer: Buffer): Promise<string> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -74,9 +92,13 @@ async function extractDocxText(buffer: Buffer): Promise<string> {
 /* ---------------- EXTRACT ---------------- */
 async function extractText(file: File): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
-  const name = file.name.toLowerCase();
-  if (name.endsWith(".pdf"))  return extractPdfText(buffer);
-  if (name.endsWith(".docx")) return extractDocxText(buffer);
+  const mime = detectMime(buffer);
+
+  if (!mime) {
+    throw new Error("Unsupported or binary file format.");
+  }
+  if (mime === "pdf")  return extractPdfText(buffer);
+  if (mime === "docx") return extractDocxText(buffer);
   return buffer.toString("utf-8");
 }
 
@@ -100,7 +122,6 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    void formData.get("model");
 
     if (!file) {
       return NextResponse.json({ error: "NO_FILE", message: "No file provided." }, { status: 400 });
@@ -146,7 +167,7 @@ export async function POST(req: NextRequest) {
       parsed = normalizeParsed({});
     }
 
-    return NextResponse.json({ success: true, parsed, raw: rawText });
+    return NextResponse.json({ success: true, parsed });
   } catch (err) {
     console.error("[parse] unexpected error:", err);
     return NextResponse.json(

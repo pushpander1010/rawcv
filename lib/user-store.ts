@@ -26,7 +26,7 @@ export interface CreditTransaction {
   createdAt: string;
 }
 
-const INITIAL_CREDITS = 20;
+export const INITIAL_CREDITS = 20;
 
 function normalizeEmail(email: string): string {
   return email.toLowerCase();
@@ -228,6 +228,19 @@ export async function getUserByPasswordResetToken(
 ): Promise<StoredUser | null> {
   const u = await prisma.user.findFirst({
     where: { passwordResetToken: token },
+  });
+  return u ? toStoredUser(u) : null;
+}
+
+/** Single atomic query: find user by token AND check expiry together */
+export async function getUserByValidResetToken(
+  token: string
+): Promise<StoredUser | null> {
+  const u = await prisma.user.findFirst({
+    where: {
+      passwordResetToken: token,
+      passwordResetExpiry: { gt: new Date() },
+    },
   });
   return u ? toStoredUser(u) : null;
 }

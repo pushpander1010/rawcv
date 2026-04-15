@@ -7,6 +7,9 @@ import { completeChat as complete } from "@/lib/ai-providers";
 import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseMessages } from "@/lib/api-guard";
 
+/** Server-side undo history — never sent to or trusted from the client */
+const sectionHistoryStore = new Map<string, Record<string, unknown>>();
+
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
@@ -133,7 +136,34 @@ export async function POST(req: NextRequest) {
   if (!messages) {
     return NextResponse.json({ error: "missing_fields", message: "messages array is required" }, { status: 400 });
   }
-  const { resumeState, mode = "build", sectionHistory = {} } = body;
+  const { mode = "build" } = body;
+
+  // Server-side section history — keyed by userId, never trusted from client
+  const sectionHistory: Record<string, unknown> = sectionHistoryStore.get(auth.userId) ?? {};
+
+  // Sanitize resumeState: only allow known schema keys, truncate strings
+  const ALLOWED_KEYS: Array<keyof ParsedResume> = ["contact", "summary", "experience", "education", "skills", "certifications", "projects"];
+  const MAX_STR = 500;
+  const rawState = body.resumeState ?? {};
+  const resumeState: Partial<ParsedResume> = {};
+  for (const key of ALLOWED_KEYS) {
+    const val = (rawState as Record<string, unknown>)[key];
+    if (val === undefined) continue;
+    if (typeof val === "string") {
+      (resumeState as Record<string, unknown>)[key] = val.slice(0, MAX_STR);
+    } else if (Array.isArray(val)) {
+      (resumeState as Record<string, unknown>)[key] = val.slice(0, 30).map(item =>
+        typeof item === "string" ? item.slice(0, MAX_STR) :
+        item && typeof item === "object" ? Object.fromEntries(
+          Object.entries(item as Record<string, unknown>).map(([k, v]) => [k, typeof v === "string" ? v.slice(0, MAX_STR) : v])
+        ) : item
+      );
+    } else if (val && typeof val === "object") {
+      (resumeState as Record<string, unknown>)[key] = Object.fromEntries(
+        Object.entries(val as Record<string, unknown>).map(([k, v]) => [k, typeof v === "string" ? v.slice(0, MAX_STR) : v])
+      );
+    }
+  }
   try {
     
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : BUILD_SYSTEM_PROMPT;
@@ -199,6 +229,9 @@ export async function POST(req: NextRequest) {
           }
         }
       }
+
+      // Persist updated history server-side
+      sectionHistoryStore.set(auth.userId, updatedHistory);
 
       return NextResponse.json({
         message: parsed.message ?? "Done! What else would you like to change?",

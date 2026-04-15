@@ -3,9 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
-import { getUserByEmail } from "./user-store";
-
-const INITIAL_CREDITS = 20;
+import { getUserByEmail, INITIAL_CREDITS } from "./user-store";
 
 export const authOptions: NextAuthOptions = {
   providers: [

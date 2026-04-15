@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { getUserByPasswordResetToken, updateUser, clearPasswordResetToken } from "@/lib/user-store";
-import { prisma } from "@/lib/prisma";
+import { getUserByValidResetToken, updateUser, clearPasswordResetToken } from "@/lib/user-store";
+import { rateLimit, getIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  const { allowed, retryAfter } = rateLimit(`reset-password:${getIp(req)}`, 5, 15 * 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "too_many_requests", message: "Too many attempts. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } }
+    );
+  }
+
   const { token, password } = await req.json();
 
   if (!token || !password || password.length < 8) {
@@ -13,15 +21,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const user = await getUserByPasswordResetToken(token);
+  // Single atomic query: validates token AND expiry together
+  const user = await getUserByValidResetToken(token);
   if (!user) {
     return NextResponse.json({ error: "invalid_token", message: "Invalid or expired reset link." }, { status: 400 });
-  }
-
-  // Check expiry
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
-  if (!dbUser?.passwordResetExpiry || dbUser.passwordResetExpiry < new Date()) {
-    return NextResponse.json({ error: "expired_token", message: "This reset link has expired. Please request a new one." }, { status: 400 });
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);

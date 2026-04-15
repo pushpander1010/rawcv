@@ -2,8 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { getUserByEmail, setPasswordResetToken } from "@/lib/user-store";
 import { sendPasswordResetEmail } from "@/lib/email";
+import { rateLimit, getIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  const { allowed, retryAfter } = rateLimit(`forgot-password:${getIp(req)}`, 3, 15 * 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "too_many_requests", message: "Too many attempts. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } }
+    );
+  }
+
   const { email } = await req.json();
 
   if (!email) {
@@ -30,7 +39,7 @@ export async function POST(req: NextRequest) {
     } catch (err) {
       console.error("[forgot-password] email send failed:", err);
       return NextResponse.json(
-        { message: "Reset email could not be sent. Please try again.", debug: String(err) },
+        { message: "Reset email could not be sent. Please try again." },
         { status: 500 }
       );
     }

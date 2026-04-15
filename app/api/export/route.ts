@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, ThemeId, TailorChange } from "@/types";
 import { applyChanges, renderThemeHtml } from "@/lib/theme-renderer";
+import { requireAuth } from "@/lib/api-guard";
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth();
+  if (auth instanceof NextResponse) return auth;
+
   let body: { parsed: ParsedResume; theme: ThemeId; changes?: TailorChange[] };
   try {
     body = await req.json();
