@@ -3,6 +3,9 @@ import type { ParsedResume, ThemeId, TailorChange } from "@/types";
 import { applyChanges, renderThemeHtml } from "@/lib/theme-renderer";
 import { requireAuth } from "@/lib/api-guard";
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   const auth = await requireAuth();
   if (auth instanceof NextResponse) return auth;
@@ -35,19 +38,34 @@ export async function POST(req: NextRequest) {
   // Generate PDF via puppeteer
   let pdfBuffer: Buffer;
   try {
-    const puppeteer = await import("puppeteer");
-    const browser = await puppeteer.default.launch({
-      headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-gpu",
-        "--disable-dev-shm-usage",
-        "--disable-extensions",
-        "--single-process",
-        "--font-render-hinting=none",
-      ],
-    });
+    let browser;
+    const isProduction = process.env.NODE_ENV === "production";
+    if (isProduction) {
+      const chromium = await import("@sparticuz/chromium-min");
+      const puppeteer = await import("puppeteer-core");
+      browser = await puppeteer.default.launch({
+        args: chromium.default.args,
+        defaultViewport: chromium.default.defaultViewport,
+        executablePath: await chromium.default.executablePath(
+          "https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar"
+        ),
+        headless: true,
+      });
+    } else {
+      const puppeteer = await import("puppeteer");
+      browser = await puppeteer.default.launch({
+        headless: true,
+        args: [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-gpu",
+          "--disable-dev-shm-usage",
+          "--disable-extensions",
+          "--single-process",
+          "--font-render-hinting=none",
+        ],
+      });
+    }
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
     await page.evaluateHandle("document.fonts.ready");

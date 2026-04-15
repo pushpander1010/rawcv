@@ -32,7 +32,7 @@ const nextConfig = {
     ];
   },
   experimental: {
-    serverComponentsExternalPackages: ["pdf-parse", "mammoth", "pdfjs-dist", "mupdf", "puppeteer", "puppeteer-core"],
+    serverComponentsExternalPackages: ["pdf-parse", "mammoth", "pdfjs-dist", "mupdf", "puppeteer", "puppeteer-core", "@sparticuz/chromium-min"],
   },
   webpack: (config, { isServer }) => {
     if (isServer) {

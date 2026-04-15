@@ -27,7 +27,7 @@ export default function DownloadButton() {
           openPrintWindow(json.fallbackHtml, safeName);
           return;
         }
-        throw new Error(json.message || "Failed to generate PDF");
+        throw new Error("PDF generation failed. Please try again.");
       }
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -37,7 +37,8 @@ export default function DownloadButton() {
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong");
+      console.error("Download failed:", e);
+      setError("Could not generate PDF. Please try again.");
     } finally {
       setLoading(false);
     }
