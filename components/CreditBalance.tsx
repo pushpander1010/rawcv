@@ -35,7 +35,7 @@ export default function CreditBalance() {
 
   return (
     <Link
-      href="/credits"
+      href="/dashboard?tab=credits"
       className="flex items-center gap-1.5 text-sm font-medium rounded-lg px-3 py-1.5 border transition-colors
         border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500
         text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"

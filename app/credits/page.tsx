@@ -11,7 +11,7 @@ const BUNDLES = [
   {
     id: "starter",
     name: "Starter Pack",
-    credits: 30,
+    credits: 50,
     priceInr: 99,
     description: "Great for a few analyses",
     highlight: false,
@@ -19,7 +19,7 @@ const BUNDLES = [
   {
     id: "pro",
     name: "Pro Pack",
-    credits: 200,
+    credits: 250,
     priceInr: 499,
     description: "Best value for active job seekers",
     highlight: true,
@@ -27,7 +27,7 @@ const BUNDLES = [
   {
     id: "power",
     name: "Power Pack",
-    credits: 350,
+    credits: 500,
     priceInr: 999,
     description: "For power users and career coaches",
     highlight: false,

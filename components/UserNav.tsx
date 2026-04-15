@@ -65,7 +65,7 @@ export default function UserNav() {
               )}
             </div>
             <Link
-              href="/credits"
+              href="/dashboard?tab=credits"
               onClick={() => setOpen(false)}
               className="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >

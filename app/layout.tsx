@@ -90,6 +90,9 @@ export default function RootLayout({
                       <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-gray-100">rawcv</span>
                     </Link>
                     <nav className="hidden sm:flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400" aria-label="Main navigation">
+                      <Link href="/dashboard" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+                        Dashboard
+                      </Link>
                       <Link href="/analyze" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                         Analyze
                       </Link>
