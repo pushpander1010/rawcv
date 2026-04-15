@@ -1,47 +1,37 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import { renderThemeHtml } from "@/lib/theme-renderer";
-import ResumePreview from "@/components/ResumePreview";
-
-function isMobile() {
-  return /Mobi|Android|iPhone|iPad|iPod/i.test(
-    typeof navigator !== "undefined" ? navigator.userAgent : ""
-  );
-}
 
 export default function DownloadButton() {
   const { state } = useResume();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const printRef = useRef<HTMLDivElement>(null);
 
-  async function handleMobileDownload() {
-    if (!state.parsed || !printRef.current) return;
+  async function handleApiDownload() {
+    if (!state.parsed) return;
     setLoading(true);
+    setError(null);
     try {
-      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
-        import("html2canvas"),
-        import("jspdf"),
-      ]);
-      const canvas = await html2canvas(printRef.current, {
-        scale: 2, useCORS: true, backgroundColor: "#ffffff", logging: false,
-      });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-      const imgH = (canvas.height * pageW) / canvas.width;
-      let yOffset = 0;
-      while (yOffset < imgH) {
-        if (yOffset > 0) pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, -yOffset, pageW, imgH);
-        yOffset += pageH;
-      }
       const safeName = (state.parsed.contact.name || "resume")
         .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-      pdf.save(`${safeName}-resume.pdf`);
+      const res = await fetch("/api/export", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ parsed: state.parsed, theme: state.selectedTheme }),
+      });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json.message || "Failed to generate PDF");
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${safeName}-resume.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
@@ -85,27 +75,11 @@ export default function DownloadButton() {
   }
 
   function handleDownload() {
-    if (isMobile()) {
-      handleMobileDownload();
-    } else {
-      handleDesktopDownload();
-    }
+    handleApiDownload();
   }
 
   return (
     <div>
-      {/* Hidden render target for mobile html2canvas */}
-      <div
-        style={{ position: "absolute", left: "-9999px", top: 0, width: "800px", background: "#fff" }}
-        aria-hidden="true"
-      >
-        <div ref={printRef}>
-          {state.parsed && (
-            <ResumePreview resume={state.parsed} theme={state.selectedTheme} bare />
-          )}
-        </div>
-      </div>
-
       <button
         type="button"
         onClick={handleDownload}
