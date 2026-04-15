@@ -12,7 +12,13 @@ export async function POST(req: NextRequest) {
 
   // Always return success to avoid email enumeration
   const user = await getUserByEmail(email);
-  // Allow reset for any registered user (verified or not — they may have lost access before verifying)
+  // Block password reset for unverified accounts
+  if (user && !user.emailVerified) {
+    return NextResponse.json(
+      { error: "email_not_verified", message: "Please verify your email address before resetting your password." },
+      { status: 403 }
+    );
+  }
   if (user) {
     const token = randomUUID();
     const expiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour

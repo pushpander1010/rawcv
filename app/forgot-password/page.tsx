@@ -8,10 +8,12 @@ export default function ForgotPasswordPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [unverified, setUnverified] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setUnverified(false);
     setLoading(true);
 
     const res = await fetch("/api/auth/forgot-password", {
@@ -24,7 +26,11 @@ export default function ForgotPasswordPage() {
 
     if (!res.ok) {
       const data = await res.json();
-      setError(data.message ?? "Something went wrong.");
+      if (data.error === "email_not_verified") {
+        setUnverified(true);
+      } else {
+        setError(data.message ?? "Something went wrong.");
+      }
       return;
     }
 
@@ -51,6 +57,20 @@ export default function ForgotPasswordPage() {
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
               Enter your email and we&apos;ll send you a reset link.
             </p>
+
+            {unverified && (
+              <div role="alert" className="mb-5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-300 dark:border-amber-700 px-5 py-4 text-sm">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl leading-none" aria-hidden="true">⚠️</span>
+                  <div>
+                    <p className="font-semibold text-amber-800 dark:text-amber-200 text-base">Verify your email first</p>
+                    <p className="mt-1 text-amber-700 dark:text-amber-300">
+                      Your account hasn&apos;t been verified yet. Please check your inbox for the verification email we sent when you signed up and click the link to activate your account. Password reset is only available after verification.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {error && (
               <div role="alert" className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">

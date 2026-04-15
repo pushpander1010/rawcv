@@ -81,11 +81,16 @@ export default function RegisterPage() {
         )}
 
         {success && (
-          <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
-            <p className="font-medium">{success}</p>
-            {success.toLowerCase().includes("email") && (
-              <p className="mt-1 text-green-600">Please verify your email before signing in.</p>
-            )}
+          <div role="alert" className="mb-6 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border-2 border-indigo-300 dark:border-indigo-700 px-5 py-4 text-sm">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl leading-none" aria-hidden="true">📧</span>
+              <div>
+                <p className="font-semibold text-indigo-800 dark:text-indigo-200 text-base">Verification email sent!</p>
+                <p className="mt-1 text-indigo-700 dark:text-indigo-300">
+                  We sent a verification link to <span className="font-medium">{email}</span>. Please check your inbox (and spam folder) and click the link to activate your account before signing in.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
