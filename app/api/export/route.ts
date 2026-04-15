@@ -42,30 +42,33 @@ export async function POST(req: NextRequest) {
         "--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-gpu",
-        "--font-render-hinting=none", // sharper font rendering
+        "--disable-dev-shm-usage",
+        "--disable-extensions",
+        "--single-process",
+        "--font-render-hinting=none",
       ],
     });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
-
-    // Ensure fonts are loaded before capturing
     await page.evaluateHandle("document.fonts.ready");
 
     pdfBuffer = Buffer.from(
       await page.pdf({
         format: "A4",
-        printBackground: true,    // needed for coloured sidebar themes
-        tagged: true,             // embeds structure tags → selectable text on mobile
+        printBackground: true,
+        tagged: true,
         margin: { top: "0", right: "0", bottom: "0", left: "0" },
         preferCSSPageSize: false,
-        scale: 0.98,              // slight scale-down reduces file size without visible quality loss
+        scale: 0.98,
       })
     );
     await browser.close();
   } catch (err) {
-    console.error("PDF generation failed:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("PDF generation failed:", message);
+    // Return the HTML so the client can fall back to print dialog
     return NextResponse.json(
-      { error: "export_failed", message: "Failed to generate PDF. Please try again." },
+      { error: "export_failed", message, fallbackHtml: html },
       { status: 500 }
     );
   }

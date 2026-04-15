@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
-import { renderThemeHtml } from "@/lib/theme-renderer";
 
 export default function DownloadButton() {
   const { state } = useResume();
@@ -23,6 +22,11 @@ export default function DownloadButton() {
       });
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
+        // Puppeteer unavailable — fall back to print dialog
+        if (json.fallbackHtml) {
+          openPrintWindow(json.fallbackHtml, safeName);
+          return;
+        }
         throw new Error(json.message || "Failed to generate PDF");
       }
       const blob = await res.blob();
@@ -39,39 +43,16 @@ export default function DownloadButton() {
     }
   }
 
-  function handleDesktopDownload() {
-    if (!state.parsed) return;
-    setError(null);
-    try {
-      const safeName = (state.parsed.contact.name || "resume")
-        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-      const html = renderThemeHtml(state.parsed, state.selectedTheme);
-      const printHtml = html.replace(
-        "</head>",
-        `<style>
-          @page { margin: 0; size: A4; }
-          body { margin: 0; }
-          @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
-        </style>
-        <script>
-          window.onload = function() {
-            document.title = "${safeName}-resume";
-            window.print();
-            window.onafterprint = function() { window.close(); };
-          };
-        </script>
-        </head>`
-      );
-      const win = window.open("", "_blank");
-      if (!win) {
-        setError("Pop-up blocked. Please allow pop-ups and try again.");
-        return;
-      }
-      win.document.write(printHtml);
-      win.document.close();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong");
-    }
+  function openPrintWindow(html: string, safeName: string) {
+    const printHtml = html.replace(
+      "</head>",
+      `<style>@page{margin:0;size:A4}body{margin:0}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>
+      <script>window.onload=function(){document.title="${safeName}-resume";window.print();window.onafterprint=function(){window.close()}};<\/script></head>`
+    );
+    const win = window.open("", "_blank");
+    if (!win) { setError("Pop-up blocked. Please allow pop-ups and try again."); return; }
+    win.document.write(printHtml);
+    win.document.close();
   }
 
   function handleDownload() {
