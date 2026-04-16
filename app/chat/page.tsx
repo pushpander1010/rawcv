@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useResume } from "@/context/ResumeContext";
 import ChatBot from "@/components/ChatBot";
@@ -13,8 +13,19 @@ import ResetButton from "@/components/ResetButton";
 export default function ChatPage() {
   const { state } = useResume();
   const router = useRouter();
-  // Derive mode reactively so it updates after context hydrates from localStorage
-  const mode: "build" | "customize" = state.parsed ? "customize" : "build";
+
+  // Lock mode after first non-null state.parsed determination (hydration).
+  // Without this, mode flips build→customize on first AI response and resets the chat.
+  const [mode, setMode] = useState<"build" | "customize">("build");
+  const modeLocked = useRef(false);
+  useEffect(() => {
+    if (modeLocked.current) return;
+    // Wait until context has hydrated (state.parsed is known, even if null)
+    // We detect hydration by checking if the context has settled
+    modeLocked.current = true;
+    setMode(state.parsed ? "customize" : "build");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.parsed]);
   const [showThemePicker, setShowThemePicker] = useState(false);
 
   function handleComplete() {

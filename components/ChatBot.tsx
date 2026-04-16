@@ -45,23 +45,23 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   // Always seed localResume from existing state — so chat knows what's already filled
   const existingResume = state.parsed ?? null;
 
-  function buildWelcome(): string {
-    if (!existingResume) {
+  function buildWelcome(parsed: typeof existingResume = existingResume): string {
+    if (!parsed) {
       return "Hi! I'm your resume assistant. Let's build your resume together. To get started, what's your full name?";
     }
 
     const filled: string[] = [];
     const missing: string[] = [];
 
-    if (existingResume.contact?.name) filled.push("name"); else missing.push("name");
-    if (existingResume.contact?.email) filled.push("email"); else missing.push("email");
-    if (existingResume.summary) filled.push("summary"); else missing.push("summary");
-    if (existingResume.experience?.length) filled.push(`${existingResume.experience.length} job${existingResume.experience.length > 1 ? "s" : ""}`); else missing.push("work experience");
-    if (existingResume.education?.length) filled.push("education"); else missing.push("education");
-    if (existingResume.skills?.length) filled.push("skills"); else missing.push("skills");
+    if (parsed.contact?.name) filled.push("name"); else missing.push("name");
+    if (parsed.contact?.email) filled.push("email"); else missing.push("email");
+    if (parsed.summary) filled.push("summary"); else missing.push("summary");
+    if (parsed.experience?.length) filled.push(`${parsed.experience.length} job${parsed.experience.length > 1 ? "s" : ""}`); else missing.push("work experience");
+    if (parsed.education?.length) filled.push("education"); else missing.push("education");
+    if (parsed.skills?.length) filled.push("skills"); else missing.push("skills");
 
     if (mode === "customize") {
-      return `Hi! I can see your resume for ${existingResume.contact?.name || "you"} is loaded with ${filled.join(", ")}. What would you like to change or improve?`;
+      return `Hi! I can see your resume for ${parsed.contact?.name || "you"} is loaded with ${filled.join(", ")}. What would you like to change or improve?`;
     }
 
     if (missing.length === 0) {
@@ -78,12 +78,12 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     }`;
   }
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "assistant", content: buildWelcome() },
-  ]);
+  // Start with empty — will be populated after hydration to avoid stale welcome message
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const chatHydrated = useRef<string | null>(null);
 
-  // Rehydrate chat messages from localStorage once userId is known
+  // Rehydrate chat messages from localStorage once userId is known.
+  // If nothing saved, generate the welcome message AFTER state.parsed is known.
   useEffect(() => {
     if (!userId) return;
     const key = `${mode}_${userId}`;
@@ -92,12 +92,24 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     const saved = loadChatMessages(userId, mode);
     if (saved && saved.length > 0) {
       setMessages(saved);
+    } else {
+      // Generate welcome now — state.parsed may already be hydrated from context
+      setMessages([{ role: "assistant", content: buildWelcome(state.parsed) }]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, mode]);
+
+  // If session takes a moment and we still have no messages, set welcome once state is ready
+  useEffect(() => {
+    if (chatHydrated.current && messages.length === 0) {
+      setMessages([{ role: "assistant", content: buildWelcome(state.parsed) }]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.parsed]);
 
   // Persist messages whenever they change (only for logged-in users)
   useEffect(() => {
-    if (!userId || !chatHydrated.current) return;
+    if (!userId || !chatHydrated.current || messages.length === 0) return;
     saveChatMessages(messages, userId, mode);
   }, [messages, userId, mode]);
   const [input, setInput] = useState("");
