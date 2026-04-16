@@ -36,7 +36,7 @@ STRICT OUTPUT RULE — respond with ONLY this JSON, nothing else:
 {"message":"<your message ending with a question>","resumeUpdate":<object or null>,"isComplete":<boolean>}
 
 THE SINGLE MOST IMPORTANT RULE:
-Every "message" value MUST end with a question mark. No exceptions. If your message does not end with "?", rewrite it until it does.
+Every "message" value MUST end with a question mark. No exceptions.
 
 RESUME FIELDS:
 contact: {name, email, phone, location, linkedin, website}
@@ -47,28 +47,34 @@ skills: ["skill1","skill2"]
 certifications: ["cert1"]
 projects: [{name, description, technologies:["tech1"]}]
 
-CONVERSATION FLOW — collect in this order, skip already-collected fields:
+CONVERSATION FLOW — collect in this order, skip already-collected fields shown in COLLECTED SO FAR:
 1. name → 2. email → 3. phone + city + linkedin (together, all optional) → 4. summary → 5. work experience (loop until done) → 6. education → 7. skills → 8. certifications (skip if none) → 9. projects (skip if none) → 10. confirmation
 
-RULES:
+CRITICAL RULES:
+- If a section already appears in COLLECTED SO FAR, it is DONE — never ask about it again, move to the next missing section
 - Acknowledge the answer in ≤5 words, then immediately ask the next question — in the SAME message
 - resumeUpdate: include only fields changed this turn. null if nothing was collected
 - For arrays always return the COMPLETE updated array
 - isComplete: true only after step 10 confirmation
-- Never ask for something already in COLLECTED SO FAR
+
+GENERATION RULE — when user says "yes", "sure", "make them up", "generate", "suggest", or similar vague confirmations:
+- Look at COLLECTED SO FAR (experience, summary, education) to infer appropriate content
+- Generate realistic, ATS-friendly data for the missing section yourself
+- Put the generated data in resumeUpdate — do NOT ask again
+- Example: if skills is missing and user says "yes" or "make them up", generate 6-8 relevant skills from their experience and put them in resumeUpdate.skills
 
 EXAMPLES:
 Input: "Pushpa"
 Output: {"message":"Got it! What is your email address?","resumeUpdate":{"contact":{"name":"Pushpa"}},"isComplete":false}
 
-Input: "pushpa@gmail.com"
-Output: {"message":"Perfect! What is your phone number, city, and LinkedIn URL? (all optional, skip any)","resumeUpdate":{"contact":{"email":"pushpa@gmail.com"}},"isComplete":false}
+Input: "yes" (when asked about skills, and experience shows data science work)
+Output: {"message":"Added relevant skills based on your experience! Do you have any certifications like AWS, PMP, or Google certs?","resumeUpdate":{"skills":["Python","Machine Learning","SQL","Data Analysis","TensorFlow","Pandas","Statistical Modeling","Data Visualization"]},"isComplete":false}
+
+Input: "make them up as per rest of resume" (when asked about skills)
+Output: {"message":"Done, added skills matching your background! Do you have any certifications to add?","resumeUpdate":{"skills":["Python","Machine Learning","SQL","Data Analysis","TensorFlow","Pandas"]},"isComplete":false}
 
 Input: "skip"
-Output: {"message":"No problem! In 2-3 sentences, how would you describe your professional background?","resumeUpdate":null,"isComplete":false}
-
-Input: "I worked at Google as SWE from 2020 to 2023"
-Output: {"message":"Great! What were 2-3 key achievements or responsibilities at Google?","resumeUpdate":{"experience":[{"company":"Google","title":"Software Engineer","startDate":"2020","endDate":"2023","bullets":[]}]},"isComplete":false}`;
+Output: {"message":"No problem! In 2-3 sentences, how would you describe your professional background?","resumeUpdate":null,"isComplete":false}`;
 
 const CUSTOMIZE_SYSTEM_PROMPT = `You are an expert resume coach helping the user improve their existing resume through conversation.
 
@@ -182,8 +188,8 @@ export async function POST(req: NextRequest) {
       ? `COLLECTED SO FAR:\n${hasAnyData ? JSON.stringify(collected, null, 2) : "(nothing yet)"}\n\n${missingBlock}`
       : `CURRENT RESUME:\n${JSON.stringify(collected, null, 2)}\n\n${missingBlock}`;
 
-    // Keep only last 6 turns to avoid prompt bloat
-    const recentHistory = messages.slice(-7, -1);
+    // Keep only last 12 turns to give AI enough context to avoid repeating questions
+    const recentHistory = messages.slice(-13, -1);
     const historyBlock = recentHistory.length > 0
       ? `CONVERSATION:\n${recentHistory.map(m => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`).join("\n")}`
       : "";
