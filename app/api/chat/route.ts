@@ -53,7 +53,7 @@ interface BuildAIResponse {
 const BUILD_STEPS = [
   "name",
   "email",
-  "phone_location_linkedin",
+  "phone_location_linkedin_otherlinks",
   "summary",
   "experience",
   "education",
@@ -69,6 +69,21 @@ function getStepName(index: number): BuildStep {
   return BUILD_STEPS[Math.min(index, BUILD_STEPS.length - 1)];
 }
 
+// ─── Derive the furthest completed step from existing resume data ──────────────
+// Used on first turn so the AI skips sections that are already filled.
+function deriveStepFromResume(r: Partial<ParsedResume>): number {
+  if (!r.contact?.name) return 0;
+  if (!r.contact?.email) return 1;
+  if (!r.contact?.phone && !r.contact?.location && !r.contact?.linkedin) return 2;
+  if (!r.summary) return 3;
+  if (!r.experience?.length) return 4;
+  if (!r.education?.length) return 5;
+  if (!r.skills?.length) return 6;
+  if (!r.certifications?.length) return 7;
+  if (!r.projects?.length) return 8;
+  return 9; // everything filled — go straight to confirmation
+}
+
 // ─── System prompts ────────────────────────────────────────────────────────────
 const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Interview the user to collect their resume data through conversation. Be concise and efficient — ask only what's needed, batch related fields together.
 
@@ -77,7 +92,7 @@ STRICT OUTPUT RULE — respond with ONLY valid JSON, no markdown, no extra text:
 
 RESUME FIELDS:
 contact: {name, email, phone, location, linkedin, website}
-summary: "2-3 sentence professional summary"
+summary: "3-4 sentence professional summary"
 experience: [{company, title, startDate, endDate, bullets:["achievement 1","achievement 2"]}]
 education: [{institution, degree, field, graduationYear}]
 skills: ["skill1","skill2"]
@@ -87,7 +102,7 @@ projects: [{name, description, technologies:["tech1"]}]
 STEP DEFINITIONS (advance nextStep after collecting each):
 0 = name
 1 = email
-2 = phone + location + linkedin (ask all together in one message)
+2 = phone + location + linkedin + other links (ask all together in one message)
 3 = summary
 4 = work experience (ask all jobs until user says done)
 5 = education
@@ -147,9 +162,14 @@ function getMissingSections(r: Partial<ParsedResume>): string[] {
   const missing: string[] = [];
   if (!r.contact?.name) missing.push("contact name");
   if (!r.contact?.email) missing.push("email");
+  if (!r.contact?.phone) missing.push("phone");
+  if (!r.contact?.linkedin) missing.push("linkedin");
+  if (!r.contact?.website) missing.push("other links");
   if (!r.summary) missing.push("professional summary");
   if (!r.experience?.length) missing.push("work experience");
   if (!r.education?.length) missing.push("education");
+  if (!r.certifications?.length) missing.push("certifications");
+  if (!r.projects?.length) missing.push("projects");
   if (!r.skills?.length) missing.push("skills");
   return missing;
 }
@@ -214,7 +234,13 @@ export async function POST(req: NextRequest) {
 
   // Server-side stores
   const sectionHistory: Record<string, unknown> = sectionHistoryStore.get(auth.userId) ?? {};
-  const currentStep = buildStepStore.get(auth.userId) ?? 0;
+
+  // ── FIX: On the very first turn (no stored step yet), derive the starting step
+  // from whatever is already in resumeState (e.g. a pre-parsed/uploaded resume).
+  // On subsequent turns, use the persisted step as before.
+  const isFirstTurn = !buildStepStore.has(auth.userId);
+  const storedStep = buildStepStore.get(auth.userId) ?? 0;
+  const currentStep = isFirstTurn ? deriveStepFromResume(resumeState) : storedStep;
 
   try {
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : BUILD_SYSTEM_PROMPT;
@@ -230,14 +256,19 @@ export async function POST(req: NextRequest) {
           `CURRENT RESUME STATE:\n${Object.keys(resumeState).length > 0 ? JSON.stringify(resumeState, null, 2) : "(empty)"}`,
           `CURRENT STEP: ${currentStep} (${getStepName(currentStep)})`,
           missingBlock,
-        ].join("\n\n")
+          // ── FIX: On first message, tell the AI to greet the user and acknowledge
+          // whatever is already filled before asking about the current step.
+          isFirstTurn
+            ? "NOTE: This is the opening message. Greet the user, briefly acknowledge what sections are already filled (if any), and then ask only about the CURRENT STEP."
+            : "",
+        ].filter(Boolean).join("\n\n")
       : [
           `CURRENT RESUME:\n${JSON.stringify(resumeState, null, 2)}`,
           missingBlock,
         ].join("\n\n");
 
-    // ✅ FIX: Include ALL messages as history (not sliced with a bug), keep last 20 turns
-    const historyMessages = messages.slice(-21, -1); // last 20 exchanges, exclude the current message
+    // Include last 20 turns of history, exclude the current message
+    const historyMessages = messages.slice(-21, -1);
     const historyBlock = historyMessages.length > 0
       ? `CONVERSATION HISTORY:\n${historyMessages
           .map(m => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
@@ -301,9 +332,9 @@ export async function POST(req: NextRequest) {
       parsed.resumeUpdate = null;
     }
 
-    // ✅ FIX: Persist the step the AI says to advance to
+    // Persist the step the AI says to advance to; never go backwards
     const nextStep = typeof parsed.nextStep === "number"
-      ? Math.max(currentStep, parsed.nextStep) // never go backwards
+      ? Math.max(currentStep, parsed.nextStep)
       : currentStep;
 
     buildStepStore.set(auth.userId, nextStep);
