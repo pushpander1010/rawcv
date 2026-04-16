@@ -55,14 +55,15 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     if (initialised.current) return;
     initialised.current = true;
 
-    if (state.parsed) {
-      setLocalResume(state.parsed);
+    const resumeSnapshot = state.parsed;
+    if (resumeSnapshot) {
+      setLocalResume(resumeSnapshot);
     }
 
     // Always start fresh chat — greet based on persisted resume state
-    triggerGreeting(state.parsed);
+    triggerGreeting(resumeSnapshot);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHydrated, state.parsed]);
+  }, [isHydrated]); // intentionally exclude state.parsed — snapshot is taken once on hydration
 
   // Sync localResume if context updates externally (e.g. undo)
   useEffect(() => {
