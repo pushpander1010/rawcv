@@ -239,6 +239,41 @@ function renderTerra(r: ParsedResume): string {
     </div>`;
 }
 
+function renderEnhancv(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  const initials = contact.name ? contact.name.split(" ").map((w:string)=>w[0]).slice(0,2).join("").toUpperCase() : "?";
+  const accent = "#008cff";
+  const sectionHead = (title: string) => `<div style="font-family:sans-serif;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;color:#000;border-bottom:2.5px solid #000;padding-bottom:3px;margin-bottom:10px;">${esc(title)}</div>`;
+  return `<div style="font-family:Inter,Arial,Helvetica,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.5;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:24px 32px 16px;border-bottom:1px solid #e5e7eb;">
+      <div>
+        <div style="font-family:sans-serif;font-weight:600;font-size:28px;text-transform:uppercase;letter-spacing:1px;line-height:1;color:#000;margin-bottom:4px;">${esc(contact.name)}</div>
+        ${experience[0]?.title?`<div style="color:${accent};font-size:14px;margin-bottom:8px;">${esc(experience[0].title)}</div>`:""}
+        <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#444;">
+          ${contact.phone?`<span>☎ ${esc(contact.phone)}</span>`:""}
+          ${contact.email?`<span>✉ ${esc(contact.email)}</span>`:""}
+          ${contact.location?`<span>⌖ ${esc(contact.location)}</span>`:""}
+          ${contact.linkedin?`<span>in ${esc(contact.linkedin)}</span>`:""}
+          ${contact.website?`<span>🔗 ${esc(contact.website)}</span>`:""}
+        </div>
+      </div>
+      <div style="width:72px;height:72px;border-radius:50%;background:${accent};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0;">${initials}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 38%;gap:0;">
+      <div style="padding:20px 20px 24px 32px;border-right:1px solid #e5e7eb;">
+        ${summary?`<section style="margin-bottom:18px;">${sectionHead("Summary")}<p style="color:#444;line-height:1.6;">${esc(summary)}</p></section>`:""}
+        ${experience.length?`<section style="margin-bottom:18px;">${sectionHead("Experience")}${experience.map(j=>`<div style="margin-bottom:14px;"><div style="font-weight:600;font-size:14px;">${esc(j.title)}</div><div style="color:${accent};font-size:12px;margin-bottom:2px;">${esc(j.company)}</div><div style="font-size:11px;color:#888;margin-bottom:5px;">${esc(j.startDate)} – ${esc(j.endDate)}</div><ul style="margin:0;padding:0;list-style:none;">${j.bullets.map(b=>`<li style="display:flex;gap:6px;margin-bottom:2px;color:#444;"><span style="color:${accent};flex-shrink:0;">•</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>`:""}
+        ${education.length?`<section>${sectionHead("Education")}${education.map(e=>`<div style="margin-bottom:10px;"><div style="font-weight:600;font-size:14px;">${esc(e.degree)}${e.field?` — ${esc(e.field)}`:""}</div><div style="color:${accent};font-size:12px;">${esc(e.institution)}</div><div style="font-size:11px;color:#888;">${esc(e.graduationYear)}</div></div>`).join("")}</section>`:""}
+      </div>
+      <div style="padding:20px 24px 24px 16px;">
+        ${skills.length?`<section style="margin-bottom:18px;">${sectionHead("Skills")}<div style="display:flex;flex-wrap:wrap;gap:6px;">${skills.map(s=>`<span style="background:#f0f7ff;color:#1a6abf;font-size:11px;padding:3px 10px;border-radius:4px;border:1px solid #cce0ff;">${esc(s)}</span>`).join("")}</div></section>`:""}
+        ${projects?.length?`<section style="margin-bottom:18px;">${sectionHead("Projects")}${projects.map(p=>`<div style="margin-bottom:10px;"><div style="font-weight:600;font-size:13px;">${esc(p.name)}</div><p style="font-size:11px;color:#555;margin:2px 0 4px;">${esc(p.description)}</p><div style="display:flex;flex-wrap:wrap;gap:4px;">${p.technologies.map(t=>`<span style="font-size:10px;color:${accent};background:#f0f7ff;padding:1px 6px;border-radius:3px;">${esc(t)}</span>`).join("")}</div></div>`).join("")}</section>`:""}
+        ${certifications?.length?`<section>${sectionHead("Certifications")}<ul style="margin:0;padding:0;list-style:none;">${certifications.map(c=>`<li style="font-size:12px;color:#444;margin-bottom:4px;display:flex;gap:6px;"><span style="color:${accent};">•</span>${esc(c)}</li>`).join("")}</ul></section>`:""}
+      </div>
+    </div>
+  </div>`;
+}
+
 const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
   classic: renderClassic,
   modern: renderModern,
@@ -248,6 +283,7 @@ const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
   sharp: renderSharp,
   navy: renderNavy,
   terra: renderTerra,
+  enhancv: renderEnhancv,
 };
 
 /** Sanitise a resume so theme renderers never receive undefined arrays */
