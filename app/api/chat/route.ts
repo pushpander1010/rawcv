@@ -24,6 +24,7 @@ export interface ChatRequest {
   messages: ChatMessage[];
   resumeState: Partial<ParsedResume>;
   mode: "build" | "customize";
+  isGreeting?: boolean;
 }
 
 export interface ChatResponse {
@@ -85,7 +86,7 @@ function deriveStepFromResume(r: Partial<ParsedResume>): number {
 }
 
 // ─── System prompts ────────────────────────────────────────────────────────────
-const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Interview the user to collect their resume data through conversation. Be concise and efficient — ask only what's needed, batch related fields together.
+const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Your job is to INTERVIEW the user — always ask questions, never make statements without a follow-up question. You are a detective gathering information.
 
 STRICT OUTPUT RULE — respond with ONLY valid JSON, no markdown, no extra text:
 {"message":"<your message>","resumeUpdate":<object or null>,"isComplete":<boolean>,"nextStep":<number>}
@@ -99,38 +100,42 @@ skills: ["skill1","skill2"]
 certifications: ["cert1"]
 projects: [{name, description, technologies:["tech1"]}]
 
-STEP DEFINITIONS (advance nextStep after collecting each):
+STEP ORDER (strict — never skip forward, never go back):
 0 = name
 1 = email
-2 = phone + location + linkedin + other links (ask all together in one message)
+2 = phone + location + linkedin + other links (ask all together)
 3 = summary
-4 = work experience (ask all jobs until user says done)
+4 = work experience (collect all jobs; ask "Any other positions? Or type 'done'" after each)
 5 = education
 6 = skills
-7 = certifications (ask once; if none, skip to 8)
-8 = projects (ask once; if none, skip to 9)
-9 = confirmation — show summary and ask "Does everything look correct?"
-DONE = isComplete: true (after user confirms at step 9)
+7 = certifications (optional; if none, skip to 8)
+8 = projects (optional; if none, skip to 9)
+9 = confirmation — show a brief summary and ask "Does everything look correct?"
+DONE = isComplete: true (only after user confirms at step 9)
 
-CURRENT STEP is provided in the prompt. Only ask about the CURRENT STEP. Never ask about already-collected data.
+INTERROGATION RULES (CRITICAL):
+1. ALWAYS end your message with a question mark "?" — no exceptions unless isComplete is true
+2. If the user gives a vague or incomplete answer, cross-question them before moving on:
+   - Vague job title → "What exactly did you do as [title]? Can you give me 2-3 key achievements?"
+   - No dates → "When did you start and end at [company]?"
+   - Short summary → "That's a start — can you tell me more about your specialisation or key strengths?"
+   - Missing location → "Where are you based?"
+3. Only advance to the next step when you have COMPLETE data for the current step
+4. Never ask about a section that already has data in CURRENT RESUME STATE
+5. Never ask two different sections in the same message — focus on ONE step at a time
+6. After collecting each section, acknowledge briefly (≤5 words) then immediately ask the next question
+7. resumeUpdate: include ONLY fields changed this turn. null if nothing changed
+8. isComplete: true ONLY when user confirms at step 9
+9. If user says "skip", "none", or "no" for optional sections (certifications/projects), advance and ask next
+10. If user says "generate"/"make them up"/"suggest" — generate realistic data from context, include in resumeUpdate, advance step
 
-CRITICAL RULES:
-1. Advance nextStep by 1 after successfully collecting a section
-2. If user says "skip", "none", or "no" for an optional section (certifications/projects), advance nextStep and move on
-3. If user says "generate", "make them up", "suggest", or similar — generate realistic data from their experience context and include in resumeUpdate, then advance nextStep
-4. For experience: after each job, ask "Any other positions? Or type 'done' to continue" — only advance to step 5 when they say done
-5. resumeUpdate: include ONLY fields changed this turn. null if nothing changed
-6. isComplete: true ONLY when user confirms at step 9
-7. Always acknowledge in ≤5 words before asking the next question
-8. The message MUST end with a "?" unless isComplete is true
-9. Never repeat a question for a section that already has data in CURRENT RESUME STATE
+GREETING RULE (isGreeting=true):
+- Greet the user warmly
+- If resume has data: acknowledge what's already filled and ask about the CURRENT STEP
+- If resume is empty: introduce yourself and ask for their full name
+- Always end with a question`;
 
-GENERATION EXAMPLES:
-- "make them up" for skills → generate 6-8 skills based on their experience
-- "generate" for summary → write a professional 2-3 sentence summary based on their experience and background
-- "yes" when asked about certifications → if they said yes but gave no data, ask which ones; if context suggests they want auto-generation, generate relevant ones`;
-
-const CUSTOMIZE_SYSTEM_PROMPT = `You are an expert resume coach helping the user improve their existing resume through conversation.
+const CUSTOMIZE_SYSTEM_PROMPT = `You are an expert resume coach helping the user improve their existing resume through conversation. You ALWAYS ask a follow-up question after every response.
 
 OUTPUT FORMAT — every response must be exactly this JSON shape, no exceptions:
 {"message":"<your reply>","resumeUpdate":<changed fields only, or null>,"undoSection":<section key or null>,"isComplete":<boolean>}
@@ -152,10 +157,12 @@ EDITING RULES:
 - resumeUpdate: null if no data changed
 - isComplete: true only when user explicitly says they are done
 
-PROACTIVE COACHING — after every change:
-- Check MISSING SECTIONS in the prompt
-- If sections are missing, end your message with a suggestion and specific question for the next missing section
-- Never leave the user without clear guidance on what to add next`;
+INTERROGATION RULES:
+1. ALWAYS end your message with a question — never leave the user without clear next action
+2. If the user's request is vague, ask for clarification before making changes
+3. After every change, check MISSING SECTIONS and ask about the most important missing one
+4. Cross-question weak content: "That bullet point is quite generic — can you add a specific metric or outcome?"`;
+
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 function getMissingSections(r: Partial<ParsedResume>): string[] {
@@ -231,16 +238,20 @@ export async function POST(req: NextRequest) {
 
   const { mode = "build" } = body;
   const resumeState = sanitizeResumeState((body.resumeState ?? {}) as Record<string, unknown>);
+  const isGreeting = body.isGreeting === true;
 
   // Server-side stores
   const sectionHistory: Record<string, unknown> = sectionHistoryStore.get(auth.userId) ?? {};
 
-  // ── FIX: On the very first turn (no stored step yet), derive the starting step
-  // from whatever is already in resumeState (e.g. a pre-parsed/uploaded resume).
-  // On subsequent turns, use the persisted step as before.
-  const isFirstTurn = !buildStepStore.has(auth.userId);
+  // On greeting or first turn, reset the step store so it re-derives from resume state
+  const isFirstTurn = isGreeting || !buildStepStore.has(auth.userId);
   const storedStep = buildStepStore.get(auth.userId) ?? 0;
   const currentStep = isFirstTurn ? deriveStepFromResume(resumeState) : storedStep;
+
+  // If this is a greeting reset, clear the step store so next real turn starts fresh
+  if (isGreeting) {
+    buildStepStore.delete(auth.userId);
+  }
 
   try {
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : BUILD_SYSTEM_PROMPT;
@@ -256,16 +267,15 @@ export async function POST(req: NextRequest) {
           `CURRENT RESUME STATE:\n${Object.keys(resumeState).length > 0 ? JSON.stringify(resumeState, null, 2) : "(empty)"}`,
           `CURRENT STEP: ${currentStep} (${getStepName(currentStep)})`,
           missingBlock,
-          // ── FIX: On first message, tell the AI to greet the user and acknowledge
-          // whatever is already filled before asking about the current step.
           isFirstTurn
-            ? "NOTE: This is the opening message. Greet the user, briefly acknowledge what sections are already filled (if any), and then ask only about the CURRENT STEP."
+            ? `NOTE: ${isGreeting ? "isGreeting=true. " : ""}Greet the user, briefly acknowledge what sections are already filled (if any), and then ask only about the CURRENT STEP.`
             : "",
         ].filter(Boolean).join("\n\n")
       : [
           `CURRENT RESUME:\n${JSON.stringify(resumeState, null, 2)}`,
           missingBlock,
-        ].join("\n\n");
+          isGreeting ? "NOTE: isGreeting=true. Greet the user and ask what they would like to improve." : "",
+        ].filter(Boolean).join("\n\n");
 
     // Include last 20 turns of history, exclude the current message
     const historyMessages = messages.slice(-21, -1);
@@ -333,11 +343,14 @@ export async function POST(req: NextRequest) {
     }
 
     // Persist the step the AI says to advance to; never go backwards
+    // Don't persist step on greeting — let the next real turn set it
     const nextStep = typeof parsed.nextStep === "number"
       ? Math.max(currentStep, parsed.nextStep)
       : currentStep;
 
-    buildStepStore.set(auth.userId, nextStep);
+    if (!isGreeting) {
+      buildStepStore.set(auth.userId, nextStep);
+    }
 
     return NextResponse.json({
       message: parsed.message ?? "Got it! What's next?",
@@ -357,4 +370,15 @@ export async function POST(req: NextRequest) {
       { status: 502 }
     );
   }
+}
+
+// ─── Reset server-side state (called when user clicks Reset) ──────────────────
+export async function DELETE() {
+  const auth = await requireAuth();
+  if (auth instanceof NextResponse) return auth;
+
+  buildStepStore.delete(auth.userId);
+  sectionHistoryStore.delete(auth.userId);
+
+  return NextResponse.json({ ok: true });
 }

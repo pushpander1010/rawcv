@@ -10,6 +10,7 @@ import type {
   TailoredResume,
   ThemeId,
 } from "@/types";
+import type { ChatMessage } from "@/app/api/chat/route";
 
 export interface ResumeState {
   raw: string;
@@ -23,6 +24,7 @@ export interface ResumeState {
   jd: string;
   lastOperationCost: number | null;
   creditBalance: number | null;
+  chatResetSignal: number; // increments on reset so ChatBot can react
 }
 
 interface ResumeContextValue {
@@ -33,6 +35,10 @@ interface ResumeContextValue {
   canUndo: boolean;
   reset: () => void;
   refreshCredits: () => void;
+  // Chat message persistence
+  loadChatMessages: (mode: string) => ChatMessage[];
+  saveChatMessages: (mode: string, messages: ChatMessage[]) => void;
+  clearChatMessages: (mode?: string) => void;
 }
 
 const defaultState: ResumeState = {
@@ -47,12 +53,17 @@ const defaultState: ResumeState = {
   jd: "",
   lastOperationCost: null,
   creditBalance: null,
+  chatResetSignal: 0,
 };
 
 const MAX_UNDO = 20;
 
 function storageKey(userId: string | undefined) {
   return userId ? `rawcv_resume_state_${userId}` : null;
+}
+
+function chatStorageKey(userId: string | undefined, mode: string) {
+  return userId ? `rawcv_chat_${mode}_${userId}` : null;
 }
 
 // Fields we want to persist (skip transient UI/credit fields)
@@ -94,16 +105,15 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
   const userId = (session?.user as { id?: string } | undefined)?.id;
 
   const [state, setStateRaw] = useState<ResumeState>(defaultState);
-  const hydrated = useRef<string | null>(null); // tracks which userId we've hydrated for
+  const hydrated = useRef<string | null>(null);
 
   // Rehydrate from localStorage when userId is known (or changes)
   useEffect(() => {
-    if (status === "loading") return; // wait until session is resolved
+    if (status === "loading") return;
     const key = userId ?? "__guest__";
     if (hydrated.current === key) return;
     hydrated.current = key;
 
-    // Clear state first so previous user's data doesn't flash
     setStateRaw(defaultState);
 
     if (userId) {
@@ -114,20 +124,20 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     }
   }, [userId, status]);
 
-  // Persist to localStorage whenever relevant state changes (only for logged-in users)
+  // Persist to localStorage whenever relevant state changes
   useEffect(() => {
     if (!hydrated.current || !userId) return;
     persistState(state, userId);
   }, [state, userId]);
 
-  // Wrap setState so persistence fires through the same path
   const setState: React.Dispatch<React.SetStateAction<ResumeState>> = useCallback((action) => {
     setStateRaw((prev) => {
       const next = typeof action === "function" ? action(prev) : action;
       return next;
     });
   }, []);
-  // Stack of previous parsed resumes for undo
+
+  // Undo stack
   const undoStack = useRef<ParsedResume[]>([]);
   const [canUndo, setCanUndo] = useState(false);
 
@@ -155,23 +165,61 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
   const reset = useCallback(() => {
     undoStack.current = [];
     setCanUndo(false);
-    // Keep model/theme preferences, wipe resume data
     setStateRaw((prev) => ({
       ...defaultState,
       selectedTheme: prev.selectedTheme,
       creditBalance: prev.creditBalance,
+      chatResetSignal: prev.chatResetSignal + 1, // signal ChatBot to reset
     }));
-    // Clear persisted storage for this user
     if (userId) {
       try {
         const key = storageKey(userId);
         if (key) localStorage.removeItem(key);
-        // Clean up any previously persisted chat messages (feature removed)
+        // Clear chat history for all modes
         localStorage.removeItem(`rawcv_chat_build_${userId}`);
         localStorage.removeItem(`rawcv_chat_customize_${userId}`);
       } catch { /* ignore */ }
     }
+    // Clear server-side step/history stores
+    fetch("/api/chat", { method: "DELETE" }).catch(() => {});
   }, [userId]);
+
+  // ── Chat message persistence ──────────────────────────────────────────────
+
+  const loadChatMessages = useCallback((mode: string): ChatMessage[] => {
+    try {
+      const key = chatStorageKey(userId, mode);
+      if (!key) return [];
+      const raw = localStorage.getItem(key);
+      if (!raw) return [];
+      return JSON.parse(raw) as ChatMessage[];
+    } catch {
+      return [];
+    }
+  }, [userId]);
+
+  const saveChatMessages = useCallback((mode: string, messages: ChatMessage[]) => {
+    try {
+      const key = chatStorageKey(userId, mode);
+      if (!key) return;
+      // Keep last 100 messages to avoid storage bloat
+      localStorage.setItem(key, JSON.stringify(messages.slice(-100)));
+    } catch { /* ignore */ }
+  }, [userId]);
+
+  const clearChatMessages = useCallback((mode?: string) => {
+    try {
+      if (mode) {
+        const key = chatStorageKey(userId, mode);
+        if (key) localStorage.removeItem(key);
+      } else {
+        localStorage.removeItem(`rawcv_chat_build_${userId}`);
+        localStorage.removeItem(`rawcv_chat_customize_${userId}`);
+      }
+    } catch { /* ignore */ }
+  }, [userId]);
+
+  // ── Credits ───────────────────────────────────────────────────────────────
 
   const refreshCredits = useCallback(async () => {
     try {
@@ -181,17 +229,19 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
         setState((prev) => ({ ...prev, creditBalance: data.balance }));
       }
     } catch {
-      // silently ignore — credits will show on next successful fetch
+      // silently ignore
     }
-  }, []);
+  }, [setState]);
 
-  // Fetch on mount
   useEffect(() => {
     refreshCredits();
   }, [refreshCredits]);
 
   return (
-    <ResumeContext.Provider value={{ state, setState, pushUndo, undo, canUndo, reset, refreshCredits }}>
+    <ResumeContext.Provider value={{
+      state, setState, pushUndo, undo, canUndo, reset, refreshCredits,
+      loadChatMessages, saveChatMessages, clearChatMessages,
+    }}>
       {children}
     </ResumeContext.Provider>
   );

@@ -14,80 +14,130 @@ interface Props {
 }
 
 export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
-  const { state, setState, refreshCredits, pushUndo } = useResume();
+  const { state, setState, refreshCredits, pushUndo, loadChatMessages, saveChatMessages } = useResume();
 
-  function buildWelcome(parsed: ParsedResume | null): string {
-    if (!parsed) {
-      return "Hi! I'm your resume assistant. Let's build your resume together. To get started, what's your full name?";
-    }
-
-    const filled: string[] = [];
-    const missing: string[] = [];
-
-    if (parsed.contact?.name) filled.push("name"); else missing.push("name");
-    if (parsed.contact?.email) filled.push("email"); else missing.push("email");
-    if (parsed.summary) filled.push("summary"); else missing.push("summary");
-    if (parsed.experience?.length) filled.push(`${parsed.experience.length} job${parsed.experience.length > 1 ? "s" : ""}`); else missing.push("work experience");
-    if (parsed.education?.length) filled.push("education"); else missing.push("education");
-    if (parsed.skills?.length) filled.push("skills"); else missing.push("skills");
-
-    if (mode === "customize") {
-      return `Hi! I can see your resume for ${parsed.contact?.name || "you"} is loaded with ${filled.join(", ")}. What would you like to change or improve?`;
-    }
-
-    if (missing.length === 0) {
-      return `Hi! Your resume looks complete with ${filled.join(", ")}. Would you like to improve anything, or shall I mark it as done?`;
-    }
-
-    return `Hi! I can see your resume already has ${filled.join(", ")}. Let's fill in the missing parts — starting with ${missing[0]}. ${
-      missing[0] === "name" ? "What's your full name?" :
-      missing[0] === "email" ? "What's your email address?" :
-      missing[0] === "summary" ? "Can you write a 2–3 sentence professional summary?" :
-      missing[0] === "work experience" ? "Tell me about your most recent job — company name, title, and dates?" :
-      missing[0] === "education" ? "Where did you study? Tell me your institution, degree, and graduation year." :
-      "What are your key skills? List them separated by commas."
-    }`;
-  }
-
-  // Start empty — set after context hydrates so welcome reflects persisted resume state
+  // ── Message persistence ───────────────────────────────────────────────────
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const welcomeSet = useRef(false);
-
-  useEffect(() => {
-    if (welcomeSet.current) return;
-    // state.parsed is null on first render, then updates when context loads from localStorage.
-    // We wait one tick — if it's still null after hydration, that's fine (fresh start).
-    welcomeSet.current = true;
-    setMessages([{ role: "assistant", content: buildWelcome(state.parsed) }]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.parsed]);
-
-  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [input, setInput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [outOfCredits, setOutOfCredits] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [sectionHistory, setSectionHistory] = useState<Record<string, unknown>>({});
-
-  // localResume tracks what the AI has collected this session.
-  // Seed from state.parsed so the AI always knows what's already filled (including after refresh).
   const [localResume, setLocalResume] = useState<Partial<ParsedResume>>(state.parsed ?? {});
-  const localResumeHydrated = useRef(false);
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const initialised = useRef(false);
+  const greetingInFlight = useRef(false);
+  const lastResetSignal = useRef(state.chatResetSignal);
+
+  // ── React to reset signal (user clicked Reset button) ────────────────────
   useEffect(() => {
-    if (localResumeHydrated.current) return;
+    if (state.chatResetSignal === lastResetSignal.current) return;
+    lastResetSignal.current = state.chatResetSignal;
+    // Clear all chat state
+    setMessages([]);
+    setLocalResume({});
+    setIsComplete(false);
+    setError(null);
+    setSectionHistory({});
+    setInput("");
+    greetingInFlight.current = false;
+    // Trigger fresh AI greeting with empty resume
+    triggerGreeting(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.chatResetSignal]);
+
+  // ── Hydrate from localStorage once session is ready ───────────────────────
+  useEffect(() => {
+    if (initialised.current) return;
+    initialised.current = true;
+
     if (state.parsed) {
-      localResumeHydrated.current = true;
+      setLocalResume(state.parsed);
+    }
+
+    const saved = loadChatMessages(mode);
+    if (saved.length > 0) {
+      setMessages(saved);
+      return;
+    }
+
+    triggerGreeting(state.parsed);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.parsed]);
+
+  // Persist messages whenever they change (only non-empty to avoid wiping on reset)
+  useEffect(() => {
+    if (!initialised.current) return;
+    if (messages.length === 0) return; // greeting will repopulate shortly
+    saveChatMessages(mode, messages);
+  }, [messages, mode, saveChatMessages]);
+
+  // Sync localResume if context updates externally (e.g. undo)
+  useEffect(() => {
+    if (state.parsed) {
       setLocalResume(state.parsed);
     }
   }, [state.parsed]);
 
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-
+  // Auto-scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, loading]);
 
+  // ── AI greeting on first load ─────────────────────────────────────────────
+  async function triggerGreeting(parsed: ParsedResume | null) {
+    if (greetingInFlight.current) return;
+    greetingInFlight.current = true;
+
+    // Send a silent "start" message so the AI greets based on current resume state
+    const initMsg: ChatMessage = { role: "user", content: "__init__" };
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [initMsg],
+          resumeState: parsed ?? {},
+          mode,
+          sectionHistory: {},
+          isGreeting: true,
+        }),
+      });
+
+      if (!res.ok) {
+        // Fallback to static greeting if API fails
+        const fallback = parsed?.contact?.name
+          ? `Welcome back, ${parsed.contact.name}! Let's continue building your resume. Where did we leave off?`
+          : "Hi! I'm your resume assistant. Let's build your resume together. What's your full name?";
+        setMessages([{ role: "assistant", content: fallback }]);
+        return;
+      }
+
+      const data = await res.json() as ChatResponse;
+      setMessages([{ role: "assistant", content: data.message }]);
+
+      if (data.resumeUpdate && Object.keys(data.resumeUpdate).length > 0) {
+        const merged = mergeResumeUpdate(parsed ?? {}, data.resumeUpdate);
+        setLocalResume(merged);
+        setState((s) => ({ ...s, parsed: toFullResume(merged) }));
+      }
+    } catch {
+      const fallback = parsed?.contact?.name
+        ? `Welcome back, ${parsed.contact.name}! Let's continue your resume. What would you like to work on?`
+        : "Hi! I'm your resume assistant. Let's build your resume together. What's your full name?";
+      setMessages([{ role: "assistant", content: fallback }]);
+    } finally {
+      setLoading(false);
+      greetingInFlight.current = false;
+    }
+  }
+
+  // ── Send message ──────────────────────────────────────────────────────────
   const sendMessage = useCallback(
     async (text: string) => {
       if (!text.trim() || loading) return;
@@ -115,7 +165,6 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
         const data = await res.json();
 
         if (!res.ok) {
-          // Roll back the user message so they can retry after fixing the issue
           setMessages((prev) => prev.slice(0, -1));
           setInput(text.trim());
           if (res.status === 402) {
@@ -128,12 +177,11 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
         const chatData = data as ChatResponse;
 
-        // Update section history if returned (customize mode)
         if (chatData.sectionHistory !== undefined) {
           setSectionHistory(chatData.sectionHistory);
         }
 
-        // Merge resume update into local state and sync to global context
+        // Merge resume update and sync to global context (triggers preview update)
         if (chatData.resumeUpdate && Object.keys(chatData.resumeUpdate).length > 0) {
           pushUndo();
           const merged = mergeResumeUpdate(localResume, chatData.resumeUpdate);
@@ -158,7 +206,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
         inputRef.current?.focus();
       }
     },
-    [messages, localResume, loading, mode, setState, onComplete, sectionHistory, refreshCredits]
+    [messages, localResume, loading, mode, setState, onComplete, sectionHistory, refreshCredits, pushUndo]
   );
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -287,7 +335,6 @@ function toFullResume(partial: Partial<ParsedResume>): ParsedResume {
   };
 }
 
-// Deep-merge a partial resume update into the existing state
 function mergeResumeUpdate(
   current: Partial<ParsedResume>,
   update: Partial<ParsedResume>
@@ -296,14 +343,11 @@ function mergeResumeUpdate(
 
   for (const key of Object.keys(update) as Array<keyof ParsedResume>) {
     const val = update[key];
-    // Skip null/undefined — never overwrite existing data with nothing
     if (val === undefined || val === null) continue;
 
     if (key === "contact" && typeof val === "object" && !Array.isArray(val)) {
-      // Shallow-merge contact fields
       merged.contact = { ...(merged.contact as object), ...(val as object) } as ParsedResume["contact"];
     } else if (Array.isArray(val)) {
-      // Ensure every array item is a valid object before storing
       (merged as Record<string, unknown>)[key] = val.filter(
         (item) => item !== null && item !== undefined
       );
@@ -312,7 +356,6 @@ function mergeResumeUpdate(
     }
   }
 
-  // Guarantee required arrays are never undefined so theme renderers don't crash
   merged.experience = Array.isArray(merged.experience) ? merged.experience : [];
   merged.education  = Array.isArray(merged.education)  ? merged.education  : [];
   merged.skills     = Array.isArray(merged.skills)     ? merged.skills     : [];
