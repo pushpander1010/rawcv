@@ -1,11 +1,35 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useSession } from "next-auth/react";
 import { useResume } from "@/context/ResumeContext";
 import AILoader from "@/components/AILoader";
 import CreditWarningBanner from "@/components/CreditWarningBanner";
 import type { ParsedResume } from "@/types";
 import type { ChatMessage, ChatResponse } from "@/app/api/chat/route";
+
+function chatStorageKey(userId: string | undefined, mode: string) {
+  return userId ? `rawcv_chat_${mode}_${userId}` : null;
+}
+
+function loadChatMessages(userId: string | undefined, mode: string): ChatMessage[] | null {
+  try {
+    const key = chatStorageKey(userId, mode);
+    if (!key) return null;
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as ChatMessage[]) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveChatMessages(messages: ChatMessage[], userId: string | undefined, mode: string) {
+  try {
+    const key = chatStorageKey(userId, mode);
+    if (!key) return;
+    localStorage.setItem(key, JSON.stringify(messages));
+  } catch { /* ignore */ }
+}
 
 interface Props {
   mode?: "build" | "customize";
@@ -15,6 +39,8 @@ interface Props {
 
 export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   const { state, setState, refreshCredits, pushUndo } = useResume();
+  const { data: session } = useSession();
+  const userId = (session?.user as { id?: string } | undefined)?.id;
 
   // Always seed localResume from existing state — so chat knows what's already filled
   const existingResume = state.parsed ?? null;
@@ -55,6 +81,25 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: "assistant", content: buildWelcome() },
   ]);
+  const chatHydrated = useRef<string | null>(null);
+
+  // Rehydrate chat messages from localStorage once userId is known
+  useEffect(() => {
+    if (!userId) return;
+    const key = `${mode}_${userId}`;
+    if (chatHydrated.current === key) return;
+    chatHydrated.current = key;
+    const saved = loadChatMessages(userId, mode);
+    if (saved && saved.length > 0) {
+      setMessages(saved);
+    }
+  }, [userId, mode]);
+
+  // Persist messages whenever they change (only for logged-in users)
+  useEffect(() => {
+    if (!userId || !chatHydrated.current) return;
+    saveChatMessages(messages, userId, mode);
+  }, [messages, userId, mode]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,6 +112,16 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   const [localResume, setLocalResume] = useState<Partial<ParsedResume>>(
     existingResume ?? {}
   );
+
+  // Sync localResume when context hydrates from localStorage (state.parsed goes null → data)
+  const localResumeHydrated = useRef(false);
+  useEffect(() => {
+    if (localResumeHydrated.current) return;
+    if (state.parsed) {
+      localResumeHydrated.current = true;
+      setLocalResume(state.parsed);
+    }
+  }, [state.parsed]);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);

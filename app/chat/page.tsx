@@ -13,9 +13,8 @@ import ResetButton from "@/components/ResetButton";
 export default function ChatPage() {
   const { state } = useResume();
   const router = useRouter();
-  const [mode] = useState<"build" | "customize">(
-    state.parsed ? "customize" : "build"
-  );
+  // Derive mode reactively so it updates after context hydrates from localStorage
+  const mode: "build" | "customize" = state.parsed ? "customize" : "build";
   const [showThemePicker, setShowThemePicker] = useState(false);
 
   function handleComplete() {

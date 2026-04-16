@@ -166,6 +166,9 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
       try {
         const key = storageKey(userId);
         if (key) localStorage.removeItem(key);
+        // Also clear persisted chat messages for both modes
+        localStorage.removeItem(`rawcv_chat_build_${userId}`);
+        localStorage.removeItem(`rawcv_chat_customize_${userId}`);
       } catch { /* ignore */ }
     }
   }, [userId]);
