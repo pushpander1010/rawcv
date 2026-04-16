@@ -10,6 +10,7 @@ import {
   SharpTheme,
   NavyTheme,
   TerraTheme,
+  EnhancTheme,
 } from "./themes";
 
 interface Props {
@@ -27,6 +28,7 @@ const THEME_MAP: Record<ThemeId, React.ComponentType<{ resume: ParsedResume }>> 
   sharp: SharpTheme,
   navy: NavyTheme,
   terra: TerraTheme,
+  enhancv: EnhancTheme,
 };
 
 export default function ResumePreview({ resume, theme, bare = false }: Props) {

@@ -10,7 +10,8 @@ export type ThemeId =
   | "creative"
   | "sharp"
   | "navy"
-  | "terra";
+  | "terra"
+  | "enhancv";
 
 // ─── Resume Data Models ───────────────────────────────────────────────────────
 

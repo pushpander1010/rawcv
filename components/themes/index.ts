@@ -6,3 +6,4 @@ export { default as CreativeTheme } from "./CreativeTheme";
 export { default as SharpTheme } from "./SharpTheme";
 export { default as NavyTheme } from "./NavyTheme";
 export { default as TerraTheme } from "./TerraTheme";
+export { default as EnhancTheme } from "./EnhancTheme";

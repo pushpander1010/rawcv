@@ -78,6 +78,14 @@ const THEMES: ThemeMeta[] = [
     accent: "bg-[#8b4513]",
     preview: "Serif · Warm tones",
   },
+  {
+    id: "enhancv",
+    name: "Enhancv",
+    category: "Modern",
+    description: "Two-column layout with blue accents, avatar initials, and tag-style skills",
+    accent: "bg-[#008cff]",
+    preview: "Blue · Two column",
+  },
 ];
 
 const CATEGORIES = ["All", "Classic", "Modern", "Minimal", "Executive", "Creative"] as const;
