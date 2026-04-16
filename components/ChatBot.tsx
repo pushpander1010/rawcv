@@ -80,32 +80,38 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
   // Start with empty — will be populated after hydration to avoid stale welcome message
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const chatHydrated = useRef<string | null>(null);
+  const chatHydrated = useRef(false);
+  const contextReady = useRef(false);
+  // Keep latest values accessible in effects without stale closures
+  const latestParsed = useRef(state.parsed);
+  const latestUserId = useRef(userId);
+  useEffect(() => { latestParsed.current = state.parsed; }, [state.parsed]);
+  useEffect(() => { latestUserId.current = userId; }, [userId]);
 
-  // Rehydrate chat messages from localStorage once userId is known.
-  // If nothing saved, generate the welcome message AFTER state.parsed is known.
-  useEffect(() => {
-    if (!userId) return;
-    const key = `${mode}_${userId}`;
-    if (chatHydrated.current === key) return;
-    chatHydrated.current = key;
-    const saved = loadChatMessages(userId, mode);
+  const trySetWelcome = useCallback(() => {
+    const uid = latestUserId.current;
+    if (!uid || !contextReady.current || chatHydrated.current) return;
+    chatHydrated.current = true;
+    const saved = loadChatMessages(uid, mode);
     if (saved && saved.length > 0) {
       setMessages(saved);
     } else {
-      // Generate welcome now — state.parsed may already be hydrated from context
-      setMessages([{ role: "assistant", content: buildWelcome(state.parsed) }]);
+      setMessages([{ role: "assistant", content: buildWelcome(latestParsed.current) }]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, mode]);
+  }, [mode]);
 
-  // If session takes a moment and we still have no messages, set welcome once state is ready
+  // Fire trySetWelcome whenever context hydrates
   useEffect(() => {
-    if (chatHydrated.current && messages.length === 0) {
-      setMessages([{ role: "assistant", content: buildWelcome(state.parsed) }]);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.parsed]);
+    contextReady.current = true;
+    trySetWelcome();
+  }, [state.parsed, trySetWelcome]);
+
+  // Fire trySetWelcome whenever userId becomes known
+  useEffect(() => {
+    if (!userId) return;
+    trySetWelcome();
+  }, [userId, trySetWelcome]);
 
   // Persist messages whenever they change (only for logged-in users)
   useEffect(() => {
