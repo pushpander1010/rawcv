@@ -7,9 +7,14 @@ import { completeChat as complete } from "@/lib/ai-providers";
 import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseMessages } from "@/lib/api-guard";
 
-/** Server-side undo history — never sent to or trusted from the client */
+// ─── Server-side stores ────────────────────────────────────────────────────────
+// NOTE: These are in-memory. For production, replace with Redis or DB.
 const sectionHistoryStore = new Map<string, Record<string, unknown>>();
 
+// Tracks which build step each user is on — prevents re-asking completed steps
+const buildStepStore = new Map<string, number>();
+
+// ─── Types ─────────────────────────────────────────────────────────────────────
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
@@ -19,24 +24,56 @@ export interface ChatRequest {
   messages: ChatMessage[];
   resumeState: Partial<ParsedResume>;
   mode: "build" | "customize";
-  sectionHistory?: Record<string, unknown>;
 }
 
 export interface ChatResponse {
   message: string;
   resumeUpdate: Partial<ParsedResume> | null;
   isComplete: boolean;
-  /** Updated section history after this turn (only returned in customize mode) */
+  currentStep?: number;
   sectionHistory?: Record<string, unknown>;
 }
 
-const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Interview the user to collect their resume data through conversation.
+interface CustomizeAIResponse {
+  message: string;
+  resumeUpdate: Partial<ParsedResume> | null;
+  undoSection: keyof ParsedResume | null;
+  isComplete: boolean;
+}
 
-STRICT OUTPUT RULE — respond with ONLY this JSON, nothing else:
-{"message":"<your message ending with a question>","resumeUpdate":<object or null>,"isComplete":<boolean>}
+interface BuildAIResponse {
+  message: string;
+  resumeUpdate: Partial<ParsedResume> | null;
+  isComplete: boolean;
+  nextStep: number;
+}
 
-THE SINGLE MOST IMPORTANT RULE:
-Every "message" value MUST end with a question mark. No exceptions.
+// ─── Build steps ───────────────────────────────────────────────────────────────
+// Each step maps to a section. The AI uses this to know exactly where it is.
+const BUILD_STEPS = [
+  "name",
+  "email",
+  "phone_location_linkedin",
+  "summary",
+  "experience",
+  "education",
+  "skills",
+  "certifications",
+  "projects",
+  "confirmation",
+] as const;
+
+type BuildStep = typeof BUILD_STEPS[number];
+
+function getStepName(index: number): BuildStep {
+  return BUILD_STEPS[Math.min(index, BUILD_STEPS.length - 1)];
+}
+
+// ─── System prompts ────────────────────────────────────────────────────────────
+const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Interview the user to collect their resume data through conversation. Be concise and efficient — ask only what's needed, batch related fields together.
+
+STRICT OUTPUT RULE — respond with ONLY valid JSON, no markdown, no extra text:
+{"message":"<your message>","resumeUpdate":<object or null>,"isComplete":<boolean>,"nextStep":<number>}
 
 RESUME FIELDS:
 contact: {name, email, phone, location, linkedin, website}
@@ -47,34 +84,36 @@ skills: ["skill1","skill2"]
 certifications: ["cert1"]
 projects: [{name, description, technologies:["tech1"]}]
 
-CONVERSATION FLOW — collect in this order, skip already-collected fields shown in COLLECTED SO FAR:
-1. name → 2. email → 3. phone + city + linkedin (together, all optional) → 4. summary → 5. work experience (loop until done) → 6. education → 7. skills → 8. certifications (skip if none) → 9. projects (skip if none) → 10. confirmation
+STEP DEFINITIONS (advance nextStep after collecting each):
+0 = name
+1 = email
+2 = phone + location + linkedin (ask all together in one message)
+3 = summary
+4 = work experience (ask all jobs until user says done)
+5 = education
+6 = skills
+7 = certifications (ask once; if none, skip to 8)
+8 = projects (ask once; if none, skip to 9)
+9 = confirmation — show summary and ask "Does everything look correct?"
+DONE = isComplete: true (after user confirms at step 9)
+
+CURRENT STEP is provided in the prompt. Only ask about the CURRENT STEP. Never ask about already-collected data.
 
 CRITICAL RULES:
-- If a section already appears in COLLECTED SO FAR, it is DONE — never ask about it again, move to the next missing section
-- Acknowledge the answer in ≤5 words, then immediately ask the next question — in the SAME message
-- resumeUpdate: include only fields changed this turn. null if nothing was collected
-- For arrays always return the COMPLETE updated array
-- isComplete: true only after step 10 confirmation
+1. Advance nextStep by 1 after successfully collecting a section
+2. If user says "skip", "none", or "no" for an optional section (certifications/projects), advance nextStep and move on
+3. If user says "generate", "make them up", "suggest", or similar — generate realistic data from their experience context and include in resumeUpdate, then advance nextStep
+4. For experience: after each job, ask "Any other positions? Or type 'done' to continue" — only advance to step 5 when they say done
+5. resumeUpdate: include ONLY fields changed this turn. null if nothing changed
+6. isComplete: true ONLY when user confirms at step 9
+7. Always acknowledge in ≤5 words before asking the next question
+8. The message MUST end with a "?" unless isComplete is true
+9. Never repeat a question for a section that already has data in CURRENT RESUME STATE
 
-GENERATION RULE — when user says "yes", "sure", "make them up", "generate", "suggest", or similar vague confirmations:
-- Look at COLLECTED SO FAR (experience, summary, education) to infer appropriate content
-- Generate realistic, ATS-friendly data for the missing section yourself
-- Put the generated data in resumeUpdate — do NOT ask again
-- Example: if skills is missing and user says "yes" or "make them up", generate 6-8 relevant skills from their experience and put them in resumeUpdate.skills
-
-EXAMPLES:
-Input: "Pushpa"
-Output: {"message":"Got it! What is your email address?","resumeUpdate":{"contact":{"name":"Pushpa"}},"isComplete":false}
-
-Input: "yes" (when asked about skills, and experience shows data science work)
-Output: {"message":"Added relevant skills based on your experience! Do you have any certifications like AWS, PMP, or Google certs?","resumeUpdate":{"skills":["Python","Machine Learning","SQL","Data Analysis","TensorFlow","Pandas","Statistical Modeling","Data Visualization"]},"isComplete":false}
-
-Input: "make them up as per rest of resume" (when asked about skills)
-Output: {"message":"Done, added skills matching your background! Do you have any certifications to add?","resumeUpdate":{"skills":["Python","Machine Learning","SQL","Data Analysis","TensorFlow","Pandas"]},"isComplete":false}
-
-Input: "skip"
-Output: {"message":"No problem! In 2-3 sentences, how would you describe your professional background?","resumeUpdate":null,"isComplete":false}`;
+GENERATION EXAMPLES:
+- "make them up" for skills → generate 6-8 skills based on their experience
+- "generate" for summary → write a professional 2-3 sentence summary based on their experience and background
+- "yes" when asked about certifications → if they said yes but gave no data, ask which ones; if context suggests they want auto-generation, generate relevant ones`;
 
 const CUSTOMIZE_SYSTEM_PROMPT = `You are an expert resume coach helping the user improve their existing resume through conversation.
 
@@ -93,26 +132,17 @@ projects: [{name, description, technologies:["tech1"]}]
 EDITING RULES:
 - Apply EXACTLY what the user asks — do not change anything they did not mention
 - For arrays, return the COMPLETE updated array with only the requested change applied
-- REORDERING: if user says "move [job/item] up", "swap first and second", or "put X before Y" — reorder the array and return the full reordered array in resumeUpdate
+- REORDERING: if user says "move up", "swap", or "put X before Y" — reorder and return full updated array
 - undoSection: set to the section key if user says "undo"/"revert"/"go back"
 - resumeUpdate: null if no data changed
 - isComplete: true only when user explicitly says they are done
 
-PROACTIVE COACHING — mandatory after every change:
-- After applying a change, check MISSING SECTIONS in the prompt
-- If sections are missing, end your message with: "Done! Your resume is also missing [section] — would you like to add that now?"
-- Then ask a specific interview question for that section
-- Never end a message without either completing the resume or pointing to the next missing section`;
+PROACTIVE COACHING — after every change:
+- Check MISSING SECTIONS in the prompt
+- If sections are missing, end your message with a suggestion and specific question for the next missing section
+- Never leave the user without clear guidance on what to add next`;
 
-
-interface CustomizeAIResponse {
-  message: string;
-  resumeUpdate: Partial<ParsedResume> | null;
-  undoSection: keyof ParsedResume | null;
-  isComplete: boolean;
-}
-
-// Compute missing sections so the AI always knows exactly what to ask next
+// ─── Helpers ───────────────────────────────────────────────────────────────────
 function getMissingSections(r: Partial<ParsedResume>): string[] {
   const missing: string[] = [];
   if (!r.contact?.name) missing.push("contact name");
@@ -124,6 +154,39 @@ function getMissingSections(r: Partial<ParsedResume>): string[] {
   return missing;
 }
 
+const ALLOWED_KEYS: Array<keyof ParsedResume> = [
+  "contact", "summary", "experience", "education", "skills", "certifications", "projects",
+];
+
+function sanitizeResumeState(rawState: Record<string, unknown>): Partial<ParsedResume> {
+  const MAX_STR = 500;
+  const resumeState: Partial<ParsedResume> = {};
+  for (const key of ALLOWED_KEYS) {
+    const val = rawState[key];
+    if (val === undefined) continue;
+    if (typeof val === "string") {
+      (resumeState as Record<string, unknown>)[key] = val.slice(0, MAX_STR);
+    } else if (Array.isArray(val)) {
+      (resumeState as Record<string, unknown>)[key] = val.slice(0, 30).map(item =>
+        typeof item === "string" ? item.slice(0, MAX_STR) :
+        item && typeof item === "object" ? Object.fromEntries(
+          Object.entries(item as Record<string, unknown>).map(([k, v]) => [
+            k, typeof v === "string" ? v.slice(0, MAX_STR) : v,
+          ])
+        ) : item
+      );
+    } else if (val && typeof val === "object") {
+      (resumeState as Record<string, unknown>)[key] = Object.fromEntries(
+        Object.entries(val as Record<string, unknown>).map(([k, v]) => [
+          k, typeof v === "string" ? v.slice(0, MAX_STR) : v,
+        ])
+      );
+    }
+  }
+  return resumeState;
+}
+
+// ─── Route ─────────────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   const auth = await requireAuth();
   if (auth instanceof NextResponse) return auth;
@@ -132,66 +195,53 @@ export async function POST(req: NextRequest) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "invalid_request", message: "Expected JSON body" }, { status: 400 });
+    return NextResponse.json(
+      { error: "invalid_request", message: "Expected JSON body" },
+      { status: 400 }
+    );
   }
 
   const messages = sanitiseMessages(body.messages);
   if (!messages) {
-    return NextResponse.json({ error: "missing_fields", message: "messages array is required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "missing_fields", message: "messages array is required" },
+      { status: 400 }
+    );
   }
+
   const { mode = "build" } = body;
+  const resumeState = sanitizeResumeState((body.resumeState ?? {}) as Record<string, unknown>);
 
-  // Server-side section history — keyed by userId, never trusted from client
+  // Server-side stores
   const sectionHistory: Record<string, unknown> = sectionHistoryStore.get(auth.userId) ?? {};
+  const currentStep = buildStepStore.get(auth.userId) ?? 0;
 
-  // Sanitize resumeState: only allow known schema keys, truncate strings
-  const ALLOWED_KEYS: Array<keyof ParsedResume> = ["contact", "summary", "experience", "education", "skills", "certifications", "projects"];
-  const MAX_STR = 500;
-  const rawState = body.resumeState ?? {};
-  const resumeState: Partial<ParsedResume> = {};
-  for (const key of ALLOWED_KEYS) {
-    const val = (rawState as Record<string, unknown>)[key];
-    if (val === undefined) continue;
-    if (typeof val === "string") {
-      (resumeState as Record<string, unknown>)[key] = val.slice(0, MAX_STR);
-    } else if (Array.isArray(val)) {
-      (resumeState as Record<string, unknown>)[key] = val.slice(0, 30).map(item =>
-        typeof item === "string" ? item.slice(0, MAX_STR) :
-        item && typeof item === "object" ? Object.fromEntries(
-          Object.entries(item as Record<string, unknown>).map(([k, v]) => [k, typeof v === "string" ? v.slice(0, MAX_STR) : v])
-        ) : item
-      );
-    } else if (val && typeof val === "object") {
-      (resumeState as Record<string, unknown>)[key] = Object.fromEntries(
-        Object.entries(val as Record<string, unknown>).map(([k, v]) => [k, typeof v === "string" ? v.slice(0, MAX_STR) : v])
-      );
-    }
-  }
   try {
-    
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : BUILD_SYSTEM_PROMPT;
 
-    const collected = resumeState ?? {};
-
-    // Compute missing sections server-side so the AI always knows exactly what to ask next
-    const missing = getMissingSections(collected as Partial<ParsedResume>);
+    // Build the context block
+    const missing = getMissingSections(resumeState);
     const missingBlock = missing.length > 0
-      ? `MISSING SECTIONS (ask about these next, in order): ${missing.join(" → ")}`
-      : "MISSING SECTIONS: none — all required sections are filled. Proceed to final confirmation.";
-
-    const hasAnyData = Object.keys(collected).some(k => {
-      const v = (collected as Record<string, unknown>)[k];
-      return v && (typeof v === "string" ? v.trim() : Array.isArray(v) ? v.length > 0 : true);
-    });
+      ? `MISSING SECTIONS: ${missing.join(", ")}`
+      : "MISSING SECTIONS: none";
 
     const stateBlock = mode === "build"
-      ? `COLLECTED SO FAR:\n${hasAnyData ? JSON.stringify(collected, null, 2) : "(nothing yet)"}\n\n${missingBlock}`
-      : `CURRENT RESUME:\n${JSON.stringify(collected, null, 2)}\n\n${missingBlock}`;
+      ? [
+          `CURRENT RESUME STATE:\n${Object.keys(resumeState).length > 0 ? JSON.stringify(resumeState, null, 2) : "(empty)"}`,
+          `CURRENT STEP: ${currentStep} (${getStepName(currentStep)})`,
+          missingBlock,
+        ].join("\n\n")
+      : [
+          `CURRENT RESUME:\n${JSON.stringify(resumeState, null, 2)}`,
+          missingBlock,
+        ].join("\n\n");
 
-    // Keep only last 12 turns to give AI enough context to avoid repeating questions
-    const recentHistory = messages.slice(-13, -1);
-    const historyBlock = recentHistory.length > 0
-      ? `CONVERSATION:\n${recentHistory.map(m => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`).join("\n")}`
+    // ✅ FIX: Include ALL messages as history (not sliced with a bug), keep last 20 turns
+    const historyMessages = messages.slice(-21, -1); // last 20 exchanges, exclude the current message
+    const historyBlock = historyMessages.length > 0
+      ? `CONVERSATION HISTORY:\n${historyMessages
+          .map(m => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
+          .join("\n")}`
       : "";
 
     const lastMsg = messages[messages.length - 1]?.content ?? "";
@@ -200,15 +250,18 @@ export async function POST(req: NextRequest) {
       stateBlock,
       historyBlock,
       `User: ${lastMsg}`,
-      "JSON response:",
-    ].filter(Boolean).join("\n\n");
+      "Respond with JSON only:",
+    ]
+      .filter(Boolean)
+      .join("\n\n");
 
     const aiResult = await complete(prompt, systemPrompt);
 
-    // Charge only after AI responds successfully
+    // Charge after AI responds
     const chargeError = await chargeCredits("Chat bot");
     if (chargeError) return chargeError;
 
+    // ── Customize mode ────────────────────────────────────────────────────────
     if (mode === "customize") {
       const parsed = (aiResult ?? {}) as CustomizeAIResponse;
 
@@ -216,24 +269,21 @@ export async function POST(req: NextRequest) {
         parsed.resumeUpdate = null;
       }
 
-      // Handle undo: restore the previous value for the requested section
       let finalUpdate = parsed.resumeUpdate ?? null;
       const updatedHistory = { ...sectionHistory };
 
       if (parsed.undoSection && sectionHistory[parsed.undoSection] !== undefined) {
         const section = parsed.undoSection;
-        const previousValue = sectionHistory[section];
-        finalUpdate = { [section]: previousValue } as Partial<ParsedResume>;
+        finalUpdate = { [section]: sectionHistory[section] } as Partial<ParsedResume>;
         delete updatedHistory[section];
       } else if (finalUpdate) {
         for (const key of Object.keys(finalUpdate) as Array<keyof ParsedResume>) {
-          if (resumeState && resumeState[key] !== undefined) {
+          if (resumeState[key] !== undefined) {
             updatedHistory[key] = resumeState[key];
           }
         }
       }
 
-      // Persist updated history server-side
       sectionHistoryStore.set(auth.userId, updatedHistory);
 
       return NextResponse.json({
@@ -244,17 +294,25 @@ export async function POST(req: NextRequest) {
       } satisfies ChatResponse);
     }
 
-    // Build mode
-    const parsed = (aiResult ?? {}) as { message: string; resumeUpdate: Partial<ParsedResume> | null; isComplete: boolean };
+    // ── Build mode ────────────────────────────────────────────────────────────
+    const parsed = (aiResult ?? {}) as BuildAIResponse;
 
     if (parsed.resumeUpdate !== null && typeof parsed.resumeUpdate !== "object") {
       parsed.resumeUpdate = null;
     }
 
+    // ✅ FIX: Persist the step the AI says to advance to
+    const nextStep = typeof parsed.nextStep === "number"
+      ? Math.max(currentStep, parsed.nextStep) // never go backwards
+      : currentStep;
+
+    buildStepStore.set(auth.userId, nextStep);
+
     return NextResponse.json({
       message: parsed.message ?? "Got it! What's next?",
       resumeUpdate: parsed.resumeUpdate ?? null,
       isComplete: parsed.isComplete ?? false,
+      currentStep: nextStep,
     } satisfies ChatResponse);
   } catch (err) {
     const detail = err instanceof Error ? err.message : String(err);
@@ -269,4 +327,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
