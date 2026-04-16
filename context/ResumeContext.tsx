@@ -35,6 +35,7 @@ interface ResumeContextValue {
   canUndo: boolean;
   reset: () => void;
   refreshCredits: () => void;
+  isHydrated: boolean; // true once localStorage state has been loaded
   // Chat message persistence
   loadChatMessages: (mode: string) => ChatMessage[];
   saveChatMessages: (mode: string, messages: ChatMessage[]) => void;
@@ -106,6 +107,7 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
 
   const [state, setStateRaw] = useState<ResumeState>(defaultState);
   const hydrated = useRef<string | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // Rehydrate from localStorage when userId is known (or changes)
   useEffect(() => {
@@ -122,6 +124,7 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
         setStateRaw((prev) => ({ ...prev, ...saved }));
       }
     }
+    setIsHydrated(true);
   }, [userId, status]);
 
   // Persist to localStorage whenever relevant state changes
@@ -240,6 +243,7 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
   return (
     <ResumeContext.Provider value={{
       state, setState, pushUndo, undo, canUndo, reset, refreshCredits,
+      isHydrated,
       loadChatMessages, saveChatMessages, clearChatMessages,
     }}>
       {children}

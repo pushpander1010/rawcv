@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
-  const { state, setState, refreshCredits, pushUndo, loadChatMessages, saveChatMessages } = useResume();
+  const { state, setState, refreshCredits, pushUndo, loadChatMessages, saveChatMessages, isHydrated } = useResume();
 
   // ── Message persistence ───────────────────────────────────────────────────
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -51,6 +51,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
   // ── Hydrate from localStorage once session is ready ───────────────────────
   useEffect(() => {
+    if (!isHydrated) return;       // wait for context to load from localStorage
     if (initialised.current) return;
     initialised.current = true;
 
@@ -64,9 +65,10 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       return;
     }
 
+    // No saved chat — trigger AI greeting with the fully-loaded resume state
     triggerGreeting(state.parsed);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.parsed]);
+  }, [isHydrated, state.parsed]);
 
   // Persist messages whenever they change (only non-empty to avoid wiping on reset)
   useEffect(() => {
