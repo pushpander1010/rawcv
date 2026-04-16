@@ -25,6 +25,13 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   const [isComplete, setIsComplete] = useState(false);
   const [sectionHistory, setSectionHistory] = useState<Record<string, unknown>>({});
   const [localResume, setLocalResume] = useState<Partial<ParsedResume>>(state.parsed ?? {});
+  const localResumeRef = useRef<Partial<ParsedResume>>(state.parsed ?? {});
+
+  // Keep ref in sync so sendMessage always has the latest value (avoids stale closure)
+  function updateLocalResume(r: Partial<ParsedResume>) {
+    localResumeRef.current = r;
+    setLocalResume(r);
+  }
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -38,13 +45,12 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     lastResetSignal.current = state.chatResetSignal;
     // Clear all chat state
     setMessages([]);
-    setLocalResume({});
+    updateLocalResume({});
     setIsComplete(false);
     setError(null);
     setSectionHistory({});
     setInput("");
-    greetingInFlight.current = false;
-    // Trigger fresh AI greeting with empty resume
+    greetingInFlight.current = false; // allow greeting to fire again after reset
     triggerGreeting(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.chatResetSignal]);
@@ -57,7 +63,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
     const resumeSnapshot = state.parsed;
     if (resumeSnapshot) {
-      setLocalResume(resumeSnapshot);
+      updateLocalResume(resumeSnapshot);
     }
 
     // Always start fresh chat — greet based on persisted resume state
@@ -68,7 +74,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   // Sync localResume if context updates externally (e.g. undo)
   useEffect(() => {
     if (state.parsed) {
-      setLocalResume(state.parsed);
+      updateLocalResume(state.parsed);
     }
   }, [state.parsed]);
 
@@ -113,7 +119,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
       if (data.resumeUpdate && Object.keys(data.resumeUpdate).length > 0) {
         const merged = mergeResumeUpdate(parsed ?? {}, data.resumeUpdate);
-        setLocalResume(merged);
+        updateLocalResume(merged);
         setState((s) => ({ ...s, parsed: toFullResume(merged) }));
       }
     } catch {
@@ -123,7 +129,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       setMessages([{ role: "assistant", content: fallback }]);
     } finally {
       setLoading(false);
-      greetingInFlight.current = false;
+      // intentionally do NOT reset greetingInFlight — greeting should fire exactly once per session
     }
   }
 
@@ -146,7 +152,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             messages: nextMessages,
-            resumeState: localResume,
+            resumeState: localResumeRef.current, // use ref — never stale
             mode,
             sectionHistory,
           }),
@@ -171,11 +177,10 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
           setSectionHistory(chatData.sectionHistory);
         }
 
-        // Merge resume update and sync to global context (triggers preview update)
         if (chatData.resumeUpdate && Object.keys(chatData.resumeUpdate).length > 0) {
           pushUndo();
-          const merged = mergeResumeUpdate(localResume, chatData.resumeUpdate);
-          setLocalResume(merged);
+          const merged = mergeResumeUpdate(localResumeRef.current, chatData.resumeUpdate);
+          updateLocalResume(merged);
           setState((s) => ({ ...s, parsed: toFullResume(merged) }));
         }
 
@@ -196,7 +201,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
         inputRef.current?.focus();
       }
     },
-    [messages, localResume, loading, mode, setState, onComplete, sectionHistory, refreshCredits, pushUndo]
+    [messages, loading, mode, setState, onComplete, sectionHistory, refreshCredits, pushUndo]
   );
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {

@@ -4,7 +4,7 @@ const DefaultSchema = z.any();
 
 // ─── Models ───────────────────────────────────────────────────────────────────
 const MODEL_PARSE    = "google/gemini-2.5-flash-lite";           // resume parsing
-const MODEL_CHAT     = "mistralai/mistral-nemo"; // chat / build / customize
+const MODEL_CHAT     = "google/gemma-3-12b-it"; // chat / build / customize
 const MODEL_ANALYSIS = "arcee-ai/trinity-mini";             // ATS, JD relevance, suggestions, enhance
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
