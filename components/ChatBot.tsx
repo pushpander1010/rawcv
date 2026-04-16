@@ -1,35 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useSession } from "next-auth/react";
 import { useResume } from "@/context/ResumeContext";
 import AILoader from "@/components/AILoader";
 import CreditWarningBanner from "@/components/CreditWarningBanner";
 import type { ParsedResume } from "@/types";
 import type { ChatMessage, ChatResponse } from "@/app/api/chat/route";
-
-function chatStorageKey(userId: string | undefined, mode: string) {
-  return userId ? `rawcv_chat_${mode}_${userId}` : null;
-}
-
-function loadChatMessages(userId: string | undefined, mode: string): ChatMessage[] | null {
-  try {
-    const key = chatStorageKey(userId, mode);
-    if (!key) return null;
-    const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as ChatMessage[]) : null;
-  } catch {
-    return null;
-  }
-}
-
-function saveChatMessages(messages: ChatMessage[], userId: string | undefined, mode: string) {
-  try {
-    const key = chatStorageKey(userId, mode);
-    if (!key) return;
-    localStorage.setItem(key, JSON.stringify(messages));
-  } catch { /* ignore */ }
-}
 
 interface Props {
   mode?: "build" | "customize";
@@ -39,13 +15,8 @@ interface Props {
 
 export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   const { state, setState, refreshCredits, pushUndo } = useResume();
-  const { data: session } = useSession();
-  const userId = (session?.user as { id?: string } | undefined)?.id;
 
-  // Always seed localResume from existing state — so chat knows what's already filled
-  const existingResume = state.parsed ?? null;
-
-  function buildWelcome(parsed: typeof existingResume = existingResume): string {
+  function buildWelcome(parsed: ParsedResume | null): string {
     if (!parsed) {
       return "Hi! I'm your resume assistant. Let's build your resume together. To get started, what's your full name?";
     }
@@ -78,60 +49,29 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     }`;
   }
 
-  // Start with empty — will be populated after hydration to avoid stale welcome message
+  // Start empty — set after context hydrates so welcome reflects persisted resume state
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const chatHydrated = useRef(false);
-  const contextReady = useRef(false);
-  // Keep latest values accessible in effects without stale closures
-  const latestParsed = useRef(state.parsed);
-  const latestUserId = useRef(userId);
-  useEffect(() => { latestParsed.current = state.parsed; }, [state.parsed]);
-  useEffect(() => { latestUserId.current = userId; }, [userId]);
+  const welcomeSet = useRef(false);
 
-  const trySetWelcome = useCallback(() => {
-    const uid = latestUserId.current;
-    if (!uid || !contextReady.current || chatHydrated.current) return;
-    chatHydrated.current = true;
-    const saved = loadChatMessages(uid, mode);
-    if (saved && saved.length > 0) {
-      setMessages(saved);
-    } else {
-      setMessages([{ role: "assistant", content: buildWelcome(latestParsed.current) }]);
-    }
+  useEffect(() => {
+    if (welcomeSet.current) return;
+    // state.parsed is null on first render, then updates when context loads from localStorage.
+    // We wait one tick — if it's still null after hydration, that's fine (fresh start).
+    welcomeSet.current = true;
+    setMessages([{ role: "assistant", content: buildWelcome(state.parsed) }]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  }, [state.parsed]);
 
-  // Fire trySetWelcome whenever context hydrates
-  useEffect(() => {
-    contextReady.current = true;
-    trySetWelcome();
-  }, [state.parsed, trySetWelcome]);
-
-  // Fire trySetWelcome whenever userId becomes known
-  useEffect(() => {
-    if (!userId) return;
-    trySetWelcome();
-  }, [userId, trySetWelcome]);
-
-  // Persist messages whenever they change (only for logged-in users)
-  useEffect(() => {
-    if (!userId || !chatHydrated.current || messages.length === 0) return;
-    saveChatMessages(messages, userId, mode);
-  }, [messages, userId, mode]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [outOfCredits, setOutOfCredits] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-
   const [sectionHistory, setSectionHistory] = useState<Record<string, unknown>>({});
 
-  // Always start from existing resume data so the AI knows what's already filled
-  const [localResume, setLocalResume] = useState<Partial<ParsedResume>>(
-    existingResume ?? {}
-  );
-
-  // Sync localResume when context hydrates from localStorage (state.parsed goes null → data)
+  // localResume tracks what the AI has collected this session.
+  // Seed from state.parsed so the AI always knows what's already filled (including after refresh).
+  const [localResume, setLocalResume] = useState<Partial<ParsedResume>>(state.parsed ?? {});
   const localResumeHydrated = useRef(false);
   useEffect(() => {
     if (localResumeHydrated.current) return;
