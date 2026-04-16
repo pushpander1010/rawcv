@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
-  const { state, setState, refreshCredits, pushUndo, loadChatMessages, saveChatMessages, isHydrated } = useResume();
+  const { state, setState, refreshCredits, pushUndo, isHydrated } = useResume();
 
   // ── Message persistence ───────────────────────────────────────────────────
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -51,7 +51,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
   // ── Hydrate from localStorage once session is ready ───────────────────────
   useEffect(() => {
-    if (!isHydrated) return;       // wait for context to load from localStorage
+    if (!isHydrated) return;
     if (initialised.current) return;
     initialised.current = true;
 
@@ -59,23 +59,10 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       setLocalResume(state.parsed);
     }
 
-    const saved = loadChatMessages(mode);
-    if (saved.length > 0) {
-      setMessages(saved);
-      return;
-    }
-
-    // No saved chat — trigger AI greeting with the fully-loaded resume state
+    // Always start fresh chat — greet based on persisted resume state
     triggerGreeting(state.parsed);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHydrated, state.parsed]);
-
-  // Persist messages whenever they change (only non-empty to avoid wiping on reset)
-  useEffect(() => {
-    if (!initialised.current) return;
-    if (messages.length === 0) return; // greeting will repopulate shortly
-    saveChatMessages(mode, messages);
-  }, [messages, mode, saveChatMessages]);
 
   // Sync localResume if context updates externally (e.g. undo)
   useEffect(() => {

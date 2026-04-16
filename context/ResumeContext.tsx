@@ -10,7 +10,6 @@ import type {
   TailoredResume,
   ThemeId,
 } from "@/types";
-import type { ChatMessage } from "@/app/api/chat/route";
 
 export interface ResumeState {
   raw: string;
@@ -35,11 +34,7 @@ interface ResumeContextValue {
   canUndo: boolean;
   reset: () => void;
   refreshCredits: () => void;
-  isHydrated: boolean; // true once localStorage state has been loaded
-  // Chat message persistence
-  loadChatMessages: (mode: string) => ChatMessage[];
-  saveChatMessages: (mode: string, messages: ChatMessage[]) => void;
-  clearChatMessages: (mode?: string) => void;
+  isHydrated: boolean;
 }
 
 const defaultState: ResumeState = {
@@ -61,10 +56,6 @@ const MAX_UNDO = 20;
 
 function storageKey(userId: string | undefined) {
   return userId ? `rawcv_resume_state_${userId}` : null;
-}
-
-function chatStorageKey(userId: string | undefined, mode: string) {
-  return userId ? `rawcv_chat_${mode}_${userId}` : null;
 }
 
 // Fields we want to persist (skip transient UI/credit fields)
@@ -172,54 +163,16 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
       ...defaultState,
       selectedTheme: prev.selectedTheme,
       creditBalance: prev.creditBalance,
-      chatResetSignal: prev.chatResetSignal + 1, // signal ChatBot to reset
+      chatResetSignal: prev.chatResetSignal + 1,
     }));
     if (userId) {
       try {
         const key = storageKey(userId);
         if (key) localStorage.removeItem(key);
-        // Clear chat history for all modes
-        localStorage.removeItem(`rawcv_chat_build_${userId}`);
-        localStorage.removeItem(`rawcv_chat_customize_${userId}`);
       } catch { /* ignore */ }
     }
     // Clear server-side step/history stores
     fetch("/api/chat", { method: "DELETE" }).catch(() => {});
-  }, [userId]);
-
-  // ── Chat message persistence ──────────────────────────────────────────────
-
-  const loadChatMessages = useCallback((mode: string): ChatMessage[] => {
-    try {
-      const key = chatStorageKey(userId, mode);
-      if (!key) return [];
-      const raw = localStorage.getItem(key);
-      if (!raw) return [];
-      return JSON.parse(raw) as ChatMessage[];
-    } catch {
-      return [];
-    }
-  }, [userId]);
-
-  const saveChatMessages = useCallback((mode: string, messages: ChatMessage[]) => {
-    try {
-      const key = chatStorageKey(userId, mode);
-      if (!key) return;
-      // Keep last 100 messages to avoid storage bloat
-      localStorage.setItem(key, JSON.stringify(messages.slice(-100)));
-    } catch { /* ignore */ }
-  }, [userId]);
-
-  const clearChatMessages = useCallback((mode?: string) => {
-    try {
-      if (mode) {
-        const key = chatStorageKey(userId, mode);
-        if (key) localStorage.removeItem(key);
-      } else {
-        localStorage.removeItem(`rawcv_chat_build_${userId}`);
-        localStorage.removeItem(`rawcv_chat_customize_${userId}`);
-      }
-    } catch { /* ignore */ }
   }, [userId]);
 
   // ── Credits ───────────────────────────────────────────────────────────────
@@ -242,9 +195,7 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ResumeContext.Provider value={{
-      state, setState, pushUndo, undo, canUndo, reset, refreshCredits,
-      isHydrated,
-      loadChatMessages, saveChatMessages, clearChatMessages,
+      state, setState, pushUndo, undo, canUndo, reset, refreshCredits, isHydrated,
     }}>
       {children}
     </ResumeContext.Provider>
