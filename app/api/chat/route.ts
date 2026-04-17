@@ -10,8 +10,6 @@ import { requireAuth, sanitiseMessages } from "@/lib/api-guard";
 // ─── Server-side stores ────────────────────────────────────────────────────────
 // NOTE: These are in-memory. For production, replace with Redis or DB.
 const sectionHistoryStore = new Map<string, Record<string, unknown>>();
-
-// Tracks which build step each user is on — prevents re-asking completed steps
 const buildStepStore = new Map<string, number>();
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -50,7 +48,6 @@ interface BuildAIResponse {
 }
 
 // ─── Build steps ───────────────────────────────────────────────────────────────
-// Each step maps to a section. The AI uses this to know exactly where it is.
 const BUILD_STEPS = [
   "name",
   "email",
@@ -70,23 +67,89 @@ function getStepName(index: number): BuildStep {
   return BUILD_STEPS[Math.min(index, BUILD_STEPS.length - 1)];
 }
 
-// ─── Derive the furthest completed step from existing resume data ──────────────
-// Used on first turn so the AI skips sections that are already filled.
-function deriveStepFromResume(r: Partial<ParsedResume>): number {
-  if (!r.contact?.name) return 0;
-  if (!r.contact?.email) return 1;
-  if (!r.contact?.phone && !r.contact?.location && !r.contact?.linkedin) return 2;
-  if (!r.summary) return 3;
-  if (!r.experience?.length) return 4;
-  if (!r.education?.length) return 5;
-  if (!r.skills?.length) return 6;
-  if (!r.certifications?.length) return 7;
-  if (!r.projects?.length) return 8;
-  return 9; // everything filled — go straight to confirmation
+// ─── Analyse what's filled vs missing ─────────────────────────────────────────
+interface ResumeAnalysis {
+  filledSections: string[];
+  missingSections: string[];        // REQUIRED fields missing
+  optionalMissing: string[];        // optional fields missing (certifications, projects)
+  currentStep: number;
+  completionPercent: number;
+}
+
+function analyseResume(r: Partial<ParsedResume>): ResumeAnalysis {
+  const filled: string[] = [];
+  const missing: string[] = [];
+  const optionalMissing: string[] = [];
+
+  // Contact sub-fields
+  if (r.contact?.name)     filled.push("name");          else missing.push("name");
+  if (r.contact?.email)    filled.push("email");         else missing.push("email");
+  if (r.contact?.phone)    filled.push("phone");         else missing.push("phone");
+  if (r.contact?.location) filled.push("location");      else missing.push("location");
+  if (r.contact?.linkedin) filled.push("LinkedIn");      else missing.push("LinkedIn");
+
+  // Optional contact extras — lump into one note, never block progress
+  if (r.contact?.website) filled.push("website/other links");
+
+  if (r.summary)            filled.push("professional summary"); else missing.push("professional summary");
+  if (r.experience?.length) filled.push("work experience");      else missing.push("work experience");
+  if (r.education?.length)  filled.push("education");            else missing.push("education");
+  if (r.skills?.length)     filled.push("skills");               else missing.push("skills");
+
+  // Optional sections
+  if (r.certifications?.length) filled.push("certifications");
+  else                          optionalMissing.push("certifications");
+
+  if (r.projects?.length) filled.push("projects");
+  else                    optionalMissing.push("projects");
+
+  // Derive current build step from what's actually filled
+  let step = 0;
+  if (r.contact?.name)                                              step = 1;
+  if (r.contact?.name && r.contact?.email)                          step = 2;
+  if (r.contact?.name && r.contact?.email &&
+      (r.contact?.phone || r.contact?.location || r.contact?.linkedin)) step = 3;
+  if (step === 3 && r.summary)                                      step = 4;
+  if (step === 4 && r.experience?.length)                           step = 5;
+  if (step === 5 && r.education?.length)                            step = 6;
+  if (step === 6 && r.skills?.length)                               step = 7;
+  // Steps 7 (certs) and 8 (projects) are optional — only skip if we haven't reached them
+  if (step === 7)                                                   step = 7; // always ask
+  if (step >= 7 && (r.certifications?.length || step > 7))          step = 8;
+  if (step >= 8 && (r.projects?.length || step > 8))                step = 9;
+
+  const totalRequired = 9; // steps 0-8 before confirmation
+  const completionPercent = Math.round((filled.length / (filled.length + missing.length)) * 100);
+
+  return { filledSections: filled, missingSections: missing, optionalMissing, currentStep: step, completionPercent };
+}
+
+// ─── Build a human-readable summary of what's already in the resume ───────────
+function buildResumeSnapshot(r: Partial<ParsedResume>): string {
+  const parts: string[] = [];
+
+  if (r.contact?.name)     parts.push(`Name: ${r.contact.name}`);
+  if (r.contact?.email)    parts.push(`Email: ${r.contact.email}`);
+  if (r.contact?.phone)    parts.push(`Phone: ${r.contact.phone}`);
+  if (r.contact?.location) parts.push(`Location: ${r.contact.location}`);
+  if (r.contact?.linkedin) parts.push(`LinkedIn: ${r.contact.linkedin}`);
+  if (r.summary)           parts.push(`Summary: (present)`);
+  if (r.experience?.length)
+    parts.push(`Experience: ${r.experience.length} job(s) — ${r.experience.map(j => j.title ?? "?").join(", ")}`);
+  if (r.education?.length)
+    parts.push(`Education: ${r.education.length} entry(ies)`);
+  if (r.skills?.length)
+    parts.push(`Skills: ${r.skills.slice(0, 6).join(", ")}${r.skills.length > 6 ? "…" : ""}`);
+  if (r.certifications?.length)
+    parts.push(`Certifications: ${r.certifications.length}`);
+  if (r.projects?.length)
+    parts.push(`Projects: ${r.projects.length}`);
+
+  return parts.length > 0 ? parts.join("\n") : "(empty)";
 }
 
 // ─── System prompts ────────────────────────────────────────────────────────────
-const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Your job is to INTERVIEW the user — always ask questions, never make statements without a follow-up question. You are a detective gathering information.
+const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Your job is to INTERVIEW the user — always ask questions, never make statements without a follow-up question.
 
 STRICT OUTPUT RULE — respond with ONLY valid JSON, no markdown, no extra text:
 {"message":"<your message>","resumeUpdate":<object or null>,"isComplete":<boolean>,"nextStep":<number>}
@@ -100,42 +163,43 @@ skills: ["skill1","skill2"]
 certifications: ["cert1"]
 projects: [{name, description, technologies:["tech1"]}]
 
-STEP ORDER (strict — never skip forward, never go back):
+STEP ORDER (strict — never skip required steps):
 0 = name
 1 = email
-2 = phone + location + linkedin + other links (ask all together)
+2 = phone + location + linkedin + other links (ask all together in one message)
 3 = summary
-4 = work experience (collect all jobs; ask "Any other positions? Or type 'done'" after each)
+4 = work experience (collect all jobs; ask "Any other positions? Or say 'done'" after each)
 5 = education
 6 = skills
-7 = certifications (optional; if none, skip to 8)
-8 = projects (optional; if none, skip to 9)
-9 = confirmation — show a brief summary and ask "Does everything look correct?"
+7 = certifications (optional — if user says "none"/"skip", move to step 8)
+8 = projects (optional — if user says "none"/"skip", move to step 9)
+9 = confirmation — show a brief bullet summary and ask "Does everything look correct?"
 DONE = isComplete: true (only after user confirms at step 9)
 
-INTERROGATION RULES (CRITICAL):
-1. ALWAYS end your message with a question mark "?" — no exceptions unless isComplete is true
-2. If the user gives a vague or incomplete answer, cross-question them before moving on:
-   - Vague job title → "What exactly did you do as [title]? Can you give me 2-3 key achievements?"
+INTERROGATION RULES (CRITICAL — read every rule):
+1. ALWAYS end your message with a "?" — no exceptions unless isComplete is true
+2. NEVER ask about a field that is already present in CURRENT RESUME STATE
+3. NEVER ask two different sections in the same message — focus on ONE step at a time
+4. If the user's answer is vague or incomplete, cross-question BEFORE advancing:
+   - Vague title → "What exactly did you do as [title]? Give me 2-3 key achievements."
    - No dates → "When did you start and end at [company]?"
-   - Short summary → "That's a start — can you tell me more about your specialisation or key strengths?"
-   - Missing location → "Where are you based?"
-3. Only advance to the next step when you have COMPLETE data for the current step
-4. Never ask about a section that already has data in CURRENT RESUME STATE
-5. Never ask two different sections in the same message — focus on ONE step at a time
-6. After collecting each section, acknowledge briefly (≤5 words) then immediately ask the next question
-7. resumeUpdate: include ONLY fields changed this turn. null if nothing changed
-8. isComplete: true ONLY when user confirms at step 9
-9. If user says "skip", "none", or "no" for optional sections (certifications/projects), advance and ask next
-10. If user says "generate"/"make them up"/"suggest" — generate realistic data from context, include in resumeUpdate, advance step
+   - Short summary → "Can you tell me more about your specialisation or biggest strengths?"
+   - Missing location → "Where are you currently based?"
+5. Only advance nextStep when you have COMPLETE, quality data for the current step
+6. After collecting a section, acknowledge in ≤5 words then immediately ask the next question
+7. resumeUpdate: include ONLY fields changed this turn — null if nothing changed
+8. isComplete: true ONLY when user explicitly confirms at step 9
+9. If user says "skip"/"none"/"no" for optional sections (7, 8), advance and ask next
+10. If user says "generate"/"suggest"/"make one up" — create realistic data from context, include in resumeUpdate, advance step
 
-GREETING RULE (isGreeting=true):
-- Greet the user warmly
-- If resume has data: acknowledge what's already filled and ask about the CURRENT STEP
-- If resume is empty: introduce yourself and ask for their full name
-- Always end with a question`;
+GREETING BEHAVIOUR (when isGreeting=true in context):
+- Read FILLED SECTIONS and MISSING REQUIRED SECTIONS carefully
+- If resume has data: say "Welcome back [name if known]! I can see you've already added [list filled sections briefly]. Let's continue — [ask about the CURRENT STEP section only]"
+- If resume is empty: say "Hi! I'm your resume assistant. Let's build your resume step by step. What's your full name?"
+- Never ask about already-filled sections during greeting
+- Always end with exactly ONE question about the current step`;
 
-const CUSTOMIZE_SYSTEM_PROMPT = `You are an expert resume coach helping the user improve their existing resume through conversation. You ALWAYS ask a follow-up question after every response.
+const CUSTOMIZE_SYSTEM_PROMPT = `You are an expert resume coach helping the user improve their existing resume through conversation.
 
 OUTPUT FORMAT — every response must be exactly this JSON shape, no exceptions:
 {"message":"<your reply>","resumeUpdate":<changed fields only, or null>,"undoSection":<section key or null>,"isComplete":<boolean>}
@@ -157,30 +221,19 @@ EDITING RULES:
 - resumeUpdate: null if no data changed
 - isComplete: true only when user explicitly says they are done
 
+PROACTIVE GAP-FILLING (IMPORTANT):
+After every change, check MISSING SECTIONS in the context:
+- If there are REQUIRED sections missing, always end your message by asking about the most important one
+- Priority order: name > email > phone/location > summary > experience > education > skills
+- If all required sections are present but optional ones are missing, ask about certifications then projects
+- Never ask about a section that already has data
+
 INTERROGATION RULES:
-1. ALWAYS end your message with a question — never leave the user without clear next action
+1. ALWAYS end your message with a question — never leave the user without a clear next action
 2. If the user's request is vague, ask for clarification before making changes
-3. After every change, check MISSING SECTIONS and ask about the most important missing one
-4. Cross-question weak content: "That bullet point is quite generic — can you add a specific metric or outcome?"`;
+3. Cross-question weak content: "That bullet is quite generic — can you add a specific metric or outcome?"`;
 
-
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-function getMissingSections(r: Partial<ParsedResume>): string[] {
-  const missing: string[] = [];
-  if (!r.contact?.name) missing.push("contact name");
-  if (!r.contact?.email) missing.push("email");
-  if (!r.contact?.phone) missing.push("phone");
-  if (!r.contact?.linkedin) missing.push("linkedin");
-  if (!r.contact?.website) missing.push("other links");
-  if (!r.summary) missing.push("professional summary");
-  if (!r.experience?.length) missing.push("work experience");
-  if (!r.education?.length) missing.push("education");
-  if (!r.certifications?.length) missing.push("certifications");
-  if (!r.projects?.length) missing.push("projects");
-  if (!r.skills?.length) missing.push("skills");
-  return missing;
-}
-
+// ─── Sanitise resume state ─────────────────────────────────────────────────────
 const ALLOWED_KEYS: Array<keyof ParsedResume> = [
   "contact", "summary", "experience", "education", "skills", "certifications", "projects",
 ];
@@ -240,15 +293,14 @@ export async function POST(req: NextRequest) {
   const resumeState = sanitizeResumeState((body.resumeState ?? {}) as Record<string, unknown>);
   const isGreeting = body.isGreeting === true;
 
-  // Server-side stores
   const sectionHistory: Record<string, unknown> = sectionHistoryStore.get(auth.userId) ?? {};
 
-  // On greeting or first turn, reset the step store so it re-derives from resume state
-  const isFirstTurn = isGreeting || !buildStepStore.has(auth.userId);
-  const storedStep = buildStepStore.get(auth.userId) ?? 0;
-  const currentStep = isFirstTurn ? deriveStepFromResume(resumeState) : storedStep;
+  // Always re-derive step on greeting so we never re-ask filled sections
+  const analysis = analyseResume(resumeState);
+  const storedStep  = buildStepStore.get(auth.userId) ?? 0;
+  // On greeting: re-derive from actual resume data. On normal turn: use stored (never go back).
+  const currentStep = isGreeting ? analysis.currentStep : Math.max(storedStep, analysis.currentStep);
 
-  // If this is a greeting reset, clear the step store so next real turn starts fresh
   if (isGreeting) {
     buildStepStore.delete(auth.userId);
   }
@@ -256,45 +308,52 @@ export async function POST(req: NextRequest) {
   try {
     const systemPrompt = mode === "customize" ? CUSTOMIZE_SYSTEM_PROMPT : BUILD_SYSTEM_PROMPT;
 
-    // Build the context block
-    const missing = getMissingSections(resumeState);
-    const missingBlock = missing.length > 0
-      ? `MISSING SECTIONS: ${missing.join(", ")}`
-      : "MISSING SECTIONS: none";
+    // ── Rich context block sent to the AI ──────────────────────────────────
+    const snapshot = buildResumeSnapshot(resumeState);
 
-    const stateBlock = mode === "build"
-      ? [
-          `CURRENT RESUME STATE:\n${Object.keys(resumeState).length > 0 ? JSON.stringify(resumeState, null, 2) : "(empty)"}`,
-          `CURRENT STEP: ${currentStep} (${getStepName(currentStep)})`,
-          missingBlock,
-          isFirstTurn
-            ? `NOTE: ${isGreeting ? "isGreeting=true. " : ""}Greet the user, briefly acknowledge what sections are already filled (if any), and then ask only about the CURRENT STEP.`
-            : "",
-        ].filter(Boolean).join("\n\n")
-      : [
-          `CURRENT RESUME:\n${JSON.stringify(resumeState, null, 2)}`,
-          missingBlock,
-          isGreeting ? "NOTE: isGreeting=true. Greet the user and ask what they would like to improve." : "",
-        ].filter(Boolean).join("\n\n");
+    const contextLines: string[] = [
+      `=== CURRENT RESUME STATE ===`,
+      snapshot,
+      ``,
+      `=== ANALYSIS ===`,
+      `Filled sections (${analysis.filledSections.length}): ${analysis.filledSections.join(", ") || "none"}`,
+      `Missing REQUIRED sections (${analysis.missingSections.length}): ${analysis.missingSections.join(", ") || "none"}`,
+      `Missing optional sections: ${analysis.optionalMissing.join(", ") || "none"}`,
+      `Completion: ${analysis.completionPercent}%`,
+    ];
 
-    // Include last 20 turns of history, exclude the current message
+    if (mode === "build") {
+      contextLines.push(
+        ``,
+        `=== BUILD STATE ===`,
+        `Current step: ${currentStep} → "${getStepName(currentStep)}"`,
+        isGreeting
+          ? `isGreeting=true — Greet the user, acknowledge FILLED SECTIONS (if any), and ask ONLY about the current step.`
+          : `Continue from current step. Do NOT re-ask any filled section.`,
+      );
+    } else {
+      contextLines.push(
+        ``,
+        `=== FULL RESUME JSON (for editing) ===`,
+        JSON.stringify(resumeState, null, 2),
+        isGreeting ? `isGreeting=true — Greet the user and ask what they'd like to improve.` : "",
+      );
+    }
+
+    // Include last 20 turns of history
     const historyMessages = messages.slice(-21, -1);
-    const historyBlock = historyMessages.length > 0
-      ? `CONVERSATION HISTORY:\n${historyMessages
-          .map(m => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
-          .join("\n")}`
-      : "";
+    if (historyMessages.length > 0) {
+      contextLines.push(
+        ``,
+        `=== CONVERSATION HISTORY ===`,
+        historyMessages.map(m => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`).join("\n"),
+      );
+    }
 
     const lastMsg = messages[messages.length - 1]?.content ?? "";
+    contextLines.push(``, `User: ${lastMsg}`, ``, `Respond with JSON only:`);
 
-    const prompt = [
-      stateBlock,
-      historyBlock,
-      `User: ${lastMsg}`,
-      "Respond with JSON only:",
-    ]
-      .filter(Boolean)
-      .join("\n\n");
+    const prompt = contextLines.filter(l => l !== undefined).join("\n");
 
     const aiResult = await complete(prompt, systemPrompt);
 
@@ -342,8 +401,7 @@ export async function POST(req: NextRequest) {
       parsed.resumeUpdate = null;
     }
 
-    // Persist the step the AI says to advance to; never go backwards
-    // Don't persist step on greeting — let the next real turn set it
+    // Never go backwards in steps
     const nextStep = typeof parsed.nextStep === "number"
       ? Math.max(currentStep, parsed.nextStep)
       : currentStep;
@@ -372,7 +430,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// ─── Reset server-side state (called when user clicks Reset) ──────────────────
+// ─── Reset server-side state ───────────────────────────────────────────────────
 export async function DELETE() {
   const auth = await requireAuth();
   if (auth instanceof NextResponse) return auth;

@@ -16,88 +16,118 @@ interface Props {
 export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   const { state, setState, refreshCredits, pushUndo, isHydrated } = useResume();
 
-  // ── Message persistence ───────────────────────────────────────────────────
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [input, setInput] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [outOfCredits, setOutOfCredits] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
+  const [messages, setMessages]           = useState<ChatMessage[]>([]);
+  const [loading, setLoading]             = useState(false);
+  const [input, setInput]                 = useState("");
+  const [error, setError]                 = useState<string | null>(null);
+  const [outOfCredits, setOutOfCredits]   = useState(false);
+  const [isComplete, setIsComplete]       = useState(false);
   const [sectionHistory, setSectionHistory] = useState<Record<string, unknown>>({});
-  const [localResume, setLocalResume] = useState<Partial<ParsedResume>>(state.parsed ?? {});
+
+  // localResumeRef is the single source of truth for resume state inside this component.
+  // We never read from state.parsed in sendMessage to avoid stale closure bugs.
   const localResumeRef = useRef<Partial<ParsedResume>>(state.parsed ?? {});
 
-  // Keep ref in sync so sendMessage always has the latest value (avoids stale closure)
-  function updateLocalResume(r: Partial<ParsedResume>) {
-    localResumeRef.current = r;
-    setLocalResume(r);
-  }
+  // Sync localResumeRef AND push to context/preview whenever resume changes
+  const applyResumeUpdate = useCallback(
+    (update: Partial<ParsedResume>) => {
+      const merged = mergeResumeUpdate(localResumeRef.current, update);
+      localResumeRef.current = merged;
+      // Always push to context so the preview refreshes immediately
+      setState((s) => ({ ...s, parsed: toFullResume(merged) }));
+    },
+    [setState]
+  );
 
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const bottomRef   = useRef<HTMLDivElement>(null);
+  const inputRef    = useRef<HTMLTextAreaElement>(null);
   const initialised = useRef(false);
-  const greetingInFlight = useRef(false);
-  const lastResetSignal = useRef(state.chatResetSignal);
+  const greetingInFlight  = useRef(false);
+  const lastResetSignal   = useRef(state.chatResetSignal);
 
-  // ── React to reset signal (user clicked Reset button) ────────────────────
+  // ── Reset signal ──────────────────────────────────────────────────────────
   useEffect(() => {
     if (state.chatResetSignal === lastResetSignal.current) return;
     lastResetSignal.current = state.chatResetSignal;
-    // Clear all chat state
+
     setMessages([]);
-    updateLocalResume({});
+    localResumeRef.current = {};
     setIsComplete(false);
     setError(null);
     setSectionHistory({});
     setInput("");
-    greetingInFlight.current = false; // allow greeting to fire again after reset
+    greetingInFlight.current = false;
     triggerGreeting(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.chatResetSignal]);
 
-  // ── Hydrate from localStorage once session is ready ───────────────────────
+  // ── Hydrate once session is ready ─────────────────────────────────────────
   useEffect(() => {
     if (!isHydrated) return;
     if (initialised.current) return;
     initialised.current = true;
 
-    const resumeSnapshot = state.parsed;
-    if (resumeSnapshot) {
-      updateLocalResume(resumeSnapshot);
-    }
+    // Snapshot once — never re-run on state.parsed change
+    const resumeSnapshot = state.parsed ?? null;
+    localResumeRef.current = resumeSnapshot ?? {};
 
-    // Always start fresh chat — greet based on persisted resume state
     triggerGreeting(resumeSnapshot);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHydrated]); // intentionally exclude state.parsed — snapshot is taken once on hydration
+  }, [isHydrated]);
 
-  // Sync localResume if context updates externally (e.g. undo)
+  // Sync ref if context updates externally (e.g. undo button)
   useEffect(() => {
     if (state.parsed) {
-      updateLocalResume(state.parsed);
+      localResumeRef.current = state.parsed;
     }
   }, [state.parsed]);
 
-  // Auto-scroll to bottom
+  // Auto-scroll
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  // ── AI greeting on first load ─────────────────────────────────────────────
+  // ── Greeting ───────────────────────────────────────────────────────────────
   async function triggerGreeting(parsed: ParsedResume | null) {
     if (greetingInFlight.current) return;
     greetingInFlight.current = true;
-
-    // Send a silent "start" message so the AI greets based on current resume state
-    const initMsg: ChatMessage = { role: "user", content: "__init__" };
     setLoading(true);
+
+    // Build a static fallback that acknowledges existing data
+    function buildFallback(r: ParsedResume | null): string {
+      if (!r?.contact?.name) {
+        return "Hi! I'm your resume assistant. Let's build your resume step by step. What's your full name?";
+      }
+      const filled: string[] = [];
+      if (r.contact.name)       filled.push("your name");
+      if (r.contact.email)      filled.push("email");
+      if (r.contact.phone)      filled.push("phone");
+      if (r.summary)            filled.push("summary");
+      if (r.experience?.length) filled.push(`${r.experience.length} job(s)`);
+      if (r.education?.length)  filled.push("education");
+      if (r.skills?.length)     filled.push("skills");
+
+      const filledStr = filled.join(", ");
+      const missing: string[] = [];
+      if (!r.contact.email)     missing.push("email");
+      if (!r.contact.phone)     missing.push("phone");
+      if (!r.summary)           missing.push("summary");
+      if (!r.experience?.length) missing.push("work experience");
+      if (!r.education?.length)  missing.push("education");
+      if (!r.skills?.length)     missing.push("skills");
+
+      if (missing.length === 0) {
+        return `Welcome back, ${r.contact.name}! Your resume looks complete. What would you like to improve?`;
+      }
+      return `Welcome back, ${r.contact.name}! I can see you've already added ${filledStr}. Let's continue — could you tell me your ${missing[0]}?`;
+    }
 
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [initMsg],
+          messages: [{ role: "user", content: "__init__" }],
           resumeState: parsed ?? {},
           mode,
           sectionHistory: {},
@@ -106,34 +136,26 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       });
 
       if (!res.ok) {
-        // Fallback to static greeting if API fails
-        const fallback = parsed?.contact?.name
-          ? `Welcome back, ${parsed.contact.name}! Let's continue building your resume. Where did we leave off?`
-          : "Hi! I'm your resume assistant. Let's build your resume together. What's your full name?";
-        setMessages([{ role: "assistant", content: fallback }]);
+        setMessages([{ role: "assistant", content: buildFallback(parsed) }]);
         return;
       }
 
       const data = await res.json() as ChatResponse;
       setMessages([{ role: "assistant", content: data.message }]);
 
+      // Apply any resume update that came back with the greeting
       if (data.resumeUpdate && Object.keys(data.resumeUpdate).length > 0) {
-        const merged = mergeResumeUpdate(parsed ?? {}, data.resumeUpdate);
-        updateLocalResume(merged);
-        setState((s) => ({ ...s, parsed: toFullResume(merged) }));
+        applyResumeUpdate(data.resumeUpdate);
       }
     } catch {
-      const fallback = parsed?.contact?.name
-        ? `Welcome back, ${parsed.contact.name}! Let's continue your resume. What would you like to work on?`
-        : "Hi! I'm your resume assistant. Let's build your resume together. What's your full name?";
-      setMessages([{ role: "assistant", content: fallback }]);
+      setMessages([{ role: "assistant", content: buildFallback(parsed) }]);
     } finally {
       setLoading(false);
-      // intentionally do NOT reset greetingInFlight — greeting should fire exactly once per session
+      // greetingInFlight stays true — greeting fires exactly once per session/reset
     }
   }
 
-  // ── Send message ──────────────────────────────────────────────────────────
+  // ── Send message ───────────────────────────────────────────────────────────
   const sendMessage = useCallback(
     async (text: string) => {
       if (!text.trim() || loading) return;
@@ -152,7 +174,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             messages: nextMessages,
-            resumeState: localResumeRef.current, // use ref — never stale
+            resumeState: localResumeRef.current,   // always fresh — never stale
             mode,
             sectionHistory,
           }),
@@ -161,6 +183,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
         const data = await res.json();
 
         if (!res.ok) {
+          // Roll back the user message so they can retry
           setMessages((prev) => prev.slice(0, -1));
           setInput(text.trim());
           if (res.status === 402) {
@@ -177,11 +200,10 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
           setSectionHistory(chatData.sectionHistory);
         }
 
+        // ── Always update the preview, even for small incremental changes ──
         if (chatData.resumeUpdate && Object.keys(chatData.resumeUpdate).length > 0) {
           pushUndo();
-          const merged = mergeResumeUpdate(localResumeRef.current, chatData.resumeUpdate);
-          updateLocalResume(merged);
-          setState((s) => ({ ...s, parsed: toFullResume(merged) }));
+          applyResumeUpdate(chatData.resumeUpdate);
         }
 
         setMessages((prev) => [
@@ -193,6 +215,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
           setIsComplete(true);
           onComplete?.();
         }
+
         refreshCredits();
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong");
@@ -201,7 +224,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
         inputRef.current?.focus();
       }
     },
-    [messages, loading, mode, setState, onComplete, sectionHistory, refreshCredits, pushUndo]
+    [messages, loading, mode, sectionHistory, applyResumeUpdate, pushUndo, onComplete, refreshCredits]
   );
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -248,7 +271,9 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
         {isComplete && (
           <div className="flex justify-center">
             <div className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 rounded-xl px-4 py-3 text-sm text-emerald-700 dark:text-emerald-300 text-center">
-              ✅ {mode === "build" ? "Resume complete! Check the preview on the right." : "All done! Your resume has been updated."}
+              ✅ {mode === "build"
+                ? "Resume complete! Check the preview on the right."
+                : "All done! Your resume has been updated."}
             </div>
           </div>
         )}
@@ -256,7 +281,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
         <div ref={bottomRef} />
       </div>
 
-      {/* Out of credits banner */}
+      {/* Credit warning */}
       {outOfCredits
         ? <CreditWarningBanner balance={0} />
         : <CreditWarningBanner balance={state.creditBalance} />
@@ -264,10 +289,15 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
       {/* Error */}
       {error && (
-        <div role="alert" className="px-4 py-2 flex items-center gap-2 text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-t border-red-100 dark:border-red-900">
+        <div
+          role="alert"
+          className="px-4 py-2 flex items-center gap-2 text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-t border-red-100 dark:border-red-900"
+        >
           <span>⚠</span>
           <span className="flex-1">{error}</span>
-          <button onClick={() => setError(null)} className="shrink-0 underline hover:no-underline">Dismiss</button>
+          <button onClick={() => setError(null)} className="shrink-0 underline hover:no-underline">
+            Dismiss
+          </button>
         </div>
       )}
 
@@ -281,7 +311,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             onKeyDown={handleKeyDown}
             placeholder={
               mode === "customize"
-                ? "Ask me to change anything, or say 'undo'…"
+                ? "Ask me to change anything…"
                 : "Type a message… (Enter to send)"
             }
             rows={2}
@@ -313,23 +343,30 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   );
 }
 
-/** Ensure a partial resume always has the required arrays so theme renderers never crash */
+// ── Helpers ────────────────────────────────────────────────────────────────────
+
+/** Ensure a partial resume always has required arrays so theme renderers never crash */
 function toFullResume(partial: Partial<ParsedResume>): ParsedResume {
   return {
     contact: partial.contact ?? { name: "", email: "" },
     summary: partial.summary ?? "",
-    experience: Array.isArray(partial.experience) ? partial.experience.map(j => ({
-      company: j.company ?? "", title: j.title ?? "",
-      startDate: j.startDate ?? "", endDate: j.endDate ?? "",
-      bullets: Array.isArray(j.bullets) ? j.bullets : [],
-    })) : [],
-    education: Array.isArray(partial.education) ? partial.education : [],
-    skills: Array.isArray(partial.skills) ? partial.skills : [],
+    experience: Array.isArray(partial.experience)
+      ? partial.experience.map((j) => ({
+          company:   j.company   ?? "",
+          title:     j.title     ?? "",
+          startDate: j.startDate ?? "",
+          endDate:   j.endDate   ?? "",
+          bullets:   Array.isArray(j.bullets) ? j.bullets : [],
+        }))
+      : [],
+    education:      Array.isArray(partial.education)      ? partial.education      : [],
+    skills:         Array.isArray(partial.skills)         ? partial.skills         : [],
     certifications: Array.isArray(partial.certifications) ? partial.certifications : undefined,
-    projects: Array.isArray(partial.projects) ? partial.projects : undefined,
+    projects:       Array.isArray(partial.projects)       ? partial.projects       : undefined,
   };
 }
 
+/** Deep-merge a resumeUpdate patch onto the current resume state */
 function mergeResumeUpdate(
   current: Partial<ParsedResume>,
   update: Partial<ParsedResume>
@@ -341,7 +378,11 @@ function mergeResumeUpdate(
     if (val === undefined || val === null) continue;
 
     if (key === "contact" && typeof val === "object" && !Array.isArray(val)) {
-      merged.contact = { ...(merged.contact as object), ...(val as object) } as ParsedResume["contact"];
+      // Merge contact sub-fields so a partial update (e.g. just phone) doesn't wipe name/email
+      merged.contact = {
+        ...(merged.contact as object ?? {}),
+        ...(val as object),
+      } as ParsedResume["contact"];
     } else if (Array.isArray(val)) {
       (merged as Record<string, unknown>)[key] = val.filter(
         (item) => item !== null && item !== undefined
@@ -351,6 +392,7 @@ function mergeResumeUpdate(
     }
   }
 
+  // Ensure required arrays are always present
   merged.experience = Array.isArray(merged.experience) ? merged.experience : [];
   merged.education  = Array.isArray(merged.education)  ? merged.education  : [];
   merged.skills     = Array.isArray(merged.skills)     ? merged.skills     : [];
