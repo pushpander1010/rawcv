@@ -396,6 +396,5 @@ function mergeResumeUpdate(
   merged.experience = Array.isArray(merged.experience) ? merged.experience : [];
   merged.education  = Array.isArray(merged.education)  ? merged.education  : [];
   merged.skills     = Array.isArray(merged.skills)     ? merged.skills     : [];
-
   return merged;
 }
