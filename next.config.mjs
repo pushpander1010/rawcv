@@ -1,5 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Redirect non-www to www so Google sees a consistent canonical URL
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "rawcv.com" }],
+        destination: "https://www.rawcv.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
@@ -23,7 +34,7 @@ const nextConfig = {
               "img-src 'self' data: https:",
               "font-src 'self' data:",
               "connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com",
-              "frame-src https://api.razorpay.com https://checkout.razorpay.com",
+              "frame-src https://api.razorpay.com https://checkout.razorpay.com https://www.youtube.com https://youtube.com",
               "frame-ancestors 'none'",
             ].join("; "),
           },

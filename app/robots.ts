@@ -5,10 +5,11 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/login", "/register", "/credits", "/dashboard", "/privacy", "/terms"],
-        disallow: ["/api/", "/analyze", "/chat", "/tailor"],
+        allow: "/",
+        disallow: ["/api/", "/dashboard", "/reset-password", "/forgot-password", "/verify-email"],
       },
     ],
     sitemap: "https://www.rawcv.com/sitemap.xml",
+    host: "https://www.rawcv.com",
   };
 }

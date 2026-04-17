@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Script from "next/script";
 import { HeroCTA, FooterCTA, PricingCTA, FooterNav } from "@/components/LandingCTA";
 
 export const metadata: Metadata = {
@@ -45,8 +46,61 @@ const faqs = [
 ];
 
 export default function LandingPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.rawcv.com/#website",
+        "url": "https://www.rawcv.com",
+        "name": "rawcv",
+        "description": "AI-powered resume builder, ATS scorer, and job match optimizer",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.rawcv.com/analyze",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.rawcv.com/#app",
+        "name": "rawcv",
+        "url": "https://www.rawcv.com",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "offers": [
+          { "@type": "Offer", "name": "Starter", "price": "99", "priceCurrency": "INR" },
+          { "@type": "Offer", "name": "Pro", "price": "499", "priceCurrency": "INR" },
+          { "@type": "Offer", "name": "Power", "price": "999", "priceCurrency": "INR" }
+        ],
+        "description": "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, and download a polished PDF resume.",
+        "screenshot": "https://www.rawcv.com/og-image.svg",
+        "featureList": [
+          "ATS Score Analysis",
+          "Job Description Relevance Match",
+          "AI Resume Suggestions",
+          "Resume Enhancement",
+          "Visual Themes",
+          "Chat-based Resume Building"
+        ]
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.rawcv.com/#org",
+        "name": "rawcv",
+        "url": "https://www.rawcv.com",
+        "logo": "https://www.rawcv.com/logo.svg"
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <Script
+        id="json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* Hero */}
       <section className="relative overflow-hidden pt-20 pb-24 px-6">
@@ -178,8 +232,77 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="pricing-heading">
+      {/* YouTube Video — helps with engagement signals and rich results */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="video-heading">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 id="video-heading" className="text-3xl font-bold mb-3">See rawcv in action</h2>
+          <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-xl mx-auto">
+            Watch how to upload your resume, get an ATS score, match it to a job description, and download a polished PDF in under 3 minutes.
+          </p>
+          <div className="relative w-full rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-800" style={{ paddingBottom: "56.25%" }}>
+            <iframe
+              className="absolute inset-0 w-full h-full"
+              src="https://www.youtube.com/embed/videoseries?list=PLrAXtmErZgOdP_8GztsuKi9nrraNbKKp4"
+              title="rawcv — AI Resume Builder Tutorial"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+          <p className="text-xs text-gray-400 mt-3">
+            More tutorials on our{" "}
+            <a
+              href="https://www.youtube.com/@rawcv"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-violet-600 transition-colors"
+            >
+              YouTube channel
+            </a>
+          </p>
+        </div>
+      </section>
+
+      {/* Why rawcv — keyword-rich content for SEO */}
+      <section className="py-20 px-6" aria-labelledby="why-heading">
+        <div className="max-w-3xl mx-auto">
+          <h2 id="why-heading" className="text-3xl font-bold text-center mb-10">Why use an AI resume builder?</h2>
+          <div className="prose prose-gray dark:prose-invert max-w-none text-sm leading-relaxed space-y-4 text-gray-600 dark:text-gray-400">
+            <p>
+              Over <strong>75% of resumes are rejected by Applicant Tracking Systems (ATS)</strong> before a human ever reads them.
+              ATS software scans for keywords, formatting, and section completeness — and most resumes fail silently.
+              rawcv&apos;s free ATS resume checker gives you a score out of 100 with specific, actionable fixes so you know exactly what to change.
+            </p>
+            <p>
+              A <strong>job description resume matcher</strong> is equally critical. Recruiters spend an average of 7 seconds on a resume.
+              If your skills and experience don&apos;t mirror the language in the job posting, you&apos;re invisible.
+              rawcv&apos;s JD relevance tool highlights missing keywords and suggests where to add them naturally.
+            </p>
+            <p>
+              Our <strong>AI resume enhancer</strong> rewrites weak bullet points using strong action verbs and quantified achievements —
+              the two things that most consistently improve callback rates. You stay in control: accept, reject, or tweak every suggestion.
+            </p>
+            <p>
+              Whether you&apos;re a <strong>fresher building your first CV</strong>, a mid-career professional switching industries,
+              or a career coach helping clients, rawcv gives you professional-grade tools for free.
+              Start with 20 free credits — no credit card required.
+            </p>
+          </div>
+          <div className="mt-8 flex flex-wrap gap-2 justify-center">
+            {[
+              "free resume checker", "ATS resume scanner", "AI CV builder", "resume keyword optimizer",
+              "job description matcher", "resume score checker", "resume enhancer AI", "CV maker online",
+              "ATS friendly resume builder", "resume improvement tool"
+            ].map((kw) => (
+              <span key={kw} className="px-3 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                {kw}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="pricing-heading">
         <div className="max-w-5xl mx-auto">
           <h2 id="pricing-heading" className="text-3xl font-bold text-center mb-3">Pay only for what you use</h2>
           <p className="text-center text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto">
