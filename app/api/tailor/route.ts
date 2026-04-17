@@ -8,33 +8,48 @@ import { randomUUID } from "crypto";
 import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseJD } from "@/lib/api-guard";
 
-const SYSTEM_PROMPT = `You are an expert resume tailoring specialist. Given a resume and a job description, rewrite the resume's experience bullets and professional summary to better align with the role.
+const SYSTEM_PROMPT = `You are an expert resume tailoring specialist. Given a resume and a job description, aggressively rewrite the resume to be a perfect match for the role. You may change EVERYTHING except personal contact details (name, email, phone, location, linkedin, website).
 
-CRITICAL RULES:
-- Do NOT fabricate any experience, skills, companies, dates, or job titles
-- Only rephrase and reframe existing content using keywords from the JD
-- Preserve all factual information exactly
-- Focus on incorporating relevant JD keywords naturally
-- Strengthen action verbs where appropriate
+You CAN and SHOULD change:
+- Professional summary (rewrite completely to match the role)
+- Job titles / roles (reframe to match JD terminology, e.g. "Software Engineer" → "Full Stack Engineer")
+- Experience bullet points (rewrite to highlight JD-relevant impact)
+- Skills list (reorder, add relevant skills the candidate likely has based on their experience, remove irrelevant ones)
+- Project names, descriptions, and technologies (reframe to highlight JD-relevant aspects)
+- Certifications (reorder by relevance)
+
+RULES:
+- Do NOT invent companies, dates, institutions, or degrees
+- You MAY reframe job titles to better match the JD as long as the seniority level is preserved
+- You MAY add skills that are clearly implied by the candidate's existing experience
+- Make every bullet result-oriented and keyword-rich for the target role
 - Return ONLY valid JSON in this exact shape:
 
 {
   "changes": [
     {
-      "section": string,   // "summary" or "experience"
-      "field": string,     // e.g. "summary", "experience[0].bullets[1]"
-      "original": string,  // exact original text
-      "tailored": string   // rewritten version aligned with JD
+      "section": string,   // "summary" | "experience" | "skills" | "projects" | "certifications"
+      "field": string,     // see field formats below
+      "original": string,  // exact original text (or JSON string for arrays)
+      "tailored": string   // rewritten version (or JSON string for arrays)
     }
   ]
 }
 
+Field formats:
+- Summary: field = "summary"
+- Experience title: field = "experience[i].title"
+- Experience bullet: field = "experience[i].bullets[j]"
+- Skills array (whole list): field = "skills"  — original/tailored are JSON arrays serialized as strings
+- Project description: field = "projects[i].description"
+- Project name: field = "projects[i].name"
+- Project technologies: field = "projects[i].technologies" — JSON array as string
+- Certifications array: field = "certifications" — JSON array as string
+
 Rules:
-- Only include changes where the tailored version meaningfully differs from the original
-- Limit to the most impactful changes (max 15)
-- For experience bullets, reference the field as "experience[i].bullets[j]" where i and j are the indices
-- For summary, use field "summary"
-- Each tailored version must remain factually accurate to the original`;
+- Include ALL impactful changes — do not limit yourself, cover every section
+- Only include a change when the tailored version meaningfully differs
+- Each tailored version must be factually grounded in the original resume`;
 
 export async function POST(req: NextRequest) {
   const auth = await requireAuth();
@@ -59,10 +74,10 @@ export async function POST(req: NextRequest) {
 
   try {
     
-    const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 4000)}`;
+    const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 6000)}`;
     const result = await complete(prompt, SYSTEM_PROMPT) as { changes: Array<{ section: string; field: string; original: string; tailored: string }> };
     const rawChanges = Array.isArray(result.changes) ? result.changes : [];
-    const changes: TailorChange[] = rawChanges.slice(0, 15).map((c) => ({
+    const changes: TailorChange[] = rawChanges.map((c) => ({
       id: randomUUID(), section: c.section ?? "experience", field: c.field ?? "", original: c.original ?? "", tailored: c.tailored ?? "", accepted: false,
     }));
     const finalResume = applyChanges(parsed, changes);
@@ -85,22 +100,49 @@ export async function POST(req: NextRequest) {
  * the client will re-apply only accepted ones before export.
  */
 function applyChanges(base: ParsedResume, changes: TailorChange[]): ParsedResume {
-  // Deep clone
   const resume: ParsedResume = JSON.parse(JSON.stringify(base));
 
   for (const change of changes) {
-    if (change.section === "summary" && change.field === "summary") {
+    const f = change.field;
+
+    if (change.section === "summary" && f === "summary") {
       resume.summary = change.tailored;
+
     } else if (change.section === "experience") {
-      // Parse field like "experience[0].bullets[1]"
-      const expMatch = change.field.match(/experience\[(\d+)\]\.bullets\[(\d+)\]/);
-      if (expMatch) {
-        const ei = parseInt(expMatch[1], 10);
-        const bi = parseInt(expMatch[2], 10);
-        if (resume.experience[ei]?.bullets[bi] !== undefined) {
+      const titleMatch = f.match(/^experience\[(\d+)\]\.title$/);
+      const bulletMatch = f.match(/^experience\[(\d+)\]\.bullets\[(\d+)\]$/);
+      if (titleMatch) {
+        const ei = parseInt(titleMatch[1], 10);
+        if (resume.experience[ei]) resume.experience[ei].title = change.tailored;
+      } else if (bulletMatch) {
+        const ei = parseInt(bulletMatch[1], 10);
+        const bi = parseInt(bulletMatch[2], 10);
+        if (resume.experience[ei]?.bullets[bi] !== undefined)
           resume.experience[ei].bullets[bi] = change.tailored;
-        }
       }
+
+    } else if (change.section === "skills" && f === "skills") {
+      try { resume.skills = JSON.parse(change.tailored); } catch { /* skip */ }
+
+    } else if (change.section === "projects") {
+      const nameMatch = f.match(/^projects\[(\d+)\]\.name$/);
+      const descMatch = f.match(/^projects\[(\d+)\]\.description$/);
+      const techMatch = f.match(/^projects\[(\d+)\]\.technologies$/);
+      if (nameMatch) {
+        const pi = parseInt(nameMatch[1], 10);
+        if (resume.projects?.[pi]) resume.projects[pi].name = change.tailored;
+      } else if (descMatch) {
+        const pi = parseInt(descMatch[1], 10);
+        if (resume.projects?.[pi]) resume.projects[pi].description = change.tailored;
+      } else if (techMatch) {
+        const pi = parseInt(techMatch[1], 10);
+        try {
+          if (resume.projects?.[pi]) resume.projects[pi].technologies = JSON.parse(change.tailored);
+        } catch { /* skip */ }
+      }
+
+    } else if (change.section === "certifications" && f === "certifications") {
+      try { resume.certifications = JSON.parse(change.tailored); } catch { /* skip */ }
     }
   }
 

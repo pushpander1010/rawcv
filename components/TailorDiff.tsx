@@ -10,6 +10,9 @@ import AILoader from "@/components/AILoader";
 const SECTION_COLORS: Record<string, string> = {
   experience: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
   summary: "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
+  skills: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+  projects: "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300",
+  certifications: "bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300",
 };
 
 function SectionBadge({ section }: { section: string }) {
@@ -178,22 +181,49 @@ export default function TailorDiff({ changes, loading = false }: TailorDiffProps
     if (!change) return;
 
     pushUndo();
-    // Apply the change to parsed resume in context
     setState((prev) => {
       if (!prev.parsed || !prev.tailoredResume) return prev;
       const parsed = JSON.parse(JSON.stringify(prev.parsed));
+      const f = change.field;
 
-      if (change.section === "summary" && change.field === "summary") {
+      if (change.section === "summary" && f === "summary") {
         parsed.summary = change.tailored;
+
       } else if (change.section === "experience") {
-        const expMatch = change.field.match(/experience\[(\d+)\]\.bullets\[(\d+)\]/);
-        if (expMatch) {
-          const ei = parseInt(expMatch[1], 10);
-          const bi = parseInt(expMatch[2], 10);
-          if (parsed.experience[ei]?.bullets[bi] !== undefined) {
+        const titleMatch = f.match(/^experience\[(\d+)\]\.title$/);
+        const bulletMatch = f.match(/^experience\[(\d+)\]\.bullets\[(\d+)\]$/);
+        if (titleMatch) {
+          const ei = parseInt(titleMatch[1], 10);
+          if (parsed.experience[ei]) parsed.experience[ei].title = change.tailored;
+        } else if (bulletMatch) {
+          const ei = parseInt(bulletMatch[1], 10);
+          const bi = parseInt(bulletMatch[2], 10);
+          if (parsed.experience[ei]?.bullets[bi] !== undefined)
             parsed.experience[ei].bullets[bi] = change.tailored;
-          }
         }
+
+      } else if (change.section === "skills" && f === "skills") {
+        try { parsed.skills = JSON.parse(change.tailored); } catch { /* skip */ }
+
+      } else if (change.section === "projects") {
+        const nameMatch = f.match(/^projects\[(\d+)\]\.name$/);
+        const descMatch = f.match(/^projects\[(\d+)\]\.description$/);
+        const techMatch = f.match(/^projects\[(\d+)\]\.technologies$/);
+        if (nameMatch) {
+          const pi = parseInt(nameMatch[1], 10);
+          if (parsed.projects?.[pi]) parsed.projects[pi].name = change.tailored;
+        } else if (descMatch) {
+          const pi = parseInt(descMatch[1], 10);
+          if (parsed.projects?.[pi]) parsed.projects[pi].description = change.tailored;
+        } else if (techMatch) {
+          const pi = parseInt(techMatch[1], 10);
+          try {
+            if (parsed.projects?.[pi]) parsed.projects[pi].technologies = JSON.parse(change.tailored);
+          } catch { /* skip */ }
+        }
+
+      } else if (change.section === "certifications" && f === "certifications") {
+        try { parsed.certifications = JSON.parse(change.tailored); } catch { /* skip */ }
       }
 
       const updatedChanges = prev.tailoredResume.changes.map((c) =>
