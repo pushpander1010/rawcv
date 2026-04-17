@@ -102,6 +102,9 @@ export default function RootLayout({
                       <Link href="/chat" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                         Chat
                       </Link>
+                      <Link href="/how-to" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+                        How to
+                      </Link>
                     </nav>
                   </div>
                   <div className="flex items-center gap-3">
