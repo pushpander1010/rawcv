@@ -1,43 +1,6 @@
 import Link from "next/link";
 import Script from "next/script";
 
-function PlaceholderImage({ label, aspectRatio = "16/9" }: { label: string; aspectRatio?: string }) {
-  return (
-    <figure
-      className="w-full rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center gap-3 text-gray-400 dark:text-gray-500 my-6"
-      style={{ aspectRatio }}
-      aria-label={label}
-    >
-      {/* Replace this figure with: <img src="/screenshots/your-image.png" alt="..." className="w-full rounded-2xl" /> */}
-      <svg className="w-10 h-10 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-      <span className="text-xs font-medium px-4 text-center">{label}</span>
-      <span className="text-[10px] opacity-60">Replace with real screenshot</span>
-    </figure>
-  );
-}
-
-function PlaceholderVideo({ label }: { label: string }) {
-  return (
-    <figure
-      className="w-full rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-900 flex flex-col items-center justify-center gap-3 text-gray-400 my-6"
-      style={{ aspectRatio: "16/9" }}
-      aria-label={label}
-    >
-      {/* Replace this figure with: <iframe src="https://www.youtube.com/embed/VIDEO_ID" ... /> */}
-      <svg className="w-12 h-12 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <span className="text-xs font-medium px-4 text-center">{label}</span>
-      <span className="text-[10px] opacity-60">Replace with real video</span>
-    </figure>
-  );
-}
 
 function Step({ number, title, children }: { number: number; title: string; children: React.ReactNode }) {
   return (
@@ -178,7 +141,7 @@ export default function HowToPage() {
             <Step number={1} title="Create a free account">
               <p>Go to <Link href="/register" className="text-violet-600 hover:underline font-medium">rawcv.com/register</Link> and sign up with your email address. No credit card required.</p>
               <p>Once registered you receive <strong className="text-gray-800 dark:text-gray-200">20 free credits</strong> instantly. Credits are consumed per AI operation so you can run several analyses before needing to top up.</p>
-              <PlaceholderImage label="Screenshot: Registration page showing email and password fields with Sign up button" />
+              <img src="/register_screen.jpg" alt="Registration page showing email and password fields with Sign up button" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-gray-700" />
             </Step>
 
             <Step number={2} title="Understand the credit system">
@@ -221,7 +184,7 @@ export default function HowToPage() {
                 <li><strong className="text-gray-800 dark:text-gray-200">Tailor</strong> - rewrite your resume for a specific job description</li>
                 <li><strong className="text-gray-800 dark:text-gray-200">Chat</strong> - build or edit your resume conversationally with AI</li>
               </ul>
-              <PlaceholderImage label="Screenshot: Top navigation bar showing Dashboard, Analyze, Tailor, Chat, How to links and credit balance badge" aspectRatio="5/1" />
+              <img src="/navigation_screen.jpg" alt="Top navigation bar showing Dashboard, Analyze, Tailor, Chat, How to links and credit balance badge" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-gray-700" />
             </Step>
           </DocSection>
 
@@ -231,29 +194,25 @@ export default function HowToPage() {
 
             <Step number={1} title="Go to the home page or dashboard">
               <p>From the home page, scroll to the upload area in the hero section. If you are already logged in, the uploader appears immediately after the welcome message.</p>
-              <PlaceholderImage label="Screenshot: Home page hero with drag-and-drop upload zone highlighted" />
+              <img src="/resume_upload_screen.jpg" alt="Home page hero with drag-and-drop upload zone" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-gray-700" />
             </Step>
 
             <Step number={2} title="Drag and drop or click to browse">
               <p>Drag your resume file directly onto the upload zone, or click <strong className="text-gray-800 dark:text-gray-200">Browse files</strong> to open a file picker.</p>
               <p>Supported formats: <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs font-mono">.pdf</code>, <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs font-mono">.docx</code>, <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs font-mono">.txt</code> up to <strong className="text-gray-800 dark:text-gray-200">5 MB</strong>.</p>
-              <PlaceholderImage label="Screenshot: Upload zone with a file being dragged onto it - dashed border highlighted in violet" />
               <Callout type="tip">For best parsing results use a single-column PDF without tables or text boxes. Multi-column layouts can confuse the parser.</Callout>
             </Step>
 
             <Step number={3} title="Wait for parsing to complete">
               <p>rawcv extracts your contact info, work experience, education, skills, and summary automatically. This takes 3-10 seconds depending on file complexity.</p>
-              <PlaceholderImage label="Screenshot: Upload zone showing parsing spinner and 'Parsing your resume...' message" />
             </Step>
 
             <Step number={4} title="Review the parsed resume">
               <p>Once parsed you are redirected to the <strong className="text-gray-800 dark:text-gray-200">Analyze</strong> page. The right panel shows a live preview of your resume rendered in the selected theme.</p>
               <p>Check that your name, contact details, and work history look correct. If anything is missing or wrong, use the Chat tool to fix it.</p>
-              <PlaceholderImage label="Screenshot: Analyze page - left panel showing ATS tab, right panel showing parsed resume preview" />
               <Callout type="note">rawcv does not permanently store your resume content. Data lives in your browser session. If you refresh or close the tab you will need to re-upload.</Callout>
             </Step>
 
-            <PlaceholderVideo label="Video walkthrough: Uploading a PDF resume and reviewing the parsed output (60 seconds)" />
           </DocSection>
 
 
@@ -263,7 +222,6 @@ export default function HowToPage() {
             <Step number={1} title="Open the Chat tool">
               <p>Click <strong className="text-gray-800 dark:text-gray-200">Chat</strong> in the top navigation, or click <strong className="text-gray-800 dark:text-gray-200">Build from scratch</strong> on the home page.</p>
               <p>The chat interface opens in build mode - the AI will guide you through creating each section of your resume.</p>
-              <PlaceholderImage label="Screenshot: Chat page in build mode - left panel shows chat interface, right panel shows empty resume preview" />
             </Step>
 
             <Step number={2} title="Answer the AI's questions">
@@ -276,26 +234,21 @@ export default function HowToPage() {
                 <li>Optional: certifications, projects, languages, awards</li>
               </ul>
               <p className="mt-2">Type naturally - you do not need to follow a rigid format. The AI extracts structured data from your answers.</p>
-              <PlaceholderImage label="Screenshot: Chat conversation showing AI asking 'What is your most recent job title and company?' with user reply" />
             </Step>
 
             <Step number={3} title="Watch the live preview update">
               <p>As you provide information the resume preview on the right updates in real time. You can see exactly how your resume will look as you build it.</p>
-              <PlaceholderImage label="Screenshot: Split view - chat on left with a few messages, resume preview on right showing populated sections" />
               <Callout type="tip">You can switch themes at any time using the Change theme button above the preview panel. This does not affect your content.</Callout>
             </Step>
 
             <Step number={4} title="Edit any section mid-conversation">
               <p>Made a mistake? Just tell the AI: <em className="text-gray-700 dark:text-gray-300">"Change my job title at Acme Corp to Senior Engineer"</em> or <em className="text-gray-700 dark:text-gray-300">"Remove the Python skill"</em>. It will update the resume immediately.</p>
-              <PlaceholderImage label="Screenshot: Chat message 'Change my summary to focus on product management' with AI confirming the update and preview refreshing" />
             </Step>
 
             <Step number={5} title="Finish and go to Analyze">
               <p>When you are happy with the content click <strong className="text-gray-800 dark:text-gray-200">View Analysis</strong> in the header. You will be taken to the Analyze page where you can run ATS scoring and get AI suggestions.</p>
-              <PlaceholderImage label="Screenshot: Chat page header with 'View Analysis' button highlighted in blue" aspectRatio="5/1" />
             </Step>
 
-            <PlaceholderVideo label="Video walkthrough: Building a complete resume from scratch using the AI chat (3 minutes)" />
           </DocSection>
 
 
@@ -308,12 +261,10 @@ export default function HowToPage() {
 
             <Step number={1} title="Open the ATS Score tab">
               <p>From the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">ATS Score</strong> tab (the first tab, marked with a chart icon).</p>
-              <PlaceholderImage label="Screenshot: Analyze page with ATS Score tab selected and highlighted in the tab bar" aspectRatio="5/1" />
             </Step>
 
             <Step number={2} title="Click Run ATS Analysis">
               <p>Click the blue <strong className="text-gray-800 dark:text-gray-200">Run ATS Analysis</strong> button. The analysis takes 5-15 seconds.</p>
-              <PlaceholderImage label="Screenshot: ATS tab showing the 'Run ATS Analysis' button before analysis is run" />
             </Step>
 
             <Step number={3} title="Read your score and issues">
@@ -323,7 +274,6 @@ export default function HowToPage() {
                 <li><strong className="text-amber-600 dark:text-amber-400">Warnings</strong> - weak formatting, missing dates, vague bullet points</li>
                 <li><strong className="text-blue-600 dark:text-blue-400">Suggestions</strong> - keyword density, action verb usage, quantified achievements</li>
               </ul>
-              <PlaceholderImage label="Screenshot: ATS Score card showing score of 74/100 with a list of issues - one critical, three warnings, two suggestions" />
             </Step>
 
             <Step number={4} title="Fix the issues and re-run">
@@ -338,7 +288,6 @@ export default function HowToPage() {
               <Callout type="tip">Aim for a score above 80 before applying to competitive roles. Scores above 90 are excellent.</Callout>
             </Step>
 
-            <PlaceholderVideo label="Video walkthrough: Running ATS analysis and fixing the top 3 issues (2 minutes)" />
           </DocSection>
 
 
@@ -347,12 +296,10 @@ export default function HowToPage() {
 
             <Step number={1} title="Open the Suggestions tab">
               <p>On the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">Suggestions</strong> tab.</p>
-              <PlaceholderImage label="Screenshot: Analyze page with Suggestions tab selected in the tab bar" aspectRatio="5/1" />
             </Step>
 
             <Step number={2} title="Click Get AI Suggestions">
               <p>Click the violet <strong className="text-gray-800 dark:text-gray-200">Get AI Suggestions</strong> button. The AI reads your entire resume and generates targeted improvements in 5-20 seconds.</p>
-              <PlaceholderImage label="Screenshot: Suggestions tab showing 'Get AI Suggestions' button before running" />
             </Step>
 
             <Step number={3} title="Review each suggestion">
@@ -363,22 +310,18 @@ export default function HowToPage() {
                 <li>The <strong className="text-gray-800 dark:text-gray-200">suggested replacement</strong></li>
                 <li>A brief <strong className="text-gray-800 dark:text-gray-200">reason</strong> explaining why the change improves your resume</li>
               </ul>
-              <PlaceholderImage label="Screenshot: Suggestions list showing 3 cards - each with original text, suggested text, and reason" />
             </Step>
 
             <Step number={4} title="Accept or reject suggestions">
               <p>Click <strong className="text-gray-800 dark:text-gray-200">Accept</strong> to apply a suggestion. The live preview on the right updates immediately.</p>
               <p>Click <strong className="text-gray-800 dark:text-gray-200">Reject</strong> to dismiss a suggestion you disagree with. You can always re-run to get a fresh set.</p>
-              <PlaceholderImage label="Screenshot: A suggestion card with Accept (green) and Reject (red) buttons - Accept button being clicked and preview updating" />
               <Callout type="tip">Accept suggestions one at a time and watch the preview update. This helps you understand the impact of each change before committing.</Callout>
             </Step>
 
             <Step number={5} title="Undo a change">
               <p>Changed your mind? Click the <strong className="text-gray-800 dark:text-gray-200">Undo</strong> button in the top-right of the Analyze page to revert the last accepted suggestion.</p>
-              <PlaceholderImage label="Screenshot: Analyze page header with Undo button highlighted" aspectRatio="5/1" />
             </Step>
 
-            <PlaceholderVideo label="Video walkthrough: Getting AI suggestions and accepting the best ones (90 seconds)" />
           </DocSection>
 
 
@@ -391,26 +334,21 @@ export default function HowToPage() {
 
             <Step number={1} title="Open the Enhance tab">
               <p>On the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">Enhance</strong> tab.</p>
-              <PlaceholderImage label="Screenshot: Analyze page with Enhance tab selected" aspectRatio="5/1" />
             </Step>
 
             <Step number={2} title="Click Enhance Resume">
               <p>Click the orange <strong className="text-gray-800 dark:text-gray-200">Enhance Resume</strong> button. The AI rewrites your bullet points and summary in 5-20 seconds.</p>
-              <PlaceholderImage label="Screenshot: Enhance tab showing the 'Enhance Resume' button before running" />
             </Step>
 
             <Step number={3} title="Review the enhanced content">
               <p>Each enhancement is shown as a before/after comparison. The original text appears in grey and the enhanced version in violet.</p>
-              <PlaceholderImage label="Screenshot: Enhancement list showing before/after comparison for 4 bullet points with clear visual diff" />
             </Step>
 
             <Step number={4} title="Accept the enhancements you like">
               <p>Accept individual enhancements or use <strong className="text-gray-800 dark:text-gray-200">Accept all</strong> to apply everything at once. The resume preview updates in real time.</p>
               <Callout type="warning">Always read enhanced bullet points carefully. The AI preserves your facts but may occasionally rephrase something that does not match your voice. Reject anything that does not feel right.</Callout>
-              <PlaceholderImage label="Screenshot: Enhancement card with Accept and Reject buttons, and 'Accept all' button at the top of the list" />
             </Step>
 
-            <PlaceholderVideo label="Video walkthrough: Running resume enhancement and reviewing before/after changes (90 seconds)" />
           </DocSection>
 
 
@@ -423,12 +361,10 @@ export default function HowToPage() {
 
             <Step number={1} title="Open the JD Match tab">
               <p>On the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">JD Match</strong> tab.</p>
-              <PlaceholderImage label="Screenshot: Analyze page with JD Match tab selected" aspectRatio="5/1" />
             </Step>
 
             <Step number={2} title="Paste the job description">
               <p>Copy the full job description from the job posting - including the responsibilities and requirements sections - and paste it into the text area.</p>
-              <PlaceholderImage label="Screenshot: JD Match tab with a job description pasted into the textarea - 'Analyze Relevance' button visible below" />
               <Callout type="tip">Include the entire job posting, not just the requirements list. The AI picks up on context clues in the responsibilities section too.</Callout>
             </Step>
 
@@ -443,7 +379,6 @@ export default function HowToPage() {
                 <li><strong className="text-gray-800 dark:text-gray-200">Missing skills</strong> - technical or soft skills the employer wants that you have not mentioned</li>
                 <li><strong className="text-gray-800 dark:text-gray-200">Recommendations</strong> - specific sections where you should add the missing content</li>
               </ul>
-              <PlaceholderImage label="Screenshot: Relevance score card showing 68/100 with lists of missing keywords, missing skills, and 3 recommendations" />
             </Step>
 
             <Step number={5} title="Act on the missing keywords">
@@ -454,10 +389,8 @@ export default function HowToPage() {
 
             <Step number={6} title="Go to Tailor for a deeper rewrite">
               <p>If your score is below 60 or you want a more thorough rewrite, click <strong className="text-gray-800 dark:text-gray-200">Tailor resume</strong> to use the dedicated Tailor tool which rewrites your entire resume for the specific job.</p>
-              <PlaceholderImage label="Screenshot: Relevance card with 'Re-run' and 'Tailor resume' buttons at the bottom" />
             </Step>
 
-            <PlaceholderVideo label="Video walkthrough: Pasting a job description, reading the relevance score, and adding missing keywords (2 minutes)" />
           </DocSection>
 
 
@@ -470,12 +403,10 @@ export default function HowToPage() {
 
             <Step number={1} title="Open the Tailor page">
               <p>Click <strong className="text-gray-800 dark:text-gray-200">Tailor</strong> in the top navigation, or click <strong className="text-gray-800 dark:text-gray-200">Tailor resume</strong> from the JD Match results.</p>
-              <PlaceholderImage label="Screenshot: Tailor page with empty job description textarea and 'Tailor Resume' button" />
             </Step>
 
             <Step number={2} title="Paste the job description">
               <p>Paste the full job description into the text area. The same JD you used for the relevance check will be pre-filled if you navigated from there.</p>
-              <PlaceholderImage label="Screenshot: Tailor page with a job description pasted - 'Tailor Resume' button active and blue" />
             </Step>
 
             <Step number={3} title="Click Tailor Resume">
@@ -489,12 +420,10 @@ export default function HowToPage() {
                 <li><span className="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-1 rounded text-xs font-mono">removed text</span> - original content that was replaced</li>
                 <li><span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-1 rounded text-xs font-mono">added text</span> - new content the AI inserted</li>
               </ul>
-              <PlaceholderImage label="Screenshot: Tailor diff view showing red strikethrough text and green replacement text across 5 bullet points" />
             </Step>
 
             <Step number={5} title="Accept or reject individual changes">
               <p>Review each change in the diff. Accept the ones that accurately represent your experience and reject any that overstate your skills or do not fit your voice.</p>
-              <PlaceholderImage label="Screenshot: Diff card with Accept and Reject buttons - one change being accepted, preview updating on the right" />
               <Callout type="warning">Never accept tailored content that claims skills or experience you do not have. Tailoring is about framing your real experience in the employer's language.</Callout>
             </Step>
 
@@ -503,7 +432,6 @@ export default function HowToPage() {
               <Callout type="tip">A resume tailored to a specific job description consistently outperforms a generic one. It takes 30 seconds and costs 2 credits.</Callout>
             </Step>
 
-            <PlaceholderVideo label="Video walkthrough: Tailoring a resume to a software engineer job description (3 minutes)" />
           </DocSection>
 
 
@@ -512,7 +440,6 @@ export default function HowToPage() {
 
             <Step number={1} title="Open the Theme tab">
               <p>On the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">Theme</strong> tab. You can also access the theme picker from the Chat page by clicking <strong className="text-gray-800 dark:text-gray-200">Change theme</strong> above the preview.</p>
-              <PlaceholderImage label="Screenshot: Theme tab showing 8 theme cards in a grid layout" />
             </Step>
 
             <Step number={2} title="Choose a theme">
@@ -530,8 +457,7 @@ export default function HowToPage() {
                 ].map((t) => (
                   <div key={t.name} className="rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center">
                     <div className="w-full h-16 rounded-lg bg-gray-100 dark:bg-gray-800 mb-2 flex items-center justify-center">
-                      {/* Replace with actual theme thumbnail: <img src={`/themes/${t.name.toLowerCase()}-thumb.png`} alt={t.name} /> */}
-                      <span className="text-xs text-gray-400">thumbnail</span>
+                      <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">{t.name}</span>
                     </div>
                     <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">{t.name}</p>
                     <p className="text-[10px] text-gray-400 mt-0.5">{t.desc}</p>
@@ -543,17 +469,14 @@ export default function HowToPage() {
 
             <Step number={3} title="Preview in real time">
               <p>Clicking a theme card instantly updates the resume preview on the right. No need to save - the selection is applied immediately.</p>
-              <PlaceholderImage label="Screenshot: Theme tab with 'Modern' selected (highlighted border) and resume preview on the right showing the Modern theme applied" />
             </Step>
 
             <Step number={4} title="Download your PDF">
               <p>Click the <strong className="text-gray-800 dark:text-gray-200">Download PDF</strong> button in the top-right of the Analyze or Tailor page. The PDF is generated server-side and downloads automatically.</p>
               <p>PDF downloads are <strong className="text-gray-800 dark:text-gray-200">free</strong> - they do not consume credits.</p>
-              <PlaceholderImage label="Screenshot: Analyze page header with 'Download PDF' button highlighted - download starting in browser" aspectRatio="5/1" />
               <Callout type="note">The downloaded PDF is a pixel-perfect render of the theme preview, optimised for both ATS parsing and human readability.</Callout>
             </Step>
 
-            <PlaceholderVideo label="Video walkthrough: Switching themes and downloading a PDF (60 seconds)" />
           </DocSection>
 
 
@@ -562,7 +485,6 @@ export default function HowToPage() {
 
             <Step number={1} title="Check your balance">
               <p>Your current credit balance is shown in the top-right corner of every page. Click it to go to the <Link href="/credits" className="text-violet-600 hover:underline">Credits page</Link>.</p>
-              <PlaceholderImage label="Screenshot: Header showing credit balance badge '18 credits' in the top-right corner" aspectRatio="5/1" />
             </Step>
 
             <Step number={2} title="Choose a credit pack">
@@ -581,7 +503,6 @@ export default function HowToPage() {
                   </div>
                 ))}
               </div>
-              <PlaceholderImage label="Screenshot: Credits page showing three pricing cards with Buy buttons" />
             </Step>
 
             <Step number={3} title="Pay securely">
