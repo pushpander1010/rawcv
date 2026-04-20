@@ -74,7 +74,7 @@ export default function LandingPage() {
           { "@type": "Offer", "name": "Power", "price": "999", "priceCurrency": "INR" }
         ],
         "description": "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, and download a polished PDF resume.",
-        "screenshot": "https://www.rawcv.com/og-image.svg",
+        "screenshot": "https://www.rawcv.com/og-image.png",
         "featureList": [
           "ATS Score Analysis",
           "Job Description Relevance Match",
@@ -89,7 +89,12 @@ export default function LandingPage() {
         "@id": "https://www.rawcv.com/#org",
         "name": "rawcv",
         "url": "https://www.rawcv.com",
-        "logo": "https://www.rawcv.com/logo.svg"
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.rawcv.com/logo.png",
+          "width": 512,
+          "height": 512
+        }
       }
     ]
   };
