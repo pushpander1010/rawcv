@@ -6,7 +6,17 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/dashboard", "/reset-password", "/forgot-password", "/verify-email"],
+        disallow: [
+          "/api/",
+          "/dashboard/",
+          "/analyze/",
+          "/tailor/",
+          "/chat/",
+          "/credits/",
+          "/reset-password/",
+          "/forgot-password/",
+          "/verify-email/",
+        ],
       },
     ],
     sitemap: "https://www.rawcv.com/sitemap.xml",
