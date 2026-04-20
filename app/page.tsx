@@ -237,34 +237,60 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* YouTube Video — helps with engagement signals and rich results */}
-      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="video-heading">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 id="video-heading" className="text-3xl font-bold mb-3">See rawcv in action</h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-xl mx-auto">
-            Watch how to upload your resume, get an ATS score, match it to a job description, and download a polished PDF in under 3 minutes.
+      {/* Resume tips — replaces broken YouTube embed */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="tips-heading">
+        <div className="max-w-5xl mx-auto">
+          <h2 id="tips-heading" className="text-3xl font-bold text-center mb-3">
+            Quick resume tips that actually work
+          </h2>
+          <p className="text-center text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto">
+            Small changes that move the needle on ATS scores and recruiter callbacks.
           </p>
-          <div className="relative w-full rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-800" style={{ paddingBottom: "56.25%" }}>
-            <iframe
-              className="absolute inset-0 w-full h-full"
-              src="https://www.youtube.com/embed/videoseries?list=PLrAXtmErZgOdP_8GztsuKi9nrraNbKKp4"
-              title="rawcv — AI Resume Builder Tutorial"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                num: "01",
+                title: "Mirror the job description",
+                body: "Copy exact phrases from the job posting into your resume. ATS systems match keywords literally — synonyms don't count.",
+              },
+              {
+                num: "02",
+                title: "Quantify every bullet point",
+                body: 'Replace "managed a team" with "managed a team of 8 engineers, reducing deploy time by 40%." Numbers stand out to both ATS and humans.',
+              },
+              {
+                num: "03",
+                title: "Use a single-column layout",
+                body: "Multi-column resumes confuse most ATS parsers. A clean single-column format ensures every word gets read correctly.",
+              },
+              {
+                num: "04",
+                title: "Name your sections clearly",
+                body: 'Use standard headings: "Work Experience", "Education", "Skills". Creative labels like "My Journey" are invisible to ATS.',
+              },
+              {
+                num: "05",
+                title: "Keep it to one or two pages",
+                body: "Recruiters spend ~7 seconds on a first pass. One page for under 5 years of experience; two pages maximum for senior roles.",
+              },
+              {
+                num: "06",
+                title: "Save as PDF, not DOCX",
+                body: "PDFs preserve your formatting across every system. DOCX files can reflow unpredictably depending on the recruiter's Word version.",
+              },
+            ].map((tip) => (
+              <div
+                key={tip.num}
+                className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow"
+              >
+                <span className="text-xs font-bold text-violet-500 tracking-widest mb-3 block">
+                  {tip.num}
+                </span>
+                <h3 className="font-semibold text-base mb-2">{tip.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{tip.body}</p>
+              </div>
+            ))}
           </div>
-          <p className="text-xs text-gray-400 mt-3">
-            More tutorials on our{" "}
-            <a
-              href="https://www.youtube.com/@rawcv"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-violet-600 transition-colors"
-            >
-              YouTube channel
-            </a>
-          </p>
         </div>
       </section>
 
