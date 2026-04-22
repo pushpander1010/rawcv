@@ -8,8 +8,9 @@ interface Props {
   defaultLeftWidth?: number;
   minLeft?: number;
   minRight?: number;
-  leftLabel?: string;
-  rightLabel?: string;
+  leftLabel?: React.ReactNode;
+  rightLabel?: React.ReactNode;
+  onRightTabClick?: () => void;
 }
 
 export default function ResizablePanels({
@@ -20,6 +21,7 @@ export default function ResizablePanels({
   minRight = 280,
   leftLabel = "Tools",
   rightLabel = "Preview",
+  onRightTabClick,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [leftWidth, setLeftWidth] = useState(defaultLeftWidth);
@@ -72,7 +74,7 @@ export default function ResizablePanels({
         </button>
         <button
           type="button"
-          onClick={() => setMobileTab("right")}
+          onClick={() => { setMobileTab("right"); onRightTabClick?.(); }}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             mobileTab === "right"
               ? "border-b-2 border-violet-600 text-violet-600"

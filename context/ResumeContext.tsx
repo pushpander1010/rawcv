@@ -24,6 +24,7 @@ export interface ResumeState {
   lastOperationCost: number | null;
   creditBalance: number | null;
   chatResetSignal: number; // increments on reset so ChatBot can react
+  chatClearSignal: number; // increments on clear-chat so ChatBot clears messages only
 }
 
 interface ResumeContextValue {
@@ -33,6 +34,7 @@ interface ResumeContextValue {
   undo: () => void;
   canUndo: boolean;
   reset: () => void;
+  clearChat: () => void;
   refreshCredits: () => void;
   isHydrated: boolean;
 }
@@ -50,6 +52,7 @@ const defaultState: ResumeState = {
   lastOperationCost: null,
   creditBalance: null,
   chatResetSignal: 0,
+  chatClearSignal: 0,
 };
 
 const MAX_UNDO = 20;
@@ -175,6 +178,14 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     fetch("/api/chat", { method: "DELETE" }).catch(() => {});
   }, [userId]);
 
+  /** Clear chat messages only — keeps resume data, localStorage, and undo stack intact */
+  const clearChat = useCallback(() => {
+    setStateRaw((prev) => ({
+      ...prev,
+      chatClearSignal: prev.chatClearSignal + 1,
+    }));
+  }, []);
+
   // ── Credits ───────────────────────────────────────────────────────────────
 
   const refreshCredits = useCallback(async () => {
@@ -195,7 +206,7 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ResumeContext.Provider value={{
-      state, setState, pushUndo, undo, canUndo, reset, refreshCredits, isHydrated,
+      state, setState, pushUndo, undo, canUndo, reset, clearChat, refreshCredits, isHydrated,
     }}>
       {children}
     </ResumeContext.Provider>

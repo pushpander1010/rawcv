@@ -20,18 +20,35 @@ export default function ChatPage() {
   const modeLocked = useRef(false);
   useEffect(() => {
     if (modeLocked.current) return;
-    // Wait until context has hydrated (state.parsed is known, even if null)
-    // We detect hydration by checking if the context has settled
     modeLocked.current = true;
     setMode(state.parsed ? "customize" : "build");
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.parsed]);
+
   const [showThemePicker, setShowThemePicker] = useState(false);
 
+  // Track preview updates so mobile tab can show a "updated" badge
+  const [previewUpdated, setPreviewUpdated] = useState(false);
+  const prevParsedRef = useRef(state.parsed);
+  useEffect(() => {
+    if (state.parsed !== prevParsedRef.current) {
+      prevParsedRef.current = state.parsed;
+      setPreviewUpdated(true);
+    }
+  }, [state.parsed]);
+
   function handleComplete() {
-    // Resume is already synced to context via ChatBot — just navigate
     router.push("/analyze");
   }
+
+  const rightLabel = (
+    <span className="flex items-center gap-1.5">
+      Resume Preview
+      {previewUpdated && (
+        <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-label="Preview updated" />
+      )}
+    </span>
+  );
 
   return (
     <main className="h-screen flex flex-col overflow-hidden" style={{ height: "100dvh" }}>
@@ -55,7 +72,7 @@ export default function ChatPage() {
 
         <div className="flex items-center gap-3">
           <UndoButton />
-            <ResetButton />
+          <ResetButton />
           {state.parsed && (
             <button
               type="button"
@@ -72,7 +89,8 @@ export default function ChatPage() {
       <ResizablePanels
         defaultLeftWidth={420}
         leftLabel="Chat"
-        rightLabel="Resume Preview"
+        rightLabel={rightLabel as unknown as string}
+        onRightTabClick={() => setPreviewUpdated(false)}
         left={
           <div className="flex flex-col h-full">
             <ChatBot mode={mode} onComplete={handleComplete} onEnd={() => router.back()} />

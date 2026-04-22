@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
-  const { state, setState, refreshCredits, pushUndo, isHydrated } = useResume();
+  const { state, setState, refreshCredits, pushUndo, isHydrated, clearChat } = useResume();
 
   const [messages, setMessages]           = useState<ChatMessage[]>([]);
   const [loading, setLoading]             = useState(false);
@@ -44,6 +44,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   const initialised = useRef(false);
   const greetingInFlight  = useRef(false);
   const lastResetSignal   = useRef(state.chatResetSignal);
+  const lastClearSignal   = useRef(state.chatClearSignal);
 
   // ── Reset signal ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -60,6 +61,22 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     triggerGreeting(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.chatResetSignal]);
+
+  // ── Clear chat signal (messages only — resume data stays intact) ──────────
+  useEffect(() => {
+    if (state.chatClearSignal === lastClearSignal.current) return;
+    lastClearSignal.current = state.chatClearSignal;
+
+    setMessages([]);
+    setIsComplete(false);
+    setError(null);
+    setOutOfCredits(false);
+    setInput("");
+    // Re-greet with current resume state so the AI knows where we left off
+    greetingInFlight.current = false;
+    triggerGreeting(localResumeRef.current as ParsedResume | null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.chatClearSignal]);
 
   // ── Hydrate once session is ready ─────────────────────────────────────────
   useEffect(() => {
@@ -329,15 +346,33 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             Send
           </button>
         </div>
-        {onEnd && (
-          <button
-            type="button"
-            onClick={onEnd}
-            className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-500 dark:hover:text-red-400 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
-          >
-            End Chat
-          </button>
-        )}
+        <div className="flex items-center justify-between gap-2">
+          {/* Clear chat history — keeps resume data intact */}
+          {messages.length > 0 && (
+            <button
+              type="button"
+              onClick={clearChat}
+              disabled={loading}
+              aria-label="Clear chat history"
+              title="Clear chat history (resume data is kept)"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-40"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Clear chat
+            </button>
+          )}
+          {onEnd && (
+            <button
+              type="button"
+              onClick={onEnd}
+              className="ml-auto px-4 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-500 dark:hover:text-red-400 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              End Chat
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

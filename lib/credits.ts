@@ -4,9 +4,10 @@ import { authOptions } from "@/lib/auth";
 import { getUserById, deductCredits } from "@/lib/user-store";
 
 // Fixed cost per AI operation — set via CREDITS_PER_OPERATION env var, default 2
-const COST = parseInt(process.env.CREDITS_PER_OPERATION ?? "2", 10);
+const DEFAULT_COST = parseInt(process.env.CREDITS_PER_OPERATION ?? "2", 10);
 
-export async function chargeCredits(operationLabel: string): Promise<NextResponse | null> {
+export async function chargeCredits(operationLabel: string, cost?: number): Promise<NextResponse | null> {
+  const COST = cost ?? DEFAULT_COST;
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: "unauthorized", message: "Not signed in" }, { status: 401 });

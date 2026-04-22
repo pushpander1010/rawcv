@@ -357,8 +357,8 @@ export async function POST(req: NextRequest) {
 
     const aiResult = await complete(prompt, systemPrompt);
 
-    // Charge after AI responds
-    const chargeError = await chargeCredits("Chat bot");
+    // Charge 1 credit per chat message (cheaper than other AI operations)
+    const chargeError = await chargeCredits("Chat bot", 1);
     if (chargeError) return chargeError;
 
     // ── Customize mode ────────────────────────────────────────────────────────
