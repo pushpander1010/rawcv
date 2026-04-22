@@ -117,8 +117,11 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
   // Persist messages to context/localStorage whenever they settle
   // Skip during loading to avoid saving mid-flight partial states
+  // Skip empty arrays — never overwrite persisted messages with [] unless
+  // the user explicitly cleared chat (handled by the clear/reset signal handlers)
   useEffect(() => {
     if (!initialised.current || loading) return;
+    if (messages.length === 0) return; // don't wipe persisted history with an empty array
     syncMessages(messages);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, loading]);

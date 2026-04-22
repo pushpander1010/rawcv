@@ -11,19 +11,32 @@ import UndoButton from "@/components/UndoButton";
 import ResetButton from "@/components/ResetButton";
 
 export default function ChatPage() {
-  const { state } = useResume();
+  const { state, isHydrated } = useResume();
   const router = useRouter();
 
-  // Lock mode after first non-null state.parsed determination (hydration).
-  // Without this, mode flips build→customize on first AI response and resets the chat.
+  // Lock mode after hydration is complete so we read the persisted resume state,
+  // not the default null. Without waiting for isHydrated, mode always locks to
+  // "build" because state.parsed is null before localStorage is loaded.
+  // Also re-evaluate mode when the user resets (chatResetSignal changes) so
+  // "build from scratch" after a reset correctly switches back to build mode.
   const [mode, setMode] = useState<"build" | "customize">("build");
   const modeLocked = useRef(false);
+  const lastResetSignal = useRef(state.chatResetSignal);
   useEffect(() => {
+    if (!isHydrated) return;          // wait until localStorage is loaded
+
+    const resetFired = state.chatResetSignal !== lastResetSignal.current;
+    if (resetFired) {
+      // Reset always means build from scratch
+      lastResetSignal.current = state.chatResetSignal;
+      modeLocked.current = false;
+    }
+
     if (modeLocked.current) return;
     modeLocked.current = true;
     setMode(state.parsed ? "customize" : "build");
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.parsed]);
+  }, [isHydrated, state.parsed, state.chatResetSignal]);
 
   const [showThemePicker, setShowThemePicker] = useState(false);
 
