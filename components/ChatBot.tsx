@@ -39,6 +39,14 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     [setState]
   );
 
+  // Persist messages to context state so they survive page refresh
+  const syncMessages = useCallback(
+    (msgs: ChatMessage[]) => {
+      setState((s) => ({ ...s, chatMessages: msgs }));
+    },
+    [setState]
+  );
+
   const bottomRef   = useRef<HTMLDivElement>(null);
   const inputRef    = useRef<HTMLTextAreaElement>(null);
   const initialised = useRef(false);
@@ -52,6 +60,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     lastResetSignal.current = state.chatResetSignal;
 
     setMessages([]);
+    syncMessages([]);
     localResumeRef.current = {};
     setIsComplete(false);
     setError(null);
@@ -88,7 +97,14 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     const resumeSnapshot = state.parsed ?? null;
     localResumeRef.current = resumeSnapshot ?? {};
 
-    triggerGreeting(resumeSnapshot);
+    // Restore persisted messages — skip greeting if history already exists
+    const persistedMessages = state.chatMessages ?? [];
+    if (persistedMessages.length > 0) {
+      setMessages(persistedMessages);
+      greetingInFlight.current = true; // prevent greeting from firing
+    } else {
+      triggerGreeting(resumeSnapshot);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHydrated]);
 
@@ -98,6 +114,14 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       localResumeRef.current = state.parsed;
     }
   }, [state.parsed]);
+
+  // Persist messages to context/localStorage whenever they settle
+  // Skip during loading to avoid saving mid-flight partial states
+  useEffect(() => {
+    if (!initialised.current || loading) return;
+    syncMessages(messages);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages, loading]);
 
   // Auto-scroll
   useEffect(() => {

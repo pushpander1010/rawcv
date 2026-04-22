@@ -25,6 +25,7 @@ export interface ResumeState {
   creditBalance: number | null;
   chatResetSignal: number; // increments on reset so ChatBot can react
   chatClearSignal: number; // increments on clear-chat so ChatBot clears messages only
+  chatMessages: Array<{ role: "user" | "assistant"; content: string }>; // persisted chat history
 }
 
 interface ResumeContextValue {
@@ -53,6 +54,7 @@ const defaultState: ResumeState = {
   creditBalance: null,
   chatResetSignal: 0,
   chatClearSignal: 0,
+  chatMessages: [],
 };
 
 const MAX_UNDO = 20;
@@ -65,6 +67,7 @@ function storageKey(userId: string | undefined) {
 const PERSIST_KEYS: (keyof ResumeState)[] = [
   "raw", "parsed", "atsResult", "relevanceResult",
   "suggestions", "enhancements", "tailoredResume", "selectedTheme", "jd",
+  "chatMessages",
 ];
 
 function loadPersistedState(userId: string | undefined): Partial<ResumeState> {
@@ -182,6 +185,7 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
   const clearChat = useCallback(() => {
     setStateRaw((prev) => ({
       ...prev,
+      chatMessages: [],
       chatClearSignal: prev.chatClearSignal + 1,
     }));
   }, []);
