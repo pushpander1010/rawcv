@@ -4,7 +4,7 @@ import { getUserByValidResetToken, updateUser, clearPasswordResetToken } from "@
 import { rateLimit, getIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
-  const { allowed, retryAfter } = rateLimit(`reset-password:${getIp(req)}`, 5, 15 * 60 * 1000);
+  const { allowed, retryAfter } = await rateLimit(`reset-password:${getIp(req)}`, 5, 15 * 60 * 1000);
   if (!allowed) {
     return NextResponse.json(
       { error: "too_many_requests", message: "Too many attempts. Please try again later." },

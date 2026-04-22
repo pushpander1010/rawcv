@@ -5,7 +5,7 @@ import { sendPasswordResetEmail } from "@/lib/email";
 import { rateLimit, getIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
-  const { allowed, retryAfter } = rateLimit(`forgot-password:${getIp(req)}`, 3, 15 * 60 * 1000);
+  const { allowed, retryAfter } = await rateLimit(`forgot-password:${getIp(req)}`, 3, 15 * 60 * 1000);
   if (!allowed) {
     return NextResponse.json(
       { error: "too_many_requests", message: "Too many attempts. Please try again later." },
