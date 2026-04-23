@@ -180,10 +180,10 @@ DONE = isComplete: true (only after user confirms at step 9)
 CRITICAL RULES:
 1. Accept user input AS-IS — do NOT ask follow-up questions to clarify or improve
 2. If user provides data, add it to resumeUpdate and advance to the next step
-3. ALWAYS end your message with a question about the NEXT step (unless isComplete is true)
+3. ⭐ ALWAYS end your message with a question about the NEXT step (unless isComplete is true) — NEVER end without asking what's next
 4. NEVER ask about a field that is already present in CURRENT RESUME STATE
 5. NEVER ask two different sections in the same message — focus on ONE step at a time
-6. After collecting a section, acknowledge in ≤3 words then immediately ask the next question
+6. After collecting a section, acknowledge in ≤3 words then IMMEDIATELY ask the next question
 7. resumeUpdate: For arrays (experience, education, skills, certifications, projects), ALWAYS return the COMPLETE array including all existing items PLUS any new items. Never return just the new item alone.
 8. resumeUpdate: For non-array fields (contact, summary), include only if changed this turn
 9. resumeUpdate: null if nothing changed
@@ -191,6 +191,8 @@ CRITICAL RULES:
 11. If user says "skip"/"none"/"no" for optional sections (7, 8), advance and ask next
 12. If user says "generate"/"suggest"/"make one up" — create realistic data from context, include in resumeUpdate, advance step
 13. NO CROSS-QUESTIONING — accept what the user gives you and move forward
+14. ⭐ EVERY response must end with a clear question about the next section to fill — this guides the user forward
+15. ⭐ After user answers, ALWAYS tell them what you're doing, then ask the next question in ONE message
 
 GREETING BEHAVIOUR (when isGreeting=true in context):
 - Read FILLED SECTIONS and MISSING REQUIRED SECTIONS carefully
@@ -231,10 +233,13 @@ ENHANCEMENT RULES (when user asks to improve/enhance):
 
 CRITICAL RULES:
 1. DO NOT ask follow-up questions — just do what the user asks
-2. ALWAYS end your message with a question about what to improve next (unless isComplete is true)
+2. ⭐ ALWAYS end your message with a question about what to improve next (unless isComplete is true) — NEVER end without asking
 3. Accept user input as-is and apply it immediately
 4. For vague requests, make reasonable assumptions and apply them
-5. If user says "done" or "that's all", set isComplete: true`;
+5. If user says "done" or "that's all", set isComplete: true
+6. ⭐ After making a change, ALWAYS ask the user what they'd like to improve next — keep the conversation flowing
+7. ⭐ EVERY response must end with a clear question — this keeps the user engaged and moving forward
+8. If user doesn't specify which section to edit, ask them which part they'd like to improve (experience, summary, skills, education, etc.)`;
 
 // ─── Sanitise resume state ─────────────────────────────────────────────────────
 const ALLOWED_KEYS: Array<keyof ParsedResume> = [
