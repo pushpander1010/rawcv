@@ -6,6 +6,7 @@ import type { ParsedResume } from "@/types";
 import { completeChat as complete } from "@/lib/ai-providers";
 import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseMessages } from "@/lib/api-guard";
+import { sanitizeResume } from "@/lib/sanitize-resume";
 
 // ─── Server-side stores ────────────────────────────────────────────────────────
 // NOTE: These are in-memory. For production, replace with Redis or DB.
@@ -386,9 +387,12 @@ export async function POST(req: NextRequest) {
 
       sectionHistoryStore.set(auth.userId, updatedHistory);
 
+      // Sanitize the resume update to ensure all fields are strings
+      const sanitizedUpdate = finalUpdate ? sanitizeResume(finalUpdate) : null;
+
       return NextResponse.json({
         message: parsed.message ?? "Done! What else would you like to change?",
-        resumeUpdate: finalUpdate,
+        resumeUpdate: sanitizedUpdate,
         isComplete: parsed.isComplete ?? false,
         sectionHistory: updatedHistory,
       } satisfies ChatResponse);
@@ -410,9 +414,12 @@ export async function POST(req: NextRequest) {
       buildStepStore.set(auth.userId, nextStep);
     }
 
+    // Sanitize the resume update to ensure all fields are strings
+    const sanitizedUpdate = parsed.resumeUpdate ? sanitizeResume(parsed.resumeUpdate) : null;
+
     return NextResponse.json({
       message: parsed.message ?? "Got it! What's next?",
-      resumeUpdate: parsed.resumeUpdate ?? null,
+      resumeUpdate: sanitizedUpdate,
       isComplete: parsed.isComplete ?? false,
       currentStep: nextStep,
     } satisfies ChatResponse);

@@ -13,7 +13,7 @@ const MAX_SIZE = 5 * 1024 * 1024;
 /* ---------------- HARD SAFE NORMALIZER ---------------- */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalizeParsed(data: any): ParsedResume {
-  return {
+  const normalized = {
     contact: {
       name:     data?.contact?.name     ?? "",
       email:    data?.contact?.email    ?? "",
@@ -50,6 +50,9 @@ function normalizeParsed(data: any): ParsedResume {
         }))
       : [],
   };
+  
+  // Sanitize to ensure all fields are strings (not numbers, nulls, etc.)
+  return sanitizeResume(normalized);
 }
 
 /* ---------------- MAGIC BYTES ---------------- */
