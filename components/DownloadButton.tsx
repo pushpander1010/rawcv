@@ -24,7 +24,13 @@ export default function DownloadButton() {
       }, 1, 90000); // 1 retry, 90s timeout for PDF generation
 
       if (!res.ok) {
-        const json = await safeJsonParse<{ fallbackHtml?: string; message?: string }>(res).catch(() => ({}));
+        let json: { fallbackHtml?: string; message?: string } = {};
+        try {
+          json = await safeJsonParse<{ fallbackHtml?: string; message?: string }>(res);
+        } catch (parseErr) {
+          console.error('[DownloadButton] Failed to parse error response:', parseErr);
+        }
+        
         // Puppeteer unavailable — fall back to print dialog
         if (json.fallbackHtml) {
           openPrintWindow(json.fallbackHtml, safeName);
