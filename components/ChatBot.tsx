@@ -6,6 +6,7 @@ import AILoader from "@/components/AILoader";
 import CreditWarningBanner from "@/components/CreditWarningBanner";
 import type { ParsedResume } from "@/types";
 import type { ChatMessage, ChatResponse } from "@/app/api/chat/route";
+import { fetchWithRetry, safeJsonParse } from "@/lib/fetch-retry";
 
 interface Props {
   mode?: "build" | "customize";
@@ -167,7 +168,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     }
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetchWithRetry("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -184,14 +185,22 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
         return;
       }
 
-      const data = await res.json() as ChatResponse;
+      const data = await safeJsonParse<ChatResponse>(res).catch((err) => {
+        console.error('[ChatBot] Greeting JSON parse error:', err);
+        setMessages([{ role: "assistant", content: buildFallback(parsed) }]);
+        return null;
+      });
+
+      if (!data) return;
+
       setMessages([{ role: "assistant", content: data.message }]);
 
       // Apply any resume update that came back with the greeting
       if (data.resumeUpdate && data.resumeUpdate !== null && Object.keys(data.resumeUpdate).length > 0) {
         applyResumeUpdate(data.resumeUpdate);
       }
-    } catch {
+    } catch (err) {
+      console.error('[ChatBot] Greeting error:', err);
       setMessages([{ role: "assistant", content: buildFallback(parsed) }]);
     } finally {
       setLoading(false);
@@ -213,7 +222,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       setOutOfCredits(false);
 
       try {
-        const res = await fetch("/api/chat", {
+        const res = await fetchWithRetry("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -224,7 +233,12 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
           }),
         });
 
-        const data = await res.json();
+        const data = await safeJsonParse<ChatResponse>(res).catch((err) => {
+          // Roll back the user message so they can retry
+          setMessages((prev) => prev.slice(0, -1));
+          setInput(text.trim());
+          throw err;
+        });
 
         if (!res.ok) {
           // Roll back the user message so they can retry
@@ -262,7 +276,22 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
         refreshCredits();
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Something went wrong");
+        // Roll back the user message on error so they can retry
+        setMessages((prev) => prev.slice(0, -1));
+        setInput(text.trim());
+        
+        const errorMessage = e instanceof Error ? e.message : "Something went wrong";
+        
+        // Provide more helpful error messages
+        if (errorMessage.includes('timeout') || errorMessage.includes('AbortError')) {
+          setError("Request timed out. The server is taking too long to respond. Please try again.");
+        } else if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError')) {
+          setError("Network error. Please check your connection and try again.");
+        } else if (errorMessage.includes('Invalid response')) {
+          setError("Server returned an invalid response. Please try again.");
+        } else {
+          setError(errorMessage);
+        }
       } finally {
         setLoading(false);
         inputRef.current?.focus();
