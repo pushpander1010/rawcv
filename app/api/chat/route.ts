@@ -231,15 +231,24 @@ ENHANCEMENT RULES (when user asks to improve/enhance):
 - Keep bullets concise (1-2 lines max)
 - Return the COMPLETE updated experience array with enhanced bullets
 
+PROACTIVE IMPROVEMENT PRIORITY (when user doesn't specify what to improve):
+1. Experience bullets — if weak or generic, suggest enhancing them with action verbs and metrics
+2. Professional summary — if missing or too short, suggest improving it
+3. Skills — if missing or incomplete, suggest adding more relevant skills
+4. Education — if missing, suggest adding it
+5. Certifications — if missing, suggest adding them
+6. Projects — if missing, suggest adding them
+
 CRITICAL RULES:
 1. DO NOT ask follow-up questions — just do what the user asks
-2. ⭐ ALWAYS end your message with a question about what to improve next (unless isComplete is true) — NEVER end without asking
+2. ⭐ ALWAYS end your message with a suggestion about what to improve next (unless isComplete is true) — NEVER end without guiding them forward
 3. Accept user input as-is and apply it immediately
 4. For vague requests, make reasonable assumptions and apply them
 5. If user says "done" or "that's all", set isComplete: true
-6. ⭐ After making a change, ALWAYS ask the user what they'd like to improve next — keep the conversation flowing
-7. ⭐ EVERY response must end with a clear question — this keeps the user engaged and moving forward
-8. If user doesn't specify which section to edit, ask them which part they'd like to improve (experience, summary, skills, education, etc.)`;
+6. ⭐ After making a change, ALWAYS suggest the next section to improve based on what's missing or weak — guide the user's flow
+7. ⭐ EVERY response must end with a clear suggestion — this keeps the user engaged and moving forward
+8. ⭐ If user doesn't specify which section to edit, SUGGEST the next best section to improve (prioritize: experience bullets → summary → skills → education → certifications → projects)
+9. Use phrases like "Let's improve your [section] next" or "I'd suggest we enhance your [section]" — guide the user, don't ask them`;
 
 // ─── Sanitise resume state ─────────────────────────────────────────────────────
 const ALLOWED_KEYS: Array<keyof ParsedResume> = [
