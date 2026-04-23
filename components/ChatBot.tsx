@@ -28,14 +28,19 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   // localResumeRef is the single source of truth for resume state inside this component.
   // We never read from state.parsed in sendMessage to avoid stale closure bugs.
   const localResumeRef = useRef<Partial<ParsedResume>>(state.parsed ?? {});
+  const isInternalUpdate = useRef(false);
 
   // Sync localResumeRef AND push to context/preview whenever resume changes
   const applyResumeUpdate = useCallback(
     (update: Partial<ParsedResume>) => {
       const merged = mergeResumeUpdate(localResumeRef.current, update);
       localResumeRef.current = merged;
+      // Mark this as an internal update so the sync useEffect doesn't overwrite it
+      isInternalUpdate.current = true;
       // Always push to context so the preview refreshes immediately
       setState((s) => ({ ...s, parsed: toFullResume(merged) }));
+      // Reset the flag after a tick
+      setTimeout(() => { isInternalUpdate.current = false; }, 0);
     },
     [setState]
   );
@@ -110,7 +115,9 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   }, [isHydrated]);
 
   // Sync ref if context updates externally (e.g. undo button)
+  // Skip if this was an internal update from applyResumeUpdate
   useEffect(() => {
+    if (isInternalUpdate.current) return;
     if (state.parsed) {
       localResumeRef.current = state.parsed;
     }
@@ -462,6 +469,10 @@ function mergeResumeUpdate(
   current: Partial<ParsedResume>,
   update: Partial<ParsedResume>
 ): Partial<ParsedResume> {
+  console.log('[ChatBot] mergeResumeUpdate called');
+  console.log('[ChatBot] Current state:', JSON.stringify(current, null, 2));
+  console.log('[ChatBot] Update received:', JSON.stringify(update, null, 2));
+  
   const merged = { ...current };
 
   for (const key of Object.keys(update) as Array<keyof ParsedResume>) {
@@ -478,10 +489,16 @@ function mergeResumeUpdate(
       // For arrays, check if this is a partial update (single item) or complete replacement
       const currentArray = (merged as Record<string, unknown>)[key];
       
+      console.log(`[ChatBot] Processing array field: ${key}`);
+      console.log(`[ChatBot] Current array length: ${Array.isArray(currentArray) ? currentArray.length : 0}`);
+      console.log(`[ChatBot] Update array length: ${val.length}`);
+      
       if (Array.isArray(currentArray) && currentArray.length > 0) {
         // If the update array has only 1 item and current has multiple, it's likely a partial update
         // In this case, APPEND the new item instead of replacing
         if (val.length === 1 && currentArray.length > 0) {
+          console.log(`[ChatBot] Detected partial update for ${key} - will try to append`);
+          
           // Check if this item already exists (by comparing key fields)
           const newItem = val[0];
           let isDuplicate = false;
@@ -510,21 +527,25 @@ function mergeResumeUpdate(
           }
           
           if (!isDuplicate) {
+            console.log(`[ChatBot] Item is new - appending to ${key}`);
             // Append the new item to existing array
             (merged as Record<string, unknown>)[key] = [...currentArray, newItem].filter(
               (item) => item !== null && item !== undefined
             );
           } else {
+            console.log(`[ChatBot] Item is duplicate - keeping current ${key}`);
             // Item already exists, keep current array
             (merged as Record<string, unknown>)[key] = currentArray;
           }
         } else {
+          console.log(`[ChatBot] Multiple items or special case - replacing ${key}`);
           // Multiple items in update or current is empty - treat as complete replacement
           (merged as Record<string, unknown>)[key] = val.filter(
             (item) => item !== null && item !== undefined
           );
         }
       } else {
+        console.log(`[ChatBot] Current ${key} is empty - using update as-is`);
         // Current array is empty, just use the update
         (merged as Record<string, unknown>)[key] = val.filter(
           (item) => item !== null && item !== undefined
@@ -539,5 +560,7 @@ function mergeResumeUpdate(
   merged.experience = Array.isArray(merged.experience) ? merged.experience : [];
   merged.education  = Array.isArray(merged.education)  ? merged.education  : [];
   merged.skills     = Array.isArray(merged.skills)     ? merged.skills     : [];
+  
+  console.log('[ChatBot] Merged result:', JSON.stringify(merged, null, 2));
   return merged;
 }
