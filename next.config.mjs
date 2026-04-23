@@ -29,11 +29,11 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://pagead2.googlesyndication.com https://partner.googleadservices.com https://www.googletagmanager.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://pagead2.googlesyndication.com https://partner.googleadservices.com https://www.googletagmanager.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://adservice.google.com https://www.google.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com https://pagead2.googlesyndication.com https://www.google-analytics.com https://ep1.adtrafficquality.google",
+              "connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com https://pagead2.googlesyndication.com https://www.google-analytics.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://adservice.google.com https://googleads.g.doubleclick.net",
               "frame-src https://api.razorpay.com https://checkout.razorpay.com https://www.youtube.com https://youtube.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
               "frame-ancestors 'none'",
             ].join("; "),

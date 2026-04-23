@@ -49,13 +49,23 @@ export async function POST(req: NextRequest) {
     let html: string;
     try {
       console.log("[export] Rendering HTML for theme:", theme);
+      console.log("[export] Resume data:", JSON.stringify({
+        hasContact: !!finalResume.contact,
+        contactName: finalResume.contact?.name,
+        experienceCount: finalResume.experience?.length || 0,
+        educationCount: finalResume.education?.length || 0,
+        skillsCount: finalResume.skills?.length || 0,
+      }));
       html = renderThemeHtml(finalResume, theme);
       console.log("[export] HTML rendered, length:", html.length);
     } catch (renderErr) {
       const message = renderErr instanceof Error ? renderErr.message : String(renderErr);
-      console.error("[export] HTML rendering failed:", message, renderErr);
+      const stack = renderErr instanceof Error ? renderErr.stack : undefined;
+      console.error("[export] HTML rendering failed:", message);
+      console.error("[export] Stack trace:", stack);
+      console.error("[export] Resume data that caused error:", JSON.stringify(finalResume, null, 2));
       return NextResponse.json(
-        { error: "render_failed", message: "Failed to render resume HTML. Please try again." },
+        { error: "render_failed", message: `Failed to render resume HTML: ${message}` },
         { status: 500 }
       );
     }

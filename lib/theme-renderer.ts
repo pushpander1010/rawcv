@@ -288,28 +288,54 @@ const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
 
 /** Sanitise a resume so theme renderers never receive undefined arrays */
 function sanitiseResume(resume: ParsedResume): ParsedResume {
-  return {
-    ...resume,
-    contact: resume.contact ?? { name: "", email: "" },
-    experience: Array.isArray(resume.experience) ? resume.experience.map((j) => ({
-      ...j,
-      bullets: Array.isArray(j.bullets) ? j.bullets : [],
-    })) : [],
-    education:  Array.isArray(resume.education)  ? resume.education  : [],
-    skills:     Array.isArray(resume.skills)     ? resume.skills     : [],
-    certifications: Array.isArray(resume.certifications) ? resume.certifications : undefined,
-    projects: Array.isArray(resume.projects) ? resume.projects.map((p) => ({
-      ...p,
-      technologies: Array.isArray(p.technologies) ? p.technologies : [],
-    })) : undefined,
-  };
+  try {
+    return {
+      ...resume,
+      contact: resume.contact ?? { name: "", email: "" },
+      summary: resume.summary ?? "",
+      experience: Array.isArray(resume.experience) ? resume.experience.map((j) => ({
+        company: j.company ?? "",
+        title: j.title ?? "",
+        startDate: j.startDate ?? "",
+        endDate: j.endDate ?? "",
+        bullets: Array.isArray(j.bullets) ? j.bullets : [],
+      })) : [],
+      education:  Array.isArray(resume.education)  ? resume.education  : [],
+      skills:     Array.isArray(resume.skills)     ? resume.skills     : [],
+      certifications: Array.isArray(resume.certifications) ? resume.certifications : undefined,
+      projects: Array.isArray(resume.projects) ? resume.projects.map((p) => ({
+        name: p.name ?? "",
+        description: p.description ?? "",
+        technologies: Array.isArray(p.technologies) ? p.technologies : [],
+      })) : undefined,
+    };
+  } catch (err) {
+    console.error("[theme-renderer] Error sanitising resume:", err);
+    // Return a minimal valid resume
+    return {
+      contact: { name: "Resume", email: "" },
+      summary: "",
+      experience: [],
+      education: [],
+      skills: [],
+    };
+  }
 }
 
 /** Render a ParsedResume to a full self-contained HTML document */
 export function renderThemeHtml(resume: ParsedResume, theme: ThemeId): string {
-  const safe = sanitiseResume(resume);
-  const body = RENDERERS[theme]?.(safe) ?? RENDERERS.classic(safe);
-  return `<!DOCTYPE html>
+  try {
+    const safe = sanitiseResume(resume);
+    const renderer = RENDERERS[theme];
+    
+    if (!renderer) {
+      console.error("[theme-renderer] Unknown theme:", theme, "Available themes:", Object.keys(RENDERERS));
+      throw new Error(`Unknown theme: ${theme}`);
+    }
+    
+    const body = renderer(safe);
+    
+    return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -329,4 +355,9 @@ export function renderThemeHtml(resume: ParsedResume, theme: ThemeId): string {
 </head>
 <body>${body}</body>
 </html>`;
+  } catch (err) {
+    console.error("[theme-renderer] Error rendering theme HTML:", err);
+    console.error("[theme-renderer] Resume data:", JSON.stringify(resume, null, 2));
+    throw err; // Re-throw so the API route can handle it
+  }
 }
