@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
+import { fetchWithRetry, safeJsonParse } from "@/lib/fetch-retry";
 
 export default function DownloadButton() {
   const { state } = useResume();
@@ -15,20 +16,23 @@ export default function DownloadButton() {
     try {
       const safeName = (state.parsed.contact.name || "resume")
         .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-      const res = await fetch("/api/export", {
+      
+      const res = await fetchWithRetry("/api/export", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ parsed: state.parsed, theme: state.selectedTheme }),
-      });
+      }, 1, 90000); // 1 retry, 90s timeout for PDF generation
+
       if (!res.ok) {
-        const json = await res.json().catch(() => ({}));
+        const json = await safeJsonParse<{ fallbackHtml?: string; message?: string }>(res).catch(() => ({}));
         // Puppeteer unavailable — fall back to print dialog
         if (json.fallbackHtml) {
           openPrintWindow(json.fallbackHtml, safeName);
           return;
         }
-        throw new Error("PDF generation failed. Please try again.");
+        throw new Error(json.message || "PDF generation failed. Please try again.");
       }
+      
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -38,7 +42,16 @@ export default function DownloadButton() {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error("Download failed:", e);
-      setError("Could not generate PDF. Please try again.");
+      const errorMessage = e instanceof Error ? e.message : "Could not generate PDF. Please try again.";
+      
+      // Provide more helpful error messages
+      if (errorMessage.includes('timeout') || errorMessage.includes('AbortError')) {
+        setError("PDF generation timed out. The server is taking too long. Please try again.");
+      } else if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError')) {
+        setError("Network error. Please check your connection and try again.");
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
