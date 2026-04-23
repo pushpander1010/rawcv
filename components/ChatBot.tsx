@@ -481,9 +481,13 @@ function mergeResumeUpdate(
 
     if (key === "contact" && typeof val === "object" && !Array.isArray(val)) {
       // Merge contact sub-fields so a partial update (e.g. just phone) doesn't wipe name/email
+      // Filter out empty strings to avoid overwriting existing data with blanks
+      const contactUpdate = Object.fromEntries(
+        Object.entries(val as object).filter(([_, v]) => v !== "" && v !== null && v !== undefined)
+      );
       merged.contact = {
         ...(merged.contact as object ?? {}),
-        ...(val as object),
+        ...contactUpdate,
       } as ParsedResume["contact"];
     } else if (Array.isArray(val)) {
       // CRITICAL: Ignore empty arrays - AI sometimes returns [] which would wipe existing data
