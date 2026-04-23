@@ -7,12 +7,20 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
+  console.log("[export] Request received");
+  
   const auth = await requireAuth();
-  if (auth instanceof NextResponse) return auth;
+  if (auth instanceof NextResponse) {
+    console.log("[export] Auth failed");
+    return auth;
+  }
+  
+  console.log("[export] Auth successful, userId:", (auth as any).userId);
 
   let body: { parsed: ParsedResume; theme: ThemeId; changes?: TailorChange[] };
   try {
     body = await req.json();
+    console.log("[export] Body parsed, theme:", body?.theme, "hasParsed:", !!body?.parsed);
   } catch (err) {
     console.error("[export] JSON parse error:", err);
     return NextResponse.json(
@@ -32,29 +40,61 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    console.log("[export] Applying changes...");
     // Merge accepted tailor changes into the final resume
     const finalResume = applyChanges(parsed, changes);
+    console.log("[export] Changes applied");
 
     // Render themed HTML
-    const html = renderThemeHtml(finalResume, theme);
+    let html: string;
+    try {
+      console.log("[export] Rendering HTML for theme:", theme);
+      html = renderThemeHtml(finalResume, theme);
+      console.log("[export] HTML rendered, length:", html.length);
+    } catch (renderErr) {
+      const message = renderErr instanceof Error ? renderErr.message : String(renderErr);
+      console.error("[export] HTML rendering failed:", message, renderErr);
+      return NextResponse.json(
+        { error: "render_failed", message: "Failed to render resume HTML. Please try again." },
+        { status: 500 }
+      );
+    }
 
     // Generate PDF via puppeteer
     let pdfBuffer: Buffer;
     try {
       let browser;
       const isProduction = process.env.NODE_ENV === "production";
+      
+      console.log("[export] Starting PDF generation, isProduction:", isProduction);
+      
       if (isProduction) {
-        const chromium = await import("@sparticuz/chromium-min");
-        const puppeteer = await import("puppeteer-core");
-        browser = await puppeteer.default.launch({
-          args: chromium.default.args,
-          executablePath: await chromium.default.executablePath(
+        try {
+          const chromium = await import("@sparticuz/chromium-min");
+          const puppeteer = await import("puppeteer-core");
+          console.log("[export] Chromium and puppeteer-core loaded");
+          
+          const executablePath = await chromium.default.executablePath(
             "https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar"
-          ),
-          headless: true,
-        });
+          );
+          console.log("[export] Chromium executable path:", executablePath);
+          
+          browser = await puppeteer.default.launch({
+            args: chromium.default.args,
+            executablePath,
+            headless: true,
+          });
+        } catch (importErr) {
+          console.error("[export] Failed to import Chromium/Puppeteer:", importErr);
+          // Fallback to print dialog if Chromium is not available
+          return NextResponse.json(
+            { error: "export_failed", message: "PDF generation not available. Using print dialog.", fallbackHtml: html },
+            { status: 500 }
+          );
+        }
       } else {
         const puppeteer = await import("puppeteer");
+        console.log("[export] Puppeteer loaded (dev mode)");
         browser = await puppeteer.default.launch({
           headless: true,
           args: [
@@ -68,6 +108,8 @@ export async function POST(req: NextRequest) {
           ],
         });
       }
+      
+      console.log("[export] Browser launched");
       const page = await browser.newPage();
       await page.setContent(html, { waitUntil: "networkidle0" });
       await page.evaluateHandle("document.fonts.ready");
@@ -82,6 +124,7 @@ export async function POST(req: NextRequest) {
           scale: 0.98,
         })
       );
+      console.log("[export] PDF generated, size:", pdfBuffer.length);
       await browser.close();
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -110,9 +153,10 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error("[export] Unexpected error:", message, err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error("[export] Unexpected error:", message, stack);
     return NextResponse.json(
-      { error: "export_failed", message: "An unexpected error occurred. Please try again." },
+      { error: "export_failed", message: `An unexpected error occurred: ${message}` },
       { status: 500 }
     );
   }
