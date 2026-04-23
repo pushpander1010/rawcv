@@ -7,6 +7,7 @@ import { completeChat as complete } from "@/lib/ai-providers";
 import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseMessages } from "@/lib/api-guard";
 import { sanitizeResume } from "@/lib/sanitize-resume";
+import { parseBuildResponse, parseCustomizeResponse, validateResumeUpdate } from "@/lib/chat-response-parser";
 
 // ─── Server-side stores ────────────────────────────────────────────────────────
 // NOTE: These are in-memory. For production, replace with Redis or DB.
@@ -220,6 +221,8 @@ EDITING RULES:
 - For arrays, return the COMPLETE updated array with only the requested change applied
 - REORDERING: if user says "move up", "swap", or "put X before Y" — reorder and return full updated array
 - ENHANCEMENT: if user asks to "improve", "enhance", "add bullets", "make better" — generate 3-5 strong, ATS-optimized bullet points with action verbs and quantified outcomes
+- ⭐ CRITICAL: When enhancing experience bullets, ALWAYS return the COMPLETE experience array in resumeUpdate with ALL jobs and their bullets (both existing and new)
+- ⭐ CRITICAL: Do NOT just say you added bullets — actually include them in the resumeUpdate JSON
 - undoSection: set to the section key if user says "undo"/"revert"/"go back"
 - resumeUpdate: null if no data changed
 - isComplete: true only when user explicitly says they are done
@@ -230,6 +233,29 @@ ENHANCEMENT RULES (when user asks to improve/enhance):
 - Use industry-standard keywords for the role
 - Keep bullets concise (1-2 lines max)
 - Return the COMPLETE updated experience array with enhanced bullets
+
+EXAMPLE - When user asks to enhance bullets for a job:
+User: "Enhance the bullets for my Data Scientist role"
+Your response MUST include in resumeUpdate:
+{
+  "experience": [
+    {
+      "company": "Google",
+      "title": "Data Scientist",
+      "startDate": "2020-01",
+      "endDate": "Present",
+      "bullets": [
+        "Led machine learning initiatives that improved model accuracy by 23%",
+        "Developed Python-based data pipeline processing 2M+ records daily",
+        "Mentored team of 3 junior data scientists on best practices",
+        "Reduced data processing time by 40% through optimization",
+        "Published 2 research papers on predictive analytics in peer-reviewed journals",
+        "Collaborated with product team to deploy 5 ML models to production"
+      ]
+    }
+  ]
+}
+NOT just saying "I've added 6 bullets" without including them in resumeUpdate!
 
 PROACTIVE IMPROVEMENT PRIORITY (when user doesn't specify what to improve):
 1. Experience bullets — if weak or generic, suggest enhancing them with action verbs and metrics
@@ -383,13 +409,10 @@ export async function POST(req: NextRequest) {
 
     // ── Customize mode ────────────────────────────────────────────────────────
     if (mode === "customize") {
-      const parsed = (aiResult ?? {}) as CustomizeAIResponse;
+      // Parse and validate the AI response
+      const parsed = parseCustomizeResponse(aiResult);
 
-      if (parsed.resumeUpdate !== null && typeof parsed.resumeUpdate !== "object") {
-        parsed.resumeUpdate = null;
-      }
-
-      let finalUpdate = parsed.resumeUpdate ?? null;
+      let finalUpdate = validateResumeUpdate(parsed.resumeUpdate);
       const updatedHistory = { ...sectionHistory };
 
       if (parsed.undoSection && sectionHistory[parsed.undoSection] !== undefined) {
@@ -410,36 +433,31 @@ export async function POST(req: NextRequest) {
       const sanitizedUpdate = finalUpdate ? sanitizeResume(finalUpdate) : null;
 
       return NextResponse.json({
-        message: parsed.message ?? "Done! What else would you like to change?",
+        message: parsed.message,
         resumeUpdate: sanitizedUpdate,
-        isComplete: parsed.isComplete ?? false,
+        isComplete: parsed.isComplete,
         sectionHistory: updatedHistory,
       } satisfies ChatResponse);
     }
 
     // ── Build mode ────────────────────────────────────────────────────────────
-    const parsed = (aiResult ?? {}) as BuildAIResponse;
-
-    if (parsed.resumeUpdate !== null && typeof parsed.resumeUpdate !== "object") {
-      parsed.resumeUpdate = null;
-    }
+    const parsed = parseBuildResponse(aiResult);
 
     // Never go backwards in steps
-    const nextStep = typeof parsed.nextStep === "number"
-      ? Math.max(currentStep, parsed.nextStep)
-      : currentStep;
+    const nextStep = Math.max(currentStep, parsed.nextStep);
 
     if (!isGreeting) {
       buildStepStore.set(auth.userId, nextStep);
     }
 
-    // Sanitize the resume update to ensure all fields are strings
-    const sanitizedUpdate = parsed.resumeUpdate ? sanitizeResume(parsed.resumeUpdate) : null;
+    // Validate and sanitize the resume update
+    const validatedUpdate = validateResumeUpdate(parsed.resumeUpdate);
+    const sanitizedUpdate = validatedUpdate ? sanitizeResume(validatedUpdate) : null;
 
     return NextResponse.json({
-      message: parsed.message ?? "Got it! What's next?",
+      message: parsed.message,
       resumeUpdate: sanitizedUpdate,
-      isComplete: parsed.isComplete ?? false,
+      isComplete: parsed.isComplete,
       currentStep: nextStep,
     } satisfies ChatResponse);
   } catch (err) {
