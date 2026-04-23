@@ -31,9 +31,11 @@ export function applyChanges(
 }
 
 /** Escape HTML special characters */
-function esc(str: string | undefined | null): string {
-  if (!str) return "";
-  return str
+function esc(str: string | undefined | null | number | boolean | any): string {
+  if (str === undefined || str === null || str === "") return "";
+  // Convert to string first to handle numbers, booleans, objects, arrays
+  const strValue = typeof str === "string" ? str : String(str);
+  return strValue
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -289,24 +291,39 @@ const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
 /** Sanitise a resume so theme renderers never receive undefined arrays */
 function sanitiseResume(resume: ParsedResume): ParsedResume {
   try {
+    // Helper to ensure string
+    const str = (val: any): string => (val === undefined || val === null) ? "" : String(val);
+    
     return {
       ...resume,
-      contact: resume.contact ?? { name: "", email: "" },
-      summary: resume.summary ?? "",
+      contact: {
+        name: str(resume.contact?.name),
+        email: str(resume.contact?.email),
+        phone: resume.contact?.phone ? str(resume.contact.phone) : undefined,
+        location: resume.contact?.location ? str(resume.contact.location) : undefined,
+        linkedin: resume.contact?.linkedin ? str(resume.contact.linkedin) : undefined,
+        website: resume.contact?.website ? str(resume.contact.website) : undefined,
+      },
+      summary: str(resume.summary),
       experience: Array.isArray(resume.experience) ? resume.experience.map((j) => ({
-        company: j.company ?? "",
-        title: j.title ?? "",
-        startDate: j.startDate ?? "",
-        endDate: j.endDate ?? "",
-        bullets: Array.isArray(j.bullets) ? j.bullets : [],
+        company: str(j.company),
+        title: str(j.title),
+        startDate: str(j.startDate),
+        endDate: str(j.endDate),
+        bullets: Array.isArray(j.bullets) ? j.bullets.map(str) : [],
       })) : [],
-      education:  Array.isArray(resume.education)  ? resume.education  : [],
-      skills:     Array.isArray(resume.skills)     ? resume.skills     : [],
-      certifications: Array.isArray(resume.certifications) ? resume.certifications : undefined,
+      education: Array.isArray(resume.education) ? resume.education.map((e) => ({
+        institution: str(e.institution),
+        degree: str(e.degree),
+        field: str(e.field),
+        graduationYear: str(e.graduationYear),
+      })) : [],
+      skills: Array.isArray(resume.skills) ? resume.skills.map(str) : [],
+      certifications: Array.isArray(resume.certifications) ? resume.certifications.map(str) : undefined,
       projects: Array.isArray(resume.projects) ? resume.projects.map((p) => ({
-        name: p.name ?? "",
-        description: p.description ?? "",
-        technologies: Array.isArray(p.technologies) ? p.technologies : [],
+        name: str(p.name),
+        description: str(p.description),
+        technologies: Array.isArray(p.technologies) ? p.technologies.map(str) : [],
       })) : undefined,
     };
   } catch (err) {
