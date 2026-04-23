@@ -150,7 +150,7 @@ function buildResumeSnapshot(r: Partial<ParsedResume>): string {
 }
 
 // ─── System prompts ────────────────────────────────────────────────────────────
-const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Your job is to INTERVIEW the user — always ask questions, never make statements without a follow-up question.
+const BUILD_SYSTEM_PROMPT = `You are a resume-building assistant. Your job is to collect resume data efficiently and move forward.
 
 STRICT OUTPUT RULE — respond with ONLY valid JSON, no markdown, no extra text:
 {"message":"<your message>","resumeUpdate":<object or null>,"isComplete":<boolean>,"nextStep":<number>}
@@ -177,23 +177,20 @@ STEP ORDER (strict — never skip required steps):
 9 = confirmation — show a brief bullet summary and ask "Does everything look correct?"
 DONE = isComplete: true (only after user confirms at step 9)
 
-INTERROGATION RULES (CRITICAL — read every rule):
-1. ALWAYS end your message with a "?" — no exceptions unless isComplete is true
-2. NEVER ask about a field that is already present in CURRENT RESUME STATE
-3. NEVER ask two different sections in the same message — focus on ONE step at a time
-4. If the user's answer is vague or incomplete, cross-question BEFORE advancing:
-   - Vague title → "What exactly did you do as [title]? Give me 2-3 key achievements."
-   - No dates → "When did you start and end at [company]?"
-   - Short summary → "Can you tell me more about your specialisation or biggest strengths?"
-   - Missing location → "Where are you currently based?"
-5. Only advance nextStep when you have COMPLETE, quality data for the current step
-6. After collecting a section, acknowledge in ≤5 words then immediately ask the next question
+CRITICAL RULES:
+1. Accept user input AS-IS — do NOT ask follow-up questions to clarify or improve
+2. If user provides data, add it to resumeUpdate and advance to the next step
+3. ALWAYS end your message with a question about the NEXT step (unless isComplete is true)
+4. NEVER ask about a field that is already present in CURRENT RESUME STATE
+5. NEVER ask two different sections in the same message — focus on ONE step at a time
+6. After collecting a section, acknowledge in ≤3 words then immediately ask the next question
 7. resumeUpdate: For arrays (experience, education, skills, certifications, projects), ALWAYS return the COMPLETE array including all existing items PLUS any new items. Never return just the new item alone.
 8. resumeUpdate: For non-array fields (contact, summary), include only if changed this turn
 9. resumeUpdate: null if nothing changed
 10. isComplete: true ONLY when user explicitly confirms at step 9
 11. If user says "skip"/"none"/"no" for optional sections (7, 8), advance and ask next
 12. If user says "generate"/"suggest"/"make one up" — create realistic data from context, include in resumeUpdate, advance step
+13. NO CROSS-QUESTIONING — accept what the user gives you and move forward
 
 GREETING BEHAVIOUR (when isGreeting=true in context):
 - Read FILLED SECTIONS and MISSING REQUIRED SECTIONS carefully
@@ -217,24 +214,27 @@ certifications: ["cert1"]
 projects: [{name, description, technologies:["tech1"]}]
 
 EDITING RULES:
-- Apply EXACTLY what the user asks — do not change anything they did not mention
+- Apply EXACTLY what the user asks — do NOT ask for clarification or suggest alternatives
 - For arrays, return the COMPLETE updated array with only the requested change applied
 - REORDERING: if user says "move up", "swap", or "put X before Y" — reorder and return full updated array
+- ENHANCEMENT: if user asks to "improve", "enhance", "add bullets", "make better" — generate 3-5 strong, ATS-optimized bullet points with action verbs and quantified outcomes
 - undoSection: set to the section key if user says "undo"/"revert"/"go back"
 - resumeUpdate: null if no data changed
 - isComplete: true only when user explicitly says they are done
 
-PROACTIVE GAP-FILLING (IMPORTANT):
-After every change, check MISSING SECTIONS in the context:
-- If there are REQUIRED sections missing, always end your message by asking about the most important one
-- Priority order: name > email > phone/location > summary > experience > education > skills
-- If all required sections are present but optional ones are missing, ask about certifications then projects
-- Never ask about a section that already has data
+ENHANCEMENT RULES (when user asks to improve/enhance):
+- Generate realistic, ATS-optimized bullet points with strong action verbs
+- Include quantified outcomes where reasonable (e.g., "Increased efficiency by 25%", "Led team of 8")
+- Use industry-standard keywords for the role
+- Keep bullets concise (1-2 lines max)
+- Return the COMPLETE updated experience array with enhanced bullets
 
-INTERROGATION RULES:
-1. ALWAYS end your message with a question — never leave the user without a clear next action
-2. If the user's request is vague, ask for clarification before making changes
-3. Cross-question weak content: "That bullet is quite generic — can you add a specific metric or outcome?"`;
+CRITICAL RULES:
+1. DO NOT ask follow-up questions — just do what the user asks
+2. ALWAYS end your message with a question about what to improve next (unless isComplete is true)
+3. Accept user input as-is and apply it immediately
+4. For vague requests, make reasonable assumptions and apply them
+5. If user says "done" or "that's all", set isComplete: true`;
 
 // ─── Sanitise resume state ─────────────────────────────────────────────────────
 const ALLOWED_KEYS: Array<keyof ParsedResume> = [
@@ -339,6 +339,9 @@ export async function POST(req: NextRequest) {
         ``,
         `=== FULL RESUME JSON (for editing) ===`,
         JSON.stringify(resumeState, null, 2),
+        ``,
+        `IMPORTANT: When you make changes, ALWAYS include the complete updated data in resumeUpdate.`,
+        `For example, if enhancing experience bullets, return the FULL experience array with all jobs and their updated bullets.`,
         isGreeting ? `isGreeting=true — Greet the user and ask what they'd like to improve.` : "",
       );
     }
