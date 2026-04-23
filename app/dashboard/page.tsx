@@ -291,7 +291,10 @@ function DashboardContent() {
   // Sync tab from URL (handles back/forward and direct links)
   useEffect(() => {
     const t = searchParams.get("tab") as TabId | null;
-    if (t && TABS.some(x => x.id === t)) setTab(t);
+    if (t && TABS.some(x => x.id === t)) {
+      // Use setTimeout to avoid cascading renders
+      setTimeout(() => setTab(t), 0);
+    }
   }, [searchParams]);
 
   function switchTab(id: TabId) {

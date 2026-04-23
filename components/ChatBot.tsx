@@ -188,7 +188,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       setMessages([{ role: "assistant", content: data.message }]);
 
       // Apply any resume update that came back with the greeting
-      if (data.resumeUpdate && Object.keys(data.resumeUpdate).length > 0) {
+      if (data.resumeUpdate && data.resumeUpdate !== null && Object.keys(data.resumeUpdate).length > 0) {
         applyResumeUpdate(data.resumeUpdate);
       }
     } catch {
@@ -245,7 +245,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
         }
 
         // ── Always update the preview, even for small incremental changes ──
-        if (chatData.resumeUpdate && Object.keys(chatData.resumeUpdate).length > 0) {
+        if (chatData.resumeUpdate && chatData.resumeUpdate !== null && Object.keys(chatData.resumeUpdate).length > 0) {
           pushUndo();
           applyResumeUpdate(chatData.resumeUpdate);
         }

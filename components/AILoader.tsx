@@ -95,9 +95,12 @@ export default function AILoader({
 
   // Reset on type change
   useEffect(() => {
-    setStepIdx(0);
-    setVisible(true);
-    calledDone.current = false;
+    // Use setTimeout to avoid cascading renders
+    setTimeout(() => {
+      setStepIdx(0);
+      setVisible(true);
+      calledDone.current = false;
+    }, 0);
   }, [type]);
 
   // When done fires — call onDone immediately, no animation

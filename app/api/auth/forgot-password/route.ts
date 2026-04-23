@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { getUserByEmail, setPasswordResetToken } from "@/lib/user-store";
