@@ -475,6 +475,8 @@ function mergeResumeUpdate(
         ...(val as object),
       } as ParsedResume["contact"];
     } else if (Array.isArray(val)) {
+      // For arrays, REPLACE the entire array (AI sends complete arrays, not incremental updates)
+      // The AI is instructed to return the full array when making changes
       (merged as Record<string, unknown>)[key] = val.filter(
         (item) => item !== null && item !== undefined
       );
