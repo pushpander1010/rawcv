@@ -1,4 +1,5 @@
 import type { ParsedResume, ThemeId, TailorChange } from "@/types";
+import { sanitizeResume as sanitizeResumeUtil } from "@/lib/sanitize-resume";
 
 /** Merge accepted TailorChanges into a ParsedResume copy */
 export function applyChanges(
@@ -290,53 +291,8 @@ const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
 
 /** Sanitise a resume so theme renderers never receive undefined arrays */
 function sanitiseResume(resume: ParsedResume): ParsedResume {
-  try {
-    // Helper to ensure string
-    const str = (val: any): string => (val === undefined || val === null) ? "" : String(val);
-    
-    return {
-      ...resume,
-      contact: {
-        name: str(resume.contact?.name),
-        email: str(resume.contact?.email),
-        phone: resume.contact?.phone ? str(resume.contact.phone) : undefined,
-        location: resume.contact?.location ? str(resume.contact.location) : undefined,
-        linkedin: resume.contact?.linkedin ? str(resume.contact.linkedin) : undefined,
-        website: resume.contact?.website ? str(resume.contact.website) : undefined,
-      },
-      summary: str(resume.summary),
-      experience: Array.isArray(resume.experience) ? resume.experience.map((j) => ({
-        company: str(j.company),
-        title: str(j.title),
-        startDate: str(j.startDate),
-        endDate: str(j.endDate),
-        bullets: Array.isArray(j.bullets) ? j.bullets.map(str) : [],
-      })) : [],
-      education: Array.isArray(resume.education) ? resume.education.map((e) => ({
-        institution: str(e.institution),
-        degree: str(e.degree),
-        field: str(e.field),
-        graduationYear: str(e.graduationYear),
-      })) : [],
-      skills: Array.isArray(resume.skills) ? resume.skills.map(str) : [],
-      certifications: Array.isArray(resume.certifications) ? resume.certifications.map(str) : undefined,
-      projects: Array.isArray(resume.projects) ? resume.projects.map((p) => ({
-        name: str(p.name),
-        description: str(p.description),
-        technologies: Array.isArray(p.technologies) ? p.technologies.map(str) : [],
-      })) : undefined,
-    };
-  } catch (err) {
-    console.error("[theme-renderer] Error sanitising resume:", err);
-    // Return a minimal valid resume
-    return {
-      contact: { name: "Resume", email: "" },
-      summary: "",
-      experience: [],
-      education: [],
-      skills: [],
-    };
-  }
+  // Use the shared sanitization utility
+  return sanitizeResumeUtil(resume);
 }
 
 /** Render a ParsedResume to a full self-contained HTML document */

@@ -3,6 +3,7 @@ import type { ParsedResume } from "@/types";
 import { complete } from "@/lib/ai-providers";
 import { requireAuth } from "@/lib/api-guard";
 import { chargeCredits } from "@/lib/credits";
+import { sanitizeResume } from "@/lib/sanitize-resume";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;

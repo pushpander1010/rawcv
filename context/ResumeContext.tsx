@@ -10,6 +10,7 @@ import type {
   TailoredResume,
   ThemeId,
 } from "@/types";
+import { sanitizeResume } from "@/lib/sanitize-resume";
 
 export interface ResumeState {
   raw: string;
@@ -76,7 +77,17 @@ function loadPersistedState(userId: string | undefined): Partial<ResumeState> {
     if (!key) return {};
     const raw = localStorage.getItem(key);
     if (!raw) return {};
-    return JSON.parse(raw) as Partial<ResumeState>;
+    const parsed = JSON.parse(raw) as Partial<ResumeState>;
+    
+    // Sanitize the parsed resume to ensure all fields are correct types
+    if (parsed.parsed) {
+      parsed.parsed = sanitizeResume(parsed.parsed);
+    }
+    if (parsed.tailoredResume?.finalResume) {
+      parsed.tailoredResume.finalResume = sanitizeResume(parsed.tailoredResume.finalResume);
+    }
+    
+    return parsed;
   } catch {
     return {};
   }
