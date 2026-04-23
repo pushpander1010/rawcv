@@ -486,6 +486,12 @@ function mergeResumeUpdate(
         ...(val as object),
       } as ParsedResume["contact"];
     } else if (Array.isArray(val)) {
+      // CRITICAL: Ignore empty arrays - AI sometimes returns [] which would wipe existing data
+      if (val.length === 0) {
+        console.log(`[ChatBot] Ignoring empty array for ${key} - keeping existing data`);
+        continue;
+      }
+      
       // For arrays, check if this is a partial update (single item) or complete replacement
       const currentArray = (merged as Record<string, unknown>)[key];
       
@@ -538,8 +544,8 @@ function mergeResumeUpdate(
             (merged as Record<string, unknown>)[key] = currentArray;
           }
         } else {
-          console.log(`[ChatBot] Multiple items or special case - replacing ${key}`);
-          // Multiple items in update or current is empty - treat as complete replacement
+          console.log(`[ChatBot] Multiple items - replacing ${key}`);
+          // Multiple items in update - treat as complete replacement
           (merged as Record<string, unknown>)[key] = val.filter(
             (item) => item !== null && item !== undefined
           );
