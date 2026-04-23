@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useResume } from "@/context/ResumeContext";
 import AILoader from "@/components/AILoader";
 import CreditWarningBanner from "@/components/CreditWarningBanner";
-import type { ParsedResume } from "@/types";
+import type { ParsedResume, WorkExperience, Education, Project } from "@/types";
 import type { ChatMessage, ChatResponse } from "@/app/api/chat/route";
 import { fetchWithRetry, safeJsonParse } from "@/lib/fetch-retry";
 
@@ -475,11 +475,61 @@ function mergeResumeUpdate(
         ...(val as object),
       } as ParsedResume["contact"];
     } else if (Array.isArray(val)) {
-      // For arrays, REPLACE the entire array (AI sends complete arrays, not incremental updates)
-      // The AI is instructed to return the full array when making changes
-      (merged as Record<string, unknown>)[key] = val.filter(
-        (item) => item !== null && item !== undefined
-      );
+      // For arrays, check if this is a partial update (single item) or complete replacement
+      const currentArray = (merged as Record<string, unknown>)[key];
+      
+      if (Array.isArray(currentArray) && currentArray.length > 0) {
+        // If the update array has only 1 item and current has multiple, it's likely a partial update
+        // In this case, APPEND the new item instead of replacing
+        if (val.length === 1 && currentArray.length > 0) {
+          // Check if this item already exists (by comparing key fields)
+          const newItem = val[0];
+          let isDuplicate = false;
+          
+          if (key === "experience" && typeof newItem === "object" && newItem !== null) {
+            const exp = newItem as WorkExperience;
+            isDuplicate = currentArray.some((item: any) => 
+              item.company === exp.company && 
+              item.title === exp.title && 
+              item.startDate === exp.startDate
+            );
+          } else if (key === "education" && typeof newItem === "object" && newItem !== null) {
+            const edu = newItem as Education;
+            isDuplicate = currentArray.some((item: any) => 
+              item.institution === edu.institution && 
+              item.degree === edu.degree
+            );
+          } else if (key === "projects" && typeof newItem === "object" && newItem !== null) {
+            const proj = newItem as Project;
+            isDuplicate = currentArray.some((item: any) => 
+              item.name === proj.name
+            );
+          } else if (typeof newItem === "string") {
+            // For string arrays (skills, certifications), check exact match
+            isDuplicate = currentArray.includes(newItem);
+          }
+          
+          if (!isDuplicate) {
+            // Append the new item to existing array
+            (merged as Record<string, unknown>)[key] = [...currentArray, newItem].filter(
+              (item) => item !== null && item !== undefined
+            );
+          } else {
+            // Item already exists, keep current array
+            (merged as Record<string, unknown>)[key] = currentArray;
+          }
+        } else {
+          // Multiple items in update or current is empty - treat as complete replacement
+          (merged as Record<string, unknown>)[key] = val.filter(
+            (item) => item !== null && item !== undefined
+          );
+        }
+      } else {
+        // Current array is empty, just use the update
+        (merged as Record<string, unknown>)[key] = val.filter(
+          (item) => item !== null && item !== undefined
+        );
+      }
     } else {
       (merged as Record<string, unknown>)[key] = val;
     }
