@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useResume } from "@/context/ResumeContext";
 import AILoader from "@/components/AILoader";
 import CreditWarningBanner from "@/components/CreditWarningBanner";
+import UndoChatButton from "@/components/UndoChatButton";
 import type { ParsedResume, WorkExperience, Education, Project } from "@/types";
 import type { ChatMessage, ChatResponse } from "@/app/api/chat/route";
 import { fetchWithRetry, safeJsonParse } from "@/lib/fetch-retry";
@@ -15,7 +16,7 @@ interface Props {
 }
 
 export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
-  const { state, setState, refreshCredits, pushUndo, isHydrated, clearChat } = useResume();
+  const { state, setState, refreshCredits, pushUndo, undo, isHydrated, clearChat } = useResume();
 
   const [messages, setMessages]           = useState<ChatMessage[]>([]);
   const [loading, setLoading]             = useState(false);
@@ -226,6 +227,9 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       setError(null);
       setOutOfCredits(false);
 
+      // Push undo BEFORE sending the message so we can undo if needed
+      pushUndo();
+
       try {
         const res = await fetchWithRetry("/api/chat", {
           method: "POST",
@@ -265,7 +269,6 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
         // ── Always update the preview, even for small incremental changes ──
         if (chatData.resumeUpdate && chatData.resumeUpdate !== null && Object.keys(chatData.resumeUpdate).length > 0) {
-          pushUndo();
           applyResumeUpdate(chatData.resumeUpdate);
         }
 
@@ -304,6 +307,23 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     },
     [messages, loading, mode, sectionHistory, applyResumeUpdate, pushUndo, onComplete, refreshCredits]
   );
+
+  // ── Undo last chat message and resume change ──────────────────────────────
+  const undoLastChat = useCallback(() => {
+    if (messages.length < 2) return; // Need at least user + assistant message
+    
+    // Remove last 2 messages (assistant response + user message)
+    const newMessages = messages.slice(0, -2);
+    setMessages(newMessages);
+    syncMessages(newMessages);
+    
+    // Undo the resume change
+    undo();
+    
+    // Clear any completion state
+    setIsComplete(false);
+    setError(null);
+  }, [messages, undo, syncMessages]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -389,8 +409,8 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             onKeyDown={handleKeyDown}
             placeholder={
               mode === "customize"
-                ? "Ask me to change anything…"
-                : "Type a message… (Enter to send)"
+                ? "Ask me to change anything or generate content…"
+                : "Type your answer or ask me to generate content… (Enter to send)"
             }
             rows={2}
             disabled={loading || isComplete || outOfCredits}
@@ -408,22 +428,28 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
           </button>
         </div>
         <div className="flex items-center justify-between gap-2">
-          {/* Clear chat history — keeps resume data intact */}
-          {messages.length > 0 && (
-            <button
-              type="button"
-              onClick={clearChat}
-              disabled={loading}
-              aria-label="Clear chat history"
-              title="Clear chat history (resume data is kept)"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-40"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              Clear chat
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            {/* Undo last chat message */}
+            {messages.length >= 2 && (
+              <UndoChatButton onUndoChat={undoLastChat} disabled={loading || isComplete} />
+            )}
+            {/* Clear chat history — keeps resume data intact */}
+            {messages.length > 0 && (
+              <button
+                type="button"
+                onClick={clearChat}
+                disabled={loading}
+                aria-label="Clear chat history"
+                title="Clear chat history (resume data is kept)"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-40"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Clear chat
+              </button>
+            )}
+          </div>
           {onEnd && (
             <button
               type="button"
