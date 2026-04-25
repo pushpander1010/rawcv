@@ -1,18 +1,11 @@
 "use client";
 
-import type { Metadata } from "next";
 import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useResume } from "@/context/ResumeContext";
 import type { CreditTransaction } from "@/lib/user-store";
-
-export const metadata: Metadata = {
-  title: "Dashboard - Manage Your Resume & Credits | rawcv",
-  description: "Access your resume tools, view credit balance, purchase credit bundles, and track your transaction history. Your central hub for resume optimization.",
-  alternates: { canonical: "https://www.rawcv.com/dashboard" },
-};
 
 // ─── Bundle definitions ───────────────────────────────────────────────────────
 

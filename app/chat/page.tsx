@@ -1,15 +1,8 @@
 "use client";
 
-import type { Metadata } from "next";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useResume } from "@/context/ResumeContext";
-
-export const metadata: Metadata = {
-  title: "AI Resume Chat Builder - Build & Customize Your CV | rawcv",
-  description: "Build your resume from scratch or customize existing sections using conversational AI. Get real-time preview updates as you chat with our intelligent assistant.",
-  alternates: { canonical: "https://www.rawcv.com/chat" },
-};
 import ChatBot from "@/components/ChatBot";
 import ResumePreview from "@/components/ResumePreview";
 import ThemePicker from "@/components/ThemePicker";

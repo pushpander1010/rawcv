@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How to Use rawcv — Step-by-Step Guide",
-  description:
-    "Complete guide to using rawcv: how to upload or build a resume, run ATS analysis, get AI suggestions, match to a job description, tailor your CV, and download a polished PDF.",
+  title: "Complete Guide - How to Use rawcv AI Resume Builder | rawcv",
+  description: "Step-by-step tutorial on building, analyzing, and optimizing your resume with rawcv. Learn ATS scoring, AI suggestions, job description matching, and more.",
   alternates: { canonical: "https://www.rawcv.com/how-to" },
   openGraph: {
-    title: "How to Use rawcv — Step-by-Step Guide",
+    title: "Complete Guide - How to Use rawcv AI Resume Builder | rawcv",
     description:
-      "Complete guide to using rawcv: upload a resume, get ATS scores, AI suggestions, JD matching, and download polished PDFs.",
+      "Step-by-step tutorial on building, analyzing, and optimizing your resume with rawcv. Learn ATS scoring, AI suggestions, job description matching, and more.",
     url: "https://www.rawcv.com/how-to",
   },
 };

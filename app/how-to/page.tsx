@@ -1,13 +1,5 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
-
-export const metadata: Metadata = {
-  title: "Complete Guide - How to Use rawcv AI Resume Builder | rawcv",
-  description: "Step-by-step tutorial on building, analyzing, and optimizing your resume with rawcv. Learn ATS scoring, AI suggestions, job description matching, and more.",
-  alternates: { canonical: "https://www.rawcv.com/how-to" },
-};
-
 
 function Step({ number, title, children }: { number: number; title: string; children: React.ReactNode }) {
   return (
