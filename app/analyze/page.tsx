@@ -1,8 +1,15 @@
 "use client";
 
+import type { Metadata } from "next";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useResume } from "@/context/ResumeContext";
+
+export const metadata: Metadata = {
+  title: "Analyze Resume - ATS Score, AI Suggestions & JD Match | rawcv",
+  description: "Get instant ATS compatibility scores, AI-powered improvement suggestions, and job description relevance analysis. Optimize your resume for applicant tracking systems.",
+  alternates: { canonical: "https://www.rawcv.com/analyze" },
+};
 import ATSScoreCard from "@/components/ATSScoreCard";
 import RelevanceScoreCard from "@/components/RelevanceScoreCard";
 import SuggestionsList from "@/components/SuggestionsList";

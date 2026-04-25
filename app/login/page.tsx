@@ -1,9 +1,16 @@
 "use client";
 
+import type { Metadata } from "next";
 import { useState, Suspense, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Sign In - Access Your AI Resume Tools | rawcv",
+  description: "Sign in to rawcv to access ATS scoring, AI suggestions, job description matching, and resume tailoring tools. Continue with Google or email.",
+  alternates: { canonical: "https://www.rawcv.com/login" },
+};
 
 function GoogleIcon() {
   return (

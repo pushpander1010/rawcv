@@ -1,9 +1,16 @@
 "use client";
 
+import type { Metadata } from "next";
 import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Create Free Account - Start Building Better Resumes | rawcv",
+  description: "Sign up for rawcv and get 20 free credits instantly. Build, analyze, and optimize your resume with AI. No credit card required.",
+  alternates: { canonical: "https://www.rawcv.com/register" },
+};
 
 function GoogleIcon() {
   return (
