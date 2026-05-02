@@ -37,9 +37,16 @@ async function loadRazorpay(): Promise<boolean> {
 // ─── Quick-action cards ───────────────────────────────────────────────────────
 
 const TOOLS = [
-  { href: "/analyze", icon: "📊", label: "Analyze Resume",   desc: "ATS score & suggestions" },
-  { href: "/tailor",  icon: "🎯", label: "Tailor to JD",     desc: "Match a job description"  },
-  { href: "/chat",    icon: "💬", label: "Chat Builder",      desc: "Build or customize via AI" },
+  { href: "/analyze", icon: "📊", label: "Analyze Resume",   desc: "ATS score & suggestions",   color: "violet" },
+  { href: "/tailor",  icon: "🎯", label: "Tailor to JD",     desc: "Match a job description",    color: "blue"   },
+  { href: "/chat",    icon: "💬", label: "Chat Builder",      desc: "Build or customize via AI",  color: "emerald"},
+];
+
+const TIPS = [
+  { icon: "📤", title: "Upload your resume", desc: "Start by uploading a PDF or DOCX — we'll parse it instantly." },
+  { icon: "📊", title: "Run an ATS check",   desc: "See how your resume scores against applicant tracking systems." },
+  { icon: "🎯", title: "Tailor to a job",    desc: "Paste a job description and get a tailored version in seconds." },
+  { icon: "💬", title: "Chat to refine",     desc: "Use the AI chat builder to tweak wording, tone, and structure." },
 ];
 
 // ─── Credits tab ─────────────────────────────────────────────────────────────
@@ -198,28 +205,177 @@ function CreditsTab() {
 
 // ─── Overview tab ─────────────────────────────────────────────────────────────
 
-function OverviewTab() {
+function ScoreBadge({ score, label }: { score: number; label: string }) {
+  const color =
+    score >= 75 ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-700"
+    : score >= 50 ? "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-700"
+    : "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700";
+  return (
+    <div className={`rounded-xl border px-4 py-3 flex flex-col items-center gap-0.5 ${color}`}>
+      <span className="text-2xl font-bold tabular-nums">{score}</span>
+      <span className="text-xs font-medium opacity-80">{label}</span>
+    </div>
+  );
+}
+
+function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
   const { state } = useResume();
   const isLow = (state.creditBalance ?? 0) <= 5;
+  const hasResume = !!state.parsed;
+  const hasAts = !!state.atsResult;
+  const hasRelevance = !!state.relevanceResult;
+  const hasTailored = !!state.tailoredResume;
+  const hasSuggestions = state.suggestions.length > 0;
+  const hasActivity = hasAts || hasRelevance || hasTailored || hasSuggestions;
+
+  // Credit bar: cap at 100 for display
+  const balance = state.creditBalance ?? 0;
+  const barPct = Math.min(100, Math.round((balance / 100) * 100));
+  const barColor =
+    balance <= 5 ? "bg-red-500"
+    : balance <= 20 ? "bg-amber-500"
+    : "bg-violet-500";
 
   return (
     <div className="space-y-8">
-      {/* Credit nudge */}
+      {/* Low-credit nudge */}
       {isLow && (
-        <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 px-4 py-3 text-sm text-amber-700 dark:text-amber-300 flex items-center justify-between gap-4">
-          <span>You're running low on credits ({state.creditBalance ?? 0} left).</span>
+        <div
+          role="alert"
+          className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 px-4 py-3 text-sm text-amber-700 dark:text-amber-300 flex items-center justify-between gap-4"
+        >
+          <span>You&apos;re running low on credits ({balance} left).</span>
           <button
             type="button"
-            onClick={() => {
-              const url = new URL(window.location.href);
-              url.searchParams.set("tab", "credits");
-              window.history.pushState({}, "", url);
-              window.dispatchEvent(new PopStateEvent("popstate"));
-            }}
+            onClick={() => onSwitchTab("credits")}
             className="shrink-0 text-xs font-semibold underline hover:no-underline"
           >
             Top up →
           </button>
+        </div>
+      )}
+
+      {/* Resume status + credit balance — two-column on sm+ */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Resume status card */}
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Resume</p>
+            <span
+              className={`inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full ${
+                hasResume
+                  ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
+              }`}
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${hasResume ? "bg-emerald-500" : "bg-gray-400"}`} aria-hidden="true" />
+              {hasResume ? "Loaded" : "Not loaded"}
+            </span>
+          </div>
+          {hasResume ? (
+            <div className="flex-1">
+              <p className="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                {state.parsed?.contact?.name ?? "Your resume"}
+              </p>
+              {state.parsed?.contact?.email && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{state.parsed.contact.email}</p>
+              )}
+              <div className="mt-3 flex flex-wrap gap-2">
+                {state.parsed?.skills?.slice(0, 4).map((s) => (
+                  <span key={s} className="text-xs bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-700 rounded-full px-2 py-0.5">
+                    {s}
+                  </span>
+                ))}
+                {(state.parsed?.skills?.length ?? 0) > 4 && (
+                  <span className="text-xs text-gray-400 dark:text-gray-500">+{(state.parsed?.skills?.length ?? 0) - 4} more</span>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500 dark:text-gray-400 flex-1">
+              Upload a resume to get started with analysis and tailoring.
+            </p>
+          )}
+          <Link
+            href="/analyze"
+            className="mt-auto inline-flex items-center justify-center gap-1.5 w-full py-2 rounded-xl text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500"
+          >
+            {hasResume ? "Re-analyze →" : "Upload resume →"}
+          </Link>
+        </div>
+
+        {/* Credit balance card */}
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5 flex flex-col gap-3">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Credits</p>
+          <div className="flex items-end justify-between gap-2">
+            <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 tabular-nums">
+              {balance}
+              <span className="text-sm font-normal text-gray-500 ml-1">left</span>
+            </p>
+            <span className="text-3xl" aria-hidden="true">💳</span>
+          </div>
+          {/* Progress bar */}
+          <div className="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden" role="progressbar" aria-valuenow={balance} aria-valuemin={0} aria-valuemax={100} aria-label="Credit balance">
+            <div className={`h-full rounded-full transition-all ${barColor}`} style={{ width: `${barPct}%` }} />
+          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400">Each AI operation costs 2 credits.</p>
+          <button
+            type="button"
+            onClick={() => onSwitchTab("credits")}
+            className="mt-auto w-full py-2 rounded-xl text-sm font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500"
+          >
+            Buy more credits
+          </button>
+        </div>
+      </div>
+
+      {/* Recent activity */}
+      {hasActivity && (
+        <div>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Last session</h2>
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5 space-y-4">
+            {/* Score row */}
+            {(hasAts || hasRelevance) && (
+              <div className="flex flex-wrap gap-3">
+                {hasAts && state.atsResult && (
+                  <ScoreBadge score={state.atsResult.score} label="ATS score" />
+                )}
+                {hasRelevance && state.relevanceResult && (
+                  <ScoreBadge score={state.relevanceResult.score} label="JD match" />
+                )}
+              </div>
+            )}
+
+            {/* Status pills */}
+            <div className="flex flex-wrap gap-2">
+              {hasSuggestions && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700">
+                  ✅ {state.suggestions.length} suggestion{state.suggestions.length !== 1 ? "s" : ""} generated
+                </span>
+              )}
+              {hasTailored && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700">
+                  ✅ Resume tailored to JD
+                </span>
+              )}
+              {state.enhancements.length > 0 && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-700">
+                  ✅ {state.enhancements.length} enhancement{state.enhancements.length !== 1 ? "s" : ""} applied
+                </span>
+              )}
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-1">
+              <Link href="/analyze" className="text-xs font-medium text-violet-600 dark:text-violet-400 hover:underline">
+                View analysis →
+              </Link>
+              {hasTailored && (
+                <Link href="/tailor" className="text-xs font-medium text-violet-600 dark:text-violet-400 hover:underline">
+                  View tailored resume →
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
@@ -243,27 +399,27 @@ function OverviewTab() {
         </div>
       </div>
 
-      {/* Credit summary */}
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 flex items-center justify-between">
+      {/* Getting started tips — only shown when no resume loaded */}
+      {!hasResume && (
         <div>
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Credit balance</p>
-          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            {state.creditBalance ?? 0} <span className="text-base font-normal text-gray-500">credits</span>
-          </p>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">How it works</h2>
+          <ol className="grid grid-cols-1 sm:grid-cols-2 gap-3" aria-label="Getting started steps">
+            {TIPS.map((tip, i) => (
+              <li key={tip.title} className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 flex items-start gap-3">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-bold flex items-center justify-center" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
+                    <span aria-hidden="true">{tip.icon}</span> {tip.title}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{tip.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            const url = new URL(window.location.href);
-            url.searchParams.set("tab", "credits");
-            window.history.pushState({}, "", url);
-            window.dispatchEvent(new PopStateEvent("popstate"));
-          }}
-          className="px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500"
-        >
-          Buy credits
-        </button>
-      </div>
+      )}
     </div>
   );
 }
@@ -357,7 +513,7 @@ function DashboardContent() {
       </div>
 
       {/* Tab content */}
-      {tab === "overview" && <OverviewTab />}
+      {tab === "overview" && <OverviewTab onSwitchTab={switchTab} />}
       {tab === "credits"  && <CreditsTab />}
     </main>
   );
