@@ -87,6 +87,7 @@ export function FooterNav() {
   const isLoggedIn = status === "authenticated";
   return (
     <nav className="flex gap-6" aria-label="Footer navigation">
+      <Link href="/about" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">About</Link>
       <Link href="/credits" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Pricing</Link>
       <Link href="/how-to" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">How to</Link>
       {isLoggedIn

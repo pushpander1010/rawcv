@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — rawcv",
@@ -11,6 +12,7 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 px-6 py-16">
       <div className="max-w-2xl mx-auto prose prose-gray dark:prose-invert prose-sm sm:prose-base">
+        <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Privacy Policy", href: "/privacy" }]} />
         <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Privacy Policy</h1>
         <p className="text-sm text-gray-400 mb-10">Last updated: April 14, 2026</p>
 

@@ -105,6 +105,9 @@ export default function RootLayout({
                       <Link href="/how-to" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                         How to
                       </Link>
+                      <Link href="/about" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+                        About
+                      </Link>
                     </nav>
                   </div>
                   <div className="flex items-center gap-3">

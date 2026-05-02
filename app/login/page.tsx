@@ -4,6 +4,7 @@ import { useState, Suspense, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 
 function GoogleIcon() {
   return (
@@ -16,6 +17,29 @@ function GoogleIcon() {
   );
 }
 
+const TIPS = [
+  {
+    icon: "🔑",
+    title: "Forgot your password?",
+    desc: "Use the \"Forgot password?\" link on the sign-in form to receive a reset link by email. The link expires in 1 hour.",
+  },
+  {
+    icon: "📧",
+    title: "Email not verified?",
+    desc: "Check your spam folder for the verification email. If it's been more than 10 minutes, try registering again — a new link will be sent.",
+  },
+  {
+    icon: "🔒",
+    title: "Signed up with Google?",
+    desc: "If you originally signed in with Google, use the \"Continue with Google\" button — email/password login won't work for Google accounts.",
+  },
+  {
+    icon: "💡",
+    title: "New to rawcv?",
+    desc: "Create a free account in under 30 seconds. You get 20 free credits instantly — enough to run ATS analysis, get AI suggestions, and download a PDF.",
+  },
+];
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -24,7 +48,6 @@ function LoginForm() {
   const errorParam = searchParams.get("error");
   const { status } = useSession();
 
-  // All hooks must be declared before any conditional returns
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(
@@ -36,15 +59,12 @@ function LoginForm() {
   );
   const [loading, setLoading] = useState(false);
 
-  // Redirect authenticated users away from login page
   useEffect(() => {
     if (status === "authenticated") {
       window.location.href = callbackUrl;
     }
   }, [status, callbackUrl]);
 
-  // Only show spinner while session is initially loading (not yet known)
-  // Don't block on "authenticated" — let the redirect handle it
   if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
@@ -71,7 +91,6 @@ function LoginForm() {
         setError("Invalid email or password.");
       }
     } else {
-      // Hard redirect so the session cookie is picked up cleanly
       window.location.href = callbackUrl;
     }
   }
@@ -82,99 +101,163 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-100 dark:border-gray-800">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">Welcome back</h1>
-        <p className="text-sm text-gray-500 mb-6">Sign in to your rawcv account</p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Breadcrumb */}
+      <div className="max-w-3xl mx-auto px-6 pt-6">
+        <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Sign in", href: "/login" }]} />
+      </div>
 
-        {verified && (
-          <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
-            Email verified. You can now sign in.
-          </div>
-        )}
+      {/* Sign-in form */}
+      <div className="flex justify-center px-4 pb-12">
+        <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-100 dark:border-gray-800">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">Welcome back</h1>
+          <p className="text-sm text-gray-500 mb-6">Sign in to your rawcv account</p>
 
-        {error && (
-          <div role="alert" className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-            {error}
-          </div>
-        )}
-
-        <div className="mb-5">
-          <div className="flex items-center justify-center mb-2">
-            <span className="text-xs font-semibold tracking-wide text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 rounded-full px-3 py-0.5">
-              ✦ Recommended
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border-2 border-indigo-400 dark:border-indigo-500 rounded-xl px-4 py-3 text-sm font-semibold text-gray-800 dark:text-gray-100 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:border-indigo-500 shadow-sm hover:shadow-md transition-all disabled:opacity-50"
-          >
-            <GoogleIcon />
-            Continue with Google
-          </button>
-        </div>
-
-        <div className="flex items-center gap-3 mb-4">
-          <hr className="flex-1 border-gray-200 dark:border-gray-700" />
-          <span className="text-xs text-gray-400">or sign in with email</span>
-          <hr className="flex-1 border-gray-200 dark:border-gray-700" />
-        </div>
-
-        <form onSubmit={handleCredentialsLogin} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="you@example.com"
-            />
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Password
-              </label>
-              <Link href="/forgot-password" className="text-xs text-indigo-600 hover:underline">
-                Forgot password?
-              </Link>
+          {verified && (
+            <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
+              Email verified. You can now sign in.
             </div>
-            <input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="••••••••"
-            />
+          )}
+
+          {error && (
+            <div role="alert" className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+              {error}
+            </div>
+          )}
+
+          <div className="mb-5">
+            <div className="flex items-center justify-center mb-2">
+              <span className="text-xs font-semibold tracking-wide text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 rounded-full px-3 py-0.5">
+                ✦ Recommended
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border-2 border-indigo-400 dark:border-indigo-500 rounded-xl px-4 py-3 text-sm font-semibold text-gray-800 dark:text-gray-100 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:border-indigo-500 shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+            >
+              <GoogleIcon />
+              Continue with Google
+            </button>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition disabled:opacity-50"
-          >
-            {loading ? "Signing in…" : "Sign in"}
-          </button>
-        </form>
+          <div className="flex items-center gap-3 mb-4">
+            <hr className="flex-1 border-gray-200 dark:border-gray-700" />
+            <span className="text-xs text-gray-400">or sign in with email</span>
+            <hr className="flex-1 border-gray-200 dark:border-gray-700" />
+          </div>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
-          Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-indigo-600 hover:underline font-medium">
-            Create one
-          </Link>
-        </p>
+          <form onSubmit={handleCredentialsLogin} className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="you@example.com"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Password
+                </label>
+                <Link href="/forgot-password" className="text-xs text-indigo-600 hover:underline">
+                  Forgot password?
+                </Link>
+              </div>
+              <input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition disabled:opacity-50"
+            >
+              {loading ? "Signing in…" : "Sign in"}
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-sm text-gray-500">
+            Don&apos;t have an account?{" "}
+            <Link href="/register" className="text-indigo-600 hover:underline font-medium">
+              Create one free
+            </Link>
+          </p>
+        </div>
+      </div>
+
+      {/* ── Value content for AdSense & SEO ── */}
+      <div className="max-w-4xl mx-auto px-6 pb-20">
+
+        {/* Sign-in help tips */}
+        <section aria-labelledby="signin-tips-heading" className="mb-16">
+          <h2 id="signin-tips-heading" className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">
+            Having trouble signing in?
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {TIPS.map((tip) => (
+              <div
+                key={tip.title}
+                className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-5 shadow-sm flex gap-4"
+              >
+                <div className="text-2xl flex-shrink-0" aria-hidden="true">{tip.icon}</div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">{tip.title}</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{tip.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* What rawcv does */}
+        <section aria-labelledby="about-rawcv-heading" className="mb-16 max-w-2xl mx-auto">
+          <h2 id="about-rawcv-heading" className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 text-center">
+            What is rawcv?
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+            rawcv is a free AI-powered resume platform that helps job seekers build, analyze, and optimize their resumes. Whether you&apos;re starting from scratch or improving an existing CV, rawcv gives you the tools to stand out.
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+            Our ATS score checker tells you exactly why your resume might be getting filtered out before a recruiter ever reads it. The job description matcher shows you which keywords and skills you&apos;re missing for any specific role. And the AI enhancement tools help you rewrite weak bullet points into strong, results-driven statements.
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Every new account starts with 20 free credits — enough to run a full analysis, get AI suggestions, and download a polished PDF resume in your choice of theme.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3 justify-center">
+            <Link
+              href="/register"
+              className="px-5 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors"
+            >
+              Create free account
+            </Link>
+            <Link
+              href="/how-to"
+              className="px-5 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-gray-700 dark:text-gray-300"
+            >
+              Read the guide
+            </Link>
+          </div>
+        </section>
+
       </div>
     </div>
   );

@@ -1,5 +1,13 @@
 import Link from "next/link";
 import Script from "next/script";
+import Breadcrumb from "@/components/Breadcrumb";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "How to Use rawcv — AI Resume Builder Guide",
+  description: "Step-by-step guide to building, analyzing, and optimizing your resume with rawcv. Learn ATS scoring, JD matching, AI suggestions, and PDF download.",
+  alternates: { canonical: "https://www.rawcv.com/how-to" },
+};
 
 function Step({ number, title, children }: { number: number; title: string; children: React.ReactNode }) {
   return (
@@ -82,6 +90,11 @@ export default function HowToPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <Script id="how-to-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {/* Breadcrumb */}
+      <div className="max-w-6xl mx-auto px-6 pt-6">
+        <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "How to use rawcv", href: "/how-to" }]} />
+      </div>
 
       {/* Hero */}
       <div className="bg-gradient-to-b from-violet-50 dark:from-violet-950/30 to-white dark:to-gray-950 border-b border-gray-100 dark:border-gray-800 px-6 py-16 text-center">
