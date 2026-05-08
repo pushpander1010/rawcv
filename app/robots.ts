@@ -8,11 +8,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: [
           "/api/",
-          "/dashboard/",
-          "/analyze/",
-          "/tailor/",
-          "/chat/",
-          "/credits/",
           "/reset-password/",
           "/forgot-password/",
           "/verify-email/",
