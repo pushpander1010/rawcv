@@ -319,17 +319,7 @@ export default function LandingPage() {
               Start with 20 free credits — no credit card required.
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-2 justify-center">
-            {[
-              "free resume checker", "ATS resume scanner", "AI CV builder", "resume keyword optimizer",
-              "job description matcher", "resume score checker", "resume enhancer AI", "CV maker online",
-              "ATS friendly resume builder", "resume improvement tool"
-            ].map((kw) => (
-              <span key={kw} className="px-3 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                {kw}
-              </span>
-            ))}
-          </div>
+
         </div>
       </section>
 
