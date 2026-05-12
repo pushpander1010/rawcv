@@ -3,6 +3,7 @@
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import CreditBalanceDisplay from "./CreditBalanceDisplay";
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -91,9 +92,13 @@ export default function Navbar() {
             {isLoggedIn ? (
               <>
                 {/* Credits Balance */}
-                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800">
-                  <span className="text-xs font-medium text-violet-700 dark:text-violet-300">💎 Credits</span>
-                </div>
+                <Link
+                  href="/dashboard?tab=credits"
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-violet-900/20 hover:bg-violet-100 dark:hover:bg-violet-900/40 transition-colors"
+                >
+                  <span className="text-sm font-medium text-violet-700 dark:text-violet-300">💎 Credits</span>
+                  <CreditBalanceDisplay />
+                </Link>
 
                 {/* User Menu */}
                 <div className="relative">

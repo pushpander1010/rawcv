@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { ParsedResume } from "@/types";
+import { dispatchCreditUpdate } from "@/lib/credit-utils";
 
 interface KeywordStats {
   total: number;
@@ -180,6 +181,9 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
 
           {/* Upgrade CTA */}
           <div className="p-4 rounded-lg bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800">
+            <p className="text-xs text-violet-700 dark:text-violet-300 mb-2">
+              <strong>✅ This analysis is free and doesn't use any credits</strong>
+            </p>
             <p className="text-xs text-violet-700 dark:text-violet-300 mb-2">
               <strong>Get AI-powered keyword suggestions</strong>
             </p>

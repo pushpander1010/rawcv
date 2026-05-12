@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { ParsedResume } from "@/types";
+import { dispatchCreditUpdate } from "@/lib/credit-utils";
 
 interface FormatIssue {
   category: string;
@@ -272,6 +273,9 @@ export default function FreeFormattingChecker({ resume }: Props) {
         <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
           <p className="text-sm text-emerald-700 dark:text-emerald-300">
             ✅ No formatting issues found! Your resume is well-formatted.
+          </p>
+          <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">
+            This analysis is free and doesn't use any credits
           </p>
         </div>
       )}

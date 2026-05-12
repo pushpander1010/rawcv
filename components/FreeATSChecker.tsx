@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { ParsedResume } from "@/types";
+import { dispatchCreditUpdate } from "@/lib/credit-utils";
 
 interface ATSIssue {
   type: string;
@@ -187,6 +188,10 @@ export default function FreeATSChecker({ resume }: Props) {
               ❌ Your resume needs improvements for ATS compatibility.
             </p>
           )}
+
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
+            ✅ This analysis is free and doesn't use any credits
+          </p>
         </div>
       )}
 
