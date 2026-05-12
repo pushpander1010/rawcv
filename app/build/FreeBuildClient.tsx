@@ -6,6 +6,9 @@ import FreeResumeForm from "@/components/FreeResumeForm";
 import ResumePreview from "@/components/ResumePreview";
 import ThemePicker from "@/components/ThemePicker";
 import FreeDownloadButton from "@/components/FreeDownloadButton";
+import FreeATSChecker from "@/components/FreeATSChecker";
+import FreeKeywordAnalyzer from "@/components/FreeKeywordAnalyzer";
+import FreeFormattingChecker from "@/components/FreeFormattingChecker";
 
 const STORAGE_KEY = "free_resume_draft";
 const THEME_STORAGE_KEY = "free_resume_theme";
@@ -16,6 +19,7 @@ export default function FreeBuildClient() {
   const [showThemePicker, setShowThemePicker] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [activeTab, setActiveTab] = useState<"preview" | "ats" | "keywords" | "formatting">("preview");
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -84,77 +88,162 @@ export default function FreeBuildClient() {
       {/* Preview Column */}
       <div className="lg:col-span-2 order-1 lg:order-2">
         <div className="sticky top-24 space-y-6">
-          {/* Theme Selector */}
-          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Theme
-              </h2>
+          {/* Tab Navigation */}
+          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+            <div className="flex gap-2 overflow-x-auto">
               <button
                 type="button"
-                onClick={() => setShowThemePicker(!showThemePicker)}
-                className="text-sm px-3 py-1.5 rounded-lg bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 hover:bg-violet-200 dark:hover:bg-violet-900/50 transition-colors"
+                onClick={() => setActiveTab("preview")}
+                className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${
+                  activeTab === "preview"
+                    ? "bg-violet-600 text-white"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                }`}
               >
-                {showThemePicker ? "Hide" : "Change"}
+                👁️ Preview
               </button>
-            </div>
-
-            {showThemePicker && (
-              <div className="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
-                <ThemePicker onSelect={handleThemeSelect} />
-              </div>
-            )}
-
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              Current: <span className="font-semibold text-gray-900 dark:text-gray-100 capitalize">{selectedTheme}</span>
+              <button
+                type="button"
+                onClick={() => setActiveTab("ats")}
+                className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${
+                  activeTab === "ats"
+                    ? "bg-violet-600 text-white"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                }`}
+              >
+                📊 ATS Check
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("keywords")}
+                className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${
+                  activeTab === "keywords"
+                    ? "bg-violet-600 text-white"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                }`}
+              >
+                🔍 Keywords
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("formatting")}
+                className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${
+                  activeTab === "formatting"
+                    ? "bg-violet-600 text-white"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                }`}
+              >
+                ✓ Format
+              </button>
             </div>
           </div>
 
-          {/* Preview */}
-          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              Preview
-            </h2>
+          {/* Preview Tab */}
+          {activeTab === "preview" && (
+            <>
+              {/* Theme Selector */}
+              <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    Theme
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setShowThemePicker(!showThemePicker)}
+                    className="text-sm px-3 py-1.5 rounded-lg bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 hover:bg-violet-200 dark:hover:bg-violet-900/50 transition-colors"
+                  >
+                    {showThemePicker ? "Hide" : "Change"}
+                  </button>
+                </div>
 
-            {resume ? (
-              <div className="overflow-auto max-h-96 border border-gray-200 dark:border-gray-700 rounded-lg">
-                <ResumePreview resume={resume} theme={selectedTheme} />
+                {showThemePicker && (
+                  <div className="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
+                    <ThemePicker onSelect={handleThemeSelect} />
+                  </div>
+                )}
+
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Current: <span className="font-semibold text-gray-900 dark:text-gray-100 capitalize">{selectedTheme}</span>
+                </div>
               </div>
-            ) : (
-              <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700">
-                <div className="text-center">
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Start filling out the form to see your resume preview
+
+              {/* Preview */}
+              <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                  Preview
+                </h2>
+
+                {resume ? (
+                  <div className="overflow-auto max-h-96 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <ResumePreview resume={resume} theme={selectedTheme} />
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700">
+                    <div className="text-center">
+                      <p className="text-gray-500 dark:text-gray-400">
+                        Start filling out the form to see your resume preview
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Download Section */}
+              <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                  Download
+                </h2>
+
+                <FreeDownloadButton
+                  resume={resume}
+                  theme={selectedTheme}
+                  onValidationError={setValidationError}
+                />
+
+                {validationError && (
+                  <div className="mt-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+                    <p className="text-sm text-amber-700 dark:text-amber-300">{validationError}</p>
+                  </div>
+                )}
+
+                <div className="mt-4 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+                  <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                    ✅ <strong>Completely free</strong> — no watermark, no hidden charges
                   </p>
                 </div>
               </div>
-            )}
-          </div>
+            </>
+          )}
 
-          {/* Download Section */}
-          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              Download
-            </h2>
-
-            <FreeDownloadButton
-              resume={resume}
-              theme={selectedTheme}
-              onValidationError={setValidationError}
-            />
-
-            {validationError && (
-              <div className="mt-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
-                <p className="text-sm text-amber-700 dark:text-amber-300">{validationError}</p>
-              </div>
-            )}
-
-            <div className="mt-4 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
-              <p className="text-sm text-emerald-700 dark:text-emerald-300">
-                ✅ <strong>Completely free</strong> — no watermark, no hidden charges
-              </p>
+          {/* ATS Check Tab */}
+          {activeTab === "ats" && (
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                ATS Compatibility Check
+              </h2>
+              <FreeATSChecker resume={resume} />
             </div>
-          </div>
+          )}
+
+          {/* Keywords Tab */}
+          {activeTab === "keywords" && (
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                Keyword Analysis
+              </h2>
+              <FreeKeywordAnalyzer resume={resume} />
+            </div>
+          )}
+
+          {/* Formatting Tab */}
+          {activeTab === "formatting" && (
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                Formatting Check
+              </h2>
+              <FreeFormattingChecker resume={resume} />
+            </div>
+          )}
 
           {/* AI Features CTA */}
           <div className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 rounded-xl border border-violet-200 dark:border-violet-800 p-6">
@@ -162,7 +251,7 @@ export default function FreeBuildClient() {
               🚀 Upgrade Your Resume with AI
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Get ATS scores, match to job descriptions, enhance bullet points, and more.
+              Get AI-powered suggestions, JD matching, ATS optimization, and more advanced analysis.
             </p>
             <a
               href="/login?redirect=/analyze"
