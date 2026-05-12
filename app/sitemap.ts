@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     // Public pages only — auth-protected routes are excluded
     { url: base,                    lastModified: "2025-01-01", changeFrequency: "weekly",  priority: 1.0 },
+    { url: `${base}/build`,         lastModified: "2025-01-01", changeFrequency: "weekly",  priority: 0.95 },
     { url: `${base}/how-to`,        lastModified: "2025-01-01", changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/about`,         lastModified: "2025-01-01", changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/register`,      lastModified: "2025-01-01", changeFrequency: "monthly", priority: 0.8 },
