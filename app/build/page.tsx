@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import FreeBuildClient from "./FreeBuildClient";
+import FreePageBanner from "@/components/FreePageBanner";
 
 export const metadata: Metadata = {
   title: "Free Resume Builder - Create & Download | rawcv",
@@ -42,6 +43,12 @@ export default function BuildPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <FreePageBanner
+          title="🚀 Unlock AI-Powered Resume Features"
+          description="Sign up for free to access premium AI features: ATS optimization, JD matching, bullet point enhancement, and personalized suggestions."
+          ctaText="Create Free Account"
+          ctaHref="/register"
+        />
         <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
           <FreeBuildClient />
         </Suspense>

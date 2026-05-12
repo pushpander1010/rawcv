@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Link from "next/link";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import SessionProvider from "@/components/SessionProvider";
 import { ResumeProvider } from "@/context/ResumeContext";
 import { ToastProvider } from "@/components/Toast";
-import UserNav from "@/components/UserNav";
-import CreditBalance from "@/components/CreditBalance";
+import Navbar from "@/components/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -82,40 +80,7 @@ export default function RootLayout({
         <SessionProvider>
           <ResumeProvider>
             <ToastProvider>
-              <header className="sticky top-0 z-30 w-full border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm">
-                <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-                  <div className="flex items-center gap-6">
-                    <Link href="/" className="flex items-center gap-2">
-                      <img src="/favicon.svg" alt="rawcv logo" width={28} height={28} className="rounded-md" />
-                      <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-gray-100">rawcv</span>
-                    </Link>
-                    <nav className="hidden sm:flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400" aria-label="Main navigation">
-                      <Link href="/dashboard" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                        Dashboard
-                      </Link>
-                      <Link href="/analyze" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                        Analyze
-                      </Link>
-                      <Link href="/tailor" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                        Tailor
-                      </Link>
-                      <Link href="/chat" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                        Chat
-                      </Link>
-                      <Link href="/how-to" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                        How to
-                      </Link>
-                      <Link href="/about" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                        About
-                      </Link>
-                    </nav>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CreditBalance />
-                    <UserNav />
-                  </div>
-                </div>
-              </header>
+              <Navbar />
               {children}
               <Analytics />
             </ToastProvider>
