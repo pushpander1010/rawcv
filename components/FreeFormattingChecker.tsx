@@ -275,7 +275,7 @@ export default function FreeFormattingChecker({ resume }: Props) {
             ✅ No formatting issues found! Your resume is well-formatted.
           </p>
           <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">
-            This analysis is free and doesn't use any credits
+            This analysis is free and doesn&apos;t use any credits
           </p>
         </div>
       )}

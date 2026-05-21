@@ -124,7 +124,7 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
         type="button"
         onClick={analyzeKeywords}
         disabled={loading || !resume}
-        className="w-full px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-sm transition-colors"
+        className="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5"
       >
         {loading ? "Analyzing..." : "🔍 Analyze Keywords (Free)"}
       </button>
@@ -133,11 +133,11 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
         <div className="space-y-4">
           {/* Stats */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-              <p className="text-xs text-blue-600 dark:text-blue-400 mb-1">Total Words</p>
-              <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.total}</p>
+            <div className="p-3 rounded-xl bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-850">
+              <p className="text-xs text-violet-600 dark:text-violet-400 mb-1">Total Words</p>
+              <p className="text-2xl font-bold text-violet-700 dark:text-violet-300">{stats.total}</p>
             </div>
-            <div className="p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
+            <div className="p-3 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
               <p className="text-xs text-purple-600 dark:text-purple-400 mb-1">Unique Keywords</p>
               <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{stats.unique}</p>
             </div>
@@ -152,7 +152,7 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
               {stats.topKeywords.map((kw, idx) => (
                 <span
                   key={idx}
-                  className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-medium"
+                  className="px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-medium border border-violet-200/30"
                 >
                   {kw.word} <span className="opacity-70">({kw.count})</span>
                 </span>
@@ -182,7 +182,7 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
           {/* Upgrade CTA */}
           <div className="p-4 rounded-lg bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800">
             <p className="text-xs text-violet-700 dark:text-violet-300 mb-2">
-              <strong>✅ This analysis is free and doesn't use any credits</strong>
+              <strong>✅ This analysis is free and doesn&apos;t use any credits</strong>
             </p>
             <p className="text-xs text-violet-700 dark:text-violet-300 mb-2">
               <strong>Get AI-powered keyword suggestions</strong>

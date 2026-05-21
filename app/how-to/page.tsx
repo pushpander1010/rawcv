@@ -97,21 +97,35 @@ export default function HowToPage() {
       </div>
 
       {/* Hero */}
-      <div className="bg-gradient-to-b from-violet-50 dark:from-violet-950/30 to-white dark:to-gray-950 border-b border-gray-100 dark:border-gray-800 px-6 py-16 text-center">
-        <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase tracking-wide">
-          Documentation
-        </span>
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">How to use rawcv</h1>
-        <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto text-lg">
-          Everything you need to go from a blank page to a polished, ATS-optimized resume.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3 justify-center">
-          <Link href="/register" className="px-6 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors">
-            Get started free
-          </Link>
-          <Link href="#getting-started" className="px-6 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-            Read the guide
-          </Link>
+      <div className="relative overflow-hidden bg-gradient-to-b from-violet-50 dark:from-violet-950/30 to-white dark:to-gray-950 border-b border-gray-100 dark:border-gray-800 px-6 py-16">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-blue-100/20 to-transparent dark:from-violet-900/20 dark:via-blue-900/10 blur-3xl" />
+        <div className="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          <div className="md:col-span-8 text-center md:text-left space-y-4">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase tracking-wide">
+              Documentation
+            </span>
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 leading-tight">How to use rawcv</h1>
+            <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto md:mx-0 text-lg">
+              Everything you need to go from a blank page to a polished, ATS-optimized resume.
+            </p>
+            <div className="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
+              <Link href="/register" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 transition-all duration-200">
+                Get started free
+              </Link>
+              <Link href="#getting-started" className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200">
+                Read the guide
+              </Link>
+            </div>
+          </div>
+          <div className="md:col-span-4 hidden md:block">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-violet-100 dark:border-violet-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+              <img 
+                src="/resume_guide_illustration.png" 
+                alt="rawcv Builder Guide Illustration" 
+                className="w-full h-auto rounded-xl object-cover"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -254,7 +268,7 @@ export default function HowToPage() {
             </Step>
 
             <Step number={4} title="Edit any section mid-conversation">
-              <p>Made a mistake? Just tell the AI: <em className="text-gray-700 dark:text-gray-300">"Change my job title at Acme Corp to Senior Engineer"</em> or <em className="text-gray-700 dark:text-gray-300">"Remove the Python skill"</em>. It will update the resume immediately.</p>
+              <p>Made a mistake? Just tell the AI: <em className="text-gray-700 dark:text-gray-300">&quot;Change my job title at Acme Corp to Senior Engineer&quot;</em> or <em className="text-gray-700 dark:text-gray-300">&quot;Remove the Python skill&quot;</em>. It will update the resume immediately.</p>
             </Step>
 
             <Step number={5} title="Finish and go to Analyze">
@@ -294,7 +308,7 @@ export default function HowToPage() {
                 <li>Adding a professional summary section</li>
                 <li>Including start and end dates for every job</li>
                 <li>Starting bullet points with strong action verbs (Led, Built, Increased)</li>
-                <li>Adding measurable results such as "Reduced load time by 40%"</li>
+                <li>Adding measurable results such as &quot;Reduced load time by 40%&quot;</li>
               </ul>
               <p className="mt-2">Use the Chat tool or the Enhance tool to apply fixes, then click <strong className="text-gray-800 dark:text-gray-200">Re-run analysis</strong> to see your updated score.</p>
               <Callout type="tip">Aim for a score above 80 before applying to competitive roles. Scores above 90 are excellent.</Callout>
@@ -395,7 +409,7 @@ export default function HowToPage() {
 
             <Step number={5} title="Act on the missing keywords">
               <p>For each missing keyword or skill, decide whether it genuinely applies to your experience. If it does, add it naturally to the relevant section using the Chat tool or by accepting an AI suggestion.</p>
-              <Callout type="warning">Never add keywords you do not actually have. This will backfire in interviews. Tailoring is about framing your real experience in the employer's language.</Callout>
+              <Callout type="warning">Never add keywords you do not actually have. This will backfire in interviews. Tailoring is about framing your real experience in the employer&apos;s language.</Callout>
               <Callout type="note">After making changes click Re-run to get an updated relevance score. Aim for 75 or above before applying.</Callout>
             </Step>
 
@@ -436,7 +450,7 @@ export default function HowToPage() {
 
             <Step number={5} title="Accept or reject individual changes">
               <p>Review each change in the diff. Accept the ones that accurately represent your experience and reject any that overstate your skills or do not fit your voice.</p>
-              <Callout type="warning">Never accept tailored content that claims skills or experience you do not have. Tailoring is about framing your real experience in the employer's language.</Callout>
+              <Callout type="warning">Never accept tailored content that claims skills or experience you do not have. Tailoring is about framing your real experience in the employer&apos;s language.</Callout>
             </Step>
 
             <Step number={6} title="Download the tailored resume">

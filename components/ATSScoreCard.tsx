@@ -60,11 +60,7 @@ interface ATSScoreCardProps {
 }
 
 export default function ATSScoreCard({ result, loading = false }: ATSScoreCardProps) {
-  const [showLoader, setShowLoader] = useState(false);
-  useEffect(() => {
-    if (loading) setShowLoader(true);
-    else setShowLoader(false);
-  }, [loading]);
+  const showLoader = loading;
 
   if (showLoader) {
     return (

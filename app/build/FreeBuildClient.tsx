@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import { useState, useEffect } from "react";
 import type { ParsedResume, ThemeId } from "@/types";
@@ -90,14 +91,14 @@ export default function FreeBuildClient() {
         <div className="sticky top-24 space-y-6">
           {/* Tab Navigation */}
           <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
-            <div className="flex gap-2 overflow-x-auto">
+            <div className="flex gap-2 overflow-x-auto pb-1">
               <button
                 type="button"
                 onClick={() => setActiveTab("preview")}
-                className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${
+                className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                   activeTab === "preview"
-                    ? "bg-violet-600 text-white"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20"
+                    : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
                 👁️ Preview
@@ -105,10 +106,10 @@ export default function FreeBuildClient() {
               <button
                 type="button"
                 onClick={() => setActiveTab("ats")}
-                className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${
+                className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                   activeTab === "ats"
-                    ? "bg-violet-600 text-white"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20"
+                    : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
                 📊 ATS Check
@@ -116,10 +117,10 @@ export default function FreeBuildClient() {
               <button
                 type="button"
                 onClick={() => setActiveTab("keywords")}
-                className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${
+                className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                   activeTab === "keywords"
-                    ? "bg-violet-600 text-white"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20"
+                    : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
                 🔍 Keywords
@@ -127,10 +128,10 @@ export default function FreeBuildClient() {
               <button
                 type="button"
                 onClick={() => setActiveTab("formatting")}
-                className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${
+                className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                   activeTab === "formatting"
-                    ? "bg-violet-600 text-white"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20"
+                    : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
                 ✓ Format
@@ -150,7 +151,7 @@ export default function FreeBuildClient() {
                   <button
                     type="button"
                     onClick={() => setShowThemePicker(!showThemePicker)}
-                    className="text-sm px-3 py-1.5 rounded-lg bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 hover:bg-violet-200 dark:hover:bg-violet-900/50 transition-colors"
+                    className="text-sm px-3.5 py-1.5 rounded-xl bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 hover:bg-violet-200 dark:hover:bg-violet-900/50 hover:scale-[1.02] active:scale-[0.98] font-semibold transition-all duration-200 shadow-sm"
                   >
                     {showThemePicker ? "Hide" : "Change"}
                   </button>
@@ -255,7 +256,7 @@ export default function FreeBuildClient() {
             </p>
             <a
               href="/login?redirect=/analyze"
-              className="inline-flex items-center gap-2 text-sm font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-violet-500/10 transition-all duration-200 w-full"
             >
               Explore Premium Features
               <svg

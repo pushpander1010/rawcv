@@ -118,11 +118,7 @@ interface EnhancementListProps {
 export default function EnhancementList({ enhancements, loading = false }: EnhancementListProps) {
   const { setState, pushUndo } = useResume();
   const [statuses, setStatuses] = useState<Record<string, CardStatus>>({});
-  const [showLoader, setShowLoader] = useState(false);
-  useEffect(() => {
-    if (loading) setShowLoader(true);
-    else setShowLoader(false);
-  }, [loading]);
+  const showLoader = loading;
 
   function acceptChange(suggestion: Suggestion) {
     pushUndo();

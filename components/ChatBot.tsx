@@ -349,7 +349,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
                 msg.role === "user"
-                  ? "bg-blue-600 text-white rounded-br-sm"
+                  ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-br-sm shadow-sm shadow-violet-500/10"
                   : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-bl-sm"
               }`}
             >
@@ -415,14 +415,14 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             rows={2}
             disabled={loading || isComplete || outOfCredits}
             aria-label="Chat message input"
-            className="flex-1 resize-none rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+            className="flex-1 resize-none rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => sendMessage(input)}
             disabled={!input.trim() || loading || isComplete || outOfCredits}
             aria-label="Send message"
-            className="shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-all shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-500"
           >
             Send
           </button>

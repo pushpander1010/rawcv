@@ -59,12 +59,12 @@ export default function ForgotPasswordPage() {
             </p>
 
             {unverified && (
-              <div role="alert" className="mb-5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-300 dark:border-amber-700 px-5 py-4 text-sm">
+              <div role="alert" className="mb-5 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 px-5 py-4 text-sm">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl leading-none" aria-hidden="true">⚠️</span>
+                  <span className="text-2xl leading-none shrink-0" aria-hidden="true">⚠️</span>
                   <div>
-                    <p className="font-semibold text-amber-800 dark:text-amber-200 text-base">Verify your email first</p>
-                    <p className="mt-1 text-amber-700 dark:text-amber-300">
+                    <p className="font-semibold text-amber-900 dark:text-amber-200 text-base">Verify your email first</p>
+                    <p className="mt-1.5 text-amber-700 dark:text-amber-300 leading-relaxed">
                       Your account hasn&apos;t been verified yet. Please check your inbox for the verification email we sent when you signed up and click the link to activate your account. Password reset is only available after verification.
                     </p>
                   </div>
@@ -73,14 +73,15 @@ export default function ForgotPasswordPage() {
             )}
 
             {error && (
-              <div role="alert" className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-                {error}
+              <div role="alert" className="mb-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300 flex items-start gap-2">
+                <span className="text-base shrink-0">⚠️</span>
+                <span>{error}</span>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                   Email
                 </label>
                 <input
@@ -90,14 +91,14 @@ export default function ForgotPasswordPage() {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
                   placeholder="you@example.com"
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-4 py-3.5 text-sm shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none"
               >
                 {loading ? "Sending…" : "Send reset link"}
               </button>

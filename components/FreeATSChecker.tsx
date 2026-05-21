@@ -190,7 +190,7 @@ export default function FreeATSChecker({ resume }: Props) {
           )}
 
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
-            ✅ This analysis is free and doesn't use any credits
+            ✅ This analysis is free and doesn&apos;t use any credits
           </p>
         </div>
       )}

@@ -72,7 +72,7 @@ function CreditsPageContent() {
       const res = await fetch("/api/credits");
       if (res.ok) {
         const data = await res.json();
-        setTransactions(data.transactions);
+        setTransactions(data.transactions ?? []);
       }
     } finally {
       setLoadingData(false);
@@ -118,7 +118,7 @@ function CreditsPageContent() {
         description: data.description ?? "Buy credits",
         order_id: data.orderId,
         prefill: data.prefill ?? undefined,
-        theme: { color: "#2563eb" },
+        theme: { color: "#7c3aed" },
         handler: async function (response: {
           razorpay_payment_id: string;
           razorpay_order_id: string;
@@ -148,86 +148,127 @@ function CreditsPageContent() {
   }
 
   return (
-    <main className="min-h-screen p-8 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">Credits</h1>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
-        Credits are consumed when you run AI-powered operations. Choose a model with fewer credits for lighter usage.
-      </p>
+    <main className="min-h-screen py-12 px-6 max-w-5xl mx-auto">
+      {/* Header with image */}
+      <div className="flex flex-col md:flex-row gap-8 items-center mb-12 bg-gradient-to-br from-violet-50/50 via-white to-gray-50 dark:from-gray-900/50 dark:via-gray-950 dark:to-gray-900 p-8 rounded-3xl border border-gray-100 dark:border-gray-800/80 shadow-md relative overflow-hidden transition-all duration-300 hover:shadow-lg">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-violet-500/10 blur-3xl" />
+        <div aria-hidden="true" className="pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl" />
+        
+        <div className="flex-1 text-center md:text-left relative z-10">
+          <span className="inline-block mb-3 px-3.5 py-1 rounded-full text-xs font-bold tracking-wide bg-gradient-to-r from-violet-100 to-indigo-100 dark:from-violet-900/40 dark:to-indigo-900/40 text-violet-700 dark:text-violet-300 uppercase shadow-sm">
+            Pricing Plans
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-3 bg-gradient-to-r from-gray-900 via-violet-950 to-gray-900 dark:from-white dark:via-violet-200 dark:to-white bg-clip-text">
+            AI Credits &amp; Packages
+          </h1>
+          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md leading-relaxed">
+            Credits power your AI resume enhancements, ATS checks, and tailored matching. Recharge whenever you run low. Simple, pay-as-you-go pricing.
+          </p>
+        </div>
+        <div className="w-40 h-40 shrink-0 relative rounded-2xl overflow-hidden border border-violet-100 dark:border-violet-900/30 p-1.5 bg-white dark:bg-gray-900 shadow-xl transform hover:scale-[1.03] transition-transform duration-300">
+          <img
+            src="/pricing_illustration.png"
+            alt="Pricing Illustration"
+            className="w-full h-full object-cover rounded-xl"
+          />
+        </div>
+      </div>
 
       {/* Success / cancel banners */}
       {success && (
         <div
           role="alert"
-          className="mb-6 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 px-4 py-3 text-sm text-emerald-700 dark:text-emerald-300"
+          className="mb-8 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-250 dark:border-emerald-800/80 px-5 py-4 text-sm text-emerald-800 dark:text-emerald-300 shadow-md shadow-emerald-500/5 animate-fade-in flex items-center gap-3"
         >
-          Payment successful — your credits have been added to your account.
+          <span className="text-lg">✅</span>
+          <span className="font-medium">Payment successful — your credits have been added to your account.</span>
         </div>
       )}
       {cancelled && (
         <div
           role="alert"
-          className="mb-6 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 px-4 py-3 text-sm text-yellow-700 dark:text-yellow-300"
+          className="mb-8 rounded-2xl bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-255 dark:border-yellow-800/80 px-5 py-4 text-sm text-yellow-800 dark:text-yellow-350 shadow-md shadow-yellow-500/5 animate-fade-in flex items-center gap-3"
         >
-          Payment cancelled — your balance was not changed.
+          <span className="text-lg">ℹ️</span>
+          <span className="font-medium">Payment cancelled — your balance was not changed.</span>
         </div>
       )}
 
       {/* Current balance */}
-      <div className="mb-8 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6">
-        <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
-          Current balance
-        </p>
-        {loadingData ? (
-          <div className="h-8 w-24 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
-        ) : (
-          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            {state.creditBalance ?? 0}{" "}
-            <span className="text-base font-normal text-gray-500 dark:text-gray-400">credits</span>
-          </p>
-        )}
+      <div className="mb-10 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md shadow-gray-100/50 dark:shadow-none relative overflow-hidden group">
+        <div aria-hidden="true" className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-violet-500 to-indigo-600" />
+        <div className="flex items-center justify-between relative z-10">
+          <div>
+            <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">
+              Current balance
+            </p>
+            {loadingData ? (
+              <div className="h-9 w-28 bg-gray-100 dark:bg-gray-850 rounded-xl animate-pulse" />
+            ) : (
+              <p className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-gray-100 tracking-tight flex items-baseline gap-2">
+                <span className="bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                  {state.creditBalance ?? 0}
+                </span>
+                <span className="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-normal">credits available</span>
+              </p>
+            )}
+          </div>
+          <div className="w-14 h-14 rounded-2xl bg-violet-50 dark:bg-violet-950/30 flex items-center justify-center text-2xl shadow-inner border border-violet-100/30 dark:border-violet-900/10 group-hover:scale-110 transition-transform duration-300">
+            💳
+          </div>
+        </div>
       </div>
 
       {/* Bundle options */}
-      <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Buy credits</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">Select a bundle</h2>
+        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">Each operation costs 2 credits</span>
+      </div>
 
       {purchaseError && (
-        <p className="mb-4 text-sm text-red-600 dark:text-red-400" role="alert">
-          {purchaseError}
-        </p>
+        <div className="mb-6 rounded-2xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/80 px-5 py-4 text-sm text-red-800 dark:text-red-300 shadow-md shadow-red-500/5 flex items-start gap-3" role="alert">
+          <span className="text-lg">⚠️</span>
+          <span className="font-medium">{purchaseError}</span>
+        </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
         {BUNDLES.map((bundle) => (
           <div
             key={bundle.id}
-            className={`relative rounded-2xl border p-5 flex flex-col gap-3 transition-shadow
+            className={`relative rounded-3xl border p-6 flex flex-col gap-5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.99]
               ${bundle.highlight
-                ? "border-blue-500 shadow-md shadow-blue-100 dark:shadow-blue-900/20 bg-blue-50 dark:bg-blue-950/20"
-                : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
+                ? "border-violet-500 shadow-lg shadow-violet-100 dark:shadow-none bg-gradient-to-b from-violet-50/50 via-white to-white dark:from-violet-950/20 dark:via-gray-900 dark:to-gray-900"
+                : "border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-violet-200 dark:hover:border-violet-900/50"
               }`}
           >
             {bundle.highlight && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-semibold px-3 py-0.5 rounded-full">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-bold px-3.5 py-1 rounded-full shadow-md shadow-violet-500/25 tracking-wide uppercase">
                 Most popular
               </span>
             )}
-            <div>
-              <p className="font-semibold text-gray-900 dark:text-gray-100">{bundle.name}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{bundle.description}</p>
+            
+            <div className="flex flex-col gap-1">
+              <p className="font-extrabold text-lg text-gray-900 dark:text-gray-100 tracking-tight">{bundle.name}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{bundle.description}</p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {bundle.credits}{" "}
-              <span className="text-sm font-normal text-gray-500 dark:text-gray-400">credits</span>
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-300">₹{bundle.priceInr.toLocaleString("en-IN")}</p>
+            
+            <div className="my-2 p-4 rounded-2xl bg-gray-50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800/60 shadow-inner flex flex-col gap-1">
+              <p className="text-3xl font-black text-gray-900 dark:text-gray-100 tracking-tight">
+                {bundle.credits}{" "}
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">credits</span>
+              </p>
+              <p className="text-2xl font-extrabold bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent">₹{bundle.priceInr.toLocaleString("en-IN")}</p>
+            </div>
+
             <button
               type="button"
               onClick={() => handlePurchase(bundle.id)}
               disabled={purchasing !== null}
-              className={`mt-auto w-full py-2.5 rounded-xl text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500
+              className={`mt-auto w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none shadow-md
                 ${bundle.highlight
-                  ? "bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-                  : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 disabled:opacity-50"
+                  ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-violet-500/20 hover:shadow-violet-500/35"
+                  : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-750 shadow-sm"
                 }`}
               aria-label={`Buy ${bundle.name} for ₹${bundle.priceInr.toLocaleString("en-IN")}`}
             >
@@ -238,46 +279,54 @@ function CreditsPageContent() {
       </div>
 
       {/* Transaction history */}
-      <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Transaction history</h2>
+      <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100 tracking-tight">Transaction history</h2>
 
       {loadingData ? (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-12 bg-gray-100 dark:bg-gray-800 rounded-xl animate-pulse" />
+            <div key={i} className="h-14 bg-gray-100 dark:bg-gray-850 rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : transactions.length === 0 ? (
-        <p className="text-sm text-gray-500 dark:text-gray-400">No transactions yet.</p>
+        <div className="rounded-2xl border border-dashed border-gray-200 dark:border-gray-800 p-8 text-center bg-white dark:bg-gray-900">
+          <p className="text-sm text-gray-400 dark:text-gray-500">No transactions recorded yet.</p>
+        </div>
       ) : (
-        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <table className="w-full text-sm" aria-label="Credit transaction history">
-            <thead>
-              <tr className="bg-gray-50 dark:bg-gray-800/50 text-left">
-                <th className="px-4 py-3 font-medium text-gray-500 dark:text-gray-400">Description</th>
-                <th className="px-4 py-3 font-medium text-gray-500 dark:text-gray-400 text-right">Credits</th>
-                <th className="px-4 py-3 font-medium text-gray-500 dark:text-gray-400 text-right hidden sm:table-cell">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-              {transactions.map((tx) => (
-                <tr key={tx.id} className="bg-white dark:bg-gray-900">
-                  <td className="px-4 py-3 text-gray-700 dark:text-gray-200">{tx.description}</td>
-                  <td
-                    className={`px-4 py-3 text-right font-medium tabular-nums ${
-                      tx.amount > 0
-                        ? "text-emerald-600 dark:text-emerald-400"
-                        : "text-red-600 dark:text-red-400"
-                    }`}
-                  >
-                    {tx.amount > 0 ? `+${tx.amount}` : tx.amount}
-                  </td>
-                  <td className="px-4 py-3 text-right text-gray-400 dark:text-gray-500 hidden sm:table-cell">
-                    {new Date(tx.createdAt).toLocaleDateString()}
-                  </td>
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-850 overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left" aria-label="Credit transaction history">
+              <thead>
+                <tr className="bg-gray-55 dark:bg-gray-800/40 text-left border-b border-gray-100 dark:border-gray-800">
+                  <th className="px-5 py-3.5 font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-xs">Description</th>
+                  <th className="px-5 py-3.5 font-bold text-gray-500 dark:text-gray-400 text-right uppercase tracking-wider text-xs">Credits</th>
+                  <th className="px-5 py-3.5 font-bold text-gray-500 dark:text-gray-400 text-right hidden sm:table-cell uppercase tracking-wider text-xs">Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {transactions.map((tx) => (
+                  <tr key={tx.id} className="bg-white dark:bg-gray-900 hover:bg-gray-50/50 dark:hover:bg-gray-850/30 transition-colors">
+                    <td className="px-5 py-3.5 text-gray-800 dark:text-gray-200 font-medium">{tx.description}</td>
+                    <td
+                      className={`px-5 py-3.5 text-right font-bold tabular-nums ${
+                        tx.amount > 0
+                          ? "text-emerald-600 dark:text-emerald-400"
+                          : "text-rose-600 dark:text-rose-450"
+                      }`}
+                    >
+                      {tx.amount > 0 ? `+${tx.amount}` : tx.amount}
+                    </td>
+                    <td className="px-5 py-3.5 text-right text-gray-400 dark:text-gray-500 hidden sm:table-cell">
+                      {new Date(tx.createdAt).toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </main>

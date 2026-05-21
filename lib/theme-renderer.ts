@@ -53,7 +53,7 @@ function li(items: string[]): string {
 function renderClassic(r: ParsedResume): string {
   const { contact, summary, experience, education, skills, certifications, projects } = r;
   return `
-    <div style="font-family:Georgia,serif;color:#111;background:#fff;padding:40px;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+    <div style="font-family:'Lora',Georgia,serif;color:#111;background:#fff;padding:40px;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
       <div style="text-align:center;border-bottom:2px solid #222;padding-bottom:16px;margin-bottom:24px;">
         <h1 style="font-size:24px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 6px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;font-size:11px;color:#555;">
@@ -72,7 +72,7 @@ function renderClassic(r: ParsedResume): string {
 function renderModern(r: ParsedResume): string {
   const { contact, summary, experience, education, skills, certifications, projects } = r;
   return `
-    <div style="font-family:Arial,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;display:flex;">
+    <div style="font-family:'Inter',sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;display:flex;">
       <div style="width:220px;background:#1e293b;color:#fff;padding:24px;flex-shrink:0;">
         <h1 style="font-size:16px;font-weight:700;margin:0 0 4px;">${esc(contact.name)}</h1>
         <div style="font-size:11px;color:#94a3b8;margin-bottom:20px;">
@@ -93,7 +93,7 @@ function renderModern(r: ParsedResume): string {
 function renderMinimal(r: ParsedResume): string {
   const { contact, summary, experience, education, skills, certifications, projects } = r;
   return `
-    <div style="font-family:Arial,sans-serif;color:#333;background:#fff;padding:48px;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+    <div style="font-family:'Inter',sans-serif;color:#333;background:#fff;padding:48px;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
       <div style="margin-bottom:32px;">
         <h1 style="font-size:28px;font-weight:300;letter-spacing:-1px;color:#111;margin:0 0 8px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#aaa;">
@@ -112,7 +112,7 @@ function renderMinimal(r: ParsedResume): string {
 function renderExecutive(r: ParsedResume): string {
   const { contact, summary, experience, education, skills, certifications, projects } = r;
   return `
-    <div style="font-family:Arial,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+    <div style="font-family:'Inter',sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
       <div style="background:#111;color:#fff;padding:32px 40px;">
         <h1 style="font-size:24px;font-weight:700;letter-spacing:1px;margin:0 0 8px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:20px;font-size:11px;color:#9ca3af;">
@@ -139,7 +139,7 @@ function renderExecutive(r: ParsedResume): string {
 function renderCreative(r: ParsedResume): string {
   const { contact, summary, experience, education, skills, certifications, projects } = r;
   return `
-    <div style="font-family:Arial,sans-serif;color:#333;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+    <div style="font-family:'Inter',sans-serif;color:#333;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
       <div style="background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;padding:32px 40px;">
         <h1 style="font-size:24px;font-weight:700;margin:0 0 8px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#ddd6fe;">
@@ -168,7 +168,7 @@ function renderCreative(r: ParsedResume): string {
 function renderSharp(r: ParsedResume): string {
   const { contact, summary, experience, education, skills, certifications, projects } = r;
   return `
-    <div style="font-family:Arial,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+    <div style="font-family:'Inter',sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
       <div style="background:#000;color:#fff;padding:28px 40px;">
         <h1 style="font-size:26px;font-weight:900;letter-spacing:-1px;text-transform:uppercase;margin:0 0 6px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:#aaa;font-family:monospace;">
@@ -195,7 +195,7 @@ function renderSharp(r: ParsedResume): string {
 function renderNavy(r: ParsedResume): string {
   const { contact, summary, experience, education, skills, certifications, projects } = r;
   return `
-    <div style="font-family:Arial,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;display:flex;min-height:1000px;">
+    <div style="font-family:'Inter',sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;display:flex;min-height:1000px;">
       <div style="width:220px;background:#0f2044;color:#fff;flex-shrink:0;padding:0;">
         <div style="padding:28px 20px;border-bottom:1px solid rgba(255,255,255,0.1);">
           <h1 style="font-size:15px;font-weight:700;margin:0 0 10px;">${esc(contact.name)}</h1>
@@ -218,7 +218,7 @@ function renderNavy(r: ParsedResume): string {
 function renderTerra(r: ParsedResume): string {
   const { contact, summary, experience, education, skills, certifications, projects } = r;
   return `
-    <div style="font-family:Georgia,serif;color:#3d2b1f;background:#fdf8f3;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
+    <div style="font-family:'Lora',Georgia,serif;color:#3d2b1f;background:#fdf8f3;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6;">
       <div style="background:#8b4513;color:#fff;padding:28px 40px;">
         <h1 style="font-size:26px;font-weight:700;margin:0 0 8px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#fcd9b0;">
@@ -247,7 +247,7 @@ function renderEnhancv(r: ParsedResume): string {
   const initials = contact.name ? contact.name.split(" ").map((w:string)=>w[0]).slice(0,2).join("").toUpperCase() : "?";
   const accent = "#008cff";
   const sectionHead = (title: string) => `<div style="font-family:sans-serif;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;color:#000;border-bottom:2.5px solid #000;padding-bottom:3px;margin-bottom:10px;">${esc(title)}</div>`;
-  return `<div style="font-family:Inter,Arial,Helvetica,sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.5;">
+  return `<div style="font-family:'Inter',sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.5;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:24px 32px 16px;border-bottom:1px solid #e5e7eb;">
       <div>
         <div style="font-family:sans-serif;font-weight:600;font-size:28px;text-transform:uppercase;letter-spacing:1px;line-height:1;color:#000;margin-bottom:4px;">${esc(contact.name)}</div>
@@ -314,6 +314,9 @@ export function renderThemeHtml(resume: ParsedResume, theme: ThemeId): string {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${esc(safe.contact.name)} — Resume</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }

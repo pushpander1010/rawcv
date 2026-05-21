@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { TailorChange } from "@/types";
 import AILoader from "@/components/AILoader";
@@ -157,11 +157,7 @@ interface TailorDiffProps {
 
 export default function TailorDiff({ changes, loading = false }: TailorDiffProps) {
   const { setState, pushUndo } = useResume();
-  const [showLoader, setShowLoader] = useState(false);
-  useEffect(() => {
-    if (loading) setShowLoader(true);
-    else setShowLoader(false);
-  }, [loading]);
+  const showLoader = loading;
 
   function updateChange(id: string, patch: Partial<TailorChange>) {
     setState((prev) => {

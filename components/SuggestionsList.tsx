@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import type { Suggestion } from "@/types";
 import AILoader from "@/components/AILoader";
@@ -115,11 +115,7 @@ interface SuggestionsListProps {
 
 export default function SuggestionsList({ suggestions, loading = false }: SuggestionsListProps) {
   const { state, setState, pushUndo } = useResume();
-  const [showLoader, setShowLoader] = useState(false);
-  useEffect(() => {
-    if (loading) setShowLoader(true);
-    else setShowLoader(false);
-  }, [loading]);
+  const showLoader = loading;
 
   /** Derive applied state from actual resume content instead of local tracking */
   function isApplied(suggestion: Suggestion): boolean {

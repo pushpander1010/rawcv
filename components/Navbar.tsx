@@ -83,6 +83,12 @@ export default function Navbar() {
                 >
                   ℹ️ About
                 </Link>
+                <Link
+                  href="/contact"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  ✉️ Contact
+                </Link>
               </>
             )}
           </nav>
@@ -171,13 +177,13 @@ export default function Navbar() {
                 {/* Unauthenticated User Actions */}
                 <Link
                   href="/login"
-                  className="hidden sm:inline-flex items-center px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  className="hidden sm:inline-flex items-center px-4.5 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all"
                 >
                   🔑 Login
                 </Link>
                 <Link
                   href="/register"
-                  className="hidden sm:inline-flex items-center px-4 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium transition-colors"
+                  className="hidden sm:inline-flex items-center px-5 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 transition-all"
                 >
                   ✨ Sign Up
                 </Link>
@@ -226,6 +232,13 @@ export default function Navbar() {
               className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               ℹ️ About
+            </Link>
+            <Link
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              ✉️ Contact
             </Link>
             <div className="border-t border-gray-100 dark:border-gray-800 pt-2 mt-2 space-y-2">
               <Link

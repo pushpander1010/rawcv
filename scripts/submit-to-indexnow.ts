@@ -8,17 +8,19 @@ const BASE_URL = "https://www.rawcv.com";
 
 const urls = [
   `${BASE_URL}/`,
+  `${BASE_URL}/build`,
   `${BASE_URL}/how-to`,
+  `${BASE_URL}/contact`,
   `${BASE_URL}/register`,
   `${BASE_URL}/login`,
   `${BASE_URL}/credits`,
-  `${BASE_URL}/dashboard`,
-  `${BASE_URL}/analyze`,
-  `${BASE_URL}/chat`,
-  `${BASE_URL}/tailor`,
   `${BASE_URL}/privacy`,
   `${BASE_URL}/terms`,
   `${BASE_URL}/forgot-password`,
+  `${BASE_URL}/blog`,
+  `${BASE_URL}/blog/how-to-write-ats-friendly-resume`,
+  `${BASE_URL}/blog/quantifying-achievements-resume-examples`,
+  `${BASE_URL}/blog/resume-keywords-matcher-guide`,
 ];
 
 async function submitToIndexNow() {

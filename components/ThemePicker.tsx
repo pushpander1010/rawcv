@@ -126,7 +126,7 @@ export default function ThemePicker({ onSelect }: Props) {
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search themes…"
           aria-label="Search themes"
-          className="flex-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="flex-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2.5 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all duration-200 shadow-sm"
         />
         <div className="flex gap-1.5 flex-wrap" role="group" aria-label="Filter by category">
           {CATEGORIES.map((cat) => (
@@ -135,10 +135,10 @@ export default function ThemePicker({ onSelect }: Props) {
               type="button"
               onClick={() => setActiveCategory(cat)}
               aria-pressed={activeCategory === cat}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500 ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-violet-500/10 ${
                 activeCategory === cat
-                  ? "bg-violet-600 text-white"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                  ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/10"
+                  : "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
               {cat}
@@ -165,10 +165,10 @@ export default function ThemePicker({ onSelect }: Props) {
                 role="option"
                 aria-selected={isSelected}
                 onClick={() => handleSelect(theme.id)}
-                className={`group rounded-xl border-2 overflow-hidden text-left transition-all focus:outline-none focus:ring-2 focus:ring-violet-500 ${
+                className={`group rounded-2xl border-2 overflow-hidden text-left hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-violet-500/10 ${
                   isSelected
-                    ? "border-violet-500 shadow-md shadow-violet-100 dark:shadow-violet-900/30"
-                    : "border-gray-200 dark:border-gray-700 hover:border-violet-300 dark:hover:border-violet-700"
+                    ? "border-violet-600 shadow-lg shadow-violet-500/10 dark:shadow-violet-900/30"
+                    : "border-gray-200 dark:border-gray-700 hover:border-violet-400 dark:hover:border-violet-600 hover:shadow-md"
                 }`}
               >
                 {/* Thumbnail */}

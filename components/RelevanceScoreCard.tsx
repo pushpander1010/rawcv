@@ -65,11 +65,7 @@ interface RelevanceScoreCardProps {
 }
 
 export default function RelevanceScoreCard({ result, loading = false }: RelevanceScoreCardProps) {
-  const [showLoader, setShowLoader] = useState(false);
-  useEffect(() => {
-    if (loading) setShowLoader(true);
-    else setShowLoader(false);
-  }, [loading]);
+  const showLoader = loading;
 
   if (showLoader) {
     return (

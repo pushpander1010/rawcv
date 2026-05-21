@@ -110,22 +110,36 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="relative overflow-hidden pt-20 pb-24 px-6">
         <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-gradient-to-br from-violet-200/60 via-blue-100/40 to-transparent dark:from-violet-900/30 dark:via-blue-900/20 blur-3xl" />
-        <div className="relative max-w-3xl mx-auto text-center">
-          <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase">
-            AI-Powered Resume Platform
-          </span>
-          <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-6">
-            Land more interviews
-            <br />
-            <span className="bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">
-              with a smarter resume
+        <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 text-center lg:text-left">
+            <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase">
+              AI-Powered Resume Platform
             </span>
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-xl mx-auto mb-10">
-            Upload your CV, get an ATS score, match it to any job description, enhance it with AI,
-            and download a polished PDF — all in minutes.
-          </p>
-          <HeroCTA />
+            <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-6">
+              Land more interviews
+              <br />
+              <span className="bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">
+                with a smarter resume
+              </span>
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-xl mx-auto lg:mx-0 mb-10">
+              Upload your CV, get an ATS score, match it to any job description, enhance it with AI,
+              and download a polished PDF — all in minutes.
+            </p>
+            <div className="flex justify-center lg:justify-start">
+              <HeroCTA />
+            </div>
+          </div>
+          <div className="lg:col-span-5 relative w-full aspect-square max-w-[450px] mx-auto lg:max-w-none">
+            {/* Stunning image frame with neon border and shadow */}
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-violet-100 dark:border-violet-800/50 bg-white dark:bg-gray-900 p-2 transform hover:scale-[1.02] transition-transform duration-300">
+              <img 
+                src="/hero_illustration.png" 
+                alt="rawcv AI Resume Builder Illustration" 
+                className="w-full h-auto rounded-2xl object-cover"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -150,7 +164,7 @@ export default function LandingPage() {
                 <div className="h-4 w-full rounded bg-gray-100 dark:bg-gray-800" />
                 <div className="h-4 w-5/6 rounded bg-gray-100 dark:bg-gray-800" />
                 <div className="h-4 w-4/6 rounded bg-gray-100 dark:bg-gray-800" />
-                <div className="mt-2 h-10 w-full rounded-xl bg-violet-600 opacity-80" />
+                <div className="mt-2 h-10 w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 opacity-80" />
                 <div className="mt-auto flex items-center gap-2 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
                   <span className="text-emerald-600 text-lg">📊</span>
                   <div>
@@ -192,6 +206,52 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ATS Check Section */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/30 border-t border-b border-gray-100 dark:border-gray-800">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-5 relative w-full aspect-square max-w-[450px] mx-auto lg:max-w-none order-2 lg:order-1">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-emerald-100 dark:border-emerald-800/50 bg-white dark:bg-gray-900 p-2 transform hover:scale-[1.02] transition-transform duration-300">
+              <img 
+                src="/ats_illustration.png" 
+                alt="rawcv ATS Scanner & Keyword Matcher" 
+                className="w-full h-auto rounded-2xl object-cover"
+              />
+            </div>
+          </div>
+          <div className="lg:col-span-7 text-center lg:text-left order-1 lg:order-2">
+            <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 uppercase">
+              ATS Score & JD Optimizer
+            </span>
+            <h2 className="text-4xl font-bold tracking-tight mb-6">
+              Beat the bots with our
+              <br />
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                ATS Compatibility Checker
+              </span>
+            </h2>
+            <p className="text-lg text-gray-500 dark:text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0">
+              Our advanced scanning engine parses your resume and runs hundreds of checks. From section layout, contact details, date formatting, and keyword density to job description semantic matching.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+              <div className="flex gap-3">
+                <span className="text-emerald-600 dark:text-emerald-400 text-xl font-bold">✓</span>
+                <div>
+                  <h4 className="font-semibold text-gray-950 dark:text-gray-100 text-sm">Targeted Keyword Density</h4>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Automatically identifies and highlights crucial industry terms missing from your profile.</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="text-emerald-600 dark:text-emerald-400 text-xl font-bold">✓</span>
+                <div>
+                  <h4 className="font-semibold text-gray-950 dark:text-gray-100 text-sm">Semantic JD Matching</h4>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Uses contextual AI models to match your experience details directly against the job requirements.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
       <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="features-heading">
         <div className="max-w-5xl mx-auto">
@@ -224,7 +284,7 @@ export default function LandingPage() {
               { step: "3", title: "Download your PDF", body: "Pick a theme, accept the changes you like, and download a polished, ATS-safe PDF." },
             ].map((item) => (
               <li key={item.step} className="flex-1 flex gap-4" itemProp="step" itemScope itemType="https://schema.org/HowToStep">
-                <span aria-hidden="true" className="flex-shrink-0 w-9 h-9 rounded-full bg-violet-600 text-white text-sm font-bold flex items-center justify-center">
+                <span aria-hidden="true" className="flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold flex items-center justify-center shadow-md shadow-violet-500/10">
                   {item.step}
                 </span>
                 <div>

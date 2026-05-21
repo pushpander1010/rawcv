@@ -114,14 +114,16 @@ function LoginForm() {
           <p className="text-sm text-gray-500 mb-6">Sign in to your rawcv account</p>
 
           {verified && (
-            <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
-              Email verified. You can now sign in.
+            <div className="mb-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 px-4 py-3 text-sm text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
+              <span className="text-base">✓</span>
+              <span>Email verified. You can now sign in.</span>
             </div>
           )}
 
           {error && (
-            <div role="alert" className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-              {error}
+            <div role="alert" className="mb-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300 flex items-start gap-2">
+              <span className="text-base shrink-0">⚠️</span>
+              <span>{error}</span>
             </div>
           )}
 
@@ -135,7 +137,7 @@ function LoginForm() {
               type="button"
               onClick={handleGoogleLogin}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border-2 border-indigo-400 dark:border-indigo-500 rounded-xl px-4 py-3 text-sm font-semibold text-gray-800 dark:text-gray-100 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:border-indigo-500 shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 text-sm font-semibold text-gray-800 dark:text-gray-100 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/20 hover:border-indigo-500/50 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:translate-y-0"
             >
               <GoogleIcon />
               Continue with Google
@@ -160,7 +162,7 @@ function LoginForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
                 placeholder="you@example.com"
               />
             </div>
@@ -181,7 +183,7 @@ function LoginForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -189,7 +191,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-4 py-3.5 text-sm shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none"
             >
               {loading ? "Signing in…" : "Sign in"}
             </button>
@@ -216,7 +218,7 @@ function LoginForm() {
             {TIPS.map((tip) => (
               <div
                 key={tip.title}
-                className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-5 shadow-sm flex gap-4"
+                className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800/80 p-5 shadow-sm hover:shadow-md transition-shadow flex gap-4"
               >
                 <div className="text-2xl flex-shrink-0" aria-hidden="true">{tip.icon}</div>
                 <div>
@@ -245,13 +247,13 @@ function LoginForm() {
           <div className="mt-6 flex flex-wrap gap-3 justify-center">
             <Link
               href="/register"
-              className="px-5 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 hover:-translate-y-0.5 shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 text-white text-sm font-semibold transition-all"
             >
               Create free account
             </Link>
             <Link
               href="/how-to"
-              className="px-5 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-gray-700 dark:text-gray-300"
+              className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 hover:-translate-y-0.5 shadow-sm transition-all"
             >
               Read the guide
             </Link>

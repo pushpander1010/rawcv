@@ -48,19 +48,40 @@ export default function AnalyzePage() {
 
   if (!state.parsed) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center gap-6 px-6">
-        <div className="text-center">
-          <p className="text-5xl mb-4" aria-hidden="true">📄</p>
-          <h1 className="text-xl font-semibold mb-2">No resume loaded</h1>
-          <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">
-            Upload a resume to start analyzing, or build one from scratch with the chat interface.
+      <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-6 py-12">
+        <div className="relative max-w-md w-full bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 text-center overflow-hidden">
+          <div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-blue-500/10 dark:bg-blue-500/5 blur-2xl" />
+          
+          <div className="relative w-40 h-40 mx-auto mb-6 rounded-2xl overflow-hidden border border-violet-100 dark:border-violet-900/30 p-1 bg-gradient-to-b from-violet-50/50 to-white dark:from-violet-950/20 dark:to-gray-900 shadow-inner">
+            <img
+              src="/upload_illustration.png"
+              alt="Upload Resume Illustration"
+              className="w-full h-full object-cover rounded-xl"
+            />
+          </div>
+          
+          <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+            No Resume Loaded
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-8 max-w-xs mx-auto">
+            Upload your CV to unlock detailed ATS checking, keyword relevance analysis, and automated bullet tailoring.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium transition-colors">
-              ↑ Upload a resume
+          
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 text-white font-semibold shadow-lg shadow-violet-500/25 dark:shadow-none hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              Upload Resume
             </Link>
-            <Link href="/chat" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              💬 Build from scratch
+            <Link
+              href="/chat"
+              className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm"
+            >
+              💬 Build from Scratch
             </Link>
           </div>
         </div>
@@ -144,15 +165,17 @@ export default function AnalyzePage() {
         </div>
 
         {/* Tab bar */}
-        <nav className="flex gap-1 px-6 overflow-x-auto scrollbar-hide" aria-label="Analysis tools" role="tablist">          {TABS.map((tab) => (
+        <nav className="flex gap-2 px-6 py-2.5 overflow-x-auto scrollbar-hide border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50" aria-label="Analysis tools" role="tablist">
+          {TABS.map((tab) => (
             <button key={tab.id} role="tab" aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-violet-500 ${
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-violet-500 ${
                 activeTab === tab.id
-                  ? "border-violet-600 text-violet-600 dark:text-violet-400"
-                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300"
+                  ? "bg-violet-600 text-white shadow-md shadow-violet-500/20 dark:shadow-none"
+                  : "bg-transparent text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
               }`}>
-              <span aria-hidden="true">{tab.icon}</span>{tab.label}
+              <span aria-hidden="true" className="text-base">{tab.icon}</span>
+              {tab.label}
             </button>
           ))}
         </nav>
@@ -172,7 +195,7 @@ export default function AnalyzePage() {
               <h2 className="text-base font-semibold mb-1">ATS Compatibility Score</h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Check how well your resume passes ATS filters.</p>
               {!state.atsResult && !atsLoading && (
-                <button type="button" onClick={runATS} className="w-full px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors">Run ATS Analysis</button>
+                <button type="button" onClick={runATS} className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold text-sm shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500">Run ATS Analysis</button>
               )}
               {atsError && (
                 <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
@@ -183,7 +206,7 @@ export default function AnalyzePage() {
               )}
               {(state.atsResult || atsLoading) && <ATSScoreCard result={state.atsResult ?? { score: 0, issues: [] }} loading={atsLoading} />}
               {state.atsResult && (
-                <button type="button" onClick={runATS} className="mt-4 w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Re-run analysis</button>
+                <button type="button" onClick={runATS} className="mt-4 w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">Re-run analysis</button>
               )}
             </div>
           )}
@@ -195,11 +218,11 @@ export default function AnalyzePage() {
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Paste a job description to see how well your resume matches.</p>
               <textarea value={jdInput} onChange={(e) => setJdInput(e.target.value)}
                 placeholder="Paste the job description here…" rows={7}
-                className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none mb-4"
+                className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all duration-200 resize-none mb-4"
                 aria-label="Job description input" />
               {!state.relevanceResult && !relevanceLoading && (
                 <button type="button" onClick={runRelevance} disabled={!jdInput.trim()}
-                  className="w-full px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white font-medium text-sm transition-colors">Analyze Relevance</button>
+                  className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500">Analyze Relevance</button>
               )}
               {relevanceError && (
                 <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
@@ -213,8 +236,8 @@ export default function AnalyzePage() {
               )}
               {state.relevanceResult && (
                 <div className="mt-4 flex gap-3">
-                  <button type="button" onClick={runRelevance} className="flex-1 px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Re-run</button>
-                  <Link href="/tailor" className="flex-1 text-center px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition-colors">Tailor resume →</Link>
+                  <button type="button" onClick={runRelevance} className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">Re-run</button>
+                  <Link href="/tailor" className="flex-1 text-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500">Tailor resume →</Link>
                 </div>
               )}
             </div>
@@ -226,7 +249,7 @@ export default function AnalyzePage() {
               <h2 className="text-base font-semibold mb-1">AI Improvement Suggestions</h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Targeted suggestions covering clarity, action verbs, and completeness.</p>
               {!state.suggestions.length && !suggestionsLoading && (
-                <button type="button" onClick={runSuggestions} className="w-full px-4 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-medium text-sm transition-colors">Get AI Suggestions</button>
+                <button type="button" onClick={runSuggestions} className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold text-sm shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500">Get AI Suggestions</button>
               )}
               {suggestionsError && (
                 <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
@@ -237,7 +260,7 @@ export default function AnalyzePage() {
               )}
               {(state.suggestions.length > 0 || suggestionsLoading) && <SuggestionsList suggestions={state.suggestions} loading={suggestionsLoading} />}
               {state.suggestions.length > 0 && (
-                <button type="button" onClick={runSuggestions} className="mt-4 w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Re-run suggestions</button>
+                <button type="button" onClick={runSuggestions} className="mt-4 w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">Re-run suggestions</button>
               )}
             </div>
           )}
@@ -248,7 +271,7 @@ export default function AnalyzePage() {
               <h2 className="text-base font-semibold mb-1">Resume Enhancement</h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Strengthen bullet points and summary with stronger language.</p>
               {!state.enhancements.length && !enhancementLoading && (
-                <button type="button" onClick={runEnhancement} className="w-full px-4 py-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-sm transition-colors">Enhance Resume</button>
+                <button type="button" onClick={runEnhancement} className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-semibold text-sm shadow-md shadow-orange-500/10 hover:shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500">Enhance Resume</button>
               )}
               {enhancementError && (
                 <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
@@ -259,7 +282,7 @@ export default function AnalyzePage() {
               )}
               {(state.enhancements.length > 0 || enhancementLoading) && <EnhancementList enhancements={state.enhancements} loading={enhancementLoading} />}
               {state.enhancements.length > 0 && (
-                <button type="button" onClick={runEnhancement} className="mt-4 w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Re-run enhancement</button>
+                <button type="button" onClick={runEnhancement} className="mt-4 w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">Re-run enhancement</button>
               )}
             </div>
           )}

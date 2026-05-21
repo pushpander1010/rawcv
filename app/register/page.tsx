@@ -140,18 +140,19 @@ export default function RegisterPage() {
           </p>
 
           {error && (
-            <div role="alert" className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-              {error}
+            <div role="alert" className="mb-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300 flex items-start gap-2">
+              <span className="text-base shrink-0">⚠️</span>
+              <span>{error}</span>
             </div>
           )}
 
           {success && (
-            <div role="alert" className="mb-6 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border-2 border-indigo-300 dark:border-indigo-700 px-5 py-4 text-sm">
+            <div role="alert" className="mb-6 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800/80 px-5 py-4 text-sm">
               <div className="flex items-start gap-3">
-                <span className="text-2xl leading-none" aria-hidden="true">📧</span>
+                <span className="text-2xl leading-none shrink-0" aria-hidden="true">📧</span>
                 <div>
-                  <p className="font-semibold text-indigo-800 dark:text-indigo-200 text-base">Verification email sent!</p>
-                  <p className="mt-1 text-indigo-700 dark:text-indigo-300">
+                  <p className="font-semibold text-indigo-900 dark:text-indigo-200 text-base">Verification email sent!</p>
+                  <p className="mt-1.5 text-indigo-700 dark:text-indigo-300 leading-relaxed">
                     We sent a verification link to <span className="font-medium">{email}</span>. Please check your inbox (and spam folder) and click the link to activate your account before signing in.
                   </p>
                 </div>
@@ -168,7 +169,7 @@ export default function RegisterPage() {
             <button
               onClick={handleGoogleSignUp}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border-2 border-indigo-400 dark:border-indigo-500 rounded-xl px-4 py-3 text-sm font-semibold text-gray-800 dark:text-gray-100 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:border-indigo-500 shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 text-sm font-semibold text-gray-800 dark:text-gray-100 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/20 hover:border-indigo-500/50 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:translate-y-0"
             >
               <GoogleIcon />
               Continue with Google
@@ -183,7 +184,7 @@ export default function RegisterPage() {
 
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 Full name
               </label>
               <input
@@ -193,13 +194,13 @@ export default function RegisterPage() {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
                 placeholder="Jane Smith"
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 Email
               </label>
               <input
@@ -209,13 +210,13 @@ export default function RegisterPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 Password
               </label>
               <input
@@ -226,7 +227,7 @@ export default function RegisterPage() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
                 placeholder="Min. 8 characters"
               />
             </div>
@@ -234,7 +235,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-4 py-3.5 text-sm shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none"
             >
               {loading ? "Creating account…" : "Create account"}
             </button>
@@ -264,7 +265,7 @@ export default function RegisterPage() {
             {BENEFITS.map((b) => (
               <div
                 key={b.title}
-                className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-5 shadow-sm"
+                className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800/80 p-5 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="text-2xl mb-3" aria-hidden="true">{b.icon}</div>
                 <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 text-sm">{b.title}</h3>
@@ -307,8 +308,8 @@ export default function RegisterPage() {
           </h2>
           <dl className="max-w-2xl mx-auto space-y-5">
             {FAQS.map((faq) => (
-              <div key={faq.q} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 px-5 py-4">
-                <dt className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">{faq.q}</dt>
+              <div key={faq.q} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800/80 px-5 py-4.5 hover:shadow-sm transition-shadow">
+                <dt className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1.5">{faq.q}</dt>
                 <dd className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{faq.a}</dd>
               </div>
             ))}

@@ -137,9 +137,9 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
       onKeyDown={(e) => e.key === "Enter" && !loading && !lowCredits && inputRef.current?.click()}
       className={`
         relative flex flex-col items-center justify-center gap-4
-        border-2 border-dashed rounded-2xl p-12 cursor-pointer
-        transition-colors duration-200 select-none
-        ${lowCredits ? "border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/20 cursor-not-allowed" : dragging ? "border-blue-500 bg-blue-50 dark:bg-blue-950/20" : "border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800/40"}
+        border-2 border-dashed rounded-3xl p-12 cursor-pointer
+        transition-all duration-200 select-none
+        ${lowCredits ? "border-red-300 dark:border-red-700 bg-red-50/50 dark:bg-red-950/10 cursor-not-allowed" : dragging ? "border-violet-500 bg-violet-50 dark:bg-violet-950/20 shadow-inner" : "border-gray-300 dark:border-gray-700 hover:border-violet-500 hover:bg-violet-50/30 dark:hover:bg-violet-950/10"}
         ${loading ? "pointer-events-none opacity-60" : ""}
       `}
     >
@@ -156,7 +156,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
       {loading ? (
         <>
           <svg
-            className="animate-spin h-10 w-10 text-blue-500"
+            className="animate-spin h-10 w-10 text-violet-600"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -190,30 +190,32 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
         </>
       ) : (
         <>
-          <svg
-            className="h-12 w-12 text-gray-400"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M12 16v-8m0 0-3 3m3-3 3 3M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1"
-            />
-          </svg>
+          <div className="p-3 bg-violet-50 dark:bg-violet-950/30 rounded-2xl text-violet-600 dark:text-violet-400 shadow-sm border border-violet-100/50 dark:border-violet-900/20">
+            <svg
+              className="h-8 w-8"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M12 16v-8m0 0-3 3m3-3 3 3M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1"
+              />
+            </svg>
+          </div>
           <div className="text-center">
-            <p className="text-base font-medium text-gray-700 dark:text-gray-200">
+            <p className="text-base font-semibold text-gray-800 dark:text-gray-200">
               Drag &amp; drop your resume here
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              or <span className="text-blue-500 underline">browse files</span>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
+              or <span className="text-violet-600 dark:text-violet-400 font-medium hover:underline">browse files</span>
             </p>
           </div>
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
             PDF, DOCX, or TXT · max 5 MB
           </p>
         </>
@@ -234,7 +236,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
             <button
               type="button"
               onClick={() => parseAndLoad(pendingFile)}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500"
             >
               Yes, replace
             </button>

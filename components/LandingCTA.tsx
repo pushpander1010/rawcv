@@ -17,10 +17,10 @@ export function HeroCTA() {
         </p>
         <ResumeUploader />
         <div className="mt-4 flex gap-3 justify-center">
-          <Link href="/analyze" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium transition-colors">
+          <Link href="/analyze" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-medium shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-violet-500/10 transition-all duration-200">
             Go to dashboard →
           </Link>
-          <Link href="/chat" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <Link href="/chat" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm">
             💬 Build from scratch
           </Link>
         </div>
@@ -30,10 +30,10 @@ export function HeroCTA() {
 
   return (
     <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-      <Link href="/register" className="inline-flex items-center justify-center px-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors">
+      <Link href="/register" className="inline-flex items-center justify-center px-7 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-violet-500/10 transition-all duration-200">
         Get started free
       </Link>
-      <Link href="/login" className="inline-flex items-center justify-center px-7 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+      <Link href="/login" className="inline-flex items-center justify-center px-7 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm">
         Sign in
       </Link>
     </div>
@@ -56,13 +56,13 @@ export function FooterCTA() {
       </p>
       {isLoggedIn ? (
         <div className="flex gap-4 justify-center">
-          <Link href="/analyze" className="inline-flex items-center px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors">Go to dashboard →</Link>
-          <Link href="/chat" className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">💬 Build from scratch</Link>
+          <Link href="/analyze" className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-violet-500/10 transition-all duration-200">Go to dashboard →</Link>
+          <Link href="/chat" className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm">💬 Build from scratch</Link>
         </div>
       ) : (
         <div className="flex gap-4 justify-center">
-          <Link href="/register" className="inline-flex items-center px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors">Create free account</Link>
-          <Link href="/login" className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Sign in</Link>
+          <Link href="/register" className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-violet-500/10 transition-all duration-200">Create free account</Link>
+          <Link href="/login" className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm">Sign in</Link>
         </div>
       )}
     </section>
@@ -75,7 +75,7 @@ export function PricingCTA({ highlight }: { highlight: boolean }) {
   return (
     <Link
       href={isLoggedIn ? "/credits" : "/register"}
-      className={`block text-center py-2.5 rounded-xl text-sm font-medium transition-colors ${highlight ? "bg-violet-600 hover:bg-violet-700 text-white" : "border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"}`}
+      className={`block text-center py-2.5 rounded-xl text-sm font-medium hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-violet-500/10 transition-all duration-200 ${highlight ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-md shadow-violet-500/10 hover:shadow-violet-500/20" : "border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 shadow-sm"}`}
     >
       Get started
     </Link>
@@ -86,10 +86,10 @@ export function FooterNav() {
   const { status } = useSession();
   const isLoggedIn = status === "authenticated";
   return (
-    <nav className="flex gap-6" aria-label="Footer navigation">
+    <nav className="flex gap-6 flex-wrap" aria-label="Footer navigation">
       <Link href="/about" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">About</Link>
       <Link href="/credits" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Pricing</Link>
-      <Link href="/how-to" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">How to</Link>
+      <Link href="/blog" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Blog</Link>
       {isLoggedIn
         ? <Link href="/analyze" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Dashboard</Link>
         : <Link href="/register" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Sign up</Link>
