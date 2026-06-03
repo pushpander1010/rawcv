@@ -67,6 +67,12 @@ export default function Navbar() {
                 >
                   ✉️ Contact
                 </Link>
+                <Link
+                  href="/blog"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  📝 Blog
+                </Link>
               </>
             ) : (
               <>
@@ -76,6 +82,12 @@ export default function Navbar() {
                   className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   🆓 Free Builder
+                </Link>
+                <Link
+                  href="/blog"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  📝 Blog
                 </Link>
                 <Link
                   href="/how-to"
@@ -272,6 +284,13 @@ export default function Navbar() {
                 >
                   ✉️ Contact
                 </Link>
+                <Link
+                  href="/blog"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  📝 Blog
+                </Link>
               </>
             ) : (
               <>
@@ -281,6 +300,13 @@ export default function Navbar() {
                   className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   🆓 Free Builder
+                </Link>
+                <Link
+                  href="/blog"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  📝 Blog
                 </Link>
                 <Link
                   href="/how-to"
