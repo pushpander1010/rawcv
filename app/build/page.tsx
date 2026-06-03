@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Script from "next/script";
 import FreeBuildClient from "./FreeBuildClient";
 import FreePageBanner from "@/components/FreePageBanner";
 
@@ -104,6 +105,20 @@ export default function BuildPage() {
           </div>
         </div>
       </div>
+      <Script
+        id="breadcrumb-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://www.rawcv.com" },
+              { "@type": "ListItem", position: 2, name: "Free Resume Builder", item: "https://www.rawcv.com/build" },
+            ],
+          }),
+        }}
+      />
     </main>
   );
 }

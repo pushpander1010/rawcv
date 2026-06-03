@@ -71,21 +71,70 @@ const TOC = [
 
 export default function HowToPage() {
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to use rawcv - AI Resume Builder",
-    "description": "Step-by-step guide to building, analyzing, and optimizing your resume with rawcv.",
-    "url": "https://www.rawcv.com/how-to",
-    "step": [
-      { "@type": "HowToStep", "name": "Create a free account", "text": "Sign up at rawcv.com with your email. You get 20 free credits instantly." },
-      { "@type": "HowToStep", "name": "Upload or build your resume", "text": "Drag and drop a PDF or DOCX, or build from scratch using the AI chat interface." },
-      { "@type": "HowToStep", "name": "Run ATS analysis", "text": "Click Run ATS Analysis to get a score out of 100 with specific issues to fix." },
-      { "@type": "HowToStep", "name": "Get AI suggestions", "text": "Click Get AI Suggestions for targeted improvements covering action verbs and achievements." },
-      { "@type": "HowToStep", "name": "Match to a job description", "text": "Paste a job description to see your relevance score and missing keywords." },
-      { "@type": "HowToStep", "name": "Tailor your resume", "text": "Use the Tailor tool to automatically rewrite your resume for a specific job." },
-      { "@type": "HowToStep", "name": "Download your PDF", "text": "Pick a theme and download a polished, ATS-safe PDF resume." }
-    ]
-  };
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to use rawcv - AI Resume Builder",
+      "description": "Step-by-step guide to building, analyzing, and optimizing your resume with rawcv. Learn ATS scoring, JD matching, AI suggestions, and PDF download.",
+      "url": "https://www.rawcv.com/how-to",
+      "totalTime": "PT15M",
+      "estimatedCost": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": "0"
+      },
+      "supply": ["20 free credits on signup"],
+      "tool": ["Web browser", "Resume file (PDF/DOCX/TXT)"],
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Create a free account",
+          "text": "Go to rawcv.com/register and sign up with your email address. Once registered you receive 20 free credits instantly. Credits are consumed per AI operation so you can run several analyses before needing to top up."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Upload or build your resume",
+          "text": "Drag and drop a PDF, DOCX, or TXT file onto the upload zone, or use the AI Chat tool to build a resume section by section through a conversation. Supported formats: .pdf, .docx, .txt up to 5 MB."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Run ATS analysis",
+          "text": "Go to the Analyze page and click the ATS Score tab. Click Run ATS Analysis to get a score out of 100 with specific issues grouped into Critical, Warnings, and Suggestions categories."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Get AI suggestions",
+          "text": "Open the Suggestions tab on the Analyze page and click Get AI Suggestions. The AI reads your entire resume and generates 3-15 targeted improvements covering action verbs, quantified achievements, and section completeness."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Enhance your resume",
+          "text": "Open the Enhance tab on the Analyze page and click Enhance Resume. The AI rewrites your bullet points and summary with stronger action verbs and more professional tone while keeping your facts intact."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 6,
+          "name": "Match to a job description",
+          "text": "Open the JD Match tab on the Analyze page. Paste the full job description and click Analyze Relevance. You will see a relevance score out of 100 along with missing keywords and skills."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 7,
+          "name": "Tailor your resume to a job",
+          "text": "Go to the Tailor page, paste the job description, and click Tailor Resume. The AI rewrites multiple sections to incorporate the right keywords and reframe your experience in the employer's language. Review a diff view showing every change."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 8,
+          "name": "Choose a theme and download PDF",
+          "text": "Open the Theme tab on the Analyze page and pick from 8 professionally designed themes including Classic, Modern, Minimal, Executive, Creative, Navy, Sharp, and Terra. Each previews in real time. Click Download PDF — PDF downloads are free and do not consume credits."
+        }
+      ]
+    };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -137,6 +138,262 @@ const ARTICLES: Record<
       </>
     ),
   },
+  "ats-resume-formatting-guide": {
+    title: "ATS Resume Formatting Guide: What Works and What Gets Rejected",
+    description: "A deep dive into the exact formatting choices that help your resume pass ATS parsers — fonts, file types, margins, and layout decisions explained.",
+    category: "ATS Optimization",
+    date: "May 22, 2026",
+    readTime: "5 min read",
+    content: (
+      <>
+        <p>
+          Getting past an Applicant Tracking System starts before you write a single bullet point — it starts with how you <em>format</em> the document. Even the best content will be invisible if the parser cannot read your file correctly. This guide covers the formatting decisions that matter most.
+        </p>
+
+        <h2>1. Font Choice Matters More Than You Think</h2>
+        <p>
+          Use standard system fonts such as <strong>Arial, Calibri, Helvetica,</strong> or <strong>Times New Roman</strong>. Avoid decorative or script fonts — they may look elegant but many older ATS engines cannot map non-standard font glyphs to readable text. Stick to a font size of 10 to 12 points for body text so the parser has no trouble extracting every character.
+        </p>
+
+        <h2>2. Margins and White Space</h2>
+        <p>
+          Set your page margins to at least 0.5 inches on all sides. Extremely narrow margins (under 0.3 inches) can cause text to be clipped or ignored during parsing. At the same time, do not waste precious space with oversized margins. A balance of 0.5 to 0.75 inches gives the parser enough room while maximizing content density.
+        </p>
+
+        <h2>3. File Naming Conventions</h2>
+        <p>
+          Believe it or not, your file name is the first piece of data the ATS reads. Use a clean, professional naming format like <strong>&quot;John_Doe_Resume_2026.pdf&quot;</strong>. Avoid special characters, underscores only, no spaces where possible, and do not use nicknames or unprofessional terms.
+        </p>
+
+        <h2>4. Headers and Footers Are Risky</h2>
+        <p>
+          Many ATS parsers skip content placed inside the header or footer area of a document. If you place your name, phone number, or email in the header, the system may never record it. Instead, embed your contact information at the very top of the main body area, flush left under your name.
+        </p>
+      </>
+    ),
+  },
+  "resume-summary-examples": {
+    title: "How to Write a Resume Summary That Gets Read",
+    description: "Learn the structure of an effective professional summary or objective statement with real examples for different experience levels and industries.",
+    category: "Resume Guide",
+    date: "May 23, 2026",
+    readTime: "4 min read",
+    content: (
+      <>
+        <p>
+          The professional summary at the top of your resume is the first thing both an ATS and a human recruiter scan. A strong summary can hook the reader in seconds, while a generic or vague one will cause them to move on. Here is how to write one that works.
+        </p>
+
+        <h2>1. The Three-Sentence Structure</h2>
+        <p>
+          A powerful summary follows a simple three-sentence pattern. Sentence one states who you are and your years of experience. Sentence two highlights your most impressive achievement or skill. Sentence three connects your expertise to the role you are applying for.
+        </p>
+        <p>
+          <strong>Example:</strong> <em>&quot;Marketing professional with 5+ years of experience driving digital growth for SaaS companies. Increased organic traffic by 180% year-over-year through data-driven content strategies. Seeking to bring analytical creativity to the Senior Marketing Manager role at GrowthCorp.&quot;</em>
+        </p>
+
+        <h2>2. Tailor It to the Job Description</h2>
+        <p>
+          Never write a generic summary and reuse it for every application. Pull the top two or three keywords from the job description — such as <strong>&quot;cross-functional leadership,&quot;</strong> <strong>&quot;Python automation,&quot;</strong> or <strong>&quot;revenue forecasting&quot;</strong> — and work them naturally into your professional summary. This signals both the ATS and the recruiter that you match the role.
+        </p>
+
+        <h2>3. Fresher &amp; Career-Changer Formats</h2>
+        <p>
+          If you have less than two years of experience or are changing careers, use an <strong>objective statement</strong> instead of a summary. Focus on your motivation, transferable skills, and what you aim to contribute rather than your limited work history. Example: <em>&quot;Recent computer science graduate passionate about full-stack development with internship experience building REST APIs in Python and Node.js.&quot;</em>
+        </p>
+      </>
+    ),
+  },
+  "best-free-resume-builders-2026": {
+    title: "Best Free Resume Builders Compared for 2026",
+    description: "A side-by-side comparison of the top free resume builders — features, ATS compatibility, templates, and export options to help you choose.",
+    category: "Career Advice",
+    date: "May 24, 2026",
+    readTime: "6 min read",
+    content: (
+      <>
+        <p>
+          Not everyone wants to build a resume from scratch in a word processor. Free resume builders promise quick, professional results — but not all of them produce documents that pass ATS scanners or look good when printed. Here is how the top options compare in 2026.
+        </p>
+
+        <h2>1. rawcv — Best for ATS Optimization</h2>
+        <p>
+          rawcv offers a completely free builder that generates clean, single-column resumes optimized for both ATS parsers and human readers. It includes real-time ATS scoring, keyword matching against job descriptions, and export to PDF and DOCX. If your main priority is passing the automated screening stage, rawcv is the strongest choice.
+        </p>
+
+        <h2>2. Canva — Best for Visual Design</h2>
+        <p>
+          Canva provides hundreds of beautifully designed resume templates. However, many of these use multi-column layouts, icons, text boxes, and graphical elements that confuse ATS parsers. Use Canva only if you are applying to roles at small companies or creative agencies where a human reads every submission directly.
+        </p>
+
+        <h2>3. Google Docs Templates — The Simple Middle Ground</h2>
+        <p>
+          Google Docs offers basic but clean resume templates that you can edit collaboratively. The prose templates work well for ATS since they are single-column text documents. The main downside is the lack of built-in ATS scoring or keyword analysis tools — you will need to verify your formatting manually.
+        </p>
+
+        <h2>4. Zety — Feature-Rich but Paywalled</h2>
+        <p>
+          Zety has an impressive builder with many templates and real-time tips. The free tier lets you build a resume, but you must pay to download or export it as PDF. It is a good tool for drafting and iterating, but you will eventually need a subscription to get your final document out.
+        </p>
+
+        <h2>5. Novoresume — Decent Templates, Limited Free Export</h2>
+        <p>
+          Novoresume offers modern, visually appealing templates. Like Zety, downloading a PDF without watermarks requires a paid plan. The free version is useful for testing layouts and content, but keep in mind that some of its more elaborate designs are not ATS-friendly.
+        </p>
+      </>
+    ),
+  },
+  "resume-skills-section-guide": {
+    title: "Resume Skills Section: Hard Skills vs Soft Skills",
+    description: "How to structure the skills section of your resume, distinguish between hard and soft skills, and prioritize what matters most to recruiters.",
+    category: "Resume Guide",
+    date: "May 25, 2026",
+    readTime: "5 min read",
+    content: (
+      <>
+        <p>
+          The skills section of your resume is one of the most heavily scanned areas by both ATS software and human recruiters. Getting it right requires understanding the difference between hard skills and soft skills, and knowing which ones to feature most prominently.
+        </p>
+
+        <h2>1. Hard Skills: The Non-Negotiables</h2>
+        <p>
+          Hard skills are teachable, measurable abilities — programming languages, software tools, certifications, and technical processes. These are what ATS systems primarily look for. List them as a clean, scannable set of keywords. Examples include <strong>Python, SQL, Figma, Google Analytics, AutoCAD,</strong> or <strong>PMP certification</strong>.
+        </p>
+        <p>
+          Group related hard skills together. For technical roles, create subcategories like <strong>Languages</strong>, <strong>Frameworks</strong>, <strong>Tools</strong>, and <strong>Platforms</strong> so the reader can quickly assess your breadth.
+        </p>
+
+        <h2>2. Soft Skills: Prove, Don&apos;t Claim</h2>
+        <p>
+          Soft skills like leadership, communication, problem-solving, and adaptability are harder for ATS to parse but critical for human reviewers. Instead of simply listing <em>&quot;Great communicator&quot;</em> in your skills section, weave these traits into your bullet points under work experience.
+        </p>
+        <p>
+          <strong>Weak:</strong> <em>&quot;Excellent teamwork skills.&quot;</em><br />
+          <strong>Strong:</strong> <em>&quot;Collaborated with a cross-functional team of 12 engineers, designers, and product managers to ship three major releases on schedule.&quot;</em>
+        </p>
+
+        <h2>3. How Many Skills to List</h2>
+        <p>
+          Aim for 8 to 12 hard skills and 3 to 5 soft skills referenced contextually in your experience bullets. Do not pad the list with outdated or irrelevant abilities just to fill space. Every skill on your resume should be one you can discuss confidently in an interview. Quality over quantity always wins.
+        </p>
+
+        <h2>4. Match Skills to the Job Description</h2>
+        <p>
+          Before submitting, compare the job description&apos;s required and preferred skills against your own list. If the JD mentions <strong>&quot;Agile methodologies&quot;</strong> and you have Agile experience but did not list it, add it. The closer your skill keyword coverage is to the job description, the higher your ATS match score will be.
+        </p>
+      </>
+    ),
+  },
+  "fresher-resume-tips": {
+    title: "Resume Tips for Freshers & Entry-Level Candidates",
+    description: "Essential advice for students and recent graduates building a resume with limited work experience — focus on projects, internships, and transferable skills.",
+    category: "Career Advice",
+    date: "May 26, 2026",
+    readTime: "5 min read",
+    content: (
+      <>
+        <p>
+          Building a resume with little or no professional work experience can feel intimidating — but every hiring manager knows that every experienced professional was once a fresher too. The key is to reframe what you <em>have</em> done as evidence of your potential.
+        </p>
+
+        <h2>1. Lead with Education and Projects</h2>
+        <p>
+          Without extensive work history, your education section becomes your anchor. List your degree, university, graduation year, and relevant coursework. Immediately below, add a <strong>Projects</strong> section. Describe 2 to 3 academic or personal projects with the same achievement-focused format that experienced professionals use for their work bullet points.
+        </p>
+        <p>
+          <strong>Example:</strong> <em>&quot;Built a real-time chat application using React, Node.js, and Socket.io that supported 50+ concurrent users — deployed on AWS with CI/CD pipeline.&quot;</em>
+        </p>
+
+        <h2>2. Internships Count as Experience</h2>
+        <p>
+          Even a short internship or part-time job provides real experience. Treat each internship as you would a full-time role. Include your title, the company name, dates, and 3 to 5 bullet points describing what you accomplished. Focus on any measurable outcomes, no matter how small — saving time, assisting with a successful launch, or learning a new tool.
+        </p>
+
+        <h2>3. Highlight Extracurriculars and Leadership</h2>
+        <p>
+          Club memberships, volunteer work, sports teams, and student government roles all demonstrate soft skills like teamwork, initiative, and time management. Include them in a <strong>Leadership &amp; Activities</strong> section. If you held a position like <em>&quot;Treasurer of the Computer Science Society&quot;</em>, describe your responsibilities and any measurable outcomes.
+        </p>
+
+        <h2>4. Keep It to One Page</h2>
+        <p>
+          As a fresher, you almost certainly do not have enough content to justify a two-page resume. Recruiters spend about six to eight seconds on an initial screen — a single, well-organized page forces you to keep only the most relevant content, making their job easier and increasing your chances of advancing.
+        </p>
+      </>
+    ),
+  },
+  "ats-vs-human-recruiter": {
+    title: "ATS vs Human Recruiters: How to Satisfy Both",
+    description: "Understand the competing priorities of automated screening systems and human hiring managers — and how to write a resume that pleases both.",
+    category: "ATS Optimization",
+    date: "May 27, 2026",
+    readTime: "6 min read",
+    content: (
+      <>
+        <p>
+          One of the biggest frustrations in job hunting is the tug-of-war between writing for an ATS and writing for a human. An ATS wants clean, keyword-dense, single-column text. A human wants a compelling narrative with visual breathing room. Here is how to satisfy both without compromise.
+        </p>
+
+        <h2>1. The ATS Reads First, Then the Human</h2>
+        <p>
+          Understanding the order of operations is crucial. Your resume first passes through the ATS, which scores it based on keyword matches, formatting compatibility, and section structure. Only the top-scoring candidates are surfaced for human review. This means your document must pass the automated gatekeeper before anyone reads a single word.
+        </p>
+
+        <h2>2. Write for the Human, Optimize for the Machine</h2>
+        <p>
+          Start with compelling, narrative-driven bullet points written for a human audience — use strong action verbs and quantify results. Then, <em>layer in</em> relevant keywords from the job description without breaking the natural flow. A bullet like <em>&quot;Reduced cloud infrastructure costs by 28% using AWS Lambda and automated scaling policies&quot;</em> reads well for both a human and an ATS looking for <strong>AWS</strong> and <strong>automation</strong>.
+        </p>
+
+        <h2>3. Visual Appeal Within ATS Limits</h2>
+        <p>
+          You can still use subtle visual cues — bold text for job titles and company names, consistent spacing, and strategic use of horizontal rules — as long as they do not rely on tables, text boxes, or columns. A clean, minimal design with careful typography creates a professional appearance for humans while remaining perfectly parseable by machines.
+        </p>
+
+        <h2>4. The Goldilocks Resume</h2>
+        <p>
+          The ideal resume is neither too sparse (fails ATS keyword checks) nor too dense (overwhelms human readers). Aim for a keyword density of about 2% to 3% of total words — enough to signal relevance to the ATS without sounding like stuffed jargon to the human. Every keyword should appear in a natural, contextual sentence.
+        </p>
+      </>
+    ),
+  },
+  "linkedin-profile-tips-2026": {
+    title: "LinkedIn Profile Optimization Tips for 2026",
+    description: "Optimize your LinkedIn profile to attract recruiters, rank higher in search results, and complement your resume with a strong professional brand.",
+    category: "Career Advice",
+    date: "May 28, 2026",
+    readTime: "5 min read",
+    content: (
+      <>
+        <p>
+          Your LinkedIn profile is often the second thing a recruiter looks at after reading your resume. A well-optimized profile can attract inbound recruiter messages, improve your search ranking, and tell a more complete story about your professional brand. Here is how to optimize yours in 2026.
+        </p>
+
+        <h2>1. Your Headline Is Prime Real Estate</h2>
+        <p>
+          Do not settle for LinkedIn&apos;s default headline of <em>&quot;Job Title at Company Name&quot;</em>. Use all 220 available characters to describe what you do and who you help. Include your core skills and target role keywords. <strong>Example:</strong> <em>&quot;Full-Stack Developer | React, Node.js, Python | Building Scalable Web Applications | Open to Remote Opportunities&quot;</em>.
+        </p>
+
+        <h2>2. Optimize the About Section with Keywords</h2>
+        <p>
+          The About section is one of the most search-indexed areas of your profile. Write 3 to 4 short paragraphs that mirror your resume summary but go deeper. Weave in industry terms and skills that recruiters search for. End with a clear call to action — invite connection requests, mention you are open to roles, or link to your portfolio.
+        </p>
+
+        <h2>3. The Featured Section Is Your Portfolio</h2>
+        <p>
+          Use the Featured section at the top of your profile to pin your best work — a published article, a notable project, a link to your resume, or a recommendation. This section is the first thing recruiters see below your headline and About section, so make it count.
+        </p>
+
+        <h2>4. Recommendations and Endorsements Matter</h2>
+        <p>
+          Request recommendations from managers, colleagues, or professors who can speak specifically about your contributions. A generic recommendation is less effective than one that mentions concrete achievements. Actively endorse your network&apos;s skills — LinkedIn&apos;s algorithm takes reciprocity into account when ranking profiles.
+        </p>
+
+        <h2>5. Post Consistently to Stay Visible</h2>
+        <p>
+          LinkedIn&apos;s algorithm favors active users. Posting just once a week — sharing an industry insight, commenting on a trend, or reposting a relevant article — dramatically increases your profile views and search ranking. You do not need to be a content creator, but regular activity signals relevance to the platform.
+        </p>
+      </>
+    ),
+  },
 };
 
 export async function generateStaticParams() {
@@ -161,8 +418,40 @@ export default async function ArticlePage({ params }: PageProps) {
     notFound();
   }
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "description": article.description,
+    "author": {
+      "@type": "Organization",
+      "name": "rawcv",
+      "url": "https://www.rawcv.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "rawcv",
+      "url": "https://www.rawcv.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.rawcv.com/logo.png"
+      }
+    },
+    "datePublished": article.date,
+    "dateModified": article.date,
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://www.rawcv.com/blog_illustration.png"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://www.rawcv.com/blog/${slug}`
+    }
+  };
+
   return (
     <main className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 py-16 px-6">
+      <Script id="article-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <article className="max-w-2xl mx-auto">
         {/* Navigation back */}
         <Link

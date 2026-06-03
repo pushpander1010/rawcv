@@ -34,6 +34,69 @@ const POSTS = [
     readTime: "4 min read",
     gradient: "from-emerald-500 to-teal-500",
   },
+  {
+    slug: "ats-resume-formatting-guide",
+    title: "ATS Resume Formatting Guide: What Works and What Gets Rejected",
+    description: "A deep dive into the exact formatting choices that help your resume pass ATS parsers — fonts, file types, margins, and layout decisions explained.",
+    category: "ATS Optimization",
+    date: "May 22, 2026",
+    readTime: "5 min read",
+    gradient: "from-rose-500 to-pink-500",
+  },
+  {
+    slug: "resume-summary-examples",
+    title: "How to Write a Resume Summary That Gets Read",
+    description: "Learn the structure of an effective professional summary or objective statement with real examples for different experience levels and industries.",
+    category: "Resume Guide",
+    date: "May 23, 2026",
+    readTime: "4 min read",
+    gradient: "from-amber-500 to-orange-500",
+  },
+  {
+    slug: "best-free-resume-builders-2026",
+    title: "Best Free Resume Builders Compared for 2026",
+    description: "A side-by-side comparison of the top free resume builders — features, ATS compatibility, templates, and export options to help you choose.",
+    category: "Career Advice",
+    date: "May 24, 2026",
+    readTime: "6 min read",
+    gradient: "from-indigo-500 to-blue-500",
+  },
+  {
+    slug: "resume-skills-section-guide",
+    title: "Resume Skills Section: Hard Skills vs Soft Skills",
+    description: "How to structure the skills section of your resume, distinguish between hard and soft skills, and prioritize what matters most to recruiters.",
+    category: "Resume Guide",
+    date: "May 25, 2026",
+    readTime: "5 min read",
+    gradient: "from-green-500 to-emerald-500",
+  },
+  {
+    slug: "fresher-resume-tips",
+    title: "Resume Tips for Freshers & Entry-Level Candidates",
+    description: "Essential advice for students and recent graduates building a resume with limited work experience — focus on projects, internships, and transferable skills.",
+    category: "Career Advice",
+    date: "May 26, 2026",
+    readTime: "5 min read",
+    gradient: "from-sky-500 to-indigo-500",
+  },
+  {
+    slug: "ats-vs-human-recruiter",
+    title: "ATS vs Human Recruiters: How to Satisfy Both",
+    description: "Understand the competing priorities of automated screening systems and human hiring managers — and how to write a resume that pleases both.",
+    category: "ATS Optimization",
+    date: "May 27, 2026",
+    readTime: "6 min read",
+    gradient: "from-red-500 to-rose-500",
+  },
+  {
+    slug: "linkedin-profile-tips-2026",
+    title: "LinkedIn Profile Optimization Tips for 2026",
+    description: "Optimize your LinkedIn profile to attract recruiters, rank higher in search results, and complement your resume with a strong professional brand.",
+    category: "Career Advice",
+    date: "May 28, 2026",
+    readTime: "5 min read",
+    gradient: "from-teal-500 to-cyan-500",
+  },
 ];
 
 export default function BlogPage() {
@@ -84,6 +147,13 @@ export default function BlogPage() {
                   {post.slug === "how-to-write-ats-friendly-resume" && "📄"}
                   {post.slug === "quantifying-achievements-resume-examples" && "📈"}
                   {post.slug === "resume-keywords-matcher-guide" && "🎯"}
+                  {post.slug === "ats-resume-formatting-guide" && "📐"}
+                  {post.slug === "resume-summary-examples" && "✍️"}
+                  {post.slug === "best-free-resume-builders-2026" && "🔧"}
+                  {post.slug === "resume-skills-section-guide" && "🧠"}
+                  {post.slug === "fresher-resume-tips" && "🌱"}
+                  {post.slug === "ats-vs-human-recruiter" && "⚖️"}
+                  {post.slug === "linkedin-profile-tips-2026" && "💼"}
                 </span>
               </div>
               

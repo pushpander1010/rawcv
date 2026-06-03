@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Complete Guide - How to Use rawcv AI Resume Builder | rawcv",
@@ -13,5 +14,23 @@ export const metadata: Metadata = {
 };
 
 export default function HowToLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <Script
+        id="breadcrumb-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://www.rawcv.com" },
+              { "@type": "ListItem", position: 2, name: "How to Use", item: "https://www.rawcv.com/how-to" },
+            ],
+          }),
+        }}
+      />
+      {children}
+    </>
+  );
 }
