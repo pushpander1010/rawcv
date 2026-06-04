@@ -88,7 +88,7 @@ export function FooterNav() {
   return (
     <nav className="flex gap-6 flex-wrap" aria-label="Footer navigation">
       <Link href="/about" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">About</Link>
-      <Link href="/credits" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Pricing</Link>
+      <Link href="/pricing" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Pricing</Link>
       <Link href="/blog" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Blog</Link>
       {isLoggedIn
         ? <Link href="/analyze" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Dashboard</Link>

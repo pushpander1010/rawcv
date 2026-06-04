@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import { HeroCTA, FooterCTA, PricingCTA, FooterNav } from "@/components/LandingCTA";
+import AuthRedirect from "@/components/AuthRedirect";
+import { pricingPlans } from "@/data/pricing";
 
 export const metadata: Metadata = {
   title: "rawcv — AI Resume Builder, ATS Score & Job Match Optimizer",
@@ -17,24 +19,6 @@ const features = [
   { icon: "🔧", title: "Resume Enhancement", description: "Strengthen weak bullet points and your summary with stronger language — no JD required." },
   { icon: "🎨", title: "Visual Themes", description: "Switch between Classic, Modern, Minimal, Executive, and Creative themes with a live preview." },
   { icon: "💬", title: "Chat to Build or Customize", description: "Build a resume from scratch or tweak any section conversationally with an AI chat interface." },
-];
-
-const pricingPlans = [
-  {
-    name: "Starter", price: "₹99", credits: "50 credits", priceUsd: "$1",
-    description: "Perfect for a quick resume check.", highlight: false,
-    features: ["50 AI credits", "All analysis features", "Theme downloads", "Chat-based building"],
-  },
-  {
-    name: "Pro", price: "₹499", credits: "250 credits", priceUsd: "$5",
-    description: "Best value for active job seekers.", highlight: true,
-    features: ["250 AI credits", "All analysis features", "Unlimited downloads", "Priority AI models", "Chat-based building"],
-  },
-  {
-    name: "Power", price: "₹999", credits: "500 credits", priceUsd: "$10",
-    description: "For power users and career coaches.", highlight: false,
-    features: ["500 AI credits", "All analysis features", "Unlimited downloads", "All premium AI models", "Chat-based building"],
-  },
 ];
 
 const faqs = [
@@ -121,6 +105,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <AuthRedirect />
       <Script
         id="json-ld"
         type="application/ld+json"
