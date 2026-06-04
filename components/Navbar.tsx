@@ -73,6 +73,12 @@ export default function Navbar() {
                 >
                   📝 Blog
                 </Link>
+                <Link
+                  href="/pricing"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  💎 Pricing
+                </Link>
               </>
             ) : (
               <>
@@ -106,6 +112,12 @@ export default function Navbar() {
                   className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   ✉️ Contact
+                </Link>
+                <Link
+                  href="/pricing"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  💎 Pricing
                 </Link>
               </>
             )}
@@ -291,6 +303,13 @@ export default function Navbar() {
                 >
                   📝 Blog
                 </Link>
+                <Link
+                  href="/pricing"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  💎 Pricing
+                </Link>
               </>
             ) : (
               <>
@@ -328,6 +347,13 @@ export default function Navbar() {
                   className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   ✉️ Contact
+                </Link>
+                <Link
+                  href="/pricing"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  💎 Pricing
                 </Link>
                 <div className="border-t border-gray-100 dark:border-gray-800 pt-2 mt-2 space-y-2">
                   <Link
