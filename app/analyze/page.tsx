@@ -188,7 +188,7 @@ export default function AnalyzePage() {
         leftLabel="Analysis"
         rightLabel="Resume Preview"
         left={
-          <div className={activeTab === "chat" ? "flex flex-col h-full" : "p-6"}>
+                  <div className={activeTab === "chat" ? "flex flex-col h-full overflow-hidden" : "p-6 overflow-y-auto flex-1"}>
           {/* ATS */}
           {activeTab === "ats" && (
             <div>
