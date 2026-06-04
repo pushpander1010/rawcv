@@ -571,9 +571,6 @@ function DashboardContent() {
         <h1 className="text-3xl font-black text-gray-905 dark:text-gray-100 tracking-tight">
           Hey, {name.split(" ")[0]} 👋
         </h1>
-        <p className="text-sm text-gray-450 dark:text-gray-500 mt-1.5 font-medium leading-relaxed">
-          Manage your resume tools, run analyses, and top up credits from here.
-        </p>
       </div>
 
       {/* Tab bar */}
