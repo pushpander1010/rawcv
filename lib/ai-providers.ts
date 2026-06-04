@@ -3,9 +3,9 @@ import { z } from "zod";
 const DefaultSchema = z.any();
 
 // ─── Models ───────────────────────────────────────────────────────────────────
-const MODEL_PARSE    = "google/gemini-2.5-flash-lite";           // resume parsing
-const MODEL_CHAT     = "mistralai/mistral-small-3.2-24b-instruct" // chat / build / customize
-const MODEL_ANALYSIS = "meta-llama/llama-4-scout";             // ATS, JD relevance, suggestions, enhance
+const MODEL_PARSE    = "xiaomi/mimo-v2.5";           // resume parsing
+const MODEL_CHAT     = "xiaomi/mimo-v2.5";            // chat / build / customize
+const MODEL_ANALYSIS = "xiaomi/mimo-v2.5";             // ATS, JD relevance, suggestions, enhance
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -47,7 +47,7 @@ async function callOpenRouter<T>(
   model: string,
   prompt: string,
   systemPrompt: string,
-  options?: { maxTokens?: number; schema?: z.ZodSchema<T>; jsonMode?: boolean }
+  options?: { maxTokens?: number; schema?: z.ZodSchema<T>; jsonMode?: boolean; temperature?: number }
 ): Promise<T> {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error("OPENROUTER_API_KEY not set");
@@ -67,7 +67,7 @@ async function callOpenRouter<T>(
       const body: Record<string, unknown> = {
         model,
         max_tokens: options?.maxTokens ?? 2500,
-        temperature: 0.1,
+        temperature: options?.temperature ?? 0.1,
         messages: [
           { role: "system", content: fullSystem },
           { role: "user",   content: prompt },
@@ -105,7 +105,7 @@ async function callOpenRouter<T>(
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-/** Resume parsing — google/gemini-2.5-flash-lite */
+/** Resume parsing — xiaomi/mimo-v2.5 */
 export async function complete<T = any>(
   prompt: string,
   systemPrompt: string,
@@ -114,7 +114,7 @@ export async function complete<T = any>(
   return callOpenRouter(MODEL_PARSE, prompt, systemPrompt, options);
 }
 
-/** Chat (build / customize) — mistralai/mistral-small-24b-instruct-2501 */
+/** Chat (build / customize) — xiaomi/mimo-v2.5 */
 export async function completeChat<T = any>(
   prompt: string,
   systemPrompt: string,
@@ -123,7 +123,7 @@ export async function completeChat<T = any>(
   return callOpenRouter(MODEL_CHAT, prompt, systemPrompt, options);
 }
 
-/** ATS, JD relevance, suggestions, enhancements — google/gemma-4-26b-a4b-it */
+/** ATS, JD relevance, suggestions, enhancements — xiaomi/mimo-v2.5 */
 export async function completeAnalysis<T = any>(
   prompt: string,
   systemPrompt: string,

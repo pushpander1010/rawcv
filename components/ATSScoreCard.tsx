@@ -71,28 +71,30 @@ export default function ATSScoreCard({ result, loading = false }: ATSScoreCardPr
   }
 
   const { score, issues = [] } = result;
-  const showIssues = score < 60 && issues.length > 0;
+  const showIssues = issues.length > 0;
   const label = score >= 80 ? "Great ATS compatibility" : score >= 60 ? "Moderate ATS compatibility" : "Poor ATS compatibility";
+  const color = score >= 80 ? "text-emerald-600 dark:text-emerald-400" : score >= 60 ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400";
 
   return (
     <section aria-label="ATS Score" className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6">
-      <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">ATS Score</h2>
       <div className="flex flex-col items-center gap-2 mb-6">
         <CircularGauge score={score} />
-        <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
-        <p className="text-xs text-gray-400 dark:text-gray-500">out of 100</p>
+        <p className={`text-sm font-semibold ${color}`}>{label}</p>
+        <p className="text-xs text-gray-400 dark:text-gray-500">Score: {score}/100</p>
       </div>
       {showIssues && (
         <div>
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Issues to fix</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+            Issues to fix ({issues.length})
+          </p>
           <ul className="space-y-2" aria-label="ATS issues">
             {issues.map((issue, idx) => <IssueRow key={`${issue.type}-${idx}`} issue={issue} />)}
           </ul>
         </div>
       )}
-      {!showIssues && score >= 60 && (
-        <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-          Your resume passes basic ATS checks.{issues.length > 0 && " Minor improvements may still help."}
+      {!showIssues && (
+        <p className="text-sm text-center text-emerald-600 dark:text-emerald-400 font-medium">
+          No issues found — your resume is ATS-ready!
         </p>
       )}
     </section>

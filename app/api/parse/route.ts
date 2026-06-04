@@ -107,7 +107,9 @@ async function extractText(file: File): Promise<string> {
 }
 
 /* ---------------- API ---------------- */
-const SYSTEM_PROMPT = `You are a resume parser. Extract ALL information from the resume text and return a JSON object with this exact structure:
+const SYSTEM_PROMPT = `You are a precise resume parser. Extract ALL information from the resume text thoroughly — do not miss any job, bullet point, skill, certification, or project.
+
+Return a JSON object with this exact structure:
 {
   "contact": { "name": "", "email": "", "phone": "", "location": "", "linkedin": "", "website": "" },
   "summary": "",
@@ -117,7 +119,13 @@ const SYSTEM_PROMPT = `You are a resume parser. Extract ALL information from the
   "certifications": [""],
   "projects": [{ "name": "", "description": "", "technologies": [""] }]
 }
-Extract every job, every bullet point, every skill. Use empty string for missing fields, empty array for missing arrays.`;
+
+Guidelines:
+- Extract EVERY job, EVERY bullet point verbatim — do not summarize or rewrite
+- Extract ALL skills mentioned anywhere in the resume (skills section, experience bullets, etc.)
+- Use empty string for missing fields, empty array for missing arrays
+- Preserve the original wording of bullet points exactly as written
+- For graduationYear, extract the year as a string (e.g. "2020", "Expected 2024")`;
 
 export async function POST(req: NextRequest) {
   const auth = await requireAuth();

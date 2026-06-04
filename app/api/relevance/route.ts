@@ -7,11 +7,19 @@ import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseJD } from "@/lib/api-guard";
 
-const SYSTEM_PROMPT = `You are a resume-to-job-description relevance expert. Analyze the provided resume and job description, then return ONLY valid JSON in this exact shape:
+const SYSTEM_PROMPT = `You are an expert resume-to-job-description relevance analyst. Carefully compare the candidate's resume against the provided job description to determine how well they match.
+
+Your analysis must be thorough and specific:
+1. Score based on both explicit keyword matches AND semantic alignment (similar concepts phrased differently)
+2. Identify critical missing keywords — terms that appear in the JD's requirements/qualifications but are absent from the resume
+3. Flag missing hard skills that would be dealbreakers for the role
+4. Provide actionable recommendations: specific changes the candidate could make to improve alignment
+
+Return JSON in this exact shape:
 {
   "score": number,           // 0–100 relevance score
-  "missingKeywords": string[], // keywords in JD not found in resume
-  "missingSkills": string[],   // skills in JD absent from resume skills section
+  "missingKeywords": string[], // most impactful keywords in JD not found in resume (max 15)
+  "missingSkills": string[],   // hard skills from JD absent from resume skills section (max 10)
   "recommendations": string[]  // prioritized, actionable recommendations (max 8)
 }
 
@@ -20,8 +28,7 @@ Scoring guidance:
 - 70–89: Good match with minor gaps
 - 50–69: Moderate match, several important keywords/skills missing
 - 0–49: Poor match, significant gaps
-
-Keep missingKeywords to the most impactful terms (max 15). Keep missingSkills focused on hard skills (max 10). Recommendations should be specific and actionable.`;
+- Note: For junior/fresher roles, be more lenient on years-of-experience gaps but strict on skill gaps`;
 
 export async function POST(req: NextRequest) {
   const auth = await requireAuth();

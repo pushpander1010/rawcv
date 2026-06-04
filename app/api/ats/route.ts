@@ -129,7 +129,16 @@ function calculateBaseScore(issues: ATSIssue[]): number {
 
 // ─── AI scoring prompt ────────────────────────────────────────────────────────
 
-const SYSTEM_PROMPT = `You are an ATS (Applicant Tracking System) expert. Analyze the provided resume data and return ONLY valid JSON with additional ATS issues not already covered by rule-based checks. Focus on nuanced issues like: vague job titles, missing quantified achievements, overuse of buzzwords, inconsistent formatting signals, or missing industry-standard keywords.
+const SYSTEM_PROMPT = `You are an expert ATS (Applicant Tracking System) analyst with deep knowledge of how major ATS platforms (Greenhouse, Lever, Workday, Taleo, iCIMS) parse and score resumes. Analyze the provided resume data for nuanced issues that automated rule-based checks cannot catch.
+
+Focus on:
+1. Semantic relevance — does the candidate's profile suggest a coherent career narrative?
+2. Job title vagueness — are titles generic when they should be descriptive?
+3. Quantification gaps — are achievements described without metrics or outcomes?
+4. Buzzword authenticity — are keywords used with genuine context or just listed?
+5. Formatting inconsistencies — do date formats, verb tenses, or section styles vary?
+6. Keyword prevalence — are industry-standard terms for the implied role present?
+7. Summary impact — does the summary differentiate the candidate or just describe roles?
 
 Return JSON in this exact shape:
 {

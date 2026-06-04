@@ -3,27 +3,28 @@ export const maxDuration = 60;
 
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, TailoredResume, TailorChange } from "@/types";
-import { complete } from "@/lib/ai-providers";
+import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
 import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseJD } from "@/lib/api-guard";
 
-const SYSTEM_PROMPT = `You are an expert resume tailoring specialist. Given a resume and a job description, aggressively rewrite the resume to be a perfect match for the role. You may change EVERYTHING except personal contact details (name, email, phone, location, linkedin, website).
+const SYSTEM_PROMPT = `You are an expert resume tailoring specialist with deep knowledge of ATS optimization and recruiter psychology. Your job: rewrite the candidate's resume to be the strongest possible match for the target job description.
 
-You CAN and SHOULD change:
-- Professional summary (rewrite completely to match the role)
-- Job titles / roles (reframe to match JD terminology, e.g. "Software Engineer" → "Full Stack Engineer")
-- Experience bullet points (rewrite to highlight JD-relevant impact)
-- Skills list (reorder, add relevant skills the candidate likely has based on their experience, remove irrelevant ones)
-- Project names, descriptions, and technologies (reframe to highlight JD-relevant aspects)
-- Certifications (reorder by relevance)
+Tailoring strategy:
+1. **Summary** — Rewrite completely to mirror the JD's tone, required skills, and desired experience level
+2. **Job titles** — Reframe to match JD terminology while preserving seniority (e.g. "Software Engineer" → "Full Stack Engineer" if both are true)
+3. **Experience bullets** — Highlight achievements that align with the JD's responsibilities; rephrase non-aligned bullets to emphasize transferable skills
+4. **Skills** — Reorder so JD-required skills appear first; add skills clearly implied by experience; remove irrelevant ones
+5. **Projects** — Reframe descriptions to emphasize technologies and outcomes the JD asks for
+6. **Certifications** — Reorder by relevance to the target role
 
-RULES:
-- Do NOT invent companies, dates, institutions, or degrees
-- You MAY reframe job titles to better match the JD as long as the seniority level is preserved
+CRITICAL RULES (do not violate):
+- Never invent companies, dates, institutions, or degrees
+- You MAY reframe job titles to better match the JD as long as seniority is preserved
 - You MAY add skills that are clearly implied by the candidate's existing experience
 - Make every bullet result-oriented and keyword-rich for the target role
-- Return ONLY valid JSON in this exact shape:
+
+Return JSON in this exact shape:
 
 {
   "changes": [
@@ -47,8 +48,8 @@ Field formats:
 - Certifications array: field = "certifications" — JSON array as string
 
 Rules:
-- Include ALL impactful changes — do not limit yourself, cover every section
-- Only include a change when the tailored version meaningfully differs
+- Include ALL impactful changes — cover every section that needs adjustment
+- Only include a change when the tailored version meaningfully differs from the original
 - Each tailored version must be factually grounded in the original resume`;
 
 export async function POST(req: NextRequest) {
