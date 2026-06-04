@@ -97,7 +97,7 @@ export default function ResizablePanels({
 
       {/* Desktop: resizable side-by-side */}
       <div ref={containerRef} className="hidden md:flex flex-1 min-h-0 overflow-hidden">
-        <div style={{ width: leftWidth, flexShrink: 0 }} className="flex flex-col overflow-hidden border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <div style={{ width: leftWidth, flexShrink: 0 }} className="flex flex-col h-full overflow-hidden border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
           {left}
         </div>
 
