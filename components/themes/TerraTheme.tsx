@@ -1,4 +1,5 @@
 import type { ParsedResume } from "@/types";
+import { ContactLink } from "./ContactLink";
 
 export default function TerraTheme({ resume }: { resume: ParsedResume }) {
   const { contact, summary, experience, education, skills, certifications, projects } = resume;
@@ -9,11 +10,11 @@ export default function TerraTheme({ resume }: { resume: ParsedResume }) {
       <div className="bg-[#8b4513] text-white px-10 py-8">
         <h1 className="text-3xl font-bold tracking-wide mb-2">{contact.name}</h1>
         <div className="flex flex-wrap gap-x-5 gap-y-0.5 text-xs text-orange-200">
-          {contact.email && <span>{contact.email}</span>}
-          {contact.phone && <span>{contact.phone}</span>}
-          {contact.location && <span>{contact.location}</span>}
-          {contact.linkedin && <span>{contact.linkedin}</span>}
-          {contact.website && <span>{contact.website}</span>}
+          {contact.email && <ContactLink value={contact.email} type="email" />}
+          {contact.phone && <ContactLink value={contact.phone} type="phone" />}
+          {contact.location && <ContactLink value={contact.location} type="location" />}
+          {contact.linkedin && <ContactLink value={contact.linkedin} type="linkedin" />}
+          {contact.website && <ContactLink value={contact.website} type="website" />}
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import type { ParsedResume } from "@/types";
+import { ContactLink } from "./ContactLink";
 
 interface Props {
   resume: ParsedResume;
@@ -13,11 +14,11 @@ export default function ClassicTheme({ resume }: Props) {
       <div className="text-center border-b-2 border-gray-800 pb-4 mb-6">
         <h1 className="text-3xl font-bold tracking-wide uppercase mb-1">{contact.name}</h1>
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-600">
-          {contact.email && <span>{contact.email}</span>}
-          {contact.phone && <span>{contact.phone}</span>}
-          {contact.location && <span>{contact.location}</span>}
-          {contact.linkedin && <span>{contact.linkedin}</span>}
-          {contact.website && <span>{contact.website}</span>}
+          {contact.email && <ContactLink value={contact.email} type="email" />}
+          {contact.phone && <ContactLink value={contact.phone} type="phone" />}
+          {contact.location && <ContactLink value={contact.location} type="location" />}
+          {contact.linkedin && <ContactLink value={contact.linkedin} type="linkedin" />}
+          {contact.website && <ContactLink value={contact.website} type="website" />}
         </div>
       </div>
 

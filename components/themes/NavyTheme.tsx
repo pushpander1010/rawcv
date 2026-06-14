@@ -1,4 +1,5 @@
 import type { ParsedResume } from "@/types";
+import { ContactLink } from "./ContactLink";
 
 export default function NavyTheme({ resume }: { resume: ParsedResume }) {
   const { contact, summary, experience, education, skills, certifications, projects } = resume;
@@ -10,11 +11,11 @@ export default function NavyTheme({ resume }: { resume: ParsedResume }) {
         <div className="px-6 py-8 border-b border-white/10">
           <h1 className="text-lg font-bold leading-tight mb-3">{contact.name}</h1>
           <div className="space-y-1 text-xs text-blue-200">
-            {contact.email && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">✉</span>{contact.email}</div>}
-            {contact.phone && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">✆</span>{contact.phone}</div>}
-            {contact.location && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">⌖</span>{contact.location}</div>}
-            {contact.linkedin && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">in</span>{contact.linkedin}</div>}
-            {contact.website && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">⊕</span>{contact.website}</div>}
+            {contact.email && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">✉</span><ContactLink value={contact.email} type="email" /></div>}
+            {contact.phone && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">✆</span><ContactLink value={contact.phone} type="phone" /></div>}
+            {contact.location && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">⌖</span><ContactLink value={contact.location} type="location" /></div>}
+            {contact.linkedin && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">in</span><ContactLink value={contact.linkedin} type="linkedin" /></div>}
+            {contact.website && <div className="flex gap-1.5 items-center"><span className="text-yellow-400">⊕</span><ContactLink value={contact.website} type="website" /></div>}
           </div>
         </div>
 

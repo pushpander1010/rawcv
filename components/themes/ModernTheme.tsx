@@ -1,4 +1,5 @@
 import type { ParsedResume } from "@/types";
+import { ContactLink } from "./ContactLink";
 
 interface Props {
   resume: ParsedResume;
@@ -14,11 +15,11 @@ export default function ModernTheme({ resume }: Props) {
         <div className="mb-6">
           <h1 className="text-xl font-bold leading-tight mb-1">{contact.name}</h1>
           <div className="space-y-1 text-xs text-slate-300">
-            {contact.email && <div>{contact.email}</div>}
-            {contact.phone && <div>{contact.phone}</div>}
-            {contact.location && <div>{contact.location}</div>}
-            {contact.linkedin && <div>{contact.linkedin}</div>}
-            {contact.website && <div>{contact.website}</div>}
+            {contact.email && <div><ContactLink value={contact.email} type="email" /></div>}
+            {contact.phone && <div><ContactLink value={contact.phone} type="phone" /></div>}
+            {contact.location && <div><ContactLink value={contact.location} type="location" /></div>}
+            {contact.linkedin && <div><ContactLink value={contact.linkedin} type="linkedin" /></div>}
+            {contact.website && <div><ContactLink value={contact.website} type="website" /></div>}
           </div>
         </div>
 

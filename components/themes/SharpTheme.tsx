@@ -1,4 +1,5 @@
 import type { ParsedResume } from "@/types";
+import { ContactLink } from "./ContactLink";
 
 export default function SharpTheme({ resume }: { resume: ParsedResume }) {
   const { contact, summary, experience, education, skills, certifications, projects } = resume;
@@ -9,11 +10,11 @@ export default function SharpTheme({ resume }: { resume: ParsedResume }) {
       <div className="bg-black text-white px-10 py-7">
         <h1 className="text-3xl font-black tracking-tight uppercase mb-1">{contact.name}</h1>
         <div className="flex flex-wrap gap-x-5 gap-y-0.5 text-xs text-gray-400 font-mono">
-          {contact.email && <span>{contact.email}</span>}
-          {contact.phone && <span>{contact.phone}</span>}
-          {contact.location && <span>{contact.location}</span>}
-          {contact.linkedin && <span>{contact.linkedin}</span>}
-          {contact.website && <span>{contact.website}</span>}
+          {contact.email && <ContactLink value={contact.email} type="email" />}
+          {contact.phone && <ContactLink value={contact.phone} type="phone" />}
+          {contact.location && <ContactLink value={contact.location} type="location" />}
+          {contact.linkedin && <ContactLink value={contact.linkedin} type="linkedin" />}
+          {contact.website && <ContactLink value={contact.website} type="website" />}
         </div>
       </div>
 

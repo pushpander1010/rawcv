@@ -1,4 +1,5 @@
 import type { ParsedResume } from "@/types";
+import { ContactLink } from "./ContactLink";
 
 interface Props {
   resume: ParsedResume;
@@ -60,27 +61,27 @@ export default function EnhancTheme({ resume }: Props) {
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap", fontSize: 12, color: "#444" }}>
             {contact.phone && (
               <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <span style={{ color: ACCENT }}>☎</span> {contact.phone}
+                <span style={{ color: ACCENT }}>☎</span> <ContactLink value={contact.phone} type="phone" />
               </span>
             )}
             {contact.email && (
               <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <span style={{ color: ACCENT }}>✉</span> {contact.email}
+                <span style={{ color: ACCENT }}>✉</span> <ContactLink value={contact.email} type="email" />
               </span>
             )}
             {contact.location && (
               <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <span style={{ color: ACCENT }}>⌖</span> {contact.location}
+                <span style={{ color: ACCENT }}>⌖</span> <ContactLink value={contact.location} type="location" />
               </span>
             )}
             {contact.linkedin && (
               <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <span style={{ color: ACCENT }}>in</span> {contact.linkedin}
+                <span style={{ color: ACCENT }}>in</span> <ContactLink value={contact.linkedin} type="linkedin" />
               </span>
             )}
             {contact.website && (
               <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <span style={{ color: ACCENT }}>🔗</span> {contact.website}
+                <span style={{ color: ACCENT }}>🔗</span> <ContactLink value={contact.website} type="website" />
               </span>
             )}
           </div>

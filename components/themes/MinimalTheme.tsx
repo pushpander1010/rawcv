@@ -1,4 +1,5 @@
 import type { ParsedResume } from "@/types";
+import { ContactLink } from "./ContactLink";
 
 interface Props {
   resume: ParsedResume;
@@ -13,11 +14,11 @@ export default function MinimalTheme({ resume }: Props) {
       <div className="mb-8">
         <h1 className="text-4xl font-light tracking-tight text-gray-900 mb-2">{contact.name}</h1>
         <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-gray-400">
-          {contact.email && <span>{contact.email}</span>}
-          {contact.phone && <span>{contact.phone}</span>}
-          {contact.location && <span>{contact.location}</span>}
-          {contact.linkedin && <span>{contact.linkedin}</span>}
-          {contact.website && <span>{contact.website}</span>}
+          {contact.email && <ContactLink value={contact.email} type="email" />}
+          {contact.phone && <ContactLink value={contact.phone} type="phone" />}
+          {contact.location && <ContactLink value={contact.location} type="location" />}
+          {contact.linkedin && <ContactLink value={contact.linkedin} type="linkedin" />}
+          {contact.website && <ContactLink value={contact.website} type="website" />}
         </div>
       </div>
 
