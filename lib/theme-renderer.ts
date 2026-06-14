@@ -66,10 +66,21 @@ function contactHref(type: string, value: string): string | null {
 
 /** Render a contact field as a clickable link (or plain text for location) */
 function contactHtml(type: string, value: string, display?: string): string {
+  if (!value?.trim()) return "";
   const href = contactHref(type, value);
-  const label = display ?? esc(value);
+  // Build a clean display label
+  let label: string;
+  if (display) {
+    label = esc(display);
+  } else if (type === "linkedin") {
+    label = value.startsWith("http") ? "LinkedIn" : esc(value.replace(/^@/, ""));
+  } else if (type === "website") {
+    try { label = esc(new URL(value.startsWith("http") ? value : `https://${value}`).hostname.replace(/^www\./, "")); } catch { label = esc(value); }
+  } else {
+    label = esc(value);
+  }
   if (!href) return `<span>${label}</span>`;
-  return `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">${label}</a>`;
+  return `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">${label}</a>`;
 }
 
 // ─── Theme HTML generators ────────────────────────────────────────────────────
