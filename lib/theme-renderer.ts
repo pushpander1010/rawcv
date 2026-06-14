@@ -49,7 +49,8 @@ function li(items: string[]): string {
 }
 
 /** Build a clickable <a> tag for a contact field, or plain text for location */
-function contactHref(type: string, value: string): string | null {
+function contactHref(type: string, value: string | undefined): string | null {
+  if (!value?.trim()) return null;
   const v = value.trim();
   switch (type) {
     case "email": return v.startsWith("mailto:") ? v : `mailto:${v}`;
@@ -66,7 +67,7 @@ function contactHref(type: string, value: string): string | null {
 }
 
 /** Render a contact field as a clickable link (or plain text for location) */
-function contactHtml(type: string, value: string, display?: string): string {
+function contactHtml(type: string, value: string | undefined, display?: string): string {
   if (!value?.trim()) return "";
   const href = contactHref(type, value);
   // Build a clean display label
