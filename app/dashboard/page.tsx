@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useResume } from "@/context/ResumeContext";
+import ResumeUploader from "@/components/ResumeUploader";
 import type { CreditTransaction } from "@/lib/user-store";
 
 // ─── Bundle definitions ───────────────────────────────────────────────────────
@@ -351,24 +352,22 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
             </div>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center py-4 text-center">
-              <div className="w-14 h-14 mb-2.5 rounded-2xl overflow-hidden border border-violet-100 dark:border-violet-900/30 p-1 bg-gradient-to-b from-violet-50/50 to-white dark:from-violet-950/20 dark:to-gray-900 shadow-sm shrink-0">
-                <img
-                  src="/upload_illustration.png"
-                  alt="Upload Resume Illustration"
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
-              <p className="text-xs text-gray-400 dark:text-gray-500 leading-relaxed max-w-[200px] font-medium">
-                Upload a resume to get started with analysis and tailoring.
-              </p>
+              <ResumeUploader />
             </div>
           )}
-          <Link
-            href="/analyze"
-            className="mt-auto inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-md shadow-violet-500/10 hover:shadow-violet-500/25 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-          >
-            {hasResume ? "Re-analyze →" : "Upload resume →"}
-          </Link>
+          {hasResume ? (
+            <div className="flex gap-2">
+              <Link
+                href="/analyze"
+                className="flex-1 inline-flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-md shadow-violet-500/10 hover:shadow-violet-500/25 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              >
+                Re-analyze →
+              </Link>
+              <div className="flex-1">
+                <ResumeUploader />
+              </div>
+            </div>
+          ) : null}
         </div>
 
         {/* Credit balance card */}

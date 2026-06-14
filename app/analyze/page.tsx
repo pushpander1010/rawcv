@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useResume } from "@/context/ResumeContext";
+import ResumeUploader from "@/components/ResumeUploader";
 import ATSScoreCard from "@/components/ATSScoreCard";
 import RelevanceScoreCard from "@/components/RelevanceScoreCard";
 import SuggestionsList from "@/components/SuggestionsList";
@@ -67,19 +68,14 @@ export default function AnalyzePage() {
             Upload your CV to unlock detailed ATS checking, keyword relevance analysis, and automated bullet tailoring.
           </p>
           
-          <div className="flex flex-col gap-3">
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 text-white font-semibold shadow-lg shadow-violet-500/25 dark:shadow-none hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
-              Upload Resume
-            </Link>
+          <div className="max-w-sm mx-auto">
+            <ResumeUploader />
+          </div>
+
+          <div className="mt-6">
             <Link
               href="/chat"
-              className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm"
             >
               💬 Build from Scratch
             </Link>
