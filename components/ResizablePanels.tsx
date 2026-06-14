@@ -90,7 +90,7 @@ export default function ResizablePanels({
         <div className={`flex-1 overflow-hidden bg-white dark:bg-gray-900 ${mobileTab === "left" ? "flex flex-col" : "hidden"}`}>
           {left}
         </div>
-        <div className={`flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-950 ${mobileTab === "right" ? "block" : "hidden"}`}>
+        <div className={`flex-1 overflow-y-auto overflow-x-auto bg-gray-100 dark:bg-gray-950 ${mobileTab === "right" ? "block" : "hidden"}`}>
           {right}
         </div>
       </div>

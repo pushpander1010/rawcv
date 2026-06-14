@@ -44,8 +44,10 @@ export default function ResumePreview({ resume, theme, bare = false }: Props) {
   if (bare) return <ThemeComponent resume={safe} />;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-      <ThemeComponent resume={safe} />
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 min-w-0">
+      <div className="min-w-[640px] md:min-w-0">
+        <ThemeComponent resume={safe} />
+      </div>
     </div>
   );
 }
