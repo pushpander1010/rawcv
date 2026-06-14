@@ -44,7 +44,10 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
 
   const handleFile = useCallback(
     async (file: File) => {
-      if (lowCredits) return; // blocked — UI already shows the message
+      if (lowCredits) {
+        showToast(`Upload requires ${PARSE_COST} credits. You have ${balance ?? 0}.`, "error");
+        return;
+      } // blocked — UI already shows the message
 
       const error = validateFile(file);
       if (error) {
@@ -60,8 +63,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
 
       await parseAndLoad(file);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hasResume]
+    [hasResume, lowCredits]
   );
 
   const parseAndLoad = useCallback(

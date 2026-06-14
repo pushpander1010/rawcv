@@ -179,7 +179,7 @@ export async function POST(req: NextRequest) {
       parsed = normalizeParsed({});
     }
 
-    return NextResponse.json({ success: true, parsed });
+    return NextResponse.json({ success: true, parsed, raw: rawText });
   } catch (err) {
     console.error("[parse] unexpected error:", err);
     return NextResponse.json(
