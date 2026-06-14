@@ -48,6 +48,30 @@ function li(items: string[]): string {
   return items.map((i) => `<li>${esc(i)}</li>`).join("");
 }
 
+/** Build a clickable <a> tag for a contact field, or plain text for location */
+function contactHref(type: string, value: string): string | null {
+  const v = value.trim();
+  switch (type) {
+    case "email": return v.startsWith("mailto:") ? v : `mailto:${v}`;
+    case "phone": return `tel:${v.replace(/[^+\d]/g, "")}`;
+    case "linkedin":
+      if (v.startsWith("http")) return v;
+      return `https://linkedin.com/in/${v.replace(/^@/, "").replace(/^linkedin\.com\/in\//i, "")}`;
+    case "website":
+      if (v.startsWith("http")) return v;
+      return `https://${v}`;
+    default: return null;
+  }
+}
+
+/** Render a contact field as a clickable link (or plain text for location) */
+function contactHtml(type: string, value: string, display?: string): string {
+  const href = contactHref(type, value);
+  const label = display ?? esc(value);
+  if (!href) return `<span>${label}</span>`;
+  return `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">${label}</a>`;
+}
+
 // ─── Theme HTML generators ────────────────────────────────────────────────────
 
 function renderClassic(r: ParsedResume): string {
@@ -57,7 +81,7 @@ function renderClassic(r: ParsedResume): string {
       <div style="text-align:center;border-bottom:2px solid #222;padding-bottom:16px;margin-bottom:24px;">
         <h1 style="font-size:24px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 6px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;font-size:11px;color:#555;">
-          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<span>${v}</span>`).join("")}
+          ${[contactHtml("email", contact.email), contactHtml("phone", contact.phone), contactHtml("location", contact.location), contactHtml("linkedin", contact.linkedin), contactHtml("website", contact.website)].join("")}
         </div>
       </div>
       ${summary ? `<section style="margin-bottom:20px;"><h2 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #aaa;padding-bottom:4px;margin-bottom:8px;">Professional Summary</h2><p style="color:#444;">${esc(summary)}</p></section>` : ""}
@@ -76,7 +100,7 @@ function renderModern(r: ParsedResume): string {
       <div style="width:220px;background:#1e293b;color:#fff;padding:24px;flex-shrink:0;">
         <h1 style="font-size:16px;font-weight:700;margin:0 0 4px;">${esc(contact.name)}</h1>
         <div style="font-size:11px;color:#94a3b8;margin-bottom:20px;">
-          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<div>${v}</div>`).join("")}
+          ${[contactHtml("email", contact.email), contactHtml("phone", contact.phone), contactHtml("location", contact.location), contactHtml("linkedin", contact.linkedin), contactHtml("website", contact.website)].join("")}
         </div>
         ${skills.length ? `<div style="margin-bottom:20px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:8px;">Skills</div><div style="display:flex;flex-wrap:wrap;gap:4px;">${skills.map((s) => `<span style="background:#334155;color:#cbd5e1;font-size:10px;padding:2px 6px;border-radius:3px;">${esc(s)}</span>`).join("")}</div></div>` : ""}
         ${education.length ? `<div style="margin-bottom:20px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:8px;">Education</div>${education.map((e) => `<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:600;">${esc(e.degree)}</div><div style="font-size:11px;color:#94a3b8;">${esc(e.field)}</div><div style="font-size:11px;color:#64748b;">${esc(e.institution)}</div><div style="font-size:10px;color:#475569;">${esc(e.graduationYear)}</div></div>`).join("")}</div>` : ""}
@@ -97,7 +121,7 @@ function renderMinimal(r: ParsedResume): string {
       <div style="margin-bottom:32px;">
         <h1 style="font-size:28px;font-weight:300;letter-spacing:-1px;color:#111;margin:0 0 8px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#aaa;">
-          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<span>${v}</span>`).join("")}
+          ${[contactHtml("email", contact.email), contactHtml("phone", contact.phone), contactHtml("location", contact.location), contactHtml("linkedin", contact.linkedin), contactHtml("website", contact.website)].join("")}
         </div>
       </div>
       ${summary ? `<section style="margin-bottom:28px;"><p style="color:#666;line-height:1.7;">${esc(summary)}</p></section>` : ""}
@@ -116,7 +140,7 @@ function renderExecutive(r: ParsedResume): string {
       <div style="background:#111;color:#fff;padding:32px 40px;">
         <h1 style="font-size:24px;font-weight:700;letter-spacing:1px;margin:0 0 8px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:20px;font-size:11px;color:#9ca3af;">
-          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<span>${v}</span>`).join("")}
+          ${[contactHtml("email", contact.email), contactHtml("phone", contact.phone), contactHtml("location", contact.location), contactHtml("linkedin", contact.linkedin), contactHtml("website", contact.website)].join("")}
         </div>
       </div>
       <div style="padding:32px 40px;">
@@ -143,7 +167,7 @@ function renderCreative(r: ParsedResume): string {
       <div style="background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;padding:32px 40px;">
         <h1 style="font-size:24px;font-weight:700;margin:0 0 8px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#ddd6fe;">
-          ${[contact.email, contact.phone, contact.location, contact.linkedin, contact.website].filter(Boolean).map(esc).map((v) => `<span>${v}</span>`).join("")}
+          ${[contactHtml("email", contact.email), contactHtml("phone", contact.phone), contactHtml("location", contact.location), contactHtml("linkedin", contact.linkedin), contactHtml("website", contact.website)].join("")}
         </div>
       </div>
       <div style="padding:32px 40px;">
@@ -172,7 +196,7 @@ function renderSharp(r: ParsedResume): string {
       <div style="background:#000;color:#fff;padding:28px 40px;">
         <h1 style="font-size:26px;font-weight:900;letter-spacing:-1px;text-transform:uppercase;margin:0 0 6px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:#aaa;font-family:monospace;">
-          ${[contact.email,contact.phone,contact.location,contact.linkedin,contact.website].filter(Boolean).map(esc).map(v=>`<span>${v}</span>`).join("")}
+          ${[contactHtml("email", contact.email),contactHtml("phone", contact.phone),contactHtml("location", contact.location),contactHtml("linkedin", contact.linkedin),contactHtml("website", contact.website)].join("")}
         </div>
       </div>
       <div style="padding:32px 40px;">
@@ -200,7 +224,7 @@ function renderNavy(r: ParsedResume): string {
         <div style="padding:28px 20px;border-bottom:1px solid rgba(255,255,255,0.1);">
           <h1 style="font-size:15px;font-weight:700;margin:0 0 10px;">${esc(contact.name)}</h1>
           <div style="font-size:11px;color:#93c5fd;">
-            ${[contact.email,contact.phone,contact.location,contact.linkedin,contact.website].filter(Boolean).map(esc).map(v=>`<div style="margin-bottom:3px;">${v}</div>`).join("")}
+            ${[contactHtml("email", contact.email),contactHtml("phone", contact.phone),contactHtml("location", contact.location),contactHtml("linkedin", contact.linkedin),contactHtml("website", contact.website)].join("")}
           </div>
         </div>
         ${skills.length?`<div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.1);"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#fbbf24;margin-bottom:10px;">Skills</div>${skills.map(s=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;"><div style="width:5px;height:5px;border-radius:50%;background:#fbbf24;flex-shrink:0;"></div><span style="font-size:11px;color:#bfdbfe;">${esc(s)}</span></div>`).join("")}</div>`:""}
@@ -222,7 +246,7 @@ function renderTerra(r: ParsedResume): string {
       <div style="background:#8b4513;color:#fff;padding:28px 40px;">
         <h1 style="font-size:26px;font-weight:700;margin:0 0 8px;">${esc(contact.name)}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#fcd9b0;">
-          ${[contact.email,contact.phone,contact.location,contact.linkedin,contact.website].filter(Boolean).map(esc).map(v=>`<span>${v}</span>`).join("")}
+          ${[contactHtml("email", contact.email),contactHtml("phone", contact.phone),contactHtml("location", contact.location),contactHtml("linkedin", contact.linkedin),contactHtml("website", contact.website)].join("")}
         </div>
       </div>
       <div style="padding:32px 40px;">
@@ -253,11 +277,11 @@ function renderEnhancv(r: ParsedResume): string {
         <div style="font-family:sans-serif;font-weight:600;font-size:28px;text-transform:uppercase;letter-spacing:1px;line-height:1;color:#000;margin-bottom:4px;">${esc(contact.name)}</div>
         ${experience[0]?.title?`<div style="color:${accent};font-size:14px;margin-bottom:8px;">${esc(experience[0].title)}</div>`:""}
         <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#444;">
-          ${contact.phone?`<span>☎ ${esc(contact.phone)}</span>`:""}
-          ${contact.email?`<span>✉ ${esc(contact.email)}</span>`:""}
-          ${contact.location?`<span>⌖ ${esc(contact.location)}</span>`:""}
-          ${contact.linkedin?`<span>in ${esc(contact.linkedin)}</span>`:""}
-          ${contact.website?`<span>🔗 ${esc(contact.website)}</span>`:""}
+          ${contact.phone?`<span>☎ ${contactHtml("phone", contact.phone)}</span>`:""}
+          ${contact.email?`<span>✉ ${contactHtml("email", contact.email)}</span>`:""}
+          ${contact.location?`<span>⌖ ${contactHtml("location", contact.location)}</span>`:""}
+          ${contact.linkedin?`<span>in ${contactHtml("linkedin", contact.linkedin)}</span>`:""}
+          ${contact.website?`<span>🔗 ${contactHtml("website", contact.website)}</span>`:""}
         </div>
       </div>
       <div style="width:72px;height:72px;border-radius:50%;background:${accent};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0;">${initials}</div>
