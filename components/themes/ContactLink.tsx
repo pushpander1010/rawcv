@@ -16,14 +16,13 @@ function getHref(type: string, value: string): string | null {
       return `tel:${digits}`;
     }
     case "linkedin": {
-      // If it's already a full URL, use it; otherwise construct from handle
       if (v.startsWith("http")) return v;
-      const handle = v.replace(/^@/, "").replace(/^linkedin\.com\/in\//i, "");
-      return `https://linkedin.com/in/${handle}`;
+      if (v.includes("linkedin.com")) return `https://${v.replace(/^(www\.)?/, "")}`;
+      return `https://linkedin.com/in/${v.replace(/^@/, "")}`;
     }
     case "website": {
       if (v.startsWith("http")) return v;
-      return `https://${v}`;
+      return `https://${v.replace(/^(www\.)?/, "")}`;
     }
     default:
       return null;
@@ -38,8 +37,7 @@ function getLabel(type: string, value: string): string {
     case "phone":
       return v;
     case "linkedin": {
-      // Show "LinkedIn" for full URLs, or the handle for short ones
-      if (v.startsWith("http")) return "LinkedIn";
+      if (v.startsWith("http") || v.startsWith("www") || v.includes("linkedin.com")) return "LinkedIn";
       return v.replace(/^@/, "");
     }
     case "website": {

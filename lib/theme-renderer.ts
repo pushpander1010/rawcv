@@ -56,10 +56,11 @@ function contactHref(type: string, value: string): string | null {
     case "phone": return `tel:${v.replace(/[^+\d]/g, "")}`;
     case "linkedin":
       if (v.startsWith("http")) return v;
-      return `https://linkedin.com/in/${v.replace(/^@/, "").replace(/^linkedin\.com\/in\//i, "")}`;
+      if (v.includes("linkedin.com")) return `https://${v.replace(/^(www\.)?/, "")}`;
+      return `https://linkedin.com/in/${v.replace(/^@/, "")}`;
     case "website":
       if (v.startsWith("http")) return v;
-      return `https://${v}`;
+      return `https://${v.replace(/^(www\.)?/, "")}`;
     default: return null;
   }
 }
@@ -73,7 +74,7 @@ function contactHtml(type: string, value: string, display?: string): string {
   if (display) {
     label = esc(display);
   } else if (type === "linkedin") {
-    label = value.startsWith("http") ? "LinkedIn" : esc(value.replace(/^@/, ""));
+    label = value.startsWith("http") || value.startsWith("www") || value.includes("linkedin.com") ? "LinkedIn" : esc(value.replace(/^@/, ""));
   } else if (type === "website") {
     try { label = esc(new URL(value.startsWith("http") ? value : `https://${value}`).hostname.replace(/^www\./, "")); } catch { label = esc(value); }
   } else {
