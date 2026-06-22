@@ -4,6 +4,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { getUserByEmail, INITIAL_CREDITS } from "./user-store";
+import { logAuthFailure, clearFailures } from "./security-log";
+import { getIp } from "./rate-limit";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -17,19 +19,41 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await getUserByEmail(credentials.email);
-        if (!user) return null;
+        // Extract client IP from the raw request headers
+        const ip =
+          (req?.headers as Record<string, string | undefined>)?.[
+            "x-forwarded-for"
+          ]?.split(",")[0]?.trim() ??
+          (req?.headers as Record<string, string | undefined>)?.["x-real-ip"] ??
+          "unknown";
+
+        const email = credentials.email.toLowerCase();
+
+        const user = await getUserByEmail(email);
+        if (!user) {
+          logAuthFailure(ip, email, "user_not_found");
+          return null;
+        }
 
         const passwordMatch = await bcrypt.compare(
           credentials.password,
           user.hashedPassword!
         );
-        if (!passwordMatch) return null;
+        if (!passwordMatch) {
+          logAuthFailure(ip, email, "wrong_password");
+          return null;
+        }
 
-        if (!user.emailVerified) throw new Error("email_not_verified");
+        if (!user.emailVerified) {
+          logAuthFailure(ip, email, "email_not_verified");
+          throw new Error("email_not_verified");
+        }
+
+        // Successful login — clear failure counter
+        clearFailures(ip);
 
         return { id: user.id, email: user.email, name: user.name };
       },

@@ -6,9 +6,11 @@ import { randomUUID } from "crypto";
 import { createUser, getUserByEmail, updateUser } from "@/lib/user-store";
 import { sendVerificationEmail } from "@/lib/email";
 import { rateLimit, getIp } from "@/lib/rate-limit";
+import { verifyCaptcha } from "@/lib/captcha";
 
 export async function POST(req: NextRequest) {
-  const { allowed, retryAfter } = await rateLimit(`register:${getIp(req)}`, 5, 15 * 60 * 1000);
+  const ip = getIp(req);
+  const { allowed, retryAfter } = await rateLimit(`register:${ip}`, 5, 15 * 60 * 1000);
   if (!allowed) {
     return NextResponse.json(
       { error: "too_many_requests", message: "Too many attempts. Please try again later." },
@@ -16,7 +18,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { name, email, password } = await req.json();
+  const { name, email, password, captchaToken } = await req.json();
+
+  // CAPTCHA verification
+  const captcha = await verifyCaptcha(captchaToken);
+  if (!captcha.success) {
+    return NextResponse.json(
+      { error: "captcha_failed", message: captcha.error ?? "CAPTCHA verification failed." },
+      { status: 403 }
+    );
+  }
 
   if (!name || !email || !password) {
     return NextResponse.json(
@@ -78,7 +89,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         error: "email_send_failed",
-        message: `Account created but verification email failed: ${err instanceof Error ? err.message : String(err)}`,
+        message: "Account created but verification email failed. Please contact support.",
       },
       { status: 201 }
     );
@@ -89,4 +100,3 @@ export async function POST(req: NextRequest) {
     { status: 201 }
   );
 }
-

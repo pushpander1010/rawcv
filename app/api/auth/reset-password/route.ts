@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { getUserByValidResetToken, updateUser, clearPasswordResetToken } from "@/lib/user-store";
 import { rateLimit, getIp } from "@/lib/rate-limit";
+import { verifyCaptcha } from "@/lib/captcha";
 
 export async function POST(req: NextRequest) {
   const { allowed, retryAfter } = await rateLimit(`reset-password:${getIp(req)}`, 5, 15 * 60 * 1000);
@@ -14,7 +15,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { token, password } = await req.json();
+  const { token, password, captchaToken } = await req.json();
+
+  // CAPTCHA verification
+  const captcha = await verifyCaptcha(captchaToken);
+  if (!captcha.success) {
+    return NextResponse.json(
+      { error: "captcha_failed", message: captcha.error ?? "CAPTCHA verification failed." },
+      { status: 403 }
+    );
+  }
 
   if (!token || !password || password.length < 8) {
     return NextResponse.json(
@@ -26,7 +36,10 @@ export async function POST(req: NextRequest) {
   // Single atomic query: validates token AND expiry together
   const user = await getUserByValidResetToken(token);
   if (!user) {
-    return NextResponse.json({ error: "invalid_token", message: "Invalid or expired reset link." }, { status: 400 });
+    return NextResponse.json(
+      { error: "invalid_token", message: "Invalid or expired reset link." },
+      { status: 400 }
+    );
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -35,4 +48,3 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ message: "Password updated. You can now sign in." });
 }
-
