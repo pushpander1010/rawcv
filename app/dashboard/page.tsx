@@ -135,8 +135,8 @@ function CreditsTab() {
           <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-1">
             Top Up Your Account
           </h2>
-          text-xs sm:text-sm text-gray-600 dark:text-gray-400 max-w-md leading-relaxed">
-                      Credits power your AI resume actions
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 max-w-md leading-relaxed">
+            Credits power your AI resume actions
           </p>
         </div>
         <div className="w-24 h-24 shrink-0 relative rounded-2xl overflow-hidden border border-violet-100 dark:border-violet-900/30 p-1 bg-white dark:bg-gray-900 shadow-md transform hover:scale-[1.03] transition-transform duration-300">
