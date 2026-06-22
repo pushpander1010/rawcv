@@ -161,7 +161,7 @@ function CreditsTab() {
                 <span className="bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent">
                   {state.creditBalance ?? 0}
                 </span>
-                <span className="text-sm font-semibold text-gray-550 dark:text-gray-400 tracking-normal">credits available</span>
+                <span className="text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-normal">credits available</span>
               </p>
             )}
           </div>
@@ -191,11 +191,11 @@ function CreditsTab() {
               )}
               <div>
                 <p className="font-extrabold text-gray-950 dark:text-gray-100 tracking-tight">{b.name}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 leading-normal">{b.description}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-normal">{b.description}</p>
               </div>
               
               <div className="my-1 p-3.5 rounded-2xl bg-gray-50 dark:bg-gray-850/40 border border-gray-100 dark:border-gray-800/60 shadow-inner flex flex-col gap-1">
-                <p className="text-2xl font-black text-gray-900 dark:text-gray-100 tracking-tight">{b.credits} <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">credits</span></p>
+                <p className="text-2xl font-black text-gray-900 dark:text-gray-100 tracking-tight">{b.credits} <span className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">credits</span></p>
                 <p className="text-lg font-bold bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent">₹{b.priceInr.toLocaleString("en-IN")}</p>
               </div>
 
@@ -223,7 +223,7 @@ function CreditsTab() {
           <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-14 bg-gray-100 dark:bg-gray-850 rounded-2xl animate-pulse" />)}</div>
         ) : transactions.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-gray-255 dark:border-gray-800 p-8 text-center bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-500 dark:text-gray-500">No transactions recorded yet.</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">No transactions recorded yet.</p>
           </div>
         ) : (
           <div className="rounded-2xl border border-gray-200 dark:border-gray-850 overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
@@ -231,7 +231,7 @@ function CreditsTab() {
               <table className="w-full text-sm text-left" aria-label="Credit transaction history">
                 <thead>
                   <tr className="bg-gray-55 dark:bg-gray-800/40 text-left border-b border-gray-100 dark:border-gray-800">
-                    <th className="px-5 py-3 font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-xs">Description</th>
+                    <th className="px-5 py-3 font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider text-xs">Description</th>
                     <th className="px-5 py-3 font-bold text-gray-500 dark:text-gray-400 text-right uppercase tracking-wider text-xs">Credits</th>
                     <th className="px-5 py-3 font-bold text-gray-500 dark:text-gray-400 text-right hidden sm:table-cell uppercase tracking-wider text-xs">Date</th>
                   </tr>
@@ -239,11 +239,11 @@ function CreditsTab() {
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                   {transactions.map((tx) => (
                     <tr key={tx.id} className="bg-white dark:bg-gray-900 hover:bg-gray-50/50 dark:hover:bg-gray-850/30 transition-colors">
-                      <td className="px-5 py-3 text-gray-800 dark:text-gray-200 font-medium">{tx.description}</td>
+                      <td className="px-5 py-3 text-gray-900 dark:text-gray-100 font-medium">{tx.description}</td>
                       <td className={`px-5 py-3 text-right font-bold tabular-nums ${tx.amount > 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-450"}`}>
                         {tx.amount > 0 ? `+${tx.amount}` : tx.amount}
                       </td>
-                      <td className="px-5 py-3 text-right text-gray-500 dark:text-gray-500 hidden sm:table-cell">
+                      <td className="px-5 py-3 text-right text-gray-600 dark:text-gray-400 hidden sm:table-cell">
                         {new Date(tx.createdAt).toLocaleDateString(undefined, {
                           year: 'numeric',
                           month: 'short',
@@ -390,7 +390,7 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
           <div className="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden" role="progressbar" aria-valuenow={balance} aria-valuemin={0} aria-valuemax={100} aria-label="Credit balance">
             <div className={`h-full rounded-full transition-all duration-500 ${barColor}`} style={{ width: `${barPct}%` }} />
           </div>
-          <p className="text-xxs text-gray-500 dark:text-gray-500 font-medium">Each AI operation costs 2 credits.</p>
+          <p className="text-xxs text-gray-600 dark:text-gray-400 font-medium">Each AI operation costs 2 credits.</p>
           <button
             type="button"
             onClick={() => onSwitchTab("credits")}
