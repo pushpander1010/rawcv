@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useResume } from "@/context/ResumeContext";
 
 interface CropArea {
@@ -21,7 +21,8 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
   const [showCropModal, setShowCropModal] = useState(false);
   const [originalImage, setOriginalImage] = useState<string | null>(null);
   const [cropArea, setCropArea] = useState<CropArea>({ x: 0, y: 0, width: 100, height: 100 });
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const [naturalSize, setNaturalSize] = useState({ width: 0, height: 0 });
+  const [displaySize, setDisplaySize] = useState({ width: 0, height: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [brightness, setBrightness] = useState(100);
@@ -29,7 +30,6 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const renderedImageRef = useRef<{ width: number; height: number }>({ width: 0, height: 0 });
   const lastDragEndRef = useRef(0);
 
@@ -79,37 +79,36 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
   const handleImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
     imgRef.current = img;
-    setImageSize({ width: img.naturalWidth, height: img.naturalHeight });
-    // Compute rendered dimensions accounting for max-h-64 constraint
-    const container = containerRef.current;
-    if (container) {
-      const containerRect = container.getBoundingClientRect();
-      const imgNaturalAspect = img.naturalWidth / img.naturalHeight;
-      // The img has w-full (container width) and max-h-64
-      const maxHeightPx = 256; // 64 * 4 = 256px (Tailwind max-h-64 = 16rem = 256px)
-      const renderedW = containerRect.width;
-      const renderedH = Math.min(containerRect.width / imgNaturalAspect, maxHeightPx);
-      renderedImageRef.current = { width: renderedW, height: renderedH };
-    }
-    const size = Math.min(img.naturalWidth, img.naturalHeight) * 0.7;
+    const natW = img.naturalWidth;
+    const natH = img.naturalHeight;
+    setNaturalSize({ width: natW, height: natH });
+
+    // Compute actual rendered size from the element
+    const displayW = img.clientWidth;
+    const displayH = img.clientHeight;
+    setDisplaySize({ width: displayW, height: displayH });
+    renderedImageRef.current = { width: displayW, height: displayH };
+
+    // Set initial crop to center 80% of display area
+    const size = Math.min(displayW, displayH) * 0.8;
     setCropArea({
-      x: (img.naturalWidth - size) / 2,
-      y: (img.naturalHeight - size) / 2,
+      x: (displayW - size) / 2,
+      y: (displayH - size) / 2,
       width: size,
       height: size,
     });
   }, []);
 
-  // Convert crop area from natural image coords to display percentages
+  // Convert display crop to percentages for overlay positioning
   const getCropDisplay = useCallback(() => {
-    if (imageSize.width === 0 || imageSize.height === 0) return null;
+    if (displaySize.width === 0 || displaySize.height === 0) return null;
     return {
-      left: (cropArea.x / imageSize.width) * 100,
-      top: (cropArea.y / imageSize.height) * 100,
-      width: (cropArea.width / imageSize.width) * 100,
-      height: (cropArea.height / imageSize.height) * 100,
+      left: (cropArea.x / displaySize.width) * 100,
+      top: (cropArea.y / displaySize.height) * 100,
+      width: (cropArea.width / displaySize.width) * 100,
+      height: (cropArea.height / displaySize.height) * 100,
     };
-  }, [cropArea, imageSize]);
+  }, [cropArea, displaySize]);
 
   // Unified pointer down handler for move + all 8 resize handles
   const handlePointerDown = useCallback((e: React.PointerEvent, type: "move" | "tl" | "tr" | "bl" | "br" | "t" | "b" | "l" | "r") => {
@@ -125,32 +124,36 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
   }, [cropArea]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
-    if (!dragRef.current || imageSize.width === 0) return;
+    if (!dragRef.current || displaySize.width === 0) return;
     e.preventDefault();
 
-    // Use the actual rendered image element for scale calculation
+    // The crop is in display pixels, so we compute delta in display pixels
+    // But the image has zoom transform — we need to account for that
     const imgEl = imgRef.current;
     if (!imgEl) return;
-    const imgRect = imgEl.getBoundingClientRect();
 
-    // Account for zoom: the image is rendered at zoom× its CSS display size
-    const scaleX = imageSize.width / (imgRect.width * zoom);
-    const scaleY = imageSize.height / (imgRect.height * zoom);
+    // The image is rendered with CSS transform scale(zoom).
+    // clientWidth/clientHeight don't change with CSS transforms,
+    // so the actual on-screen size is displaySize * zoom.
+    const onScreenW = displaySize.width * zoom;
+    const onScreenH = displaySize.height * zoom;
+    const scaleX = displaySize.width / onScreenW;
+    const scaleY = displaySize.height / onScreenH;
 
     const dx = (e.clientX - dragRef.current.startX) * scaleX;
     const dy = (e.clientY - dragRef.current.startY) * scaleY;
 
     const { type, startCrop } = dragRef.current;
-    const MIN_SIZE = 50; // minimum crop size in natural pixels
+    const MIN_SIZE = 30;
 
     let newCrop = { ...startCrop };
 
     if (type === "move") {
-      newCrop.x = clamp(startCrop.x + dx, 0, imageSize.width - startCrop.width);
-      newCrop.y = clamp(startCrop.y + dy, 0, imageSize.height - startCrop.height);
+      newCrop.x = clamp(startCrop.x + dx, 0, displaySize.width - startCrop.width);
+      newCrop.y = clamp(startCrop.y + dy, 0, displaySize.height - startCrop.height);
     } else if (type === "br") {
-      newCrop.width = clamp(startCrop.width + dx, MIN_SIZE, imageSize.width - startCrop.x);
-      newCrop.height = clamp(startCrop.height + dy, MIN_SIZE, imageSize.height - startCrop.y);
+      newCrop.width = clamp(startCrop.width + dx, MIN_SIZE, displaySize.width - startCrop.x);
+      newCrop.height = clamp(startCrop.height + dy, MIN_SIZE, displaySize.height - startCrop.y);
     } else if (type === "tl") {
       const w = clamp(startCrop.width - dx, MIN_SIZE, startCrop.x + startCrop.width);
       const h = clamp(startCrop.height - dy, MIN_SIZE, startCrop.y + startCrop.height);
@@ -159,7 +162,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
       newCrop.width = w;
       newCrop.height = h;
     } else if (type === "tr") {
-      newCrop.width = clamp(startCrop.width + dx, MIN_SIZE, imageSize.width - startCrop.x);
+      newCrop.width = clamp(startCrop.width + dx, MIN_SIZE, displaySize.width - startCrop.x);
       const h = clamp(startCrop.height - dy, MIN_SIZE, startCrop.y + startCrop.height);
       newCrop.y = startCrop.y + startCrop.height - h;
       newCrop.height = h;
@@ -167,23 +170,23 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
       const w = clamp(startCrop.width - dx, MIN_SIZE, startCrop.x + startCrop.width);
       newCrop.x = startCrop.x + startCrop.width - w;
       newCrop.width = w;
-      newCrop.height = clamp(startCrop.height + dy, MIN_SIZE, imageSize.height - startCrop.y);
+      newCrop.height = clamp(startCrop.height + dy, MIN_SIZE, displaySize.height - startCrop.y);
     } else if (type === "t") {
       const h = clamp(startCrop.height - dy, MIN_SIZE, startCrop.y + startCrop.height);
       newCrop.y = startCrop.y + startCrop.height - h;
       newCrop.height = h;
     } else if (type === "b") {
-      newCrop.height = clamp(startCrop.height + dy, MIN_SIZE, imageSize.height - startCrop.y);
+      newCrop.height = clamp(startCrop.height + dy, MIN_SIZE, displaySize.height - startCrop.y);
     } else if (type === "l") {
       const w = clamp(startCrop.width - dx, MIN_SIZE, startCrop.x + startCrop.width);
       newCrop.x = startCrop.x + startCrop.width - w;
       newCrop.width = w;
     } else if (type === "r") {
-      newCrop.width = clamp(startCrop.width + dx, MIN_SIZE, imageSize.width - startCrop.x);
+      newCrop.width = clamp(startCrop.width + dx, MIN_SIZE, displaySize.width - startCrop.x);
     }
 
     setCropArea(newCrop);
-  }, [imageSize, zoom]);
+  }, [displaySize, zoom]);
 
   const handlePointerUp = useCallback(() => {
     dragRef.current = null;
@@ -192,28 +195,45 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
 
   // Click on image to reposition crop center
   const handleCropClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (dragRef.current) return; // ignore if we're currently dragging
-    if (Date.now() - lastDragEndRef.current < 150) return; // ignore post-drag click
+    if (dragRef.current) return;
+    if (Date.now() - lastDragEndRef.current < 150) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const relX = (x / rect.width) * imageSize.width;
-    const relY = (y / rect.height) * imageSize.height;
+    // Convert screen coords to display coords (accounting for zoom)
+    const relX = (x / rect.width) * displaySize.width;
+    const relY = (y / rect.height) * displaySize.height;
 
     setCropArea((prev) => ({
       ...prev,
-      x: clamp(relX - prev.width / 2, 0, imageSize.width - prev.width),
-      y: clamp(relY - prev.height / 2, 0, imageSize.height - prev.height),
+      x: clamp(relX - prev.width / 2, 0, displaySize.width - prev.width),
+      y: clamp(relY - prev.height / 2, 0, displaySize.height - prev.height),
     }));
-  }, [imageSize]);
+  }, [displaySize]);
 
   const applyCrop = useCallback(() => {
     const canvas = canvasRef.current;
     const img = imgRef.current;
-    if (!canvas || !img) return;
+    if (!canvas || !img || naturalSize.width === 0 || displaySize.width === 0) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    // Convert display crop coords back to natural image coords
+    const scaleX = naturalSize.width / displaySize.width;
+    const scaleY = naturalSize.height / displaySize.height;
+
+    // When zoomed, the visible area is smaller — account for zoom
+    const visibleNatW = (displaySize.width / zoom) * scaleX;
+    const visibleNatH = (displaySize.height / zoom) * scaleY;
+    const visibleNatX = ((displaySize.width - displaySize.width / zoom) / 2) * scaleX;
+    const visibleNatY = ((displaySize.height - displaySize.height / zoom) / 2) * scaleY;
+
+    // Crop area in natural coords, clamped to visible area
+    const srcX = clamp(visibleNatX + (cropArea.x / displaySize.width) * visibleNatW, 0, naturalSize.width);
+    const srcY = clamp(visibleNatY + (cropArea.y / displaySize.height) * visibleNatH, 0, naturalSize.height);
+    const srcW = (cropArea.width / displaySize.width) * visibleNatW;
+    const srcH = (cropArea.height / displaySize.height) * visibleNatH;
 
     const outputSize = 400;
     canvas.width = outputSize;
@@ -221,28 +241,20 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
 
     ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
 
-    // Zoom is purely CSS — the source image is not zoomed. When zoom > 1,
-    // the visible crop area in the source image is smaller: cropArea / zoom
-    const zoomedWidth = cropArea.width / zoom;
-    const zoomedHeight = cropArea.height / zoom;
-    const zoomedX = cropArea.x + (cropArea.width - zoomedWidth) / 2;
-    const zoomedY = cropArea.y + (cropArea.height - zoomedHeight) / 2;
-
     ctx.save();
     ctx.translate(outputSize / 2, outputSize / 2);
     ctx.rotate((rotation * Math.PI) / 180);
 
-    const scaleX = outputSize / zoomedWidth;
-    const scaleY = outputSize / zoomedHeight;
-    const scale = Math.min(scaleX, scaleY);
+    // Fit the cropped region into the square output
+    const fitScale = Math.min(outputSize / srcW, outputSize / srcH);
 
     ctx.drawImage(
       img,
-      zoomedX, zoomedY, zoomedWidth, zoomedHeight,
-      (-zoomedWidth * scale) / 2,
-      (-zoomedHeight * scale) / 2,
-      zoomedWidth * scale,
-      zoomedHeight * scale,
+      srcX, srcY, srcW, srcH,
+      (-srcW * fitScale) / 2,
+      (-srcH * fitScale) / 2,
+      srcW * fitScale,
+      srcH * fitScale,
     );
     ctx.restore();
 
@@ -252,7 +264,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
     onPhotoChange?.(dataUrl);
     setShowCropModal(false);
     setOriginalImage(null);
-  }, [cropArea, zoom, rotation, brightness, contrast, setState, onPhotoChange]);
+  }, [cropArea, zoom, rotation, brightness, contrast, naturalSize, displaySize, setState, onPhotoChange]);
 
   const removePhoto = useCallback(() => {
     setPreview(null);
@@ -363,8 +375,11 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             {/* Image preview with crop overlay */}
             <div className="p-5">
               <div
-                ref={containerRef}
                 className="relative rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 select-none"
+                style={{
+                  // Constrain container to fit in modal
+                  maxHeight: "50vh",
+                }}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 onPointerLeave={handlePointerUp}
@@ -374,16 +389,19 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
                   src={originalImage}
                   alt="Original"
                   onLoad={handleImageLoad}
-                  className="w-full h-auto max-h-64 object-contain pointer-events-none"
+                  className="w-full h-auto pointer-events-none"
                   style={{
+                    maxHeight: "50vh",
+                    objectFit: "contain",
                     filter: `brightness(${brightness}%) contrast(${contrast}%)`,
                     transform: `rotate(${rotation}deg) scale(${zoom})`,
+                    transformOrigin: "center center",
                   }}
                   draggable={false}
                 />
 
                 {/* Dark overlay outside crop area */}
-                {cropDisplay && imageSize.width > 0 && (
+                {cropDisplay && displaySize.width > 0 && (
                   <>
                     {/* Dim overlay using 4 rectangles around the crop area */}
                     <div className="absolute inset-0 bg-black/50 pointer-events-none" />
@@ -403,12 +421,9 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
                         className="absolute pointer-events-none"
                         style={{
                           width: "100%",
-                          height: "auto",
-                          top: 0,
-                          left: 0,
-                          transform: `rotate(${rotation}deg) scale(${zoom}) translate(-${cropDisplay.left / zoom}%, -${cropDisplay.top / zoom}%)`,
+                          height: "100%",
+                          objectFit: "cover",
                           filter: `brightness(${brightness}%) contrast(${contrast}%)`,
-                          transformOrigin: "top left",
                         }}
                         draggable={false}
                       />
@@ -548,23 +563,20 @@ function Handle({ pos, display, onDown }: {
   display: { left: number; top: number; width: number; height: number };
   onDown: (e: React.PointerEvent, type: HandlePos) => void;
 }) {
-  // Position each handle at the correct edge/corner
   const style: React.CSSProperties = {
     position: "absolute",
     pointerEvents: "auto" as const,
     zIndex: 20,
   };
 
-  const SIZE = 16; // touch target size
-  const DOT = 10;  // visual dot size
+  const SIZE = 16;
+  const DOT = 10;
 
-  // Cursor map
   const cursors: Record<HandlePos, string> = {
     tl: "nwse-resize", tr: "nesw-resize", bl: "nesw-resize", br: "nwse-resize",
     t: "ns-resize", b: "ns-resize", l: "ew-resize", r: "ew-resize",
   };
 
-  // Position logic
   const offset = -DOT / 2;
   switch (pos) {
     case "tl":
