@@ -10,6 +10,8 @@ import type {
   Suggestion,
   TailoredResume,
   ThemeId,
+  CoverLetter,
+  ResumeFormat,
 } from "@/types";
 import { sanitizeResume } from "@/lib/sanitize-resume";
 
@@ -22,12 +24,15 @@ export interface ResumeState {
   enhancements: Suggestion[];
   tailoredResume: TailoredResume | null;
   selectedTheme: ThemeId;
+  selectedFormat: ResumeFormat;
   jd: string;
   lastOperationCost: number | null;
   creditBalance: number | null;
   chatResetSignal: number; // increments on reset so ChatBot can react
   chatClearSignal: number; // increments on clear-chat so ChatBot clears messages only
   chatMessages: Array<{ role: "user" | "assistant"; content: string }>; // persisted chat history
+  coverLetters: CoverLetter[];
+  userPhoto: string | null; // base64 data URL - persisted in localStorage
 }
 
 interface ResumeContextValue {
@@ -51,12 +56,15 @@ const defaultState: ResumeState = {
   enhancements: [],
   tailoredResume: null,
   selectedTheme: "classic",
+  selectedFormat: "general",
   jd: "",
   lastOperationCost: null,
   creditBalance: null,
   chatResetSignal: 0,
   chatClearSignal: 0,
   chatMessages: [],
+  coverLetters: [],
+  userPhoto: null,
 };
 
 const MAX_UNDO = 20;
@@ -68,8 +76,8 @@ function storageKey(userId: string | undefined) {
 // Fields we want to persist (skip transient UI/credit fields)
 const PERSIST_KEYS: (keyof ResumeState)[] = [
   "raw", "parsed", "atsResult", "relevanceResult",
-  "suggestions", "enhancements", "tailoredResume", "selectedTheme", "jd",
-  "chatMessages",
+  "suggestions", "enhancements", "tailoredResume", "selectedTheme", "selectedFormat", "jd",
+  "chatMessages", "coverLetters", "userPhoto",
 ];
 
 function loadPersistedState(userId: string | undefined): Partial<ResumeState> {

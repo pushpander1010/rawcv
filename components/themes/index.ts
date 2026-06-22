@@ -7,3 +7,8 @@ export { default as SharpTheme } from "./SharpTheme";
 export { default as NavyTheme } from "./NavyTheme";
 export { default as TerraTheme } from "./TerraTheme";
 export { default as EnhancTheme } from "./EnhancTheme";
+export { default as EuropassTheme } from "./EuropassTheme";
+export { default as CanadianTheme } from "./CanadianTheme";
+export { default as FotoramTheme } from "./FotoramTheme";
+export { default as ZetyTheme } from "./ZetyTheme";
+export { default as ResumeioTheme } from "./ResumeioTheme";

@@ -12,6 +12,11 @@ import {
   NavyTheme,
   TerraTheme,
   EnhancTheme,
+  EuropassTheme,
+  CanadianTheme,
+  FotoramTheme,
+  ZetyTheme,
+  ResumeioTheme,
 } from "./themes";
 
 interface Props {
@@ -30,6 +35,11 @@ const THEME_MAP: Record<ThemeId, React.ComponentType<{ resume: ParsedResume }>> 
   navy: NavyTheme,
   terra: TerraTheme,
   enhancv: EnhancTheme,
+  europass: EuropassTheme,
+  canadian: CanadianTheme,
+  fotoram: FotoramTheme,
+  zety: ZetyTheme,
+  resumeio: ResumeioTheme,
 };
 
 export default function ResumePreview({ resume, theme, bare = false }: Props) {

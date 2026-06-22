@@ -62,6 +62,12 @@ export default function Navbar() {
                   💬 Chat
                 </Link>
                 <Link
+                  href="/cover-letter"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  📝 Cover Letter
+                </Link>
+                <Link
                   href="/contact"
                   className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
@@ -88,6 +94,18 @@ export default function Navbar() {
                   className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   🆓 Free Builder
+                </Link>
+                <Link
+                  href="/resume-templates"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  🎨 Templates
+                </Link>
+                <Link
+                  href="/cover-letter"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  📝 Cover Letter
                 </Link>
                 <Link
                   href="/blog"
@@ -290,6 +308,13 @@ export default function Navbar() {
                   💬 Chat
                 </Link>
                 <Link
+                  href="/cover-letter"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  📝 Cover Letter
+                </Link>
+                <Link
                   href="/contact"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -319,6 +344,20 @@ export default function Navbar() {
                   className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   🆓 Free Builder
+                </Link>
+                <Link
+                  href="/resume-templates"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  🎨 Templates
+                </Link>
+                <Link
+                  href="/cover-letter"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  📝 Cover Letter
                 </Link>
                 <Link
                   href="/blog"

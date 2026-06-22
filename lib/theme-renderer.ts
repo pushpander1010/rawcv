@@ -1,4 +1,4 @@
-import type { ParsedResume, ThemeId, TailorChange } from "@/types";
+import type { ParsedResume, ThemeId, TailorChange, LanguageProficiency } from "@/types";
 import { sanitizeResume as sanitizeResumeUtil } from "@/lib/sanitize-resume";
 
 /** Merge accepted TailorChanges into a ParsedResume copy */
@@ -297,8 +297,7 @@ function renderEnhancv(r: ParsedResume): string {
           ${contact.website?`<span>🔗 ${contactHtml("website", contact.website)}</span>`:""}
         </div>
       </div>
-      <div style="width:72px;height:72px;border-radius:50%;background:${accent};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0;">${initials}</div>
-    </div>
+      <div style="width:72px;height:72px;border-radius:50%;background:${accent};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0;">${initials}</div></div>
     <div style="display:grid;grid-template-columns:1fr 38%;gap:0;">
       <div style="padding:20px 20px 24px 32px;border-right:1px solid #e5e7eb;">
         ${summary?`<section style="margin-bottom:18px;">${sectionHead("Summary")}<p style="color:#444;line-height:1.6;">${esc(summary)}</p></section>`:""}
@@ -314,6 +313,247 @@ function renderEnhancv(r: ParsedResume): string {
   </div>`;
 }
 
+// ─── NEW THEMES ────────────────────────────────────────────────────────────────
+
+const ACCENT_EURO = "#1a3a5c";
+const ACCENT_CAN = "#cc2936";
+const ACCENT_FOTO = "#0f3460";
+const ACCENT_ZETY = "#2c3e50";
+const ACCENT_RESIO = "#2563eb";
+
+function levelLabel(level: LanguageProficiency["level"]): string {
+  const map: Record<string, string> = {
+    basic: "A1 - Basic",
+    elementary: "A2 - Elementary",
+    intermediate: "B1 - Intermediate",
+    "upper-intermediate": "B2 - Upper Intermediate",
+    advanced: "C1 - Advanced",
+    fluent: "C2 - Proficient",
+    native: "Native",
+    bilingual: "Bilingual",
+  };
+  return map[level] ?? level;
+}
+
+function levelDots(level: LanguageProficiency["level"]): number {
+  const map: Record<string, number> = {
+    basic: 1, elementary: 2, intermediate: 3,
+    "upper-intermediate": 4, advanced: 5, fluent: 6, native: 6, bilingual: 6,
+  };
+  return map[level] ?? 3;
+}
+
+function languagesHtml(languages: LanguageProficiency[] | undefined): string {
+  if (!languages?.length) return "";
+  return `<section style="margin-bottom:18px;">
+    <div style="font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;color:#000;border-bottom:1px solid ${ACCENT_EURO};padding-bottom:2px;margin-bottom:8px;">Languages</div>
+    ${languages.map(l => `<div style="margin-bottom:6px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-weight:500;font-size:13px;color:#000;">${esc(l.language)}</span>
+        <span style="font-size:11px;color:#666;">${levelLabel(l.level)}</span>
+      </div>
+      <div style="display:flex;gap:3px;margin-top:2px;">
+        ${[1,2,3,4,5,6].map(d => `<div style="width:10px;height:10px;border-radius:50%;background:${d <= levelDots(l.level) ? ACCENT_EURO : "#ddd"};"></div>`).join("")}
+      </div>
+    </div>`).join("")}
+  </section>`;
+}
+
+function photoHtml(photo: string | undefined, name: string, size: number, round: boolean = false, border: string = ""): string {
+  if (!photo) return "";
+  const radius = round ? "50%" : "4px";
+  return `<img src="${esc(photo)}" alt="${esc(name)}" style="width:${size}px;height:${size}px;border-radius:${radius};object-fit:cover;flex-shrink:0;${border ? `border:${border};` : ""}" />`;
+}
+
+function initialsHtml(name: string, size: number, bg: string, fontSize: number): string {
+  const initials = name ? name.split(" ").map((w: string) => w[0]).slice(0, 2).join("").toUpperCase() : "?";
+  return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${bg};display:flex;align-items:center;justify-content:center;font-size:${fontSize}px;font-weight:700;color:#fff;flex-shrink:0;">${initials}</div>`;
+}
+
+function contactRowHtml(contact: ParsedResume["contact"], accent: string): string {
+  const parts = [
+    contact.email ? `<span style="display:inline-flex;align-items:center;gap:3px;">✉ ${contactHtml("email", contact.email)}</span>` : "",
+    contact.phone ? `<span style="display:inline-flex;align-items:center;gap:3px;">☎ ${contactHtml("phone", contact.phone)}</span>` : "",
+    contact.location ? `<span style="display:inline-flex;align-items:center;gap:3px;">⌖ ${contactHtml("location", contact.location)}</span>` : "",
+    contact.linkedin ? `<span style="display:inline-flex;align-items:center;gap:3px;">in ${contactHtml("linkedin", contact.linkedin)}</span>` : "",
+    contact.website ? `<span style="display:inline-flex;align-items:center;gap:3px;">🔗 ${contactHtml("website", contact.website)}</span>` : "",
+  ].filter(Boolean);
+  return parts.join(`<span style="margin:0 4px;color:#999;">|</span>`);
+}
+
+function sectionHeading(title: string, accent: string): string {
+  return `<div style="font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;color:#000;border-bottom:2px solid ${accent};padding-bottom:3px;margin-bottom:10px;">${esc(title)}</div>`;
+}
+
+function renderEuropassTheme(r: ParsedResume): string {
+  const { contact, photo, summary, experience, education, skills, certifications, projects, languages } = r;
+  const a = ACCENT_EURO;
+  return `<div style="font-family:'Inter',Arial,sans-serif;color:#222;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.4;">
+    <div style="display:flex;align-items:center;gap:24px;padding:28px 32px 20px;border-bottom:2px solid ${a};background:#f4f7fa;">
+      ${photo ? photoHtml(photo, contact.name, 100, false, `2px solid ${a}`) : initialsHtml(contact.name, 100, a, 28)}
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:26px;letter-spacing:0.5px;color:#000;margin-bottom:2px;">${esc(contact.name)}</div>
+        ${experience[0]?.title ? `<div style="color:${a};font-size:14px;font-weight:500;margin-bottom:8px;">${esc(experience[0].title)}</div>` : ""}
+        <div style="display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:#444;">
+          ${contactRowHtml(contact, a)}
+        </div>
+        <div style="font-size:11px;color:#666;margin-top:6px;border-top:1px dashed #ccc;padding-top:6px;">
+          <span style="margin-right:16px;">📅 Date of Birth: [Add date]</span>
+          <span>🏳 Nationality: [Add nationality]</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 280px;gap:0;">
+      <div style="padding:20px 28px 24px 32px;border-right:1px solid #e5e7eb;">
+        ${summary ? `<section style="margin-bottom:20px;">${sectionHeading("Professional Summary", a)}<p style="color:#444;line-height:1.6;">${esc(summary)}</p></section>` : ""}
+        ${experience.length ? `<section style="margin-bottom:20px;">${sectionHeading("Work Experience", a)}${experience.map(j => `<div style="margin-bottom:16px;"><div style="display:flex;justify-content:space-between;align-items:baseline;"><div><span style="font-weight:600;font-size:14px;color:#000;">${esc(j.title)}</span><span style="color:${a};font-size:13px;margin-left:6px;">— ${esc(j.company)}</span></div><div style="font-size:11px;color:#888;white-space:nowrap;">${esc(j.startDate)} – ${esc(j.endDate as string)}</div></div><ul style="margin:4px 0 0;padding:0;list-style:none;">${j.bullets.map(b => `<li style="display:flex;gap:6px;margin-bottom:3px;color:#444;font-size:12px;"><span style="color:${a};flex-shrink:0;">•</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>` : ""}
+        ${education.length ? `<section style="margin-bottom:20px;">${sectionHeading("Education", a)}${education.map(e => `<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:baseline;"><div><span style="font-weight:600;font-size:14px;color:#000;">${esc(e.degree)}${e.field ? ` — ${esc(e.field)}` : ""}</span><span style="color:${a};font-size:13px;margin-left:6px;">— ${esc(e.institution)}</span></div><div style="font-size:11px;color:#888;white-space:nowrap;">${esc(e.graduationYear)}</div></div></div>`).join("")}</section>` : ""}
+        ${projects?.length ? `<section style="margin-bottom:20px;">${sectionHeading("Projects", a)}${projects.map(p => `<div style="margin-bottom:12px;"><div style="font-weight:600;font-size:14px;color:#000;">${esc(p.name)}</div><p style="font-size:12px;color:#555;margin:2px 0 4px;">${esc(p.description)}</p><div style="display:flex;flex-wrap:wrap;gap:4px;">${p.technologies.map(t => `<span style="font-size:11px;color:${a};background:#eef2f6;padding:1px 6px;border-radius:3px;">${esc(t)}</span>`).join("")}</div></div>`).join("")}</section>` : ""}
+      </div>
+      <div style="padding:20px 24px 24px 20px;background:#fafbfc;">
+        ${skills.length ? `<section style="margin-bottom:20px;"><div style="font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;color:#000;border-bottom:1px solid ${a};padding-bottom:2px;margin-bottom:8px;">Skills</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${skills.map(s => `<span style="background:#e8edf3;color:${a};font-size:12px;padding:3px 10px;border-radius:3px;">${esc(s)}</span>`).join("")}</div></section>` : ""}
+        ${languagesHtml(languages)}
+        ${certifications?.length ? `<section><div style="font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;color:#000;border-bottom:1px solid ${a};padding-bottom:2px;margin-bottom:8px;">Certifications</div><ul style="margin:0;padding:0;list-style:none;">${certifications.map(c => `<li style="font-size:12px;color:#444;margin-bottom:4px;display:flex;gap:6px;"><span style="color:${a};">•</span>${esc(c)}</li>`).join("")}</ul></section>` : ""}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderCanadianTheme(r: ParsedResume): string {
+  const { contact, summary, experience, education, skills, certifications, projects } = r;
+  const a = ACCENT_CAN;
+  // Canadian theme: no photo, no personal details (nationality, DOB, etc.)
+  // Contact info only: email, phone, linkedin, website — but no location details beyond what's needed
+  return `<div style="font-family:'Inter',Arial,sans-serif;color:#222;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.4;">
+    <div style="padding:28px 32px 16px;border-bottom:3px solid ${a};margin-bottom:16px;">
+      <div style="font-weight:700;font-size:28px;color:#000;line-height:1.1;margin-bottom:2px;">${esc(contact.name)}</div>
+      ${experience[0]?.title ? `<div style="color:${a};font-size:15px;font-weight:500;margin-bottom:8px;">${esc(experience[0].title)}</div>` : ""}
+      <div style="display:flex;flex-wrap:wrap;gap:6px 20px;font-size:12px;color:#555;">
+        ${contact.email ? `<span style="display:inline-flex;align-items:center;gap:4px;"><span style="color:${a};">✉</span> ${contactHtml("email", contact.email)}</span>` : ""}
+        ${contact.phone ? `<span style="display:inline-flex;align-items:center;gap:4px;"><span style="color:${a};">☎</span> ${contactHtml("phone", contact.phone)}</span>` : ""}
+        ${contact.linkedin ? `<span style="display:inline-flex;align-items:center;gap:4px;"><span style="color:${a};">in</span> ${contactHtml("linkedin", contact.linkedin)}</span>` : ""}
+        ${contact.website ? `<span style="display:inline-flex;align-items:center;gap:4px;"><span style="color:${a};">🔗</span> ${contactHtml("website", contact.website)}</span>` : ""}
+      </div>
+    </div>
+    <div style="padding:0 32px 28px;">
+      ${summary ? `<section style="margin-bottom:20px;">${sectionHeading("Professional Summary", a)}<p style="color:#444;line-height:1.6;">${esc(summary)}</p></section>` : ""}
+      ${experience.length ? `<section style="margin-bottom:20px;">${sectionHeading("Work Experience", a)}${experience.map(j => `<div style="margin-bottom:16px;"><div style="display:flex;justify-content:space-between;align-items:baseline;"><div><span style="font-weight:600;font-size:14px;color:#000;">${esc(j.title)}</span><span style="color:${a};font-size:13px;margin-left:6px;">— ${esc(j.company)}</span></div><div style="font-size:11px;color:#888;white-space:nowrap;">${esc(j.startDate)} – ${esc(j.endDate as string)}</div></div><ul style="margin:4px 0 0;padding:0;list-style:none;">${j.bullets.map(b => `<li style="display:flex;gap:6px;margin-bottom:3px;color:#444;font-size:12px;"><span style="color:${a};flex-shrink:0;">•</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>` : ""}
+      ${education.length ? `<section style="margin-bottom:20px;">${sectionHeading("Education", a)}${education.map(e => `<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;align-items:baseline;"><div><span style="font-weight:600;font-size:14px;color:#000;">${esc(e.degree)}${e.field ? ` — ${esc(e.field)}` : ""}</span><span style="color:${a};font-size:13px;margin-left:6px;">— ${esc(e.institution)}</span></div><div style="font-size:11px;color:#888;white-space:nowrap;">${esc(e.graduationYear)}</div></div></div>`).join("")}</section>` : ""}
+      ${skills.length ? `<section style="margin-bottom:20px;">${sectionHeading("Skills", a)}<div style="display:flex;flex-wrap:wrap;gap:6px;">${skills.map(s => `<span style="background:#fef0f0;color:#b31a28;font-size:12px;padding:3px 10px;border-radius:3px;border:1px solid #f5c6cb;">${esc(s)}</span>`).join("")}</div></section>` : ""}
+      ${projects?.length ? `<section style="margin-bottom:20px;">${sectionHeading("Projects", a)}${projects.map(p => `<div style="margin-bottom:12px;"><div style="font-weight:600;font-size:14px;color:#000;">${esc(p.name)}</div><p style="font-size:12px;color:#555;margin:2px 0 4px;">${esc(p.description)}</p><div style="display:flex;flex-wrap:wrap;gap:4px;">${p.technologies.map(t => `<span style="font-size:11px;color:#b31a28;background:#fef0f0;padding:1px 6px;border-radius:3px;">${esc(t)}</span>`).join("")}</div></div>`).join("")}</section>` : ""}
+      ${certifications?.length ? `<section>${sectionHeading("Certifications", a)}<ul style="margin:0;padding:0;list-style:none;">${certifications.map(c => `<li style="font-size:12px;color:#444;margin-bottom:4px;display:flex;gap:6px;"><span style="color:${a};">•</span>${esc(c)}</li>`).join("")}</ul></section>` : ""}
+    </div>
+  </div>`;
+}
+
+function renderFotoramTheme(r: ParsedResume): string {
+  const { contact, photo, summary, experience, education, skills, certifications, projects } = r;
+  const a = ACCENT_FOTO;
+  return `<div style="font-family:'Inter',Arial,sans-serif;color:#222;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.4;">
+    <div style="display:flex;align-items:center;gap:32px;padding:32px 36px;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,${a} 100%);color:#fff;">
+      ${photo ? photoHtml(photo, contact.name, 130, true, "4px solid rgba(255,255,255,0.3)") : initialsHtml(contact.name, 130, "rgba(255,255,255,0.15)", 42)}
+      <div>
+        <div style="font-weight:700;font-size:28px;letter-spacing:-0.5px;color:#fff;margin-bottom:4px;">${esc(contact.name)}</div>
+        ${experience[0]?.title ? `<div style="font-size:14px;color:rgba(255,255,255,0.7);font-weight:400;margin-bottom:12px;">${esc(experience[0].title)}</div>` : ""}
+        <div style="display:flex;flex-wrap:wrap;gap:10px 18px;font-size:12px;color:rgba(255,255,255,0.6);">
+          ${contact.email ? `<span>✉ ${contactHtml("email", contact.email)}</span>` : ""}
+          ${contact.phone ? `<span>☎ ${contactHtml("phone", contact.phone)}</span>` : ""}
+          ${contact.location ? `<span>⌖ ${contactHtml("location", contact.location)}</span>` : ""}
+          ${contact.linkedin ? `<span>in ${contactHtml("linkedin", contact.linkedin)}</span>` : ""}
+          ${contact.website ? `<span>🔗 ${contactHtml("website", contact.website)}</span>` : ""}
+        </div>
+      </div>
+    </div>
+    <div style="padding:28px 36px;">
+      ${summary ? `<section style="margin-bottom:24px;">${sectionHeading("About", "#1a1a2e")}<p style="color:#555;line-height:1.6;">${esc(summary)}</p></section>` : ""}
+      ${experience.length ? `<section style="margin-bottom:24px;">${sectionHeading("Experience", "#1a1a2e")}${experience.map(j => `<div style="margin-bottom:20px;"><div style="display:flex;justify-content:space-between;align-items:baseline;"><div><span style="font-weight:600;font-size:14px;color:#000;">${esc(j.title)}</span><span style="color:${a};font-size:13px;margin-left:6px;">— ${esc(j.company)}</span></div><div style="font-size:11px;color:#888;white-space:nowrap;">${esc(j.startDate)} – ${esc(j.endDate as string)}</div></div><ul style="margin:6px 0 0;padding:0;list-style:none;">${j.bullets.map(b => `<li style="display:flex;gap:6px;margin-bottom:4px;color:#444;font-size:12px;"><span style="color:${a};flex-shrink:0;">▹</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>` : ""}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+        <div>
+          ${education.length ? `<section style="margin-bottom:20px;">${sectionHeading("Education", "#1a1a2e")}${education.map(e => `<div style="margin-bottom:12px;"><div style="font-weight:600;font-size:14px;color:#000;">${esc(e.degree)}${e.field ? ` — ${esc(e.field)}` : ""}</div><div style="font-size:12px;color:${a};">${esc(e.institution)}</div><div style="font-size:11px;color:#888;">${esc(e.graduationYear)}</div></div>`).join("")}</section>` : ""}
+          ${certifications?.length ? `<section>${sectionHeading("Certifications", "#1a1a2e")}<ul style="margin:0;padding-left:16px;">${li(certifications)}</ul></section>` : ""}
+        </div>
+        <div>
+          ${skills.length ? `<section style="margin-bottom:20px;">${sectionHeading("Skills", "#1a1a2e")}<div style="display:flex;flex-wrap:wrap;gap:6px;">${skills.map(s => `<span style="background:#f0f4f8;color:${a};font-size:12px;padding:3px 10px;border-radius:3px;">${esc(s)}</span>`).join("")}</div></section>` : ""}
+          ${projects?.length ? `<section>${sectionHeading("Projects", "#1a1a2e")}${projects.map(p => `<div style="margin-bottom:12px;"><div style="font-weight:600;font-size:13px;color:#000;">${esc(p.name)}</div><p style="font-size:11px;color:#555;margin:2px 0;">${esc(p.description)}</p></div>`).join("")}</section>` : ""}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderZetyTheme(r: ParsedResume): string {
+  const { contact, photo, summary, experience, education, skills, certifications, projects } = r;
+  const a = ACCENT_ZETY;
+  const initials = contact.name ? contact.name.split(" ").map((w: string) => w[0]).slice(0, 2).join("").toUpperCase() : "?";
+  return `<div style="font-family:'Inter',Arial,sans-serif;color:#222;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.4;">
+    <div style="display:grid;grid-template-columns:260px 1fr;min-height:800px;">
+      <div style="background:${a};color:#fff;padding:32px 24px;">
+        <div style="text-align:center;margin-bottom:24px;">
+          ${photo ? photoHtml(photo, contact.name, 110, true, "3px solid rgba(255,255,255,0.3)") : `<div style="width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:#fff;margin:0 auto;">${initials}</div>`}
+        </div>
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="font-weight:700;font-size:22px;color:#fff;margin-bottom:2px;">${esc(contact.name)}</div>
+          ${experience[0]?.title ? `<div style="font-size:13px;color:rgba(255,255,255,0.7);">${esc(experience[0].title)}</div>` : ""}
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:16px;margin-bottom:20px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);margin-bottom:10px;">Contact</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.8);display:flex;flex-direction:column;gap:6px;">
+            ${contact.phone ? `<span>☎ ${contactHtml("phone", contact.phone)}</span>` : ""}
+            ${contact.email ? `<span>✉ ${contactHtml("email", contact.email)}</span>` : ""}
+            ${contact.location ? `<span>⌖ ${contactHtml("location", contact.location)}</span>` : ""}
+            ${contact.linkedin ? `<span>in ${contactHtml("linkedin", contact.linkedin)}</span>` : ""}
+            ${contact.website ? `<span>🔗 ${contactHtml("website", contact.website)}</span>` : ""}
+          </div>
+        </div>
+        ${skills.length ? `<div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:16px;margin-bottom:20px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);margin-bottom:10px;">Skills</div><div style="display:flex;flex-wrap:wrap;gap:4px;">${skills.map(s => `<span style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.9);font-size:11px;padding:3px 8px;border-radius:2px;">${esc(s)}</span>`).join("")}</div></div>` : ""}
+        ${certifications?.length ? `<div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:16px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);margin-bottom:10px;">Certifications</div><ul style="margin:0;padding-left:14px;font-size:12px;color:rgba(255,255,255,0.8);">${li(certifications)}</ul></div>` : ""}
+      </div>
+      <div style="padding:32px 28px;">
+        ${summary ? `<section style="margin-bottom:24px;">${sectionHeading("Profile", a)}<p style="color:#555;line-height:1.6;">${esc(summary)}</p></section>` : ""}
+        ${experience.length ? `<section style="margin-bottom:24px;">${sectionHeading("Experience", a)}${experience.map(j => `<div style="margin-bottom:18px;"><div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-weight:600;font-size:14px;color:#000;">${esc(j.title)}</span><span style="font-size:11px;color:#888;white-space:nowrap;">${esc(j.startDate)} – ${esc(j.endDate as string)}</span></div><div style="color:${a};font-size:12px;font-weight:500;margin-bottom:4px;">${esc(j.company)}</div><ul style="margin:0;padding:0;list-style:none;">${j.bullets.map(b => `<li style="display:flex;gap:6px;margin-bottom:3px;color:#444;font-size:12px;"><span style="color:${a};flex-shrink:0;">•</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>` : ""}
+        ${education.length ? `<section style="margin-bottom:24px;">${sectionHeading("Education", a)}${education.map(e => `<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-weight:600;font-size:14px;color:#000;">${esc(e.degree)}${e.field ? ` — ${esc(e.field)}` : ""}</span><span style="font-size:11px;color:#888;">${esc(e.graduationYear)}</span></div><div style="color:#555;font-size:12px;">${esc(e.institution)}</div></div>`).join("")}</section>` : ""}
+        ${projects?.length ? `<section>${sectionHeading("Projects", a)}${projects.map(p => `<div style="margin-bottom:12px;"><div style="font-weight:600;font-size:13px;color:#000;">${esc(p.name)}</div><p style="font-size:11px;color:#555;margin:2px 0;">${esc(p.description)}</p></div>`).join("")}</section>` : ""}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderResumeioTheme(r: ParsedResume): string {
+  const { contact, photo, summary, experience, education, skills, certifications, projects } = r;
+  const a = ACCENT_RESIO;
+  const initials = contact.name ? contact.name.split(" ").map((w: string) => w[0]).slice(0, 2).join("").toUpperCase() : "?";
+  return `<div style="font-family:'Inter',Arial,sans-serif;color:#222;background:#fff;max-width:800px;margin:0 auto;font-size:13px;line-height:1.4;">
+    <div style="display:flex;align-items:center;gap:20px;padding:28px 36px;background:#f8fafc;border-bottom:3px solid ${a};">
+      ${photo ? photoHtml(photo, contact.name, 80, true, `3px solid ${a}`) : initialsHtml(contact.name, 80, a, 24)}
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:24px;color:#000;margin-bottom:2px;">${esc(contact.name)}</div>
+        ${experience[0]?.title ? `<div style="color:${a};font-size:14px;font-weight:500;margin-bottom:6px;">${esc(experience[0].title)}</div>` : ""}
+        <div style="display:flex;flex-wrap:wrap;gap:10px 18px;font-size:12px;color:#555;">
+          ${contact.phone ? `<span>☎ ${contactHtml("phone", contact.phone)}</span>` : ""}
+          ${contact.email ? `<span>✉ ${contactHtml("email", contact.email)}</span>` : ""}
+          ${contact.location ? `<span>⌖ ${contactHtml("location", contact.location)}</span>` : ""}
+          ${contact.linkedin ? `<span>in ${contactHtml("linkedin", contact.linkedin)}</span>` : ""}
+          ${contact.website ? `<span>🔗 ${contactHtml("website", contact.website)}</span>` : ""}
+        </div>
+      </div>
+    </div>
+    <div style="padding:24px 36px;">
+      ${summary ? `<section style="margin-bottom:20px;">${sectionHeading("Summary", a)}<p style="color:#555;line-height:1.6;">${esc(summary)}</p></section>` : ""}
+      ${experience.length ? `<section style="margin-bottom:20px;">${sectionHeading("Experience", a)}${experience.map(j => `<div style="margin-bottom:16px;"><div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-weight:600;font-size:14px;color:#000;">${esc(j.title)}</span><span style="font-size:11px;color:#888;white-space:nowrap;">${esc(j.startDate)} – ${esc(j.endDate as string)}</span></div><div style="color:${a};font-size:12px;font-weight:500;margin-bottom:4px;">${esc(j.company)}</div><ul style="margin:0;padding:0;list-style:none;">${j.bullets.map(b => `<li style="display:flex;gap:6px;margin-bottom:3px;color:#444;font-size:12px;"><span style="color:${a};flex-shrink:0;">•</span><span>${esc(b)}</span></li>`).join("")}</ul></div>`).join("")}</section>` : ""}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+        <div>
+          ${education.length ? `<section style="margin-bottom:20px;">${sectionHeading("Education", a)}${education.map(e => `<div style="margin-bottom:10px;"><div style="font-weight:600;font-size:14px;color:#000;">${esc(e.degree)}${e.field ? ` — ${esc(e.field)}` : ""}</div><div style="color:${a};font-size:12px;">${esc(e.institution)}</div><div style="font-size:11px;color:#888;">${esc(e.graduationYear)}</div></div>`).join("")}</section>` : ""}
+          ${certifications?.length ? `<section>${sectionHeading("Certifications", a)}<ul style="margin:0;padding-left:16px;">${li(certifications)}</ul></section>` : ""}
+        </div>
+        <div>
+          ${skills.length ? `<section style="margin-bottom:20px;">${sectionHeading("Skills", a)}<div style="display:flex;flex-wrap:wrap;gap:6px;">${skills.map(s => `<span style="background:#eff6ff;color:${a};font-size:12px;padding:3px 10px;border-radius:3px;">${esc(s)}</span>`).join("")}</div></section>` : ""}
+          ${projects?.length ? `<section>${sectionHeading("Projects", a)}${projects.map(p => `<div style="margin-bottom:12px;"><div style="font-weight:600;font-size:13px;color:#000;">${esc(p.name)}</div><p style="font-size:11px;color:#555;margin:2px 0;">${esc(p.description)}</p></div>`).join("")}</section>` : ""}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
 const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
   classic: renderClassic,
   modern: renderModern,
@@ -324,6 +564,11 @@ const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
   navy: renderNavy,
   terra: renderTerra,
   enhancv: renderEnhancv,
+  europass: renderEuropassTheme,
+  canadian: renderCanadianTheme,
+  fotoram: renderFotoramTheme,
+  zety: renderZetyTheme,
+  resumeio: renderResumeioTheme,
 };
 
 /** Sanitise a resume so theme renderers never receive undefined arrays */

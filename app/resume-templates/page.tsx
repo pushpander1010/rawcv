@@ -4,14 +4,14 @@ import Breadcrumb from "@/components/Breadcrumb";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Resume Templates — 9 Professional Themes for Your CV | rawcv",
+  title: "Resume Templates — 14 Professional Themes for Your CV | rawcv",
   description:
-    "Explore 9 professionally designed resume templates: Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant. Find the perfect ATS-friendly theme for your job search. Free to use.",
+    "Explore 14 professionally designed resume templates: Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant plus EU, Canada, US, International, and ATS-Optimized formats. Find the perfect ATS-friendly theme for your job search. Free to use.",
   alternates: { canonical: "https://www.rawcv.com/resume-templates" },
   openGraph: {
-    title: "Resume Templates — 9 Professional Themes for Your CV | rawcv",
+    title: "Resume Templates — 14 Professional Themes for Your CV | rawcv",
     description:
-      "Explore 9 professionally designed resume templates: Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant. ATS-friendly, AI-optimized, and free to use.",
+      "Explore 14 professionally designed resume templates: Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant plus EU, Canada, US, International, and ATS-Optimized formats. ATS-friendly, AI-optimized, and free to use.",
     url: "https://www.rawcv.com/resume-templates",
   },
 };
@@ -292,7 +292,7 @@ export default function ResumeTemplatesPage() {
     "@type": "CollectionPage",
     name: "Resume Templates Gallery",
     description:
-      "9 professionally designed resume templates — Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant.",
+      "14 professionally designed resume templates — Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant plus EU, Canada, US, International, and ATS-Optimized formats.",
     url: "https://www.rawcv.com/resume-templates",
     numberOfItems: themes.length,
     itemListElement: themes.map((t, i) => ({
@@ -324,7 +324,7 @@ export default function ResumeTemplatesPage() {
         name: "Can I switch templates after I start building my resume?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Absolutely. You can switch between any of the 9 templates at any time without losing your content. Each template uses the same data model — your experience, education, skills, and custom sections are preserved and automatically reformatted to match the new theme's layout and styling.",
+          text: "Absolutely. You can switch between any of the 14 templates at any time without losing your content. Each template uses the same data model — your experience, education, skills, and custom sections are preserved and automatically reformatted to match the new theme's layout and styling.",
         },
       },
       {
@@ -348,7 +348,7 @@ export default function ResumeTemplatesPage() {
         name: "Are the templates free to use?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, all 9 resume templates are free to use. You can build, preview, and switch between templates without any cost. Exporting your finished resume as a PDF uses credits — new users receive 20 free credits upon sign-up, which covers multiple exports. There are no hidden fees or subscription requirements for template access.",
+          text: "Yes, all 14 resume templates are free to use. You can build, preview, and switch between templates without any cost. Exporting your finished resume as a PDF uses credits — new users receive 20 free credits upon sign-up, which covers multiple exports. There are no hidden fees or subscription requirements for template access.",
         },
       },
     ],
@@ -387,10 +387,10 @@ export default function ResumeTemplatesPage() {
                 Resume Templates
               </span>
               <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">
-                9 Professional Resume Templates
+                14 Professional Resume Templates
               </h1>
               <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-                Choose from 9 expertly crafted templates, each optimised for ATS
+                Choose from 14 expertly crafted templates, each optimised for ATS
                 compatibility and recruiter appeal. Preview, switch, and build
                 your perfect resume in minutes — no design skills required.
               </p>
@@ -398,7 +398,7 @@ export default function ResumeTemplatesPage() {
             {/* Quick stats */}
             <div className="flex flex-wrap justify-center gap-6 text-sm">
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                <span className="text-violet-500 font-bold">9</span> Templates
+                <span className="text-violet-500 font-bold">14</span> Templates
               </div>
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                 <span className="text-violet-500 font-bold">100%</span>{" "}
@@ -495,7 +495,7 @@ export default function ResumeTemplatesPage() {
               differently to suit various narrative strategies.
             </p>
             <p>
-              All 9 templates are available immediately, free of charge. You can
+              All 14 templates are available immediately, free of charge. You can
               preview, select, and switch between templates at any point during
               the building process without losing your content. Our AI-powered
               builder also provides real-time suggestions for bullet point
@@ -524,7 +524,7 @@ export default function ResumeTemplatesPage() {
             />
             <FAQ
               question="Can I switch templates after I start building my resume?"
-              answer="Absolutely. You can switch between any of the 9 templates at any time without losing your content. Each template uses the same data model — your experience, education, skills, and custom sections are preserved and automatically reformatted to match the new theme's layout and styling."
+              answer="Absolutely. You can switch between any of the 14 templates at any time without losing your content. Each template uses the same data model — your experience, education, skills, and custom sections are preserved and automatically reformatted to match the new theme's layout and styling."
             />
             <FAQ
               question="Do I need design skills to use these templates?"
@@ -536,7 +536,7 @@ export default function ResumeTemplatesPage() {
             />
             <FAQ
               question="Are the templates free to use?"
-              answer="Yes, all 9 resume templates are free to use. You can build, preview, and switch between templates without any cost. Exporting your finished resume as a PDF uses credits — new users receive 20 free credits upon sign-up, which covers multiple exports. There are no hidden fees or subscription requirements for template access."
+              answer="Yes, all 14 resume templates are free to use. You can build, preview, and switch between templates without any cost. Exporting your finished resume as a PDF uses credits — new users receive 20 free credits upon sign-up, which covers multiple exports. There are no hidden fees or subscription requirements for template access."
             />
           </div>
         </section>

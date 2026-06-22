@@ -86,6 +86,46 @@ const THEMES: ThemeMeta[] = [
     accent: "bg-[#008cff]",
     preview: "Blue · Two column",
   },
+  {
+    id: "europass",
+    name: "Europass",
+    category: "Classic",
+    description: "European CV format with photo in header, languages section, and personal details",
+    accent: "bg-[#1a3a5c]",
+    preview: "EU · Photo header · Languages",
+  },
+  {
+    id: "canadian",
+    name: "Canadian",
+    category: "Minimal",
+    description: "Clean Canadian resume — no photo, no personal details beyond contact",
+    accent: "bg-[#cc2936]",
+    preview: "Red accent · Clean · Single column",
+  },
+  {
+    id: "fotoram",
+    name: "Fotoram",
+    category: "Creative",
+    description: "Modern photo-focused theme with a large circular photo and dark gradient header",
+    accent: "bg-[#1a1a2e]",
+    preview: "Dark gradient · Large photo",
+  },
+  {
+    id: "zety",
+    name: "Zety",
+    category: "Modern",
+    description: "Professional two-column layout with photo in a dark sidebar",
+    accent: "bg-[#2c3e50]",
+    preview: "Dark sidebar · Photo",
+  },
+  {
+    id: "resumeio",
+    name: "Resume.io",
+    category: "Minimal",
+    description: "Clean single-column layout with circular photo header and blue accents",
+    accent: "bg-[#2563eb]",
+    preview: "Blue accent · Photo header",
+  },
 ];
 
 const CATEGORIES = ["All", "Classic", "Modern", "Minimal", "Executive", "Creative"] as const;

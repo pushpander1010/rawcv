@@ -8,7 +8,7 @@ import { pricingPlans } from "@/data/pricing";
 export const metadata: Metadata = {
   title: "rawcv — AI Resume Builder, ATS Score & Job Match Optimizer",
   description:
-    "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, and download a polished PDF resume.",
+    "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, build cover letters, and download a polished PDF resume. Supports international resume formats for EU, Canada, US, and India.",
   alternates: { canonical: "https://www.rawcv.com" },
 };
 
@@ -17,8 +17,10 @@ const features = [
   { icon: "🎯", title: "JD Relevance Match", description: "Paste any job description and get a relevance score with missing keywords and skills highlighted." },
   { icon: "✨", title: "AI Suggestions", description: "Get 3–15 targeted improvements covering action verbs, quantified achievements, and section completeness." },
   { icon: "🔧", title: "Resume Enhancement", description: "Strengthen weak bullet points and your summary with stronger language — no JD required." },
-  { icon: "🎨", title: "Visual Themes", description: "Switch between Classic, Modern, Minimal, Executive, and Creative themes with a live preview." },
+  { icon: "🎨", title: "Visual Themes", description: "Switch between 14 templates including Classic, Modern, Minimal, Executive, and Creative themes with a live preview." },
   { icon: "💬", title: "Chat to Build or Customize", description: "Build a resume from scratch or tweak any section conversationally with an AI chat interface." },
+  { icon: "📝", title: "Cover Letter Builder", description: "Generate professional AI cover letters tailored to your resume and job description. Supports EU, Canada, and US formats." },
+  { icon: "🌍", title: "International Resume Formats", description: "Choose from EU, Canada, US, and India-specific resume formats with region-appropriate sections and conventions." },
 ];
 
 const faqs = [
@@ -47,6 +49,11 @@ const faqs = [
   { q: "What kind of AI suggestions does rawcv provide?", a: "Suggestions range from replacing weak action verbs and adding quantified results to filling missing sections (summary, certifications) and rewording bullets to match job description language." },
   { q: "Does rawcv support languages other than English?", a: "The interface is in English, and the AI models are optimized for English-language resumes. We plan to expand to other languages based on user demand." },
   { q: "Can I edit my resume directly inside rawcv?", a: "Yes — the chat interface lets you modify any section conversationally, and the enhancement tool applies AI suggestions directly to your resume preview." },
+  { q: "Does rawcv support international resume formats?", a: "Yes — rawcv supports resume formats for EU (Europass-compatible), Canada, US, and India. Each format adjusts section ordering, required fields, and cultural expectations for recruiters in that region. You can select your preferred format when building or enhancing your resume." },
+  { q: "What is the EU resume format?", a: "The EU format follows Europass conventions with a clear reverse-chronological structure, personal information section, language proficiency levels (CEFR), and optional photo placement. It is widely accepted across EU member states." },
+  { q: "What is the Canada resume format?", a: "The Canadian resume format emphasizes a professional summary, key achievements with quantifiable results, and excludes personal details like age, marital status, or photo. It typically runs 1-2 pages and follows strict anti-discrimination hiring norms." },
+  { q: "What is the US resume format?", a: "The US resume format focuses on measurable achievements, action verbs, and is typically one page for early-to-mid career. It avoids personal information and uses a reverse-chronological structure optimized for both recruiters and ATS software." },
+  { q: "Does rawcv have a cover letter builder?", a: "Yes — you can generate professional AI cover letters tailored to your resume and the specific job description. Choose from General, EU, Canada, and US format options, then edit, save, and export as PDF. The cover letter builder is included with your credits." },
 ];
 
 export default function LandingPage() {
@@ -58,7 +65,7 @@ export default function LandingPage() {
         "@id": "https://www.rawcv.com/#website",
         "url": "https://www.rawcv.com",
         "name": "rawcv",
-        "description": "AI-powered resume builder, ATS scorer, and job match optimizer",
+        "description": "AI-powered resume builder, ATS scorer, job match optimizer, and cover letter generator with international resume formats",
         "potentialAction": {
           "@type": "SearchAction",
           "target": "https://www.rawcv.com/analyze",
@@ -77,7 +84,7 @@ export default function LandingPage() {
           { "@type": "Offer", "name": "Pro", "price": "499", "priceCurrency": "INR" },
           { "@type": "Offer", "name": "Power", "price": "999", "priceCurrency": "INR" }
         ],
-        "description": "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, and download a polished PDF resume.",
+        "description": "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, build cover letters, and download a polished PDF resume. Supports international resume formats for EU, Canada, US, and India.",
         "screenshot": "https://www.rawcv.com/og-image.png",
         "featureList": [
           "ATS Score Analysis",
@@ -85,7 +92,9 @@ export default function LandingPage() {
           "AI Resume Suggestions",
           "Resume Enhancement",
           "Visual Themes",
-          "Chat-based Resume Building"
+          "Chat-based Resume Building",
+          "Cover Letter Builder",
+          "International Resume Formats"
         ]
       },
       {
