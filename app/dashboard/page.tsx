@@ -194,9 +194,9 @@ function CreditsTab() {
                 <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-normal">{b.description}</p>
               </div>
               
-              <div className="my-1 p-3.5 rounded-2xl bg-gray-50 dark:bg-gray-850/40 border border-gray-100 dark:border-gray-800/60 shadow-inner flex flex-col gap-1">
-                <p className="text-2xl font-black text-gray-950 dark:text-gray-100 tracking-tight">{b.credits} <span className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest">credits</span></p>
-                <p className="text-lg font-extrabold text-violet-700 dark:text-violet-300">₹{b.priceInr.toLocaleString("en-IN")}</p>
+              <div className="my-1 p-3.5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col gap-1">
+                <p className="text-2xl font-black text-gray-900 dark:text-gray-100 tracking-tight">{b.credits} <span className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">credits</span></p>
+                <p className="text-lg font-extrabold text-violet-600 dark:text-violet-400">₹{b.priceInr.toLocaleString("en-IN")}</p>
               </div>
 
               <button
