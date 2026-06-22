@@ -173,7 +173,7 @@ function CreditsTab() {
 
       {/* Buy credits */}
       <div>
-        <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest mb-4">Select a Bundle</h3>
+        <h3 className="text-sm font-bold text-gray-950 dark:text-white uppercase tracking-widest mb-4">Select a Bundle</h3>
         {purchaseError && (
           <div className="mb-4 rounded-2xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/80 px-5 py-4 text-sm text-red-850 dark:text-red-300 shadow-md flex items-start gap-3" role="alert">
             <span className="text-lg">⚠️</span>
@@ -218,7 +218,7 @@ function CreditsTab() {
 
       {/* Transaction history */}
       <div>
-        <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest mb-4">Transaction history</h3>
+        <h3 className="text-sm font-bold text-gray-950 dark:text-white uppercase tracking-widest mb-4">Transaction history</h3>
         {loadingData ? (
           <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-14 bg-gray-100 dark:bg-gray-850 rounded-2xl animate-pulse" />)}</div>
         ) : transactions.length === 0 ? (
@@ -404,7 +404,7 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
       {/* Recent activity */}
       {hasActivity && (
         <div className="space-y-4">
-          <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest">Last session</h3>
+          <h3 className="text-sm font-bold text-gray-950 dark:text-white uppercase tracking-widest">Last session</h3>
           <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 space-y-5 shadow-md">
             {/* Score row */}
             {(hasAts || hasRelevance) && (
@@ -453,7 +453,7 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
 
       {/* Quick actions */}
       <div className="space-y-4">
-        <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest">Quick actions</h3>
+        <h3 className="text-sm font-bold text-gray-950 dark:text-white uppercase tracking-widest">Quick actions</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {TOOLS.map((t) => {
             const colorMap = {
@@ -484,7 +484,7 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
       {/* Getting started tips — only shown when no resume loaded */}
       {!hasResume && (
         <div className="space-y-4">
-          <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest">How it works</h3>
+          <h3 className="text-sm font-bold text-gray-950 dark:text-white uppercase tracking-widest">How it works</h3>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
             <ol className="md:col-span-7 grid grid-cols-1 gap-3" aria-label="Getting started steps">
               {TIPS.map((tip, i) => (
@@ -535,7 +535,7 @@ function ProfileTab() {
     <div className="space-y-8 animate-fade-in">
       {/* Photo upload */}
       <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-violet-300 dark:hover:border-violet-800/80 transition-all duration-300">
-        <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest mb-4">Profile Photo</h3>
+        <h3 className="text-sm font-bold text-gray-950 dark:text-white uppercase tracking-widest mb-4">Profile Photo</h3>
         <PhotoUpload />
         <p className="mt-3 text-xs text-violet-600 dark:text-violet-400 font-semibold">
           This will be used in resumes
@@ -549,7 +549,7 @@ function ProfileTab() {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest mb-2">
+            <h3 className="text-sm font-bold text-gray-950 dark:text-white uppercase tracking-widest mb-2">
               International Resumes
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -567,7 +567,7 @@ function ProfileTab() {
 
       {/* Cover letters */}
       <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-violet-300 dark:hover:border-violet-800/80 transition-all duration-300">
-        <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest mb-4">Cover Letters</h3>
+        <h3 className="text-sm font-bold text-gray-950 dark:text-white uppercase tracking-widest mb-4">Cover Letters</h3>
         {state.coverLetters.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 p-6 text-center">
             <p className="text-sm text-gray-500 dark:text-gray-500">No saved cover letters yet.</p>
