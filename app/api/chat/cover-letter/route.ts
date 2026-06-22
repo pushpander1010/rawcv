@@ -2,7 +2,7 @@ export const runtime = "nodejs";
 export const maxDuration = 90;
 
 import { NextRequest, NextResponse } from "next/server";
-import { completeChat } from "@/lib/ai-providers";
+import { completeFast } from "@/lib/ai-providers";
 import { chargeCredits } from "@/lib/credits";
 import { requireAuth } from "@/lib/api-guard";
 import type { ResumeFormat } from "@/types";
@@ -66,18 +66,27 @@ export async function POST(req: NextRequest) {
     ? `\nCompany: ${recipientCompany}${recipientTitle ? `\nTitle: ${recipientTitle}` : ""}`
     : "";
 
-  const prompt = `Candidate Resume:
-${JSON.stringify(resume, null, 2)}
+  // Condense resume to key fields only (avoids sending huge JSON)
+  const r = resume as Record<string, unknown>;
+  const contact = (r.contact ?? {}) as Record<string, string>;
+  const summary = (r.summary ?? "") as string;
+  const experience = (r.experience ?? []) as Array<Record<string, unknown>>;
+  const education = (r.education ?? []) as Array<Record<string, unknown>>;
+  const skills = (r.skills ?? []) as string[];
 
-Job Description:
-${jobDescription}
+  const condensedResume = [
+    `Name: ${contact.name ?? ""}`,
+    `Email: ${contact.email ?? ""}`,
+    summary ? `Summary: ${summary}` : "",
+    experience.length ? `Experience:\n${experience.map((e) => `- ${e.title ?? ""} at ${e.company ?? ""} (${e.startDate ?? ""}–${e.endDate ?? ""})\n  ${(e.bullets as string[] ?? []).map((b: string) => "  • " + b).join("\n")}`).join("\n")}` : "",
+    education.length ? `Education:\n${education.map((e) => `- ${e.degree ?? ""} ${e.field ?? ""} — ${e.institution ?? ""} (${e.graduationYear ?? ""})`).join("\n")}` : "",
+    skills.length ? `Skills: ${skills.join(", ")}` : "",
+  ].filter(Boolean).join("\n\n");
 
-Format Requirements:
-${formatTip}
-${recipientInfo}`;
+  const prompt = `Candidate Resume:\n${condensedResume}\n\nJob Description:\n${jobDescription}\n\nFormat Requirements:\n${formatTip}${recipientInfo}`;
 
   try {
-    const result = await completeChat<{
+    const result = await completeFast<{
       opening: string;
       body: string[];
       closing: string;

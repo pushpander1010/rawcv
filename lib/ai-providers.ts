@@ -6,6 +6,7 @@ const DefaultSchema = z.any();
 const MODEL_PARSE    = "google/gemini-2.5-flash-lite"; // resume parsing — fast & cheap
 const MODEL_CHAT     = "xiaomi/mimo-v2.5";            // chat / build / customize
 const MODEL_ANALYSIS = "xiaomi/mimo-v2.5";             // ATS, JD relevance, suggestions, enhance
+const MODEL_FAST     = "google/gemini-2.5-flash-lite"; // fast generation (cover letters, etc.)
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -130,4 +131,13 @@ export async function completeAnalysis<T = any>(
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
   return callOpenRouter(MODEL_ANALYSIS, prompt, systemPrompt, options);
+}
+
+/** Fast generation (cover letters, etc.) — google/gemini-2.5-flash-lite */
+export async function completeFast<T = any>(
+  prompt: string,
+  systemPrompt: string,
+  options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
+): Promise<T> {
+  return callOpenRouter(MODEL_FAST, prompt, systemPrompt, { ...options, timeoutMs: 30000 });
 }
