@@ -30,6 +30,8 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const renderedImageRef = useRef<{ width: number; height: number }>({ width: 0, height: 0 });
+  const lastDragEndRef = useRef(0);
 
   // Drag state
   const dragRef = useRef<{
@@ -78,6 +80,17 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
     const img = e.currentTarget;
     imgRef.current = img;
     setImageSize({ width: img.naturalWidth, height: img.naturalHeight });
+    // Compute rendered dimensions accounting for max-h-64 constraint
+    const container = containerRef.current;
+    if (container) {
+      const containerRect = container.getBoundingClientRect();
+      const imgNaturalAspect = img.naturalWidth / img.naturalHeight;
+      // The img has w-full (container width) and max-h-64
+      const maxHeightPx = 256; // 64 * 4 = 256px (Tailwind max-h-64 = 16rem = 256px)
+      const renderedW = containerRect.width;
+      const renderedH = Math.min(containerRect.width / imgNaturalAspect, maxHeightPx);
+      renderedImageRef.current = { width: renderedW, height: renderedH };
+    }
     const size = Math.min(img.naturalWidth, img.naturalHeight) * 0.7;
     setCropArea({
       x: (img.naturalWidth - size) / 2,
@@ -115,19 +128,20 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
     if (!dragRef.current || imageSize.width === 0) return;
     e.preventDefault();
 
-    const container = containerRef.current;
-    if (!container) return;
-    const rect = container.getBoundingClientRect();
+    // Use the actual rendered image element for scale calculation
+    const imgEl = imgRef.current;
+    if (!imgEl) return;
+    const imgRect = imgEl.getBoundingClientRect();
 
-    // Calculate how many natural-image pixels correspond to 1px on screen
-    const scaleX = imageSize.width / rect.width;
-    const scaleY = imageSize.height / rect.height;
+    // Account for zoom: the image is rendered at zoom× its CSS display size
+    const scaleX = imageSize.width / (imgRect.width * zoom);
+    const scaleY = imageSize.height / (imgRect.height * zoom);
 
     const dx = (e.clientX - dragRef.current.startX) * scaleX;
     const dy = (e.clientY - dragRef.current.startY) * scaleY;
 
     const { type, startCrop } = dragRef.current;
-    const MIN_SIZE = 30; // minimum crop size in natural pixels
+    const MIN_SIZE = 50; // minimum crop size in natural pixels
 
     let newCrop = { ...startCrop };
 
@@ -169,15 +183,17 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
     }
 
     setCropArea(newCrop);
-  }, [imageSize]);
+  }, [imageSize, zoom]);
 
   const handlePointerUp = useCallback(() => {
     dragRef.current = null;
+    lastDragEndRef.current = Date.now();
   }, []);
 
   // Click on image to reposition crop center
   const handleCropClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (dragRef.current) return; // ignore if we just finished a drag
+    if (dragRef.current) return; // ignore if we're currently dragging
+    if (Date.now() - lastDragEndRef.current < 150) return; // ignore post-drag click
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -205,21 +221,28 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
 
     ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
 
+    // Zoom is purely CSS — the source image is not zoomed. When zoom > 1,
+    // the visible crop area in the source image is smaller: cropArea / zoom
+    const zoomedWidth = cropArea.width / zoom;
+    const zoomedHeight = cropArea.height / zoom;
+    const zoomedX = cropArea.x + (cropArea.width - zoomedWidth) / 2;
+    const zoomedY = cropArea.y + (cropArea.height - zoomedHeight) / 2;
+
     ctx.save();
     ctx.translate(outputSize / 2, outputSize / 2);
     ctx.rotate((rotation * Math.PI) / 180);
 
-    const scaleX = outputSize / (cropArea.width / zoom);
-    const scaleY = outputSize / (cropArea.height / zoom);
+    const scaleX = outputSize / zoomedWidth;
+    const scaleY = outputSize / zoomedHeight;
     const scale = Math.min(scaleX, scaleY);
 
     ctx.drawImage(
       img,
-      cropArea.x, cropArea.y, cropArea.width, cropArea.height,
-      (-cropArea.width * scale) / 2,
-      (-cropArea.height * scale) / 2,
-      cropArea.width * scale,
-      cropArea.height * scale,
+      zoomedX, zoomedY, zoomedWidth, zoomedHeight,
+      (-zoomedWidth * scale) / 2,
+      (-zoomedHeight * scale) / 2,
+      zoomedWidth * scale,
+      zoomedHeight * scale,
     );
     ctx.restore();
 
@@ -377,13 +400,13 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
                       <img
                         src={originalImage}
                         alt=""
-                        className="absolute object-contain pointer-events-none"
+                        className="absolute pointer-events-none"
                         style={{
-                          width: containerRef.current ? `${(imageSize.width / containerRef.current.getBoundingClientRect().width) * 100}%` : "100%",
+                          width: "100%",
                           height: "auto",
                           top: 0,
                           left: 0,
-                          transform: `translate(-${cropDisplay.left}%, -${cropDisplay.top}%)`,
+                          transform: `rotate(${rotation}deg) scale(${zoom}) translate(-${cropDisplay.left / zoom}%, -${cropDisplay.top / zoom}%)`,
                           filter: `brightness(${brightness}%) contrast(${contrast}%)`,
                           transformOrigin: "top left",
                         }}
