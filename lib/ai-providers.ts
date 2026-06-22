@@ -61,7 +61,7 @@ async function callOpenRouter<T>(
 
   return withRetry(async () => {
     const controller = new AbortController();
-    const timeoutMs = model === MODEL_ANALYSIS ? 120000 : 45000;
+    const timeoutMs = options?.timeoutMs ?? (model === MODEL_ANALYSIS ? 120000 : 60000);
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const body: Record<string, unknown> = {

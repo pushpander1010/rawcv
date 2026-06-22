@@ -173,7 +173,7 @@ export default function CoverLetterPage() {
 
     try {
       const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 45000);
+      const timer = setTimeout(() => ctrl.abort(), 90000);
 
       const res = await fetch("/api/chat/cover-letter", {
         method: "POST",
