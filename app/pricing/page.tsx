@@ -89,10 +89,10 @@ export default function PricingPage() {
               <div className="mb-4">
                 <p className="font-semibold text-base">{plan.name}</p>
                 <p className="text-3xl font-extrabold mt-1">
-                  {plan.price}<span className="text-sm font-normal text-gray-400 ml-1">/ {plan.credits}</span>
+                  {plan.price}<span className="text-sm font-normal text-gray-600 ml-1">/ {plan.credits}</span>
                 </p>
-                <p className="text-xs text-gray-400 mt-0.5">{plan.priceUsd} USD</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{plan.description}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{plan.priceUsd} USD</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{plan.description}</p>
               </div>
               <ul className="space-y-2 mb-6 flex-1">
                 {plan.features.map((feat) => (
@@ -130,7 +130,7 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
-          <p className="text-xs text-gray-400 mt-8">
+          <p className="text-xs text-gray-500 mt-8">
             Your first 20 free credits = ~10 analyses. That&apos;s enough to check and improve your resume several times.
           </p>
         </div>
@@ -144,7 +144,7 @@ export default function PricingPage() {
             {faqs.map((faq) => (
               <div key={faq.q}>
                 <dt className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{faq.q}</dt>
-                <dd className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{faq.a}</dd>
+                <dd className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{faq.a}</dd>
               </div>
             ))}
           </dl>
@@ -167,7 +167,7 @@ export default function PricingPage() {
 
       {/* Footer */}
       <footer className="border-t border-gray-100 dark:border-gray-800 py-8 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-600">
           <span className="font-bold text-gray-700 dark:text-gray-300">rawcv</span>
           <FooterNav />
           <p>© {new Date().getFullYear()} rawcv. All rights reserved.</p>

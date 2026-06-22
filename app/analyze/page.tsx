@@ -214,7 +214,7 @@ export default function AnalyzePage() {
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Paste a job description to see how well your resume matches.</p>
               <textarea value={jdInput} onChange={(e) => setJdInput(e.target.value)}
                 placeholder="Paste the job description here…" rows={7}
-                className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all duration-200 resize-none mb-4"
+                className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm placeholder-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all duration-200 resize-none mb-4"
                 aria-label="Job description input" />
               {!state.relevanceResult && !relevanceLoading && (
                 <button type="button" onClick={runRelevance} disabled={!jdInput.trim()}

@@ -173,7 +173,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
           </div>
           <div>
             <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">Profile photo</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+            <p className="text-xs text-gray-500 dark:text-gray-500 mt-0.5">
               This photo will be used in resume themes that support photos.
             </p>
             <button
@@ -208,7 +208,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
               <p className="text-sm font-bold text-gray-700 dark:text-gray-300">
                 Upload your photo
               </p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                 Drag & drop or click to browse. JPG/PNG, max 5 MB.
               </p>
               <p className="text-xs text-violet-500 dark:text-violet-400 font-semibold mt-2">
@@ -239,7 +239,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             {/* Header */}
             <div className="p-5 border-b border-gray-100 dark:border-gray-800">
               <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Edit Photo</h3>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                 Click on the image to reposition the crop area. Use sliders to adjust.
               </p>
             </div>

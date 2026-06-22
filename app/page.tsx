@@ -167,7 +167,7 @@ export default function LandingPage() {
               <span className="w-3 h-3 rounded-full bg-yellow-400" />
               <span className="w-3 h-3 rounded-full bg-green-400" />
               <div className="flex-1 mx-4 h-6 rounded-md bg-gray-200 dark:bg-gray-700 flex items-center px-3">
-                <span className="text-xs text-gray-400">rawcv.com/analyze</span>
+                <span className="text-xs text-gray-600">rawcv.com/analyze</span>
               </div>
             </div>
             {/* App UI mockup */}
@@ -216,7 +216,7 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          <p className="text-center text-xs text-gray-400 mt-3">Live preview updates as you chat or apply suggestions</p>
+          <p className="text-center text-xs text-gray-600 mt-3">Live preview updates as you chat or apply suggestions</p>
         </div>
       </section>
 
@@ -243,7 +243,7 @@ export default function LandingPage() {
                 ATS Compatibility Checker
               </span>
             </h2>
-            <p className="text-lg text-gray-500 dark:text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0">
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0">
               Our advanced scanning engine parses your resume and runs hundreds of checks. From section layout, contact details, date formatting, and keyword density to job description semantic matching.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
@@ -251,14 +251,14 @@ export default function LandingPage() {
                 <span className="text-emerald-600 dark:text-emerald-400 text-xl font-bold">✓</span>
                 <div>
                   <h4 className="font-semibold text-gray-950 dark:text-gray-100 text-sm">Targeted Keyword Density</h4>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Automatically identifies and highlights crucial industry terms missing from your profile.</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Automatically identifies and highlights crucial industry terms missing from your profile.</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="text-emerald-600 dark:text-emerald-400 text-xl font-bold">✓</span>
                 <div>
                   <h4 className="font-semibold text-gray-950 dark:text-gray-100 text-sm">Semantic JD Matching</h4>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Uses contextual AI models to match your experience details directly against the job requirements.</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Uses contextual AI models to match your experience details directly against the job requirements.</p>
                 </div>
               </div>
             </div>
@@ -411,8 +411,8 @@ export default function LandingPage() {
                 )}
                 <div className="mb-4">
                   <p className="font-semibold text-base">{plan.name}</p>
-                  <p className="text-3xl font-extrabold mt-1">{plan.price}<span className="text-sm font-normal text-gray-400 ml-1">/ {plan.credits}</span></p>
-                  <p className="text-xs text-gray-400 mt-0.5">{plan.priceUsd} USD</p>
+                  <p className="text-3xl font-extrabold mt-1">{plan.price}<span className="text-sm font-normal text-gray-600 ml-1">/ {plan.credits}</span></p>
+                  <p className="text-xs text-gray-600 mt-0.5">{plan.priceUsd} USD</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{plan.description}</p>
                 </div>
                 <ul className="space-y-2 mb-6 flex-1">
@@ -453,7 +453,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-gray-100 dark:border-gray-800 py-8 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
           <span className="font-bold text-gray-700 dark:text-gray-300">rawcv</span>
           <FooterNav />
           <p>© {new Date().getFullYear()} rawcv. All rights reserved.</p>

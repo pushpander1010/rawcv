@@ -217,7 +217,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
               or <span className="text-violet-600 dark:text-violet-400 font-medium hover:underline">browse files</span>
             </p>
           </div>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
             PDF, DOCX, or TXT · max 5 MB
           </p>
         </>

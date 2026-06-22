@@ -228,7 +228,7 @@ export default function AboutPage() {
                 <div className="font-bold text-gray-900 dark:text-gray-100 mb-1">{plan.name}</div>
                 <div className="text-2xl font-extrabold text-violet-600 dark:text-violet-400 mb-1">{plan.price}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{plan.credits}</div>
-                <div className="text-xs text-gray-400">{plan.note}</div>
+                <div className="text-xs text-gray-500">{plan.note}</div>
               </div>
             ))}
           </div>
@@ -257,7 +257,7 @@ export default function AboutPage() {
         </section>
 
         {/* Footer links */}
-        <div className="pt-6 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-400 flex flex-wrap gap-4">
+        <div className="pt-6 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-600 flex flex-wrap gap-4">
           <Link href="/" className="text-violet-600 hover:underline">Home</Link>
           <Link href="/how-to" className="text-violet-600 hover:underline">How-to guide</Link>
           <Link href="/privacy" className="text-violet-600 hover:underline">Privacy Policy</Link>

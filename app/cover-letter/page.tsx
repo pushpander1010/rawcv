@@ -478,7 +478,7 @@ export default function CoverLetterPage() {
               type="button"
               onClick={() => router.back()}
               aria-label="Go back"
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+              className="text-gray-500 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -544,7 +544,7 @@ export default function CoverLetterPage() {
                   );
                 })}
               </div>
-              <p className="mt-3 text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
+              <p className="mt-3 text-xs text-gray-500 dark:text-gray-500 leading-relaxed">
                 {formatInfo.description}
               </p>
             </section>
@@ -565,7 +565,7 @@ export default function CoverLetterPage() {
                     value={recipientName}
                     onChange={(e) => setRecipientName(e.target.value)}
                     placeholder="e.g. Jane Smith"
-                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500"
                   />
                 </div>
                 <div>
@@ -578,7 +578,7 @@ export default function CoverLetterPage() {
                     value={recipientCompany}
                     onChange={(e) => setRecipientCompany(e.target.value)}
                     placeholder="e.g. Acme Corp"
-                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500"
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -591,7 +591,7 @@ export default function CoverLetterPage() {
                     value={recipientTitle}
                     onChange={(e) => setRecipientTitle(e.target.value)}
                     placeholder="e.g. HR Manager, Engineering Director"
-                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500"
                   />
                 </div>
               </div>
@@ -607,7 +607,7 @@ export default function CoverLetterPage() {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the full job description here. Our AI will use your resume data + this JD to craft a tailored cover letter..."
-                  className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-y"
+                  className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-y"
                 />
               </div>
 
@@ -651,7 +651,7 @@ export default function CoverLetterPage() {
               </h2>
 
               {savedLetters.length === 0 ? (
-                <p className="text-xs text-gray-400 dark:text-gray-500 text-center py-6">
+                <p className="text-xs text-gray-500 dark:text-gray-500 text-center py-6">
                   No cover letters saved yet. Generate one and hit &quot;Save&quot;.
                 </p>
               ) : (
@@ -680,7 +680,7 @@ export default function CoverLetterPage() {
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-gray-400 dark:text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-500">
                               {formatDate(letter.createdAt)}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
@@ -693,7 +693,7 @@ export default function CoverLetterPage() {
                               e.stopPropagation();
                               deleteLetter(letter.id);
                             }}
-                            className="shrink-0 p-1 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                            className="shrink-0 p-1 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                             aria-label={`Delete cover letter for ${letter.recipientCompany || "unknown"}`}
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -748,7 +748,7 @@ export default function CoverLetterPage() {
                         ))}
                       </p>
                     </div>
-                    <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">
+                    <span className="text-xs text-gray-500 dark:text-gray-500 whitespace-nowrap">
                       {new Date().toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",
@@ -776,7 +776,7 @@ export default function CoverLetterPage() {
                     value={opening}
                     onChange={(e) => setOpening(e.target.value)}
                     placeholder={formatInfo.openingHint}
-                    className="w-full text-sm font-medium text-gray-800 dark:text-gray-100 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-400"
+                    className="w-full text-sm font-medium text-gray-800 dark:text-gray-100 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500"
                   />
                 </div>
 
@@ -789,7 +789,7 @@ export default function CoverLetterPage() {
                         onChange={(e) => updateBody(idx, e.target.value)}
                         rows={3}
                         placeholder={`Paragraph ${idx + 1} — Write your cover letter content here...`}
-                        className="w-full text-sm text-gray-700 dark:text-gray-300 bg-transparent border border-transparent focus:border-violet-300 dark:focus:border-violet-600 rounded-lg p-2 resize-y leading-relaxed focus:outline-none focus:bg-white dark:focus:bg-gray-800 transition-colors placeholder-gray-400"
+                        className="w-full text-sm text-gray-700 dark:text-gray-300 bg-transparent border border-transparent focus:border-violet-300 dark:focus:border-violet-600 rounded-lg p-2 resize-y leading-relaxed focus:outline-none focus:bg-white dark:focus:bg-gray-800 transition-colors placeholder-gray-500"
                       />
                       {bodyParagraphs.length > 1 && (
                         <button
@@ -827,7 +827,7 @@ export default function CoverLetterPage() {
                       value={closing}
                       onChange={(e) => setClosing(e.target.value)}
                       placeholder={formatInfo.closingHint}
-                      className="w-full text-sm text-gray-700 dark:text-gray-300 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-400"
+                      className="w-full text-sm text-gray-700 dark:text-gray-300 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500"
                     />
                   </div>
                   <div>
@@ -838,7 +838,7 @@ export default function CoverLetterPage() {
                       value={signature}
                       onChange={(e) => setSignature(e.target.value)}
                       placeholder={userName || "Your Name"}
-                      className="w-full text-base font-bold text-gray-900 dark:text-gray-100 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-400"
+                      className="w-full text-base font-bold text-gray-900 dark:text-gray-100 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500"
                     />
                   </div>
                 </div>

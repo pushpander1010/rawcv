@@ -183,7 +183,7 @@ export default function HowToPage() {
         {/* Sticky sidebar TOC */}
         <aside className="hidden lg:block w-56 flex-shrink-0">
           <div className="sticky top-20">
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">On this page</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-400 mb-4">On this page</p>
             <nav aria-label="Table of contents">
               <ul className="space-y-1">
                 {TOC.map((item) => (
@@ -535,7 +535,7 @@ export default function HowToPage() {
                       <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">{t.name}</span>
                     </div>
                     <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">{t.name}</p>
-                    <p className="text-[10px] text-gray-400 mt-0.5">{t.desc}</p>
+                    <p className="text-[10px] text-gray-500 mt-0.5">{t.desc}</p>
                   </div>
                 ))}
               </div>
@@ -573,7 +573,7 @@ export default function HowToPage() {
                   <div key={p.name} className="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
                     <p className="font-semibold text-gray-900 dark:text-gray-100">{p.name}</p>
                     <p className="text-xl font-extrabold mt-1 text-violet-600 dark:text-violet-400">{p.credits}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{p.price}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{p.price}</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">{p.best}</p>
                   </div>
                 ))}

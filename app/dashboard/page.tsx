@@ -153,7 +153,7 @@ function CreditsTab() {
         <div aria-hidden="true" className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-violet-500 to-indigo-650" />
         <div className="flex items-center justify-between relative z-10">
           <div>
-            <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">Current balance</p>
+            <p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest mb-1.5">Current balance</p>
             {loadingData ? (
               <div className="h-9 w-28 bg-gray-100 dark:bg-gray-850 rounded-xl animate-pulse" />
             ) : (
@@ -191,11 +191,11 @@ function CreditsTab() {
               )}
               <div>
                 <p className="font-extrabold text-gray-950 dark:text-gray-100 tracking-tight">{b.name}</p>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 leading-normal">{b.description}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 leading-normal">{b.description}</p>
               </div>
               
               <div className="my-1 p-3.5 rounded-2xl bg-gray-50 dark:bg-gray-850/40 border border-gray-100 dark:border-gray-800/60 shadow-inner flex flex-col gap-1">
-                <p className="text-2xl font-black text-gray-900 dark:text-gray-100 tracking-tight">{b.credits} <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">credits</span></p>
+                <p className="text-2xl font-black text-gray-900 dark:text-gray-100 tracking-tight">{b.credits} <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">credits</span></p>
                 <p className="text-lg font-bold bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent">₹{b.priceInr.toLocaleString("en-IN")}</p>
               </div>
 
@@ -223,7 +223,7 @@ function CreditsTab() {
           <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-14 bg-gray-100 dark:bg-gray-850 rounded-2xl animate-pulse" />)}</div>
         ) : transactions.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-gray-255 dark:border-gray-800 p-8 text-center bg-white dark:bg-gray-900">
-            <p className="text-sm text-gray-400 dark:text-gray-500">No transactions recorded yet.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-500">No transactions recorded yet.</p>
           </div>
         ) : (
           <div className="rounded-2xl border border-gray-200 dark:border-gray-850 overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
@@ -243,7 +243,7 @@ function CreditsTab() {
                       <td className={`px-5 py-3 text-right font-bold tabular-nums ${tx.amount > 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-450"}`}>
                         {tx.amount > 0 ? `+${tx.amount}` : tx.amount}
                       </td>
-                      <td className="px-5 py-3 text-right text-gray-400 dark:text-gray-500 hidden sm:table-cell">
+                      <td className="px-5 py-3 text-right text-gray-500 dark:text-gray-500 hidden sm:table-cell">
                         {new Date(tx.createdAt).toLocaleDateString(undefined, {
                           year: 'numeric',
                           month: 'short',
@@ -322,7 +322,7 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
         {/* Resume status card */}
         <div className="rounded-3xl border border-gray-250 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 flex flex-col gap-4 hover:border-violet-300 dark:hover:border-violet-800/80 transition-all duration-300 shadow-md hover:shadow-lg">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Resume</p>
+            <p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">Resume</p>
             <span
               className={`inline-flex items-center gap-1.5 text-xxs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
                 hasResume
@@ -340,7 +340,7 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
                 {state.parsed?.contact?.name ?? "Your resume"}
               </p>
               {state.parsed?.contact?.email && (
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">{state.parsed.contact.email}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500 mt-0.5 truncate">{state.parsed.contact.email}</p>
               )}
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {state.parsed?.skills?.slice(0, 3).map((s) => (
@@ -349,7 +349,7 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
                   </span>
                 ))}
                 {(state.parsed?.skills?.length ?? 0) > 3 && (
-                  <span className="text-xxs text-gray-400 dark:text-gray-550 font-bold self-center ml-1">+{(state.parsed?.skills?.length ?? 0) - 3} more</span>
+                  <span className="text-xxs text-gray-500 dark:text-gray-550 font-bold self-center ml-1">+{(state.parsed?.skills?.length ?? 0) - 3} more</span>
                 )}
               </div>
             </div>
@@ -375,11 +375,11 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
 
         {/* Credit balance card */}
         <div className="rounded-3xl border border-gray-255 dark:border-gray-800 bg-white dark:bg-gray-900/50 p-6 flex flex-col gap-4 hover:border-violet-300 dark:hover:border-violet-800/80 transition-all duration-300 shadow-md hover:shadow-lg">
-          <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Credits</p>
+          <p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">Credits</p>
           <div className="flex items-end justify-between gap-2">
             <p className="text-3xl font-black text-gray-950 dark:text-gray-100 tracking-tight tabular-nums">
               {balance}
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1.5">left</span>
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1.5">left</span>
             </p>
             <span className="text-3xl" aria-hidden="true">💳</span>
           </div>
@@ -387,7 +387,7 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
           <div className="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden" role="progressbar" aria-valuenow={balance} aria-valuemin={0} aria-valuemax={100} aria-label="Credit balance">
             <div className={`h-full rounded-full transition-all duration-500 ${barColor}`} style={{ width: `${barPct}%` }} />
           </div>
-          <p className="text-xxs text-gray-400 dark:text-gray-500 font-medium">Each AI operation costs 2 credits.</p>
+          <p className="text-xxs text-gray-500 dark:text-gray-500 font-medium">Each AI operation costs 2 credits.</p>
           <button
             type="button"
             onClick={() => onSwitchTab("credits")}
@@ -470,7 +470,7 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
                 </span>
                 <div>
                   <p className="font-bold text-gray-950 dark:text-gray-100 tracking-tight group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">{t.label}</p>
-                  <p className="text-xxs text-gray-400 dark:text-gray-500 mt-1 leading-relaxed font-medium">{t.desc}</p>
+                  <p className="text-xxs text-gray-500 dark:text-gray-500 mt-1 leading-relaxed font-medium">{t.desc}</p>
                 </div>
               </Link>
             );
@@ -601,8 +601,8 @@ function ProfileTab() {
               }`}
             >
               <p className="font-bold text-sm text-gray-900 dark:text-gray-100">{fmt.label}</p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 leading-relaxed">{fmt.description}</p>
-              <div className="flex gap-3 mt-2 text-xxs font-semibold text-gray-400 dark:text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 leading-relaxed">{fmt.description}</p>
+              <div className="flex gap-3 mt-2 text-xxs font-semibold text-gray-500 dark:text-gray-500">
                 <span>Max {fmt.maxPages} page{fmt.maxPages > 1 ? "s" : ""}</span>
                 {fmt.photoRequired && <span className="text-violet-500">📸 Photo req.</span>}
               </div>
@@ -625,7 +625,7 @@ function ProfileTab() {
             </button>
           </div>
           {lang.length === 0 ? (
-            <p className="text-xs text-gray-400 dark:text-gray-500">No languages added yet.</p>
+            <p className="text-xs text-gray-500 dark:text-gray-500">No languages added yet.</p>
           ) : (
             <div className="space-y-3">
               {lang.map((l, i) => (
@@ -635,7 +635,7 @@ function ProfileTab() {
                     value={l.language}
                     onChange={(e) => updateLanguage(i, "language", e.target.value)}
                     placeholder="Language"
-                    className="flex-1 px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-850 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                    className="flex-1 px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-850 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   />
                   <select
                     value={l.level}
@@ -666,7 +666,7 @@ function ProfileTab() {
         <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest mb-4">Cover Letters</h3>
         {state.coverLetters.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 p-6 text-center">
-            <p className="text-sm text-gray-400 dark:text-gray-500">No saved cover letters yet.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-500">No saved cover letters yet.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -686,8 +686,8 @@ function ProfileTab() {
                       {RESUME_FORMAT_INFO[cl.format]?.label ?? cl.format}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 line-clamp-2">{cl.opening}</p>
-                  <p className="text-xxs text-gray-400 dark:text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 line-clamp-2">{cl.opening}</p>
+                  <p className="text-xxs text-gray-500 dark:text-gray-500 mt-1">
                     {new Date(cl.createdAt).toLocaleDateString(undefined, {
                       year: "numeric", month: "short", day: "numeric",
                     })}

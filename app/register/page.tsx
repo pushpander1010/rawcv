@@ -134,7 +134,7 @@ export default function RegisterPage() {
       <div className="flex justify-center px-4 pb-12">
         <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-100 dark:border-gray-800">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">Create your account</h1>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-gray-600 mb-6">
             Start building better resumes with AI —{" "}
             <span className="font-medium text-emerald-600 dark:text-emerald-400">20 free credits included</span>
           </p>
@@ -178,7 +178,7 @@ export default function RegisterPage() {
 
           <div className="flex items-center gap-3 mb-4">
             <hr className="flex-1 border-gray-200 dark:border-gray-700" />
-            <span className="text-xs text-gray-400">or sign up with email</span>
+            <span className="text-xs text-gray-500">or sign up with email</span>
             <hr className="flex-1 border-gray-200 dark:border-gray-700" />
           </div>
 
@@ -194,7 +194,7 @@ export default function RegisterPage() {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
+                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
                 placeholder="Jane Smith"
               />
             </div>
@@ -210,7 +210,7 @@ export default function RegisterPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
+                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
                 placeholder="you@example.com"
               />
             </div>
@@ -227,7 +227,7 @@ export default function RegisterPage() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
+                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all"
                 placeholder="Min. 8 characters"
               />
             </div>
@@ -241,7 +241,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-500">
+          <p className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{" "}
             <Link href="/login" className="text-indigo-600 hover:underline font-medium">
               Sign in
@@ -294,7 +294,7 @@ export default function RegisterPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">{step.title}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{step.body}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{step.body}</p>
                 </div>
               </li>
             ))}
@@ -310,13 +310,13 @@ export default function RegisterPage() {
             {FAQS.map((faq) => (
               <div key={faq.q} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800/80 px-5 py-4.5 hover:shadow-sm transition-shadow">
                 <dt className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1.5">{faq.q}</dt>
-                <dd className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{faq.a}</dd>
+                <dd className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{faq.a}</dd>
               </div>
             ))}
           </dl>
         </section>
 
-        <p className="text-center text-sm text-gray-400">
+        <p className="text-center text-sm text-gray-600">
           Already have an account?{" "}
           <Link href="/login" className="text-indigo-600 hover:underline font-medium">
             Sign in here

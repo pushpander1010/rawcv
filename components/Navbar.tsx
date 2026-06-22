@@ -172,7 +172,7 @@ export default function Navbar() {
                         .toUpperCase()}
                     </span>
                     <svg
-                      className="w-3.5 h-3.5 text-gray-400"
+                      className="w-3.5 h-3.5 text-gray-500"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -195,7 +195,7 @@ export default function Navbar() {
                             {session.user?.name ?? "Account"}
                           </p>
                           {session.user?.email && (
-                            <p className="text-xs text-gray-400 truncate">{session.user.email}</p>
+                            <p className="text-xs text-gray-600 truncate">{session.user.email}</p>
                           )}
                         </div>
                         <Link

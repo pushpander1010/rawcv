@@ -248,7 +248,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
           ))}
         </ul>
 
-        <p className="text-[10px] text-gray-400 dark:text-gray-500 mb-3">
+        <p className="text-[10px] text-gray-600 dark:text-gray-400 mb-3">
           Best for:{" "}
           <span className="font-medium text-gray-600 dark:text-gray-300">
             {theme.bestFor}
@@ -273,7 +273,7 @@ function FAQ({ question, answer }: { question: string; answer: string }) {
     <details className="group border-b border-gray-200 dark:border-gray-800 pb-4 mb-4 last:border-b-0 last:pb-0 last:mb-0">
       <summary className="flex items-center justify-between cursor-pointer list-none text-sm font-semibold text-gray-900 dark:text-gray-100 py-2 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
         {question}
-        <span className="text-gray-400 dark:text-gray-500 group-open:rotate-45 transition-transform text-lg leading-none">
+        <span className="text-gray-500 dark:text-gray-500 group-open:rotate-45 transition-transform text-lg leading-none">
           +
         </span>
       </summary>
