@@ -68,6 +68,12 @@ export default function Navbar() {
                   📝 Cover Letter
                 </Link>
                 <Link
+                  href="/international"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  🌍 International
+                </Link>
+                <Link
                   href="/contact"
                   className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
@@ -108,7 +114,13 @@ export default function Navbar() {
                   📝 Cover Letter
                 </Link>
                 <Link
-                  href="/blog"
+                  href="/international"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  🌍 International
+                </Link>
+                <Link
+                  href="/blog" 
                   className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   📝 Blog
@@ -315,6 +327,13 @@ export default function Navbar() {
                   📝 Cover Letter
                 </Link>
                 <Link
+                  href="/international"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  🌍 International
+                </Link>
+                <Link
                   href="/contact"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -358,6 +377,13 @@ export default function Navbar() {
                   className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   📝 Cover Letter
+                </Link>
+                <Link
+                  href="/international"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  🌍 International
                 </Link>
                 <Link
                   href="/blog"

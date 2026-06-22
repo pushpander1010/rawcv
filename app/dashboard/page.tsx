@@ -9,7 +9,7 @@ import ResumeUploader from "@/components/ResumeUploader";
 import PhotoUpload from "@/components/PhotoUpload";
 import type { CreditTransaction } from "@/lib/user-store";
 import { RESUME_FORMAT_INFO } from "@/types";
-import type { ResumeFormat, CoverLetter, LanguageProficiency } from "@/types";
+import type { ResumeFormat } from "@/types";
 
 // ─── Bundle definitions ───────────────────────────────────────────────────────
 
@@ -516,54 +516,10 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
 
 // ─── Profile tab ──────────────────────────────────────────────────────────────
 
-const PROFICIENCY_OPTIONS = [
-  { value: "basic", label: "Basic" },
-  { value: "elementary", label: "Elementary" },
-  { value: "intermediate", label: "Intermediate" },
-  { value: "upper-intermediate", label: "Upper Intermediate" },
-  { value: "advanced", label: "Advanced" },
-  { value: "fluent", label: "Fluent" },
-  { value: "native", label: "Native" },
-  { value: "bilingual", label: "Bilingual" },
-] as const;
+
 
 function ProfileTab() {
   const { state, setState } = useResume();
-  const info = RESUME_FORMAT_INFO[state.selectedFormat];
-
-  function setFormat(f: ResumeFormat) {
-    setState((prev) => ({ ...prev, selectedFormat: f }));
-  }
-
-  function addLanguage() {
-    setState((prev) => ({
-      ...prev,
-      parsed: prev.parsed
-        ? {
-            ...prev.parsed,
-            languages: [...(prev.parsed.languages ?? []), { language: "", level: "intermediate" as const }],
-          }
-        : prev.parsed,
-    }));
-  }
-
-  function removeLanguage(i: number) {
-    setState((prev) => ({
-      ...prev,
-      parsed: prev.parsed
-        ? { ...prev.parsed, languages: prev.parsed.languages?.filter((_, idx) => idx !== i) ?? [] }
-        : prev.parsed,
-    }));
-  }
-
-  function updateLanguage(i: number, field: "language" | "level", value: string) {
-    setState((prev) => {
-      if (!prev.parsed) return prev;
-      const langs = [...(prev.parsed.languages ?? [])];
-      langs[i] = { ...langs[i], [field]: value };
-      return { ...prev, parsed: { ...prev.parsed, languages: langs } };
-    });
-  }
 
   function deleteCoverLetter(id: string) {
     setState((prev) => ({
@@ -571,8 +527,6 @@ function ProfileTab() {
       coverLetters: prev.coverLetters.filter((cl) => cl.id !== id),
     }));
   }
-
-  const lang = state.parsed?.languages ?? [];
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -585,81 +539,28 @@ function ProfileTab() {
         </p>
       </div>
 
-      {/* Resume format selector */}
-      <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-violet-300 dark:hover:border-violet-800/80 transition-all duration-300">
-        <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest mb-4">Resume Format</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {(Object.entries(RESUME_FORMAT_INFO) as [ResumeFormat, typeof info][]).map(([key, fmt]) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setFormat(key)}
-              className={`rounded-2xl border p-4 text-left transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none ${
-                state.selectedFormat === key
-                  ? "border-violet-500 bg-violet-50/60 dark:bg-violet-950/20 shadow-md shadow-violet-500/10"
-                  : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/50 hover:border-violet-300 dark:hover:border-violet-800"
-              }`}
-            >
-              <p className="font-bold text-sm text-gray-900 dark:text-gray-100">{fmt.label}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 leading-relaxed">{fmt.description}</p>
-              <div className="flex gap-3 mt-2 text-xxs font-semibold text-gray-500 dark:text-gray-500">
-                <span>Max {fmt.maxPages} page{fmt.maxPages > 1 ? "s" : ""}</span>
-                {fmt.photoRequired && <span className="text-violet-500">📸 Photo req.</span>}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Languages section — only show for EU format */}
-      {info.includeLanguages && (
-        <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-violet-300 dark:hover:border-violet-800/80 transition-all duration-300">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest">Languages</h3>
-            <button
-              type="button"
-              onClick={addLanguage}
-              className="text-xs font-bold text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 hover:underline"
-            >
-              + Add language
-            </button>
+      {/* International resume formats & languages — now on /international */}
+      <Link
+        href="/international"
+        className="block rounded-3xl border border-violet-200 dark:border-violet-800/60 bg-gradient-to-br from-violet-50/80 to-white dark:from-violet-950/30 dark:to-gray-900 p-6 shadow-md hover:shadow-lg hover:border-violet-400 dark:hover:border-violet-700 transition-all duration-300 group"
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest mb-2">
+              International Resumes
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Manage resume formats, languages, and localization settings
+            </p>
           </div>
-          {lang.length === 0 ? (
-            <p className="text-xs text-gray-500 dark:text-gray-500">No languages added yet.</p>
-          ) : (
-            <div className="space-y-3">
-              {lang.map((l, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <input
-                    type="text"
-                    value={l.language}
-                    onChange={(e) => updateLanguage(i, "language", e.target.value)}
-                    placeholder="Language"
-                    className="flex-1 px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-850 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-                  />
-                  <select
-                    value={l.level}
-                    onChange={(e) => updateLanguage(i, "level", e.target.value)}
-                    className="px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-850 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-                  >
-                    {PROFICIENCY_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>{opt.label}</option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    onClick={() => removeLanguage(i)}
-                    className="p-2 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
-                    aria-label="Remove language"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <span className="inline-flex items-center gap-1 text-sm font-semibold text-violet-600 dark:text-violet-400 group-hover:translate-x-1 transition-transform">
+            Open
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </span>
         </div>
-      )}
+      </Link>
 
       {/* Cover letters */}
       <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-violet-300 dark:hover:border-violet-800/80 transition-all duration-300">
