@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.rawcv.com/analyze" },
 };
 
+
 export default function AnalyzeLayout({
   children,
 }: {
