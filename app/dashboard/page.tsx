@@ -135,8 +135,8 @@ function CreditsTab() {
           <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-1">
             Top Up Your Account
           </h2>
-          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 max-w-md leading-relaxed">
-            Credits power your AI resume actions, ATS scans, and JD matching. Select a bundle below to recharge.
+          text-xs sm:text-sm text-gray-600 dark:text-gray-400 max-w-md leading-relaxed">
+                      Credits power your AI resume actions
           </p>
         </div>
         <div className="w-24 h-24 shrink-0 relative rounded-2xl overflow-hidden border border-violet-100 dark:border-violet-900/30 p-1 bg-white dark:bg-gray-900 shadow-md transform hover:scale-[1.03] transition-transform duration-300">
@@ -232,8 +232,8 @@ function CreditsTab() {
                 <thead>
                   <tr className="bg-gray-55 dark:bg-gray-800/40 text-left border-b border-gray-100 dark:border-gray-800">
                     <th className="px-5 py-3 font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider text-xs">Description</th>
-                    <th className="px-5 py-3 font-bold text-gray-500 dark:text-gray-400 text-right uppercase tracking-wider text-xs">Credits</th>
-                    <th className="px-5 py-3 font-bold text-gray-500 dark:text-gray-400 text-right hidden sm:table-cell uppercase tracking-wider text-xs">Date</th>
+                    <th className="px-5 py-3 font-bold text-gray-600 dark:text-gray-400 text-right uppercase tracking-wider text-xs">Credits</th>
+                    <th className="px-5 py-3 font-bold text-gray-600 dark:text-gray-400 text-right hidden sm:table-cell uppercase tracking-wider text-xs">Date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
