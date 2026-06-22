@@ -48,7 +48,7 @@ async function callOpenRouter<T>(
   model: string,
   prompt: string,
   systemPrompt: string,
-  options?: { maxTokens?: number; schema?: z.ZodSchema<T>; jsonMode?: boolean; temperature?: number }
+  options?: { maxTokens?: number; schema?: z.ZodSchema<T>; jsonMode?: boolean; temperature?: number; timeoutMs?: number }
 ): Promise<T> {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error("OPENROUTER_API_KEY not set");
@@ -66,9 +66,10 @@ async function callOpenRouter<T>(
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const body: Record<string, unknown> = {
-        model,
-        max_tokens: options?.maxTokens ?? 2500,
-        temperature: options?.temperature ?? 0.1,
+            model,
+            max_tokens: options?.maxTokens ?? 2500,
+            temperature: options?.temperature ?? 0.1,
+            ...(model.startsWith("xiaomi/") ? { reasoning: { exclude: true } } : {}),
         messages: [
           { role: "system", content: fullSystem },
           { role: "user",   content: prompt },
