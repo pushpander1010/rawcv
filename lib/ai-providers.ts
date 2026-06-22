@@ -3,7 +3,7 @@ import { z } from "zod";
 const DefaultSchema = z.any();
 
 // ─── Models ───────────────────────────────────────────────────────────────────
-const MODEL_PARSE    = "xiaomi/mimo-v2.5";           // resume parsing
+const MODEL_PARSE    = "google/gemini-2.5-flash-lite"; // resume parsing — fast & cheap
 const MODEL_CHAT     = "xiaomi/mimo-v2.5";            // chat / build / customize
 const MODEL_ANALYSIS = "xiaomi/mimo-v2.5";             // ATS, JD relevance, suggestions, enhance
 
