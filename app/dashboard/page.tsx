@@ -366,9 +366,12 @@ function OverviewTab({ onSwitchTab }: { onSwitchTab: (id: TabId) => void }) {
               >
                 Re-analyze →
               </Link>
-              <div className="flex-1">
-                <ResumeUploader />
-              </div>
+              <Link
+                href="/chat"
+                className="flex-1 inline-flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm"
+              >
+                ✏️ Edit
+              </Link>
             </div>
           ) : null}
         </div>
