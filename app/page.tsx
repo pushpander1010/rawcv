@@ -132,7 +132,7 @@ export default function LandingPage() {
             <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-6">
               Land more interviews
               <br />
-              <span className="bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-violet-600 to-blue-500 text-violet-700 dark:text-violet-300">
                 with a smarter resume
               </span>
             </h1>
@@ -239,7 +239,7 @@ export default function LandingPage() {
             <h2 className="text-4xl font-bold tracking-tight mb-6">
               Beat the bots with our
               <br />
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-500 text-violet-700 dark:text-violet-300">
                 ATS Compatibility Checker
               </span>
             </h2>
