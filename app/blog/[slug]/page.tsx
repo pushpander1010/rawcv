@@ -391,7 +391,7 @@ const ARTICLES: Record<
         <p>
           LinkedIn&apos;s algorithm favors active users. Posting just once a week — sharing an industry insight, commenting on a trend, or reposting a relevant article — dramatically increases your profile views and search ranking. You do not need to be a content creator, but regular activity signals relevance to the platform.
         </p>
-      </>,
+      </>
     ),
   },
   "resume-format-for-germany": {

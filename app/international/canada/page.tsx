@@ -4,14 +4,6 @@ import Breadcrumb from "@/components/Breadcrumb";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  openGraph: {
-    title: "Canada Resume Format — Complete Guide | rawcv",
-    description:
-      "Everything you need to write a Canadian resume: anti-discrimination rules, achievement focus, bilingual skills, and ATS-friendly formatting.",
-    url: "https://www.rawcv.com/international/canada",
-    type: "article",
-    images: [{ url: "https://www.rawcv.com/og-image.png", width: 1200, height: 630, alt: "Canada Resume Format Guide" }],
-  },
   title: "Canada Resume Format — Complete Guide & Template | rawcv",
   description:
     "Learn the Canadian resume format: no photo, no personal details, 1-2 pages, quantified achievements, and bilingual skills. Free AI conversion tool included.",
@@ -22,6 +14,7 @@ export const metadata: Metadata = {
       "Everything you need to write a Canadian resume: anti-discrimination rules, achievement focus, bilingual skills, and ATS-friendly formatting.",
     url: "https://www.rawcv.com/international/canada",
     type: "article",
+    images: [{ url: "https://www.rawcv.com/og-image.png", width: 1200, height: 630, alt: "Canada Resume Format Guide" }],
   },
 };
 

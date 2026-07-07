@@ -16,21 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-const itemListJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  name: "Resume Formats by Country",
-  description: "Compare resume formats for every major hiring market: US, EU/Europass, Canada, India, UK, Australia, Germany, Japan, and more.",
-  url: "https://www.rawcv.com/resume-formats",
-  itemListElement: FORMATS.map((format, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    name: `${format.country} Resume Format`,
-    url: `https://www.rawcv.com${format.link}`,
-    description: format.keyTip,
-  })),
-};
-
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Article",
@@ -142,6 +127,21 @@ const FORMATS = [
     supported: false,
   },
 ];
+
+const itemListJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Resume Formats by Country",
+  description: "Compare resume formats for every major hiring market: US, EU/Europass, Canada, India, UK, Australia, Germany, Japan, and more.",
+  url: "https://www.rawcv.com/resume-formats",
+  itemListElement: FORMATS.map((format, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: `${format.country} Resume Format`,
+    url: `https://www.rawcv.com${format.link}`,
+    description: format.keyTip,
+  })),
+};
 
 export default function ResumeFormatsPage() {
   const faqJsonLd = {

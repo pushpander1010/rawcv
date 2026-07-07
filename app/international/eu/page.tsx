@@ -4,14 +4,6 @@ import Breadcrumb from "@/components/Breadcrumb";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  openGraph: {
-    title: "EU / Europass Resume Format — Complete Guide | rawcv",
-    description:
-      "Everything you need to write a European CV: photo, languages, personal info, section order, and Europass conventions. Convert your resume for free.",
-    url: "https://www.rawcv.com/international/eu",
-    type: "article",
-    images: [{ url: "https://www.rawcv.com/og-image.png", width: 1200, height: 630, alt: "EU / Europass Resume Format Guide" }],
-  },
   title: "EU / Europass Resume Format — Complete Guide & Template | rawcv",
   description:
     "Learn the exact EU and Europass resume format: section order, photo rules, CEFR language levels, personal details requirements, and up to 3 pages. Free AI conversion tool included.",
@@ -22,6 +14,7 @@ export const metadata: Metadata = {
       "Everything you need to write a European CV: photo, languages, personal info, section order, and Europass conventions. Convert your resume for free.",
     url: "https://www.rawcv.com/international/eu",
     type: "article",
+    images: [{ url: "https://www.rawcv.com/og-image.png", width: 1200, height: 630, alt: "EU / Europass Resume Format Guide" }],
   },
 };
 

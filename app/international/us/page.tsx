@@ -4,14 +4,6 @@ import Breadcrumb from "@/components/Breadcrumb";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  openGraph: {
-    title: "US Resume Format — Complete Guide | rawcv",
-    description:
-      "Everything you need to write a US resume: 1-page format, achievement focus, action verbs, ATS optimization, and what NOT to include.",
-    url: "https://www.rawcv.com/international/us",
-    type: "article",
-    images: [{ url: "https://www.rawcv.com/og-image.png", width: 1200, height: 630, alt: "US Resume Format Guide" }],
-  },
   title: "US Resume Format — Complete Guide & Template | rawcv",
   description:
     "Learn the American resume format: 1-page preferred, no photo, achievement-first bullets, strong action verbs, and ATS-optimized structure. Free AI conversion tool included.",
@@ -22,6 +14,7 @@ export const metadata: Metadata = {
       "Everything you need to write a US resume: 1-page format, achievement focus, action verbs, ATS optimization, and what NOT to include.",
     url: "https://www.rawcv.com/international/us",
     type: "article",
+    images: [{ url: "https://www.rawcv.com/og-image.png", width: 1200, height: 630, alt: "US Resume Format Guide" }],
   },
 };
 
@@ -203,7 +196,7 @@ export default function USFormatPage() {
               <ul className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
                 <li>• Never include a photo</li>
                 <li>• Don&apos;t include DOB, age, or nationality</li>
-                <li>• Don&apos;t exceed 1 page for <10 years experience</li>
+                <li>• Don&apos;t exceed 1 page for &lt;10 years experience</li>
                 <li>• Don&apos;t include &quot;References available upon request&quot;</li>
                 <li>• Don&apos;t use fancy fonts, tables, or graphics</li>
               </ul>

@@ -1,6 +1,14 @@
-import { Resend } from "resend";
+import type { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+
+function getResend(): Resend {
+  if (!_resend) {
+    const { Resend: ResendClass } = require("resend");
+    _resend = new ResendClass(process.env.RESEND_API_KEY);
+  }
+  return _resend!;
+}
 
 const FROM = process.env.EMAIL_FROM ?? "rawcv <noreply@rawcv.com>";
 const BASE_URL = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
@@ -16,7 +24,7 @@ export async function sendVerificationEmail(
   console.log("[email] FROM:", FROM);
   console.log("[email] Verify URL:", verifyUrl);
 
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResend().emails.send({
     from: FROM,
     to,
     subject: "Verify your rawcv email address",
@@ -111,7 +119,7 @@ export async function sendPasswordResetEmail(
 ): Promise<void> {
   const resetUrl = `${BASE_URL}/reset-password?token=${token}`;
 
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResend().emails.send({
     from: FROM,
     to,
     subject: "Reset your rawcv password",

@@ -1,8 +1,10 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  const { Resend } = require("resend");
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,6 +17,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const resend = getResend();
 
     // Send notification email to support inbox
     const { error: sendError } = await resend.emails.send({
