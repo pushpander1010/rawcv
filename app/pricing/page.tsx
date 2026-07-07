@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
+import Breadcrumb from "@/components/Breadcrumb";
 import { pricingPlans } from "@/data/pricing";
 import { PricingCTA, FooterNav } from "@/components/LandingCTA";
 
@@ -58,6 +59,9 @@ export default function PricingPage() {
 
       {/* Header */}
       <section className="pt-20 pb-12 px-6 text-center">
+        <div className="max-w-3xl mx-auto mb-6">
+          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Pricing", href: "/pricing" }]} />
+        </div>
         <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase">
           Simple Pricing
         </span>

@@ -391,6 +391,584 @@ const ARTICLES: Record<
         <p>
           LinkedIn&apos;s algorithm favors active users. Posting just once a week — sharing an industry insight, commenting on a trend, or reposting a relevant article — dramatically increases your profile views and search ranking. You do not need to be a content creator, but regular activity signals relevance to the platform.
         </p>
+      </>,
+    ),
+  },
+  "resume-format-for-germany": {
+    title: "Resume Format for Germany: A Complete Guide (Lebenslauf)",
+    description: "Everything you need to know about the German Lebenslauf: mandatory photo, detailed personal info, reverse-chronological format, and formal conventions that German recruiters expect.",
+    category: "International",
+    date: "Jul 7, 2026",
+    readTime: "6 min read",
+    content: (
+      <>
+        <p>
+          The German resume, known as a <strong>Lebenslauf</strong>, follows strict conventions that differ significantly from US, UK, or Indian formats. German recruiters expect a formal, detailed, and photo-inclusive CV. Getting the format wrong can cost you an interview before your qualifications are even considered.
+        </p>
+        <p>
+          Germany has one of the most structured CV formats in the world. While a US resume focuses on brevity and achievement metrics, a German Lebenslauf emphasizes completeness, formality, and personal transparency. Understanding these differences is essential if you are applying to jobs in Germany, Austria, or German-speaking Switzerland.
+        </p>
+
+        <h2>CV vs Resume: What Germans Expect</h2>
+        <p>
+          In Germany, the terms <strong>Lebenslauf</strong> (resume/CV) and <strong>Bewerbung</strong> (application) are used interchangeably, but the expectations are specific. A German application typically includes:
+        </p>
+        <ul>
+          <li><strong>Deckblatt (Cover Page):</strong> Optional but common — a clean first page with your name, photo, and the position you are applying for</li>
+          <li><strong>Anschreiben (Cover Letter):</strong> A formal letter addressed to the hiring manager, explaining why you want this specific role</li>
+          <li><strong>Lebenslauf (CV):</strong> Your detailed resume following strict format conventions</li>
+          <li><strong>Zeugnisse (Certificates):</strong> Copies of degree certificates, work references, and training certificates</li>
+        </ul>
+        <p>
+          Unlike the US where a single-page resume is sufficient, German employers expect a <strong>complete documentation package</strong>. Your Lebenslauf is just one part of this.
+        </p>
+
+        <h2>1. The Photo Is Mandatory</h2>
+        <p>
+          A professional photo is <strong>expected</strong> on every German resume. This is non-negotiable. German recruiters consider a photo an essential part of the application — omitting one signals that you do not understand local conventions or are not serious about the role.
+        </p>
+        <p>
+          <strong>Photo requirements:</strong>
+        </p>
+        <ul>
+          <li>Passport-style headshot (not a selfie, not a casual photo)</li>
+          <li>Neutral or light-colored background</li>
+          <li>Professional attire (business casual or formal)</li>
+          <li>Recent — within the last 2 years</li>
+          <li>Face should occupy about 70-80% of the frame</li>
+          <li>No sunglasses, hats, or heavy filters</li>
+        </ul>
+        <p>
+          The photo is typically placed in the <strong>top-right corner</strong> of the first page, about 4.5cm x 6cm in size. Some candidates use a separate Deckblatt with a larger photo instead.
+        </p>
+
+        <h2>2. Personal Details Are Required</h2>
+        <p>
+          German CVs must include personal information that would be considered inappropriate or even illegal to ask for in the US or Canada. This is standard in Germany and omitting these details can hurt your application:
+        </p>
+        <ul>
+          <li><strong>Full name:</strong> First name, middle name (if applicable), last name</li>
+          <li><strong>Date of birth:</strong> DD.MM.YYYY format (e.g., 15.03.1992)</li>
+          <li><strong>Place of birth:</strong> City and country</li>
+          <li><strong>Nationality:</strong> Your citizenship(s)</li>
+          <li><strong>Marital status:</strong> Single, married, divorced, or &quot;in a partnership&quot;</li>
+          <li><strong>Full address:</strong> Street, postal code, city</li>
+          <li><strong>Phone number:</strong> Include country code (e.g., +49 for Germany)</li>
+          <li><strong>Email address:</strong> Professional email only</li>
+        </ul>
+        <p>
+          While EU anti-discrimination directives technically prohibit asking for some of this information, German employers still expect it, and most German CV templates include these fields by default. Not providing them can make your application look incomplete.
+        </p>
+
+        <h2>3. Reverse-Chronological Order with Exact Dates</h2>
+        <p>
+          Germany uses strict reverse-chronological order for both education and work experience. Start with the most recent and work backward. But the key difference from US resumes is the <strong>level of date precision</strong> required:
+        </p>
+        <ul>
+          <li><strong>US format:</strong> &quot;2020 — Present&quot; or &quot;2018 — 2020&quot;</li>
+          <li><strong>German format:</strong> &quot;03/2020 — heute&quot; (03/2020 — present) or &quot;09/2018 — 02/2020&quot;</li>
+        </ul>
+        <p>
+          Every position, education entry, and training period must include <strong>exact month and year</strong> for both start and end dates. Gaps in the timeline are scrutinized — if you took a 6-month career break, mention it (e.g., &quot;06/2021 — 11/2021: Sabbatical / Travel&quot;).
+        </p>
+
+        <h2>4. Keep It Formal and Detailed</h2>
+        <p>
+          German recruiters value thoroughness over brevity. A <strong>2-3 page CV</strong> is perfectly acceptable, even expected for experienced professionals. This is a major difference from the US 1-page preference.
+        </p>
+        <p>
+          For each work experience entry, include:
+        </p>
+        <ul>
+          <li>Company name and location</li>
+          <li>Your exact job title</li>
+          <li>Employment period (month/year to month/year)</li>
+          <li>3-6 bullet points describing responsibilities and achievements</li>
+          <li>Specific technologies, methodologies, or tools used</li>
+        </ul>
+        <p>
+          German recruiters prefer <strong>detailed descriptions</strong> over ultra-concise bullets. Instead of &quot;Managed team of 5,&quot; write &quot;Led a cross-functional team of 5 software developers and 2 QA engineers in an Agile/Scrum environment, delivering 3 major product releases within 12 months.&quot;
+        </p>
+
+        <h2>5. Section Order for German CVs</h2>
+        <p>
+          Follow this exact order for maximum compatibility with German recruiters and ATS systems:
+        </p>
+        <ul>
+          <li><strong>Persönliche Daten (Personal Information):</strong> Name, DOB, place of birth, nationality, marital status, address, phone, email</li>
+          <li><strong>Berufserfahrung (Work Experience):</strong> Reverse chronological with exact dates, detailed descriptions</li>
+          <li><strong>Bildung (Education):</strong> Reverse chronological with exact dates, thesis topics if relevant</li>
+          <li><strong>Ausbildung / Weiterbildung (Training / Continuing Education):</strong> Additional certifications, workshops, language courses</li>
+          <li><strong>Kenntnisse und Fähigkeiten (Skills):</strong> Languages (with CEFR levels), technical skills, software proficiency</li>
+          <li><strong>Sonstiges (Other):</strong> Volunteer work, interests, hobbies (only if relevant)</li>
+          <li><strong>Ort, Datum, Unterschrift (Place, Date, Signature):</strong> Handwritten signature at the bottom</li>
+        </ul>
+
+        <h2>6. Include a Handwritten Signature</h2>
+        <p>
+          Many German employers expect a <strong>handwritten signature</strong> at the bottom of the CV, along with the current date and place. This is a formal convention that signals professionalism. If you are applying digitally, a scanned signature image is acceptable.
+        </p>
+        <p>
+          The signature line typically appears at the bottom-right of the last page:
+        </p>
+        <p>
+          <em>München, 07.07.2026</em><br />
+          <em>[Handwritten Signature]</em>
+        </p>
+
+        <h2>7. Language Proficiency: CEFR Levels</h2>
+        <p>
+          German employers expect language skills to be listed using <strong>CEFR levels</strong> (A1-C2) or the German equivalent (Grundstufe, Mittelstufe, etc.). For each language, specify:
+        </p>
+        <ul>
+          <li><strong>German:</strong> Your level is critical — B2+ is usually required for professional roles, C1+ for client-facing positions</li>
+          <li><strong>English:</strong> Required for most international companies</li>
+          <li><strong>Other languages:</strong> Include any additional languages with proficiency levels</li>
+        </ul>
+        <p>
+          Be honest about your German level. If you are applying from outside Germany, mention your current level and your willingness to improve (e.g., &quot;German: B1 (currently attending B2 course)&quot;).
+        </p>
+
+        <h2>8. Common Mistakes to Avoid</h2>
+        <ul>
+          <li><strong>Omitting the photo:</strong> This is the #1 mistake international applicants make. Always include a professional headshot.</li>
+          <li><strong>Using US-style brevity:</strong> A one-page resume with minimal detail looks incomplete to German recruiters.</li>
+          <li><strong>Including vague dates:</strong> &quot;2020 — Present&quot; is not specific enough. Use &quot;03/2020 — heute&quot;</li>
+          <li><strong>Skipping the signature:</strong> Many employers expect a handwritten signature at the bottom. Include it.</li>
+          <li><strong>Writing in English when German is expected:</strong> Unless the job posting is in English, write your Lebenslauf in German.</li>
+          <li><strong>Using creative fonts or layouts:</strong> Stick to clean, professional formatting. No columns, no icons, no colors.</li>
+          <li><strong>Ignoring the Anschreiben:</strong> The cover letter is mandatory in Germany. Never send a Lebenslauf without one.</li>
+        </ul>
+
+        <h2>9. Tips for English-Language Applications</h2>
+        <p>
+          If you are applying to an international company in Germany (e.g., a startup or a multinational), the application may be in English. In that case:
+        </p>
+        <ul>
+          <li>You can skip the photo (but including one is still appreciated)</li>
+          <li>Personal details become optional — but include them if comfortable</li>
+          <li>Use &quot;CV&quot; or &quot;Resume&quot; instead of &quot;Lebenslauf&quot;</li>
+          <li>Still follow reverse-chronological order with exact dates</li>
+          <li>Still include the signature if possible</li>
+          <li>Write the Anschreiben in English, mirroring the language of the job posting</li>
+        </ul>
+        <p>
+          Even in English-language applications, German employers expect more detail than US employers. A one-page resume will still look thin. Aim for 2 pages with comprehensive descriptions.
+        </p>
+      </>
+    ),
+  },
+  "software-engineer-resume-guide-2026": {
+    title: "How to Write a Software Engineer Resume in 2026",
+    description: "Craft a winning software engineer resume with the right technical skills, project highlights, and ATS-optimized formatting.",
+    category: "Role Guide",
+    date: "Jul 7, 2026",
+    readTime: "7 min read",
+    content: (
+      <>
+        <p>
+          Software engineering resumes face a unique challenge: you need to demonstrate both technical depth and business impact. Hiring managers and ATS systems scan for specific technologies, quantified achievements, and clean formatting. Here is how to build a resume that passes both filters.
+        </p>
+        <p>
+          The average tech job posting receives <strong>250+ applications</strong>. Recruiters spend about 6-7 seconds on the initial scan. Your resume must immediately signal: (1) you have the right technical skills, (2) you have shipped real products, and (3) you can communicate impact clearly.
+        </p>
+
+        <h2>1. Lead with a Technical Summary</h2>
+        <p>
+          Your summary should immediately signal your stack and seniority. This is the first thing both ATS and human recruiters read. Make it count.
+        </p>
+        <p>
+          <strong>Weak:</strong> <em>&quot;Experienced software developer looking for new opportunities in a dynamic environment.&quot;</em>
+        </p>
+        <p>
+          <strong>Strong:</strong> <em>&quot;Full-stack engineer with 6 years building scalable React/Node.js applications. Architected a microservices platform that handled 10M+ daily API requests with 99.99% uptime. Led a team of 4 engineers to deliver a real-time analytics dashboard used by 50K+ users.&quot;</em>
+        </p>
+        <p>
+          The strong version names specific technologies, mentions scale (10M+ requests, 99.99% uptime), and shows leadership. This immediately tells the recruiter: this person can build systems at scale and lead teams.
+        </p>
+
+        <h2>2. Structure Experience Around Impact</h2>
+        <p>
+          Each bullet should follow: <strong>What you built/led + the technical approach + the business result</strong>. Avoid listing technologies without context — recruiters want to see outcomes, not tool lists.
+        </p>
+        <p>
+          <strong>Weak bullets:</strong>
+        </p>
+        <ul>
+          <li><em>&quot;Used React, Node.js, and PostgreSQL for web development&quot;</em></li>
+          <li><em>&quot;Worked on the backend API&quot;</em></li>
+          <li><em>&quot;Responsible for maintaining the codebase&quot;</em></li>
+        </ul>
+        <p>
+          <strong>Strong bullets:</strong>
+        </p>
+        <ul>
+          <li><em>&quot;Built a real-time collaboration feature using React, WebSockets, and PostgreSQL that increased user engagement by 42% and reduced support tickets by 30%&quot;</em></li>
+          <li><em>&quot;Designed and implemented a REST API gateway using Node.js and Express that handled 5K requests/second with sub-100ms latency, replacing a legacy SOAP service&quot;</em></li>
+          <li><em>&quot;Led migration of monolithic application to microservices architecture (Docker, Kubernetes, AWS ECS), reducing deployment time from 45 minutes to 3 minutes and cutting infrastructure costs by 35%&quot;</em></li>
+        </ul>
+        <p>
+          Notice how every strong bullet starts with an action verb (Built, Designed, Led), names the specific technologies, and ends with a measurable business outcome.
+        </p>
+
+        <h2>3. Skills: Group by Category</h2>
+        <p>
+          Organize skills into clear categories. This helps both ATS parsers and human recruiters quickly assess your fit. A flat list of 30 technologies is harder to scan than a categorized list.
+        </p>
+        <ul>
+          <li><strong>Languages:</strong> Python, JavaScript, TypeScript, Go, SQL</li>
+          <li><strong>Frontend:</strong> React, Next.js, Vue.js, Tailwind CSS, Redux</li>
+          <li><strong>Backend:</strong> Node.js, Express, Django, FastAPI, GraphQL</li>
+          <li><strong>Infrastructure:</strong> AWS (EC2, S3, Lambda, ECS), Docker, Kubernetes, Terraform</li>
+          <li><strong>Databases:</strong> PostgreSQL, MongoDB, Redis, Elasticsearch</li>
+          <li><strong>Tools:</strong> Git, CI/CD (GitHub Actions, Jenkins), Datadog, Sentry</li>
+        </ul>
+        <p>
+          <strong>Pro tip:</strong> Mirror the exact technology names from the job description. If they write &quot;React.js&quot; not &quot;React,&quot; use their spelling. ATS systems do keyword matching, and minor differences can cost you a match.
+        </p>
+
+        <h2>4. Projects Matter — Especially for Mid-Level Engineers</h2>
+        <p>
+          Include 2-3 personal or open-source projects with links. This is especially important if you are between jobs or transitioning to a new stack. For each project, describe the problem, tech stack, and outcome.
+        </p>
+        <p>
+          <strong>Example:</strong>
+        </p>
+        <ul>
+          <li><strong>OpenSource CLI Tool</strong> — <em>Go, Cobra, SQLite</em></li>
+          <li>Built a CLI tool for automating database migrations that gained 1.2K GitHub stars. Handles schema diffing, backward-compatible migrations, and rollback support. Used by 3 production teams at my previous company.</li>
+        </ul>
+        <p>
+          GitHub links, live demos, published npm packages, or conference talks all count as strong signals. Make sure your GitHub profile is clean with pinned repositories and good READMEs.
+        </p>
+
+        <h2>5. What Recruiters Actually Look For</h2>
+        <p>
+          Based on interviews with 50+ tech recruiters and hiring managers, here is what they prioritize:
+        </p>
+        <ul>
+          <li><strong>Scale and impact:</strong> How many users did you serve? What revenue did you drive? What costs did you cut?</li>
+          <li><strong>Technical depth:</strong> Can you go beyond surface-level usage? Do you understand trade-offs?</li>
+          <li><strong>Communication:</strong> Can you explain technical decisions clearly? Your resume is the first test.</li>
+          <li><strong>Ownership:</strong> Did you lead initiatives? Make architectural decisions? Mentor others?</li>
+          <li><strong>Learning velocity:</strong> Are you picking up new technologies and applying them effectively?</li>
+        </ul>
+
+        <h2>6. ATS Tips for Engineers</h2>
+        <p>
+          Tech companies use ATS systems heavily. Here is how to optimize:
+        </p>
+        <ul>
+          <li><strong>Use standard section headings:</strong> &quot;Work Experience&quot; not &quot;My Journey&quot; or &quot;Career Highlights&quot;</li>
+          <li><strong>Include exact technology names:</strong> &quot;TypeScript&quot; not &quot;TS&quot;, &quot;Kubernetes&quot; not &quot;K8s&quot;</li>
+          <li><strong>Use a single-column layout:</strong> Multi-column resumes confuse ATS parsers</li>
+          <li><strong>Save as text-based PDF:</strong> Avoid image-based PDFs or DOCX files that reflow</li>
+          <li><strong>No tables or graphics:</strong> ATS cannot parse tables, charts, or skill bars</li>
+          <li><strong>Mirror the job description:</strong> If they mention &quot;CI/CD pipelines,&quot; use that exact phrase</li>
+        </ul>
+
+        <h2>7. Template Structure</h2>
+        <p>
+          Follow this exact structure for a software engineer resume:
+        </p>
+        <ul>
+          <li><strong>Contact:</strong> Name, email, phone, city, LinkedIn, GitHub, portfolio URL</li>
+          <li><strong>Summary:</strong> 2-3 lines — years of experience + stack + biggest achievement</li>
+          <li><strong>Experience:</strong> Reverse chronological, 3-5 bullets per role, action verb + task + result</li>
+          <li><strong>Projects:</strong> 2-3 projects with links, technologies, and outcomes</li>
+          <li><strong>Skills:</strong> Categorized by type, mirroring job description keywords</li>
+          <li><strong>Education:</strong> Degree, institution, year. GPA only if 3.5+ and recent grad</li>
+          <li><strong>Certifications:</strong> AWS, GCP, Kubernetes, etc. (only if relevant)</li>
+        </ul>
+
+        <h2>8. Keep It to 1-2 Pages</h2>
+        <p>
+          One page for early career (0-4 years). Two pages for senior engineers (5+ years) with significant project history. Never exceed two pages — recruiters spend an average of 7 seconds on initial scans. If you cannot fit it in 2 pages, you are including too much.
+        </p>
+        <p>
+          Use a 10-11pt font (Arial, Calibri, or Inter), 0.5-0.75 inch margins, and consistent formatting. Save as PDF to preserve layout across devices.
+        </p>
+      </>
+    ),
+  },
+  "indian-resume-vs-us-resume": {
+    title: "Indian Resume vs US Resume: 10 Key Differences",
+    description: "Confused about how Indian resumes differ from US resumes? This side-by-side comparison covers photo, personal details, length, format, and cultural expectations.",
+    category: "International",
+    date: "Jul 7, 2026",
+    readTime: "5 min read",
+    content: (
+      <>
+        <p>
+          Indian and US resumes follow <strong>fundamentally different conventions</strong>. What is standard in India — photo, personal details, 3-page length — is considered unprofessional or even illegal to include in the US. Understanding these differences is critical if you are an Indian professional applying to US companies, or a recruiter working with international candidates.
+        </p>
+        <p>
+          The differences stem from <strong>cultural and legal context</strong>. India&apos;s hiring culture values completeness and personal transparency — employers expect to know who you are as a person. The US, shaped by anti-discrimination laws and ATS technology, values brevity, neutrality, and machine-readability.
+        </p>
+
+        <h2>1. Photo</h2>
+        <p>
+          <strong>India:</strong> A professional headshot is <strong>common and expected</strong>. Most Indian resume templates include a photo in the top-right corner. Recruiters expect to see your face, and omitting a photo can make your application look incomplete.
+        </p>
+        <p>
+          <strong>US:</strong> <strong>Never include a photo</strong> on a US resume. It can trigger unconscious bias claims, violate anti-discrimination norms, and confuse ATS parsers. Even on LinkedIn, the photo is separate from the resume.
+        </p>
+        <p>
+          <strong>Why the difference?</strong> US employment law (Title VII of the Civil Rights Act) prohibits discrimination based on race, gender, age, and other protected characteristics. Including a photo gives employers information they legally cannot use in hiring decisions. India does not have equivalent legislation covering resume photos.
+        </p>
+
+        <h2>2. Personal Details</h2>
+        <p>
+          <strong>India:</strong> Indian resumes often include <strong>extensive personal information</strong>: date of birth, father&apos;s name, gender, marital status, passport number, nationality, and sometimes even religion or caste (though this is increasingly discouraged).
+        </p>
+        <p>
+          <strong>US:</strong> Only include <strong>name, email, phone number, city/state, and LinkedIn URL</strong>. Never include DOB, gender, marital status, nationality, or any other personal detail. These are considered private and irrelevant to your qualifications.
+        </p>
+        <p>
+          <strong>Why the difference?</strong> Indian companies historically used personal details for background verification and cultural fit assessment. US companies rely on background checks conducted after an offer is made, not during the resume screening stage.
+        </p>
+
+        <h2>3. Resume Length</h2>
+        <p>
+          <strong>India:</strong> <strong>2-3 pages is standard</strong>, especially for experienced professionals. Indian resumes tend to be comprehensive, covering education, experience, skills, projects, certifications, and personal details in detail.
+        </p>
+        <p>
+          <strong>US:</strong> <strong>1 page preferred</strong> for early-mid career (0-10 years). <strong>2 pages maximum</strong> for senior professionals. Recruiters spend an average of 7.4 seconds on initial scans — brevity is essential.
+        </p>
+
+        <h2>4. Section Order</h2>
+        <p>
+          <strong>India:</strong> Personal Details → Career Objective → Education → Work Experience → Technical Skills → Projects → Certifications → Personal Interests
+        </p>
+        <p>
+          <strong>US:</strong> Contact Information → Professional Summary → Work Experience → Education → Skills → (Optional: Certifications, Projects)
+        </p>
+        <p>
+          Notice that education comes <strong>before experience</strong> in Indian resumes (especially for freshers), while US resumes put experience first (unless you are a recent graduate). The US format also leads with a summary, not an objective.
+        </p>
+
+        <h2>5. Education Placement</h2>
+        <p>
+          <strong>India:</strong> Education is often the <strong>first major section</strong> after personal details, reflecting the high value placed on academic credentials in Indian hiring culture. Include: degree, institution, university, graduation year, percentage/GPA, and relevant coursework.
+        </p>
+        <p>
+          <strong>US:</strong> Education comes <strong>after work experience</strong> (unless you are a recent graduate). Keep it brief: degree, institution, year. GPA only if 3.5+ and within the last 3 years. No coursework listing unless directly relevant.
+        </p>
+
+        <h2>6. Bullet Point Style</h2>
+        <p>
+          <strong>India:</strong> Descriptive and detailed — explains responsibilities thoroughly. Indian resumes often read like job descriptions, listing all duties performed.
+        </p>
+        <p>
+          <strong>US:</strong> <strong>Achievement-first</strong> — every bullet starts with an action verb and includes quantified results. US resumes focus on impact, not duties.
+        </p>
+        <p>
+          <strong>Weak (Indian style):</strong> <em>&quot;Responsible for managing the sales team and achieving quarterly targets&quot;</em>
+        </p>
+        <p>
+          <strong>Strong (US style):</strong> <em>&quot;Led a 12-person sales team that exceeded quarterly targets by 23%, generating $2.4M in new revenue&quot;</em>
+        </p>
+
+        <h2>7. Skills Format</h2>
+        <p>
+          <strong>India:</strong> Often a <strong>detailed technical skills table or grid</strong> listing technologies, proficiency levels, and years of experience. Tables are common and accepted.
+        </p>
+        <p>
+          <strong>US:</strong> A <strong>clean list grouped by category</strong>. No tables (ATS-unfriendly). Just list the technologies, organized by type (Languages, Frameworks, Tools, Databases).
+        </p>
+
+        <h2>8. References</h2>
+        <p>
+          <strong>India:</strong> Sometimes included directly on the resume, or noted as &quot;available on request.&quot;
+        </p>
+        <p>
+          <strong>US:</strong> <strong>Never included</strong> on the resume. Do not even write &quot;References available upon request&quot; — it wastes space and is assumed.
+        </p>
+
+        <h2>9. Hobbies & Interests</h2>
+        <p>
+          <strong>India:</strong> Often included at the end of the resume. Common entries include reading, traveling, blogging, and sports.
+        </p>
+        <p>
+          <strong>US:</strong> <strong>Only include if directly relevant to the role.</strong> &quot;Reading&quot; and &quot;traveling&quot; are too generic. Only mention hobbies that demonstrate skills or cultural fit (e.g., &quot;Open-source contributor,&quot; &quot;Hackathon organizer&quot;).
+        </p>
+
+        <h2>10. File Format</h2>
+        <p>
+          <strong>India:</strong> Both PDF and DOCX are accepted. Many recruiters still prefer DOCX for easy editing.
+        </p>
+        <p>
+          <strong>US:</strong> <strong>PDF preferred</strong> — it preserves formatting across all devices and ATS systems. Never submit a DOCX unless specifically requested.
+        </p>
+
+        <h2>How to Convert Your Indian Resume for US Applications</h2>
+        <p>
+          If you are an Indian professional applying to US companies, follow these steps:
+        </p>
+        <ul>
+          <li><strong>Remove the photo</strong> entirely — crop it out or use a text-only template</li>
+          <li><strong>Strip personal details</strong> — remove DOB, father&apos;s name, gender, marital status, passport number</li>
+          <li><strong>Trim to 1-2 pages</strong> — cut the least relevant experiences and consolidate similar roles</li>
+          <li><strong>Replace objectives with a summary</strong> — &quot;Seeking a challenging role&quot; → &quot;Software engineer with 5 years experience building scalable microservices&quot;</li>
+          <li><strong>Quantify every bullet</strong> — add numbers, percentages, and dollar amounts to show impact</li>
+          <li><strong>Reorder sections</strong> — Contact → Summary → Experience → Education → Skills</li>
+          <li><strong>Remove tables</strong> — replace skills tables with clean categorized lists</li>
+          <li><strong>Remove references</strong> — delete the references section entirely</li>
+          <li><strong>Save as PDF</strong> — ensure formatting is preserved</li>
+        </ul>
+        <p>
+          The key mindset shift: US resumes are <strong>marketing documents</strong>, not comprehensive records. Every line should earn its place by demonstrating value to the employer.
+        </p>
+      </>
+    ),
+  },
+  "best-resume-format-for-freshers-2026": {
+    title: "Best Resume Format for Freshers in 2026",
+    description: "No experience? No problem. The best resume formats for freshers, students, and entry-level candidates — with examples, templates, and ATS tips.",
+    category: "Career Advice",
+    date: "Jul 7, 2026",
+    readTime: "5 min read",
+    content: (
+      <>
+        <p>
+          As a fresher or entry-level candidate, your resume needs to compensate for limited work experience by highlighting education, projects, internships, and transferable skills. The right format makes all the difference — and the wrong one can get you auto-rejected before a human even sees your name.
+        </p>
+        <p>
+          According to a 2025 LinkedIn survey, <strong>87% of recruiters</strong> say that a well-structured fresher resume with strong projects can be just as impressive as one with years of work experience. The key is knowing what to emphasize and how to present it.
+        </p>
+
+        <h2>1. Use a Hybrid (Combination) Format</h2>
+        <p>
+          The best format for freshers is a <strong>hybrid format</strong> that leads with a skills/projects section and follows with education. This puts your strongest assets upfront while still providing a chronological education timeline. Here is the recommended section order:
+        </p>
+        <ul>
+          <li><strong>Contact Information</strong> — Name, email, phone, city, LinkedIn, GitHub/portfolio</li>
+          <li><strong>Professional Summary</strong> — 2-3 lines capturing your degree, skills, and what you bring</li>
+          <li><strong>Technical Skills</strong> — Grouped by category (Languages, Frameworks, Tools, Databases)</li>
+          <li><strong>Projects</strong> — 2-4 projects with problem, tech stack, and outcome</li>
+          <li><strong>Education</strong> — Degree, institution, GPA (if 3.5+), relevant coursework</li>
+          <li><strong>Experience</strong> — Internships, part-time work, freelancing, volunteer work</li>
+          <li><strong>Certifications</strong> — Online courses, bootcamps, professional certifications</li>
+        </ul>
+        <p>
+          Why this order? Recruiters spend an average of <strong>7.4 seconds</strong> on a first scan (TheLadders eye-tracking study). Your skills and projects — the things that prove you can do the job — must be visible in that window.
+        </p>
+
+        <h2>2. Lead with a Strong Professional Summary</h2>
+        <p>
+          Write 2-3 lines that immediately signal your value. Avoid generic statements like &quot;Hard-working team player seeking an opportunity.&quot; Instead, be specific about what you know and what you have built.
+        </p>
+        <p>
+          <strong>Weak summary:</strong> <em>&quot;Motivated computer science graduate looking for a challenging role in software development where I can learn and grow.&quot;</em>
+        </p>
+        <p>
+          <strong>Strong summary:</strong> <em>&quot;Computer Science graduate with hands-on experience building full-stack applications using React, Node.js, and PostgreSQL. Built 3 production-ready projects including a real-time collaboration tool serving 200+ users. Seeking a software engineer role where I can contribute to scalable systems from day one.&quot;</em>
+        </p>
+        <p>
+          Notice how the strong version names specific technologies, mentions a concrete project with metrics, and states the type of role being sought. This immediately tells the recruiter: this person can code, has shipped things, and knows what they want.
+        </p>
+
+        <h2>3. Projects Are Your Gold Mine</h2>
+        <p>
+          For freshers, the projects section is often <strong>more important than work experience</strong>. This is where you prove you can actually build things. Include 2-4 projects, and for each one, follow this structure:
+        </p>
+        <p>
+          <strong>Project Name</strong> — <em>Technologies Used</em><br />
+          One-sentence description of the problem you solved. One sentence about the technical approach. One sentence about the outcome or impact.
+        </p>
+        <p>
+          <strong>Example 1:</strong>
+        </p>
+        <ul>
+          <li><strong>RealTime Chat App</strong> — <em>React, Socket.io, Node.js, Redis</em></li>
+          <li>Built a real-time messaging platform with typing indicators, read receipts, and file sharing. Handled 500+ concurrent WebSocket connections with Redis pub/sub for horizontal scaling. Deployed on AWS with CI/CD via GitHub Actions.</li>
+        </ul>
+        <p>
+          <strong>Example 2:</strong>
+        </p>
+        <ul>
+          <li><strong>ExpenseTracker ML</strong> — <em>Python, TensorFlow, Flask, React</em></li>
+          <li>Developed a personal finance app that categorizes transactions using a trained NLP model (89% accuracy). Built REST API with Flask and interactive dashboard with React. Reduced manual categorization time by 70%.</li>
+        </ul>
+        <p>
+          Always link to the GitHub repository and, if possible, a live demo. Hiring managers <strong>will</strong> click these links. Make sure your README is clean and your code is well-organized.
+        </p>
+
+        <h2>4. Education: Include Relevant Details</h2>
+        <p>
+          List your degree, institution, graduation year, and GPA if it is 3.5/4.0 or higher (or equivalent). But do not stop there — include details that strengthen your candidacy:
+        </p>
+        <ul>
+          <li><strong>Relevant coursework:</strong> Data Structures, Algorithms, Database Systems, Machine Learning</li>
+          <li><strong>Academic honors:</strong> Dean&apos;s List, Merit Scholarship, GPA ranking</li>
+          <li><strong>Thesis or capstone:</strong> If it is relevant to the role, describe it in 1-2 lines</li>
+          <li><strong>Teaching assistant or lab assistant:</strong> Shows deep understanding of the subject</li>
+        </ul>
+        <p>
+          If your GPA is below 3.5, simply omit it. Focus on coursework and projects instead.
+        </p>
+
+        <h2>5. Skills: Be Specific and Honest</h2>
+        <p>
+          List specific technologies, tools, and platforms you have actually used in projects or coursework. Group them by category to make scanning easy:
+        </p>
+        <ul>
+          <li><strong>Languages:</strong> Python, JavaScript, TypeScript, Java, SQL</li>
+          <li><strong>Frameworks:</strong> React, Next.js, Express.js, Django, Flask</li>
+          <li><strong>Tools:</strong> Git, Docker, AWS (EC2, S3), Vercel, Postman</li>
+          <li><strong>Databases:</strong> PostgreSQL, MongoDB, Redis, Firebase</li>
+          <li><strong>Concepts:</strong> REST APIs, GraphQL, CI/CD, Agile/Scrum</li>
+        </ul>
+        <p>
+          <strong>Never list a skill you cannot demonstrate in an interview.</strong> If you list &quot;Docker,&quot; be prepared to explain containers, Dockerfiles, and docker-compose. If you list &quot;AWS,&quot; know the difference between EC2 and Lambda. Interviewers will probe every skill on your resume.
+        </p>
+
+        <h2>6. Internships and Volunteering Count</h2>
+        <p>
+          Even short internships, freelance projects, or volunteer contributions count as experience. The key is describing them using the same <strong>action verb + task + result</strong> formula as experienced professionals:
+        </p>
+        <p>
+          <strong>Weak:</strong> <em>&quot;Intern at TechCorp — worked on frontend development&quot;</em>
+        </p>
+        <p>
+          <strong>Strong:</strong> <em>&quot;Frontend Engineering Intern at TechCorp — Built a customer dashboard using React and Chart.js that reduced support ticket resolution time by 25%. Collaborated with a 4-person team using Agile sprints.&quot;</em>
+        </p>
+        <p>
+          If you have no internships, include relevant volunteer work, open-source contributions, hackathon projects, or teaching/mentoring roles. All of these demonstrate initiative and skills.
+        </p>
+
+        <h2>7. What to Put When You Have Zero Experience</h2>
+        <p>
+          If you truly have no work experience, no internships, and no freelance work, your resume should focus entirely on:
+        </p>
+        <ul>
+          <li><strong>Projects:</strong> Personal projects, hackathon builds, open-source contributions</li>
+          <li><strong>Education:</strong> Coursework, GPA, academic achievements, thesis</li>
+          <li><strong>Certifications:</strong> AWS Cloud Practitioner, Google Data Analytics, freeCodeCamp certificates</li>
+          <li><strong>Competitions:</strong> Coding competitions, hackathons, math olympiads</li>
+          <li><strong>Leadership:</strong> Club president, event organizer, teaching assistant</li>
+        </ul>
+        <p>
+          Remember: <strong>everyone starts somewhere.</strong> A fresher with 3 strong projects and a clean resume will always beat a fresher with no projects and a generic &quot;objective statement.&quot;
+        </p>
+
+        <h2>8. Common Fresher Resume Mistakes</h2>
+        <ul>
+          <li><strong>Using an objective statement:</strong> Objectives are outdated. Use a professional summary that focuses on what you offer, not what you want.</li>
+          <li><strong>Listing every course you took:</strong> Only include courses directly relevant to the role. &quot;Introduction to Psychology&quot; does not belong on a software engineer resume.</li>
+          <li><strong>Including a photo:</strong> Never include a photo on a US/Canada resume. It can trigger bias and ATS parsing issues.</li>
+          <li><strong>Using fancy templates:</strong> Canva templates with columns, icons, and graphics look nice but break ATS parsers. Use a clean, single-column layout.</li>
+          <li><strong>Forgetting to proofread:</strong> A single typo can get your resume rejected. Read it aloud, use Grammarly, and have a friend review it.</li>
+          <li><strong>One resume for all applications:</strong> Tailor your summary and skills to each specific job description. Mirror their exact keywords.</li>
+        </ul>
+
+        <h2>9. Keep It to 1 Page</h2>
+        <p>
+          As a fresher, your resume should be <strong>exactly 1 page</strong>. Every line must earn its place. Remove irrelevant experiences, outdated certifications, and generic soft skills like &quot;hard worker&quot; or &quot;team player.&quot; If you are struggling to fit, prioritize your strongest projects and most relevant skills.
+        </p>
+        <p>
+          Use a 10-11pt font (Arial, Calibri, or Inter), 0.5-0.75 inch margins, and consistent formatting throughout. Save as PDF to preserve layout across devices.
+        </p>
       </>
     ),
   },

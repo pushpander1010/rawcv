@@ -449,6 +449,34 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* International Resume Formats — SEO internal links */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="formats-heading">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 id="formats-heading" className="text-3xl font-bold mb-3">Resume formats for every country</h2>
+          <p className="text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto">
+            Different countries have different rules for photos, personal details, page length, and section order. Choose the right format for your target market.
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { href: "/international/us", icon: "🇺🇸", label: "US Format", desc: "1-page, achievement-first" },
+              { href: "/international/eu", icon: "🇪🇺", label: "EU / Europass", desc: "Photo, CEFR levels, 3 pages" },
+              { href: "/international/canada", icon: "🇨🇦", label: "Canada Format", desc: "No photo, anti-discrimination" },
+              { href: "/resume-formats", icon: "🌍", label: "All Formats", desc: "8+ countries compared" },
+            ].map((fmt) => (
+              <Link
+                key={fmt.href}
+                href={fmt.href}
+                className="group bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-100 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 hover:shadow-md transition-all"
+              >
+                <span className="text-3xl block mb-2">{fmt.icon}</span>
+                <p className="font-semibold text-sm group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">{fmt.label}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{fmt.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <FooterCTA />
 
       {/* Footer */}

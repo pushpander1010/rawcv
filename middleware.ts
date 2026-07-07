@@ -58,6 +58,7 @@ export const config = {
     "/themes/:path*",
     "/chat/:path*",
     "/credits/:path*",
+    "/international/:path*",
     // Also match auth endpoints for rate limiting
     "/api/auth/callback/credentials",
     "/api/auth/signin/credentials",

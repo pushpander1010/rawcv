@@ -97,6 +97,42 @@ const POSTS = [
     readTime: "5 min read",
     gradient: "from-teal-500 to-cyan-500",
   },
+  {
+    slug: "resume-format-for-germany",
+    title: "Resume Format for Germany: A Complete Guide (Lebenslauf)",
+    description: "Everything you need to know about the German Lebenslauf: mandatory photo, detailed personal info, reverse-chronological format, and formal conventions that German recruiters expect.",
+    category: "International",
+    date: "Jul 7, 2026",
+    readTime: "6 min read",
+    gradient: "from-yellow-500 to-amber-500",
+  },
+  {
+    slug: "software-engineer-resume-guide-2026",
+    title: "How to Write a Software Engineer Resume in 2026",
+    description: "Craft a winning software engineer resume with the right technical skills, project highlights, and ATS-optimized formatting. Templates and examples included.",
+    category: "Role Guide",
+    date: "Jul 7, 2026",
+    readTime: "7 min read",
+    gradient: "from-emerald-500 to-green-500",
+  },
+  {
+    slug: "indian-resume-vs-us-resume",
+    title: "Indian Resume vs US Resume: 10 Key Differences",
+    description: "Confused about how Indian resumes differ from US resumes? This side-by-side comparison covers photo, personal details, length, format, and cultural expectations.",
+    category: "International",
+    date: "Jul 7, 2026",
+    readTime: "5 min read",
+    gradient: "from-orange-500 to-red-500",
+  },
+  {
+    slug: "best-resume-format-for-freshers-2026",
+    title: "Best Resume Format for Freshers in 2026",
+    description: "No experience? No problem. The best resume formats for freshers, students, and entry-level candidates — with examples, templates, and ATS tips.",
+    category: "Career Advice",
+    date: "Jul 7, 2026",
+    readTime: "5 min read",
+    gradient: "from-sky-500 to-blue-500",
+  },
 ];
 
 export default function BlogPage() {
@@ -154,6 +190,10 @@ export default function BlogPage() {
                   {post.slug === "fresher-resume-tips" && "🌱"}
                   {post.slug === "ats-vs-human-recruiter" && "⚖️"}
                   {post.slug === "linkedin-profile-tips-2026" && "💼"}
+                  {post.slug === "resume-format-for-germany" && "🇩🇪"}
+                  {post.slug === "software-engineer-resume-guide-2026" && "💻"}
+                  {post.slug === "indian-resume-vs-us-resume" && "🔄"}
+                  {post.slug === "best-resume-format-for-freshers-2026" && "🎓"}
                 </span>
               </div>
               

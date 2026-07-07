@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "International Resume — Choose Your Region & Format | rawcv",
+  title: "International Resume — AI-Powered Format Conversion | rawcv",
   description:
-    "Select the perfect resume format for your target region: General, EU / Europass, Canada, or US. Upload your photo, add languages, and manage cover letters — all in one place.",
+    "Convert your resume to the perfect format for your target region. AI-powered conversion for General, EU / Europass, Canada, and US formats. Region-specific tips, section ordering, and conventions.",
   alternates: { canonical: "https://www.rawcv.com/international" },
   openGraph: {
-    title: "International Resume — Choose Your Region & Format | rawcv",
+    title: "International Resume — AI-Powered Format Conversion | rawcv",
     description:
-      "Select the perfect resume format for your target region: General, EU, Canada, or US.",
+      "Convert your resume to EU, Canada, US, or General format with AI. Region-specific rules, tips, and instant conversion.",
     url: "https://www.rawcv.com/international",
   },
 };

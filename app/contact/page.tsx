@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Breadcrumb from "@/components/Breadcrumb";
 import { useState } from "react";
 
 export default function ContactPage() {
@@ -53,6 +54,7 @@ export default function ContactPage() {
       <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30">
         <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-blue-100/20 to-transparent dark:from-violet-900/20 dark:via-blue-900/10 blur-3xl" />
         <div className="relative max-w-3xl mx-auto text-center">
+          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Contact", href: "/contact" }]} />
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">
             Get in Touch
           </h1>
