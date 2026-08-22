@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
-import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "rawcv — Free AI Resume Builder & ATS Score Checker",
@@ -247,8 +246,6 @@ export default function LandingPage() {
           </dl>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

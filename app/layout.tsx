@@ -7,6 +7,7 @@ import "./globals.css";
 import { ResumeProvider } from "@/context/ResumeContext";
 import { ToastProvider } from "@/components/Toast";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -167,6 +168,7 @@ export default function RootLayout({
           <ToastProvider>
             <Navbar />
             {children}
+            <Footer />
             <Analytics />
           </ToastProvider>
         </ResumeProvider>
