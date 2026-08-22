@@ -235,7 +235,6 @@ export default function InternationalPage() {
         <div className="max-w-5xl mx-auto relative">
           <div className="flex items-center gap-3 mb-4">
             <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "International", href: "/international" }]} />
-            <span className="text-3xl">🌐</span>
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
               International Resume
             </h1>
@@ -263,8 +262,8 @@ export default function InternationalPage() {
                   onMouseEnter={() => setShowFormatGuidance(key)}
                   onMouseLeave={() => setShowFormatGuidance(null)}
                   className={`
-                    group relative rounded-3xl border-2 text-left overflow-hidden
-                    transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]
+                    group relative rounded-2xl border-2 text-left overflow-hidden
+                    transition-colors duration-200
                     focus:outline-none focus:ring-4 focus:ring-brand-500/20
                     ${isSelected
                       ? "border-brand-500 dark:border-brand-400 shadow-xl shadow-brand-500/10 dark:shadow-brand-900/20"
@@ -274,7 +273,7 @@ export default function InternationalPage() {
                   aria-pressed={isSelected}
                 >
                   {/* Color bar */}
-                  <div className={`h-2 bg-gradient-to-r ${m.color}`} />
+                  <div className="h-1.5 bg-brand-500" />
 
                   {/* Content */}
                   <div className="p-5 space-y-3">
