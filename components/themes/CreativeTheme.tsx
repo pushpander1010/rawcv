@@ -11,9 +11,9 @@ export default function CreativeTheme({ resume }: Props) {
   return (
     <div className="font-sans text-gray-800 bg-white max-w-[800px] mx-auto text-sm leading-relaxed">
       {/* Header with accent */}
-      <div className="relative bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-10 py-8">
+      <div className="relative bg-brand-600 text-white px-10 py-8">
         <h1 className="text-3xl font-bold mb-1">{contact.name}</h1>
-        <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-violet-200">
+        <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-brand-200">
           {contact.email && (
             <span className="flex items-center gap-1">
               <span>✉</span> <ContactLink value={contact.email} type="email" />
@@ -47,8 +47,8 @@ export default function CreativeTheme({ resume }: Props) {
         {summary && (
           <section className="mb-7">
             <div className="flex items-center gap-3 mb-3">
-              <span className="w-3 h-3 rounded-full bg-violet-500 flex-shrink-0" />
-              <h2 className="font-bold text-violet-700 uppercase tracking-widest text-xs">About Me</h2>
+              <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+              <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">About Me</h2>
             </div>
             <p className="text-gray-600 pl-6">{summary}</p>
           </section>
@@ -58,22 +58,22 @@ export default function CreativeTheme({ resume }: Props) {
         {experience.length > 0 && (
           <section className="mb-7">
             <div className="flex items-center gap-3 mb-4">
-              <span className="w-3 h-3 rounded-full bg-indigo-500 flex-shrink-0" />
-              <h2 className="font-bold text-indigo-700 uppercase tracking-widest text-xs">Experience</h2>
+              <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+              <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Experience</h2>
             </div>
-            <div className="pl-6 border-l-2 border-violet-100 space-y-5">
+            <div className="pl-6 border-l-2 border-brand-100 space-y-5">
               {experience.map((job, i) => (
                 <div key={i} className="relative">
-                  <span className="absolute -left-[25px] top-1 w-3 h-3 rounded-full bg-violet-300 border-2 border-white" />
+                  <span className="absolute -left-[25px] top-1 w-3 h-3 rounded-full bg-brand-300 border-2 border-white" />
                   <div className="flex justify-between items-baseline mb-0.5">
                     <span className="font-bold text-gray-900">{job.title}</span>
                     <span className="text-xs text-gray-400">{job.startDate} – {job.endDate}</span>
                   </div>
-                  <div className="text-violet-600 font-medium text-xs mb-2">{job.company}</div>
+                  <div className="text-brand-600 font-medium text-xs mb-2">{job.company}</div>
                   <ul className="space-y-1">
                     {job.bullets.map((b, j) => (
                       <li key={j} className="text-gray-600 flex gap-2">
-                        <span className="text-violet-300 flex-shrink-0">◆</span>
+                        <span className="text-brand-300 flex-shrink-0">◆</span>
                         <span>{b}</span>
                       </li>
                     ))}
@@ -90,13 +90,13 @@ export default function CreativeTheme({ resume }: Props) {
             {education.length > 0 && (
               <section className="mb-7">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="w-3 h-3 rounded-full bg-violet-500 flex-shrink-0" />
-                  <h2 className="font-bold text-violet-700 uppercase tracking-widest text-xs">Education</h2>
+                  <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                  <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Education</h2>
                 </div>
                 {education.map((edu, i) => (
                   <div key={i} className="mb-3 pl-6">
                     <div className="font-semibold text-gray-900">{edu.degree} in {edu.field}</div>
-                    <div className="text-indigo-600 text-xs">{edu.institution}</div>
+                    <div className="text-brand-600 text-xs">{edu.institution}</div>
                     <div className="text-xs text-gray-400">{edu.graduationYear}</div>
                   </div>
                 ))}
@@ -107,8 +107,8 @@ export default function CreativeTheme({ resume }: Props) {
             {projects && projects.length > 0 && (
               <section>
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="w-3 h-3 rounded-full bg-indigo-500 flex-shrink-0" />
-                  <h2 className="font-bold text-indigo-700 uppercase tracking-widest text-xs">Projects</h2>
+                  <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                  <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Projects</h2>
                 </div>
                 {projects.map((proj, i) => (
                   <div key={i} className="mb-4 pl-6">
@@ -116,7 +116,7 @@ export default function CreativeTheme({ resume }: Props) {
                     <p className="text-gray-600 mb-1">{proj.description}</p>
                     <div className="flex flex-wrap gap-1">
                       {proj.technologies.map((tech, j) => (
-                        <span key={j} className="bg-violet-50 text-violet-700 text-xs px-2 py-0.5 rounded-full">
+                        <span key={j} className="bg-brand-50 text-brand-700 text-xs px-2 py-0.5 rounded-full">
                           {tech}
                         </span>
                       ))}
@@ -132,14 +132,14 @@ export default function CreativeTheme({ resume }: Props) {
             {skills.length > 0 && (
               <section className="mb-7">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="w-3 h-3 rounded-full bg-violet-500 flex-shrink-0" />
-                  <h2 className="font-bold text-violet-700 uppercase tracking-widest text-xs">Skills</h2>
+                  <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                  <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Skills</h2>
                 </div>
                 <div className="flex flex-wrap gap-1.5 pl-6">
                   {skills.map((skill, i) => (
                     <span
                       key={i}
-                      className="bg-gradient-to-r from-violet-100 to-indigo-100 text-indigo-800 text-xs px-2.5 py-1 rounded-full"
+                      className="bg-gradient-to-r from-brand-100 to-brand-100 text-brand-800 text-xs px-2.5 py-1 rounded-full"
                     >
                       {skill}
                     </span>
@@ -152,8 +152,8 @@ export default function CreativeTheme({ resume }: Props) {
             {certifications && certifications.length > 0 && (
               <section>
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="w-3 h-3 rounded-full bg-indigo-500 flex-shrink-0" />
-                  <h2 className="font-bold text-indigo-700 uppercase tracking-widest text-xs">Certifications</h2>
+                  <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                  <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Certifications</h2>
                 </div>
                 <ul className="space-y-1 pl-6">
                   {certifications.map((cert, i) => (

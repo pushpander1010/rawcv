@@ -285,7 +285,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             <img
               src={preview}
               alt="Profile photo"
-              className="w-24 h-24 rounded-2xl object-cover border-2 border-violet-200 dark:border-violet-800 shadow-md"
+              className="w-24 h-24 rounded-2xl object-cover border-2 border-brand-200 dark:border-brand-800 shadow-md"
             />
             <button
               type="button"
@@ -304,7 +304,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="mt-2 text-xs font-bold text-violet-600 dark:text-violet-400 hover:underline"
+              className="mt-2 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline"
             >
               Replace photo
             </button>
@@ -321,12 +321,12 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
           onClick={() => fileInputRef.current?.click()}
           className={`relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-200
             ${isDragging
-              ? "border-violet-500 bg-violet-50 dark:bg-violet-950/20"
-              : "border-gray-250 dark:border-gray-700 hover:border-violet-400 dark:hover:border-violet-600 hover:bg-violet-50/50 dark:hover:bg-violet-950/10"
+              ? "border-brand-500 bg-brand-50 dark:bg-brand-950/20"
+              : "border-gray-250 dark:border-gray-700 hover:border-brand-400 dark:hover:border-brand-600 hover:bg-brand-50/50 dark:hover:bg-brand-950/10"
             }`}
         >
           <div className="flex flex-col items-center gap-3">
-            <div className="w-16 h-16 rounded-2xl bg-violet-50 dark:bg-violet-950/30 flex items-center justify-center text-3xl border border-violet-100/50 dark:border-violet-900/20">
+            <div className="w-16 h-16 rounded-2xl bg-brand-50 dark:bg-brand-950/30 flex items-center justify-center text-3xl border border-brand-100/50 dark:border-brand-900/20">
               📷
             </div>
             <div>
@@ -336,7 +336,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
               <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                 Drag & drop or click to browse. JPG/PNG, max 5 MB.
               </p>
-              <p className="text-xs text-violet-500 dark:text-violet-400 font-semibold mt-2">
+              <p className="text-xs text-brand-500 dark:text-brand-400 font-semibold mt-2">
                 This photo will be used in resumes with photo support
               </p>
             </div>
@@ -479,7 +479,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
               <button
                 type="button"
                 onClick={applyCrop}
-                className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 shadow-md shadow-violet-500/20 transition-all"
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-brand-600 text-white hover:from-brand-700 hover:to-brand-700 shadow-md shadow-brand-500/20 transition-all"
               >
                 Apply & Save
               </button>
@@ -520,7 +520,7 @@ function Slider({ label, value, min, max, step, displayValue, onChange }: {
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-1.5 rounded-full appearance-none bg-gray-200 dark:bg-gray-700 accent-violet-600 cursor-pointer"
+        className="w-full h-1.5 rounded-full appearance-none bg-gray-200 dark:bg-gray-700 accent-brand-600 cursor-pointer"
       />
     </div>
   );
@@ -589,7 +589,7 @@ function Handle({ pos, crop, onDown }: {
       onPointerDown={(e) => onDown(e, pos)}
     >
       <div
-        className="bg-white border-2 border-violet-500 rounded-full shadow-md"
+        className="bg-white border-2 border-brand-500 rounded-full shadow-md"
         style={{ width: DOT, height: DOT, margin: (SIZE - DOT) / 2 }}
       />
     </div>

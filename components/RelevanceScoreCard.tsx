@@ -49,7 +49,7 @@ function Chip({ label, variant }: { label: string; variant: "keyword" | "skill" 
   const styles =
     variant === "keyword"
       ? "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300"
-      : "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300";
+      : "bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300";
   return (
     <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${styles}`}>
       {label}

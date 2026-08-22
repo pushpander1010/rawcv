@@ -211,7 +211,7 @@ export default function FreeFormattingChecker({ resume }: Props) {
         type="button"
         onClick={checkFormatting}
         disabled={loading || !resume}
-        className="w-full px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-sm transition-colors"
+        className="w-full px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-sm transition-colors"
       >
         {loading ? "Checking..." : "✓ Check Formatting (Free)"}
       </button>

@@ -61,23 +61,17 @@ export default function LandingPage() {
       />
 
       {/* ═══════════════ HERO ═══════════════ */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        {/* Background orbs */}
-        <div aria-hidden="true" className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full bg-violet-500/10 blur-[120px]" />
-        <div aria-hidden="true" className="absolute top-20 right-1/4 w-[400px] h-[400px] rounded-full bg-indigo-500/10 blur-[100px]" />
-
-        <div className="relative max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-100 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20 mb-8">
-            <span className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
-            <span className="text-xs font-semibold text-violet-700 dark:text-violet-300">100% Free — No Signup Required</span>
+      <section className="pt-20 sm:pt-28 pb-16 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/50 border border-brand-100 dark:border-brand-900 mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-500" />
+            <span className="text-xs font-semibold text-brand-700 dark:text-brand-300">100% Free — No Signup Required</span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] text-gray-900 dark:text-white mb-6">
             Build a resume that
             <br />
-            <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-              actually gets interviews
-            </span>
+            <span className="text-brand-600 dark:text-brand-400">actually gets interviews</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -85,10 +79,10 @@ export default function LandingPage() {
             enhance it with AI, and download a polished PDF — all in minutes.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-14">
             <Link
               href="/analyze"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-base font-bold shadow-xl shadow-violet-500/25 hover:shadow-violet-500/40 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-base font-semibold shadow-brand hover:shadow-brand-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
               Upload & Analyze Free
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -97,22 +91,22 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/build"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
               Build from Scratch
             </Link>
           </div>
 
           {/* Stats */}
-          <div className="flex items-center justify-center gap-8 sm:gap-12 text-center">
+          <div className="flex items-center justify-center gap-8 sm:gap-14 text-center">
             {[
               { value: "100+", label: "ATS Checks" },
               { value: "14", label: "Themes" },
               { value: "0$", label: "Forever Free" },
             ].map((stat) => (
               <div key={stat.label}>
-                <div className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white">{stat.value}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{stat.label}</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">{stat.value}</div>
+                <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -122,8 +116,8 @@ export default function LandingPage() {
       {/* ═══════════════ APP MOCKUP ═══════════════ */}
       <section className="px-6 pb-20">
         <div className="max-w-5xl mx-auto">
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-gray-900">
-            <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+          <div className="relative rounded-2xl overflow-hidden shadow-card border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+            <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
               <span className="w-3 h-3 rounded-full bg-red-400" />
               <span className="w-3 h-3 rounded-full bg-yellow-400" />
               <span className="w-3 h-3 rounded-full bg-green-400" />
@@ -132,18 +126,18 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="flex h-64 sm:h-80 overflow-hidden">
-              <div className="w-56 sm:w-72 border-r border-gray-100 dark:border-gray-800 p-4 flex flex-col gap-3 bg-white dark:bg-gray-900">
-                <div className="h-7 w-28 rounded-lg bg-violet-100 dark:bg-violet-900/40" />
+              <div className="w-56 sm:w-72 border-r border-gray-200 dark:border-gray-800 p-4 flex flex-col gap-3 bg-white dark:bg-gray-900">
+                <div className="h-7 w-28 rounded-lg bg-brand-100 dark:bg-brand-900/40" />
                 <div className="h-4 w-full rounded bg-gray-100 dark:bg-gray-800" />
                 <div className="h-4 w-5/6 rounded bg-gray-100 dark:bg-gray-800" />
                 <div className="h-4 w-4/6 rounded bg-gray-100 dark:bg-gray-800" />
-                <div className="mt-2 h-11 w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 opacity-80" />
+                <div className="mt-2 h-11 w-full rounded-xl bg-brand-600 opacity-90" />
                 <div className="mt-auto p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
                   <div className="text-xs font-bold text-emerald-600">ATS Score: 92/100</div>
                 </div>
               </div>
               <div className="flex-1 p-5 bg-gray-50 dark:bg-gray-950">
-                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 h-full">
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-5 h-full">
                   <div className="border-b-2 border-gray-800 dark:border-gray-200 pb-3 mb-3">
                     <div className="h-5 w-40 rounded bg-gray-800 dark:bg-gray-200 mb-2" />
                     <div className="flex gap-3">
@@ -158,7 +152,7 @@ export default function LandingPage() {
                   </div>
                   <div className="flex gap-2 flex-wrap">
                     {["React", "TypeScript", "Node.js", "Python"].map((s) => (
-                      <span key={s} className="px-2.5 py-1 rounded-full text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 font-medium">{s}</span>
+                      <span key={s} className="px-2.5 py-1 rounded-full text-xs bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 font-medium">{s}</span>
                     ))}
                   </div>
                 </div>
@@ -172,16 +166,16 @@ export default function LandingPage() {
       <section className="py-24 px-6" id="features">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4">Everything you need to get hired</h2>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-white">Everything you need to get hired</h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
               Professional-grade resume tools powered by AI — completely free.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
-              <div key={f.title} className="group p-5 rounded-2xl border border-gray-200/60 dark:border-gray-800/60 bg-white/50 dark:bg-gray-900/50 hover:bg-white dark:hover:bg-gray-900 hover:border-violet-200 dark:hover:border-violet-800 hover:shadow-lg hover:shadow-violet-500/5 transition-all duration-300">
-                <span className="text-2xl block mb-3">{f.icon}</span>
-                <h3 className="font-bold text-sm mb-1.5 text-gray-900 dark:text-gray-100">{f.title}</h3>
+              <div key={f.title} className="group p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200">
+                <div className="w-11 h-11 rounded-xl bg-brand-50 dark:bg-brand-950/60 flex items-center justify-center text-xl mb-4">{f.icon}</div>
+                <h3 className="font-semibold text-sm mb-1.5 text-gray-900 dark:text-gray-100">{f.title}</h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{f.desc}</p>
               </div>
             ))}
@@ -190,20 +184,20 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ HOW IT WORKS ═══════════════ */}
-      <section className="py-24 px-6 bg-gray-50/50 dark:bg-gray-900/30">
+      <section className="py-24 px-6 bg-gray-50 dark:bg-gray-900/40 border-y border-gray-100 dark:border-gray-800">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-center mb-16">Three steps to a better resume</h2>
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-center mb-16 text-gray-900 dark:text-white">Three steps to a better resume</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { step: "01", title: "Upload", desc: "Drag and drop your PDF, DOCX, or TXT file. We parse it in seconds.", color: "from-violet-500 to-purple-500" },
-              { step: "02", title: "Analyze", desc: "Run ATS scoring, paste a job description, and get AI-powered suggestions.", color: "from-purple-500 to-indigo-500" },
-              { step: "03", title: "Download", desc: "Pick a theme, apply changes, and download a polished ATS-safe PDF.", color: "from-indigo-500 to-blue-500" },
+              { step: "01", title: "Upload", desc: "Drag and drop your PDF, DOCX, or TXT file. We parse it in seconds." },
+              { step: "02", title: "Analyze", desc: "Run ATS scoring, paste a job description, and get AI-powered suggestions." },
+              { step: "03", title: "Download", desc: "Pick a theme, apply changes, and download a polished ATS-safe PDF." },
             ].map((item) => (
               <div key={item.step} className="relative">
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white font-black text-lg shadow-lg mb-4`}>
+                <div className="w-12 h-12 rounded-xl bg-brand-600 flex items-center justify-center text-white font-extrabold text-lg shadow-brand mb-4">
                   {item.step}
                 </div>
-                <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">{item.title}</h3>
+                <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-gray-100">{item.title}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -214,30 +208,27 @@ export default function LandingPage() {
       {/* ═══════════════ CTA ═══════════════ */}
       <section className="py-24 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="relative p-12 rounded-3xl bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-600 overflow-hidden">
-            <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent)]" />
-            <div className="relative">
-              <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">Ready to land more interviews?</h2>
-              <p className="text-violet-100 mb-8 max-w-md mx-auto">Upload your resume and get instant AI-powered analysis — completely free, no account needed.</p>
-              <Link href="/analyze" className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-violet-700 font-bold shadow-xl hover:shadow-2xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-200">
-                Get Started Free
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
+          <div className="p-12 rounded-3xl bg-brand-600">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Ready to land more interviews?</h2>
+            <p className="text-brand-100 mb-8 max-w-md mx-auto">Upload your resume and get instant AI-powered analysis — completely free, no account needed.</p>
+            <Link href="/analyze" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-brand-700 font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200">
+              Get Started Free
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* ═══════════════ FAQ ═══════════════ */}
-      <section className="py-24 px-6 bg-gray-50/50 dark:bg-gray-900/30" id="faq">
+      <section className="py-24 px-6 bg-gray-50 dark:bg-gray-900/40 border-t border-gray-100 dark:border-gray-800" id="faq">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-black tracking-tight text-center mb-12">Frequently asked questions</h2>
-          <dl className="space-y-6" itemScope itemType="https://schema.org/FAQPage">
+          <h2 className="text-3xl font-extrabold tracking-tight text-center mb-12 text-gray-900 dark:text-white">Frequently asked questions</h2>
+          <dl className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
             {faqs.map((faq) => (
-              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800/60">
-                <dt className="font-bold text-gray-900 dark:text-gray-100 mb-2" itemProp="name">{faq.q}</dt>
+              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-card">
+                <dt className="font-semibold text-gray-900 dark:text-gray-100 mb-2" itemProp="name">{faq.q}</dt>
                 <dd className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                   <span itemProp="text">{faq.a}</span>
                 </dd>

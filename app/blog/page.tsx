@@ -14,7 +14,7 @@ const POSTS = [
     category: "ATS Optimization",
     date: "May 20, 2026",
     readTime: "5 min read",
-    gradient: "from-violet-500 to-purple-500",
+    gradient: "from-brand-500 to-brand-500",
   },
   {
     slug: "quantifying-achievements-resume-examples",
@@ -59,7 +59,7 @@ const POSTS = [
     category: "Career Advice",
     date: "May 24, 2026",
     readTime: "6 min read",
-    gradient: "from-indigo-500 to-blue-500",
+    gradient: "from-brand-500 to-blue-500",
   },
   {
     slug: "resume-skills-section-guide",
@@ -77,7 +77,7 @@ const POSTS = [
     category: "Career Advice",
     date: "May 26, 2026",
     readTime: "5 min read",
-    gradient: "from-sky-500 to-indigo-500",
+    gradient: "from-sky-500 to-brand-500",
   },
   {
     slug: "ats-vs-human-recruiter",
@@ -141,9 +141,8 @@ export default function BlogPage() {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center mb-16">
-          <div aria-hidden="true" className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full bg-violet-500/10 blur-3xl" />
           <div className="md:col-span-7 text-center md:text-left">
-            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase">
+            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 uppercase">
               rawcv Blog
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-gray-100">
@@ -154,7 +153,7 @@ export default function BlogPage() {
             </p>
           </div>
           <div className="md:col-span-5 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-violet-100 dark:border-violet-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/blog_illustration.png" 
                 alt="rawcv Blog & Resume Strategy Illustration" 
@@ -198,7 +197,7 @@ export default function BlogPage() {
               </div>
               
               <div className="flex items-center gap-3 mb-3">
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-400">
                   {post.category}
                 </span>
                 <span className="text-xs text-gray-400 dark:text-gray-500">
@@ -206,7 +205,7 @@ export default function BlogPage() {
                 </span>
               </div>
 
-              <h2 className="text-lg font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">
+              <h2 className="text-lg font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors line-clamp-2">
                 {post.title}
               </h2>
               
@@ -214,7 +213,7 @@ export default function BlogPage() {
                 {post.description}
               </p>
 
-              <div className="mt-auto flex items-center gap-1.5 text-xs font-bold text-violet-600 dark:text-violet-400">
+              <div className="mt-auto flex items-center gap-1.5 text-xs font-bold text-brand-600 dark:text-brand-400">
                 Read Article
                 <span className="transition-transform group-hover:translate-x-1">→</span>
               </div>

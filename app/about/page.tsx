@@ -100,11 +100,10 @@ export default function AboutPage() {
       </div>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-violet-50 dark:from-violet-950/30 to-white dark:to-gray-950 border-b border-gray-100 dark:border-gray-800 px-6 py-16">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-blue-100/20 to-transparent dark:from-violet-900/20 dark:via-blue-900/10 blur-3xl" />
+      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50 dark:from-brand-950/30 to-white dark:to-gray-950 border-b border-gray-100 dark:border-gray-800 px-6 py-16">
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left">
-            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase">
+            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 uppercase">
               Our Vision
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-gray-100">About rawcv</h1>
@@ -114,7 +113,7 @@ export default function AboutPage() {
             <div className="mt-8 flex flex-wrap gap-3 justify-center md:justify-start">
               <Link
                 href="/analyze"
-                className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="inline-flex items-center px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 Get started free
               </Link>
@@ -127,7 +126,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="md:col-span-4 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-violet-100 dark:border-violet-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/ats_illustration.png" 
                 alt="rawcv ATS Optimization Illustration" 
@@ -207,13 +206,13 @@ export default function AboutPage() {
           <ul className="text-sm space-y-1">
             <li>
               General:{" "}
-              <a href="mailto:support@rawcv.com" className="text-violet-600 hover:underline">
+              <a href="mailto:support@rawcv.com" className="text-brand-600 hover:underline">
                 support@rawcv.com
               </a>
             </li>
             <li>
               Privacy:{" "}
-              <a href="mailto:privacy@rawcv.com" className="text-violet-600 hover:underline">
+              <a href="mailto:privacy@rawcv.com" className="text-brand-600 hover:underline">
                 privacy@rawcv.com
               </a>
             </li>
@@ -222,10 +221,10 @@ export default function AboutPage() {
 
         {/* Footer links */}
         <div className="pt-6 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-600 flex flex-wrap gap-4">
-          <Link href="/" className="text-violet-600 hover:underline">Home</Link>
-          <Link href="/how-to" className="text-violet-600 hover:underline">How-to guide</Link>
-          <Link href="/privacy" className="text-violet-600 hover:underline">Privacy Policy</Link>
-          <Link href="/terms" className="text-violet-600 hover:underline">Terms of Service</Link>
+          <Link href="/" className="text-brand-600 hover:underline">Home</Link>
+          <Link href="/how-to" className="text-brand-600 hover:underline">How-to guide</Link>
+          <Link href="/privacy" className="text-brand-600 hover:underline">Privacy Policy</Link>
+          <Link href="/terms" className="text-brand-600 hover:underline">Terms of Service</Link>
         </div>
       </div>
     </div>

@@ -110,7 +110,7 @@ export default function ResumePreview({ resume, theme, bare = false }: Props) {
             max="100"
             value={Math.round(scrollPct)}
             onChange={onSliderChange}
-            className="flex-1 h-1.5 rounded-full appearance-none bg-gray-200 dark:bg-gray-700 accent-violet-600 cursor-pointer"
+            className="flex-1 h-1.5 rounded-full appearance-none bg-gray-200 dark:bg-gray-700 accent-brand-600 cursor-pointer"
             aria-label="Scroll resume preview horizontally"
           />
           <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

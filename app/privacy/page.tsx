@@ -71,13 +71,13 @@ export default function PrivacyPage() {
         </Section>
 
         <Section title="10. Contact">
-          <p>Questions about this policy? Email us at <a href="mailto:privacy@rawcv.com" className="text-violet-600 hover:underline">privacy@rawcv.com</a>.</p>
+          <p>Questions about this policy? Email us at <a href="mailto:privacy@rawcv.com" className="text-brand-600 hover:underline">privacy@rawcv.com</a>.</p>
         </Section>
 
         <div className="mt-12 pt-6 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-400">
-          <Link href="/" className="text-violet-600 hover:underline">← Back to rawcv</Link>
+          <Link href="/" className="text-brand-600 hover:underline">← Back to rawcv</Link>
           {" · "}
-          <Link href="/terms" className="text-violet-600 hover:underline">Terms of Service</Link>
+          <Link href="/terms" className="text-brand-600 hover:underline">Terms of Service</Link>
         </div>
       </div>
     </div>

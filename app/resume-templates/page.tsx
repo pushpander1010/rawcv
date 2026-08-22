@@ -58,7 +58,7 @@ const themes: ThemeInfo[] = [
       "Skill-bar visual indicators",
       "Accent color section headers",
     ],
-    previewColors: "from-violet-600 to-blue-500",
+    previewColors: "from-brand-600 to-blue-500",
     previewClass: "bg-gradient-to-br",
     bestFor: "Tech, Startups, Marketing, Consulting",
   },
@@ -170,7 +170,7 @@ const themes: ThemeInfo[] = [
       "Navy + gold colour palette",
       "Editorial-inspired layout",
     ],
-    previewColors: "from-indigo-900 to-indigo-600",
+    previewColors: "from-brand-900 to-brand-600",
     previewClass: "bg-gradient-to-br",
     bestFor: "Luxury, Fashion, Hospitality, Publishing, PM roles",
   },
@@ -222,7 +222,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
             <h3 className="text-lg font-bold text-gray-900 dark:text-white">
               {theme.name}
             </h3>
-            <p className="text-xs text-violet-600 dark:text-violet-400 font-semibold uppercase tracking-wide">
+            <p className="text-xs text-brand-600 dark:text-brand-400 font-semibold uppercase tracking-wide">
               {theme.tagline}
             </p>
           </div>
@@ -242,7 +242,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
               key={f}
               className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400"
             >
-              <span className="w-1 h-1 rounded-full bg-violet-500 flex-shrink-0" />
+              <span className="w-1 h-1 rounded-full bg-brand-500 flex-shrink-0" />
               {f}
             </li>
           ))}
@@ -257,7 +257,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
 
         <Link
           href={`/build?theme=${theme.id}`}
-          className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-semibold rounded-xl bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 text-white transition-colors"
+          className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-semibold rounded-xl bg-brand-600 hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-600 text-white transition-colors"
         >
           Use {theme.name} Template
         </Link>
@@ -271,7 +271,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
 function FAQ({ question, answer }: { question: string; answer: string }) {
   return (
     <details className="group border-b border-gray-200 dark:border-gray-800 pb-4 mb-4 last:border-b-0 last:pb-0 last:mb-0">
-      <summary className="flex items-center justify-between cursor-pointer list-none text-sm font-semibold text-gray-900 dark:text-gray-100 py-2 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+      <summary className="flex items-center justify-between cursor-pointer list-none text-sm font-semibold text-gray-900 dark:text-gray-100 py-2 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
         {question}
         <span className="text-gray-500 dark:text-gray-500 group-open:rotate-45 transition-transform text-lg leading-none">
           +
@@ -371,10 +371,6 @@ export default function ResumeTemplatesPage() {
       <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 pb-20">
         {/* ── Hero ── */}
         <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-blue-100/20 to-transparent dark:from-violet-900/20 dark:via-blue-900/10 blur-3xl"
-          />
           <div className="relative max-w-4xl mx-auto">
             <Breadcrumb
               items={[
@@ -383,10 +379,10 @@ export default function ResumeTemplatesPage() {
               ]}
             />
             <div className="text-center mb-6">
-              <span className="inline-block px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 text-xs font-bold uppercase tracking-wide mb-4">
+              <span className="inline-block px-3 py-1 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wide mb-4">
                 Resume Templates
               </span>
-              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">
+              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-brand-600 dark:text-brand-400">
                 14 Professional Resume Templates
               </h1>
               <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
@@ -398,17 +394,17 @@ export default function ResumeTemplatesPage() {
             {/* Quick stats */}
             <div className="flex flex-wrap justify-center gap-6 text-sm">
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                <span className="text-violet-500 font-bold">14</span> Templates
+                <span className="text-brand-500 font-bold">14</span> Templates
               </div>
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                <span className="text-violet-500 font-bold">100%</span>{" "}
+                <span className="text-brand-500 font-bold">100%</span>{" "}
                 ATS-Friendly
               </div>
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                <span className="text-violet-500 font-bold">Free</span> to Use
+                <span className="text-brand-500 font-bold">Free</span> to Use
               </div>
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                <span className="text-violet-500 font-bold">AI</span> Optimized
+                <span className="text-brand-500 font-bold">AI</span> Optimized
               </div>
             </div>
           </div>
@@ -543,17 +539,17 @@ export default function ResumeTemplatesPage() {
 
         {/* ── CTA ── */}
         <section className="max-w-3xl mx-auto px-6 text-center">
-          <div className="rounded-2xl bg-gradient-to-br from-violet-600 to-blue-600 p-10 shadow-xl">
+          <div className="rounded-2xl bg-brand-600 p-10 shadow-xl">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
               Start Building Your Resume
             </h2>
-            <p className="text-violet-100 text-sm mb-6 max-w-lg mx-auto">
+            <p className="text-brand-100 text-sm mb-6 max-w-lg mx-auto">
               Pick a template, add your details, and let AI optimise every
               section. Free to start — no credit card required.
             </p>
             <Link
               href="/build"
-              className="inline-flex items-center justify-center px-8 py-3 text-sm font-bold rounded-xl bg-white text-violet-700 hover:bg-violet-50 transition-colors shadow-lg"
+              className="inline-flex items-center justify-center px-8 py-3 text-sm font-bold rounded-xl bg-white text-brand-700 hover:bg-brand-50 transition-colors shadow-lg"
             >
               Build Your Resume Now
             </Link>

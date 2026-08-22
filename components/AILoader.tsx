@@ -131,7 +131,7 @@ export default function AILoader({
     <div className="flex flex-col items-center justify-center gap-5 py-10 px-4 select-none">
       {/* Spinner */}
       <div className="relative w-16 h-16">
-        <span className="absolute inset-0 rounded-full bg-violet-400/20 animate-ping" />
+        <span className="absolute inset-0 rounded-full bg-brand-400/20 animate-ping" />
         <svg
           className="absolute inset-0 w-full h-full animate-spin"
           style={{ animationDuration: "1.2s" }}
@@ -148,7 +148,7 @@ export default function AILoader({
           </defs>
         </svg>
         <span className="absolute inset-0 flex items-center justify-center">
-          <span className="w-3 h-3 rounded-full bg-violet-600 animate-pulse" />
+          <span className="w-3 h-3 rounded-full bg-brand-600 animate-pulse" />
         </span>
       </div>
 
@@ -165,7 +165,7 @@ export default function AILoader({
       {/* Progress bar */}
       <div className="w-48 h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-[width] duration-500 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-500 transition-[width] duration-500 ease-out"
           style={{ width: `${progress}%` }}
           role="progressbar"
           aria-valuenow={progress}

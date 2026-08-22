@@ -20,10 +20,9 @@ export default function TailorPage() {
     return (
       <main className="min-h-[80vh] flex items-center justify-center px-6 py-16">
         <div className="relative max-w-2xl w-full bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-200/60 dark:border-gray-800/60 p-12 text-center overflow-hidden">
-          <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-blue-500/8 blur-3xl" />
           
           <div className="relative">
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 flex items-center justify-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center">
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-blue-600 dark:text-blue-400">
                 <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 <path d="M14 2v6h6M8 13h8M8 17h8M8 9h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -113,7 +112,7 @@ export default function TailorPage() {
               type="button"
               onClick={runTailor}
               disabled={!jdInput.trim() || loading}
-              className="mt-4 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-4 w-full px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {loading ? "Tailoring…" : state.tailoredResume ? "Re-tailor" : "Tailor Resume →"}
             </button>
@@ -149,7 +148,7 @@ export default function TailorPage() {
         {/* Visual placeholder for initial state */}
         {changes.length === 0 && !loading && (
           <div className="mt-8 rounded-2xl border border-dashed border-gray-200/60 dark:border-gray-800/60 bg-white/30 dark:bg-gray-900/30 backdrop-blur-sm p-12 text-center max-w-4xl mx-auto">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-blue-500">
                 <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />

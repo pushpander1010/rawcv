@@ -2,17 +2,17 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+    <footer className="border-t border-gray-200/80 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">R</span>
               </div>
-              <span className="font-bold text-lg text-gray-900 dark:text-white">raw<span className="text-violet-600">cv</span></span>
+              <span className="font-bold text-lg text-gray-900 dark:text-white">raw<span className="text-brand-600">cv</span></span>
             </Link>
-            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed max-w-xs">
               Free AI-powered resume builder with ATS scoring, job matching, and instant PDF downloads.
             </p>
           </div>
@@ -27,7 +27,7 @@ export default function Footer() {
                 { href: "/chat", label: "AI Chat" },
                 { href: "/cover-letter", label: "Cover Letter" },
               ].map((l) => (
-                <li key={l.href}><Link href={l.href} className="text-sm text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">{l.label}</Link></li>
+                <li key={l.href}><Link href={l.href} className="text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">{l.label}</Link></li>
               ))}
             </ul>
           </div>
@@ -41,7 +41,7 @@ export default function Footer() {
                 { href: "/how-to", label: "How-To Guide" },
                 { href: "/blog", label: "Blog" },
               ].map((l) => (
-                <li key={l.href}><Link href={l.href} className="text-sm text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">{l.label}</Link></li>
+                <li key={l.href}><Link href={l.href} className="text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">{l.label}</Link></li>
               ))}
             </ul>
           </div>
@@ -55,13 +55,13 @@ export default function Footer() {
                 { href: "/privacy", label: "Privacy" },
                 { href: "/terms", label: "Terms" },
               ].map((l) => (
-                <li key={l.href}><Link href={l.href} className="text-sm text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">{l.label}</Link></li>
+                <li key={l.href}><Link href={l.href} className="text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">{l.label}</Link></li>
               ))}
             </ul>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-8 border-t border-gray-200/80 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-400 dark:text-gray-500">© {new Date().getFullYear()} rawcv. All rights reserved.</p>
           <p className="text-xs text-gray-400 dark:text-gray-500">Free AI resume tools for job seekers worldwide</p>
         </div>

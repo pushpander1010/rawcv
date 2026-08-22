@@ -92,7 +92,7 @@ export default function ChatPage() {
             <button
               type="button"
               onClick={() => router.push("/analyze")}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold transition-all duration-200 shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-all duration-200 shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               View Analysis
             </button>
@@ -116,7 +116,7 @@ export default function ChatPage() {
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 flex-shrink-0">
               <h2 className="text-sm font-medium text-gray-600 dark:text-gray-400">Live Preview</h2>
               <button type="button" onClick={() => setShowThemePicker((v) => !v)}
-                className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 transition-colors focus:outline-none">
+                className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors focus:outline-none">
                 {showThemePicker ? "Hide themes" : "Change theme"}
               </button>
             </div>

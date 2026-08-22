@@ -28,16 +28,15 @@ export default function BuildPage() {
   return (
     <main id="main" className="min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
-      <div className="relative overflow-hidden border-b border-gray-200 dark:border-gray-800 bg-gradient-to-br from-violet-50/50 via-white to-gray-50 dark:from-gray-900/50 dark:via-gray-950 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-gradient-to-br from-violet-200/40 to-transparent dark:from-violet-900/20 blur-3xl" />
+      <div className="relative overflow-hidden border-b border-gray-200 dark:border-gray-800 bg-gradient-to-br from-brand-50/50 via-white to-gray-50 dark:from-gray-900/50 dark:via-gray-950 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
         <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-left">
-            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase">
+            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 uppercase">
               100% Free · No Watermarks
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-4">
               Build Your{" "}
-              <span className="bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">
+              <span className="text-brand-600 dark:text-brand-400">
                 Professional Resume
               </span>
             </h1>
@@ -46,7 +45,7 @@ export default function BuildPage() {
             </p>
           </div>
           <div className="md:col-span-4 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-violet-100 dark:border-violet-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/builder_illustration.png" 
                 alt="rawcv Resume Builder Illustration" 
@@ -76,7 +75,7 @@ export default function BuildPage() {
             </p>
             <a
               href="/analyze"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:-translate-y-0.5 transition-all"
             >
               Explore AI Features
               <svg

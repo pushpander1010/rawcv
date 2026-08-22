@@ -52,10 +52,9 @@ export default function ContactPage() {
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 pb-20">
       {/* Hero section */}
       <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-blue-100/20 to-transparent dark:from-violet-900/20 dark:via-blue-900/10 blur-3xl" />
         <div className="relative max-w-3xl mx-auto text-center">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Contact", href: "/contact" }]} />
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-brand-600 dark:text-brand-400">
             Get in Touch
           </h1>
           <p className="text-lg text-gray-500 dark:text-gray-400">
@@ -78,20 +77,20 @@ export default function ContactPage() {
 
             <div className="space-y-6">
               <div className="flex gap-4">
-                <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 text-lg">
+                <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-lg">
                   ✉️
                 </span>
                 <div>
                   <h3 className="font-semibold text-sm text-gray-900 dark:text-white">Email Support</h3>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">For account, billing, or general queries</p>
-                  <a href="mailto:support@rawcv.com" className="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline mt-1 block">
+                  <a href="mailto:support@rawcv.com" className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline mt-1 block">
                     support@rawcv.com
                   </a>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 text-lg">
+                <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-lg">
                   🕒
                 </span>
                 <div>
@@ -104,7 +103,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-violet-50/50 to-gray-50/50 dark:from-violet-950/10 dark:to-gray-900/50 border border-violet-100/80 dark:border-violet-900/20 shadow-inner">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-brand-50/50 to-gray-50/50 dark:from-brand-950/10 dark:to-gray-900/50 border border-brand-100/80 dark:border-brand-900/20 shadow-inner">
               <h3 className="font-bold text-gray-950 dark:text-white mb-2 text-sm flex items-center gap-1.5">
                 <span className="text-sm">💡</span> Quick Tip
               </h3>
@@ -114,7 +113,7 @@ export default function ContactPage() {
             </div>
 
             {/* Illustration Frame */}
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-violet-100 dark:border-violet-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img
                 src="/contact_illustration.png"
                 alt="rawcv Help &amp; Support Illustration"
@@ -138,7 +137,7 @@ export default function ContactPage() {
                   <button
                     type="button"
                     onClick={() => setStatus("idle")}
-                    className="mt-4 px-6 py-2.5 rounded-xl border border-violet-200 dark:border-violet-700 text-sm font-semibold text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-colors"
+                    className="mt-4 px-6 py-2.5 rounded-xl border border-brand-200 dark:border-brand-700 text-sm font-semibold text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors"
                   >
                     Send another message
                   </button>
@@ -158,7 +157,7 @@ export default function ContactPage() {
                         value={form.name}
                         onChange={handleChange}
                         placeholder="Jane Doe"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
                       />
                     </div>
                     <div>
@@ -173,7 +172,7 @@ export default function ContactPage() {
                         value={form.email}
                         onChange={handleChange}
                         placeholder="jane@example.com"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
                       />
                     </div>
                   </div>
@@ -190,7 +189,7 @@ export default function ContactPage() {
                       value={form.subject}
                       onChange={handleChange}
                       placeholder="How can we help you?"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all text-sm"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
                     />
                   </div>
 
@@ -206,7 +205,7 @@ export default function ContactPage() {
                       value={form.message}
                       onChange={handleChange}
                       placeholder="Enter details here..."
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 transition-all text-sm"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
                     />
                   </div>
 
@@ -219,7 +218,7 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={status === "sending"}
-                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold text-sm shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
+                    className="w-full py-3.5 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
                   >
                     {status === "sending" ? (
                       <span className="flex items-center justify-center gap-2">
@@ -242,7 +241,7 @@ export default function ContactPage() {
 
       {/* Footer Navigation Back Link */}
       <div className="text-center pt-8">
-        <Link href="/" className="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+        <Link href="/" className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
           ← Back to Homepage
         </Link>
       </div>

@@ -68,7 +68,7 @@ export default function EUFormatPage() {
       <Script id="eu-format-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600/10 via-indigo-600/5 to-transparent dark:from-blue-900/15 dark:via-indigo-900/10 dark:to-transparent px-6 py-14 sm:py-20">
+      <section className="bg-gray-50 dark:bg-gray-900/30 px-6 py-14 sm:py-20">
         <div className="max-w-4xl mx-auto">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "International", href: "/international" }, { label: "EU Format", href: "/international/eu" }]} />
           <div className="flex items-center gap-3 mb-4">
@@ -81,7 +81,7 @@ export default function EUFormatPage() {
             The European CV format follows Europass conventions with personal details, a professional photo, language proficiency levels, and a detailed reverse-chronological structure. Up to 3 pages is standard.
           </p>
           <div className="flex flex-wrap gap-3 mt-6">
-            <Link href="/international" className="px-5 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-bold hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/20">
+            <Link href="/international" className="px-5 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20">
               Convert Your Resume →
             </Link>
             <Link href="/how-to" className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-bold hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
@@ -197,10 +197,10 @@ export default function EUFormatPage() {
         </section>
 
         {/* CTA */}
-        <section className="rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-600 p-8 text-center text-white">
+        <section className="rounded-3xl bg-brand-600 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">Ready to build your EU resume?</h2>
-          <p className="text-sm text-violet-100 mb-6 max-w-lg mx-auto">Upload your resume and convert it to EU format with AI. Your content stays intact — only structure and conventions change.</p>
-          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white text-violet-700 text-sm font-bold hover:bg-violet-50 transition-colors shadow-lg">
+          <p className="text-sm text-brand-100 mb-6 max-w-lg mx-auto">Upload your resume and convert it to EU format with AI. Your content stays intact — only structure and conventions change.</p>
+          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white text-brand-700 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
             Convert to EU Format →
           </Link>
         </section>

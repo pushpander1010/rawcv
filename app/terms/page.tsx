@@ -75,13 +75,13 @@ export default function TermsPage() {
         </Section>
 
         <Section title="12. Contact">
-          <p>Questions? Email us at <a href="mailto:support@rawcv.com" className="text-violet-600 hover:underline">support@rawcv.com</a>.</p>
+          <p>Questions? Email us at <a href="mailto:support@rawcv.com" className="text-brand-600 hover:underline">support@rawcv.com</a>.</p>
         </Section>
 
         <div className="mt-12 pt-6 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-400">
-          <Link href="/" className="text-violet-600 hover:underline">← Back to rawcv</Link>
+          <Link href="/" className="text-brand-600 hover:underline">← Back to rawcv</Link>
           {" · "}
-          <Link href="/privacy" className="text-violet-600 hover:underline">Privacy Policy</Link>
+          <Link href="/privacy" className="text-brand-600 hover:underline">Privacy Policy</Link>
         </div>
       </div>
     </div>

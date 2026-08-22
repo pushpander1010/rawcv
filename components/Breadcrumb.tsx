@@ -54,7 +54,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
                 ) : (
                   <Link
                     href={item.href}
-                    className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                    className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                   >
                     {item.label}
                   </Link>

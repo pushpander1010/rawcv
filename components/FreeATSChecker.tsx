@@ -160,7 +160,7 @@ export default function FreeATSChecker({ resume }: Props) {
         type="button"
         onClick={runATSCheck}
         disabled={loading || !resume}
-        className="w-full px-4 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-sm transition-colors"
+        className="w-full px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-sm transition-colors"
       >
         {loading ? "Checking..." : "📊 Check ATS Compatibility (Free)"}
       </button>
@@ -231,16 +231,16 @@ export default function FreeATSChecker({ resume }: Props) {
       )}
 
       {score !== null && (
-        <div className="p-4 rounded-lg bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800">
-          <p className="text-xs text-violet-700 dark:text-violet-300 mb-2">
+        <div className="p-4 rounded-lg bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800">
+          <p className="text-xs text-brand-700 dark:text-brand-300 mb-2">
             <strong>Want more detailed analysis?</strong>
           </p>
-          <p className="text-xs text-violet-600 dark:text-violet-400 mb-3">
+          <p className="text-xs text-brand-600 dark:text-brand-400 mb-3">
             Sign up to get AI-powered suggestions, JD matching, and more advanced ATS analysis.
           </p>
           <a
             href="/analyze"
-            className="inline-flex items-center gap-1 text-xs font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300"
+            className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
           >
             Explore Premium Features →
           </a>

@@ -71,7 +71,7 @@ export default function USFormatPage() {
       <Script id="us-format-article" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Script id="us-format-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
-      <section className="bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-transparent dark:from-blue-900/15 dark:via-cyan-900/10 dark:to-transparent px-6 py-14 sm:py-20">
+      <section className="bg-gray-50 dark:bg-gray-900/30 px-6 py-14 sm:py-20">
         <div className="max-w-4xl mx-auto">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "International", href: "/international" }, { label: "US Format", href: "/international/us" }]} />
           <div className="flex items-center gap-3 mb-4">
@@ -84,7 +84,7 @@ export default function USFormatPage() {
             The American resume is achievement-first, ultra-concise, and ATS-optimized. One page preferred. No photo. Every bullet must show measurable impact.
           </p>
           <div className="flex flex-wrap gap-3 mt-6">
-            <Link href="/international" className="px-5 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-bold hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/20">
+            <Link href="/international" className="px-5 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20">
               Convert Your Resume →
             </Link>
             <Link href="/cover-letter" className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-bold hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">

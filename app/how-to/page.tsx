@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 function Step({ number, title, children }: { number: number; title: string; children: React.ReactNode }) {
   return (
     <div className="flex gap-5 mb-10">
-      <div className="flex-shrink-0 w-9 h-9 rounded-full bg-violet-600 text-white text-sm font-bold flex items-center justify-center mt-0.5">
+      <div className="flex-shrink-0 w-9 h-9 rounded-full bg-brand-600 text-white text-sm font-bold flex items-center justify-center mt-0.5">
         {number}
       </div>
       <div className="flex-1 min-w-0">
@@ -44,7 +44,7 @@ function DocSection({ id, badge, title, subtitle, children }: {
   return (
     <section id={id} className="scroll-mt-20 mb-20">
       <div className="flex items-center gap-3 mb-2">
-        <span className="inline-block px-2.5 py-1 rounded-lg bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 text-xs font-bold uppercase tracking-wide">
+        <span className="inline-block px-2.5 py-1 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wide">
           {badge}
         </span>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{title}</h2>
@@ -146,11 +146,10 @@ export default function HowToPage() {
       </div>
 
       {/* Hero */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-violet-50 dark:from-violet-950/30 to-white dark:to-gray-950 border-b border-gray-100 dark:border-gray-800 px-6 py-16">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-blue-100/20 to-transparent dark:from-violet-900/20 dark:via-blue-900/10 blur-3xl" />
+      <div className="relative overflow-hidden bg-gradient-to-b from-brand-50 dark:from-brand-950/30 to-white dark:to-gray-950 border-b border-gray-100 dark:border-gray-800 px-6 py-16">
         <div className="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left space-y-4">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase tracking-wide">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 uppercase tracking-wide">
               Documentation
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 leading-tight">How to use rawcv</h1>
@@ -158,7 +157,7 @@ export default function HowToPage() {
               Everything you need to go from a blank page to a polished, ATS-optimized resume.
             </p>
             <div className="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
-              <Link href="/analyze" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 transition-all duration-200">
+              <Link href="/analyze" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:-translate-y-0.5 transition-all duration-200">
                 Get started free
               </Link>
               <Link href="#getting-started" className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200">
@@ -167,7 +166,7 @@ export default function HowToPage() {
             </div>
           </div>
           <div className="md:col-span-4 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-violet-100 dark:border-violet-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/resume_guide_illustration.png" 
                 alt="rawcv Builder Guide Illustration" 
@@ -190,7 +189,7 @@ export default function HowToPage() {
                   <li key={item.id}>
                     <a
                       href={`#${item.id}`}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/30 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/30 transition-colors"
                     >
                       {item.label}
                     </a>
@@ -198,9 +197,9 @@ export default function HowToPage() {
                 ))}
               </ul>
             </nav>
-            <div className="mt-8 p-4 rounded-xl bg-violet-50 dark:bg-violet-950/30 border border-violet-100 dark:border-violet-900">
-              <p className="text-xs text-violet-700 dark:text-violet-300 font-medium mb-1">Need help?</p>
-              <a href="mailto:support@rawcv.com" className="text-xs text-violet-600 dark:text-violet-400 underline hover:no-underline">
+            <div className="mt-8 p-4 rounded-xl bg-brand-50 dark:bg-brand-950/30 border border-brand-100 dark:border-brand-900">
+              <p className="text-xs text-brand-700 dark:text-brand-300 font-medium mb-1">Need help?</p>
+              <a href="mailto:support@rawcv.com" className="text-xs text-brand-600 dark:text-brand-400 underline hover:no-underline">
                 support@rawcv.com
               </a>
             </div>
@@ -214,7 +213,7 @@ export default function HowToPage() {
           <DocSection id="getting-started" badge="Start here" title="Getting started" subtitle="Create your free account and understand how rawcv works before you dive in.">
 
             <Step number={1} title="Create a free account">
-              <p>Go to <Link href="/analyze" className="text-violet-600 hover:underline font-medium">rawcv.com/analyze</Link> and sign up with your email address. No credit card required.</p>
+              <p>Go to <Link href="/analyze" className="text-brand-600 hover:underline font-medium">rawcv.com/analyze</Link> and sign up with your email address. No credit card required.</p>
               <p>Once registered you receive <strong className="text-gray-800 dark:text-gray-200">20 free credits</strong> instantly. Credits are consumed per AI operation so you can run several analyses before needing to top up.</p>
               <img src="/register_screen.jpg" alt="Registration page showing email and password fields with Sign up button" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-gray-700" />
             </Step>
@@ -242,7 +241,7 @@ export default function HowToPage() {
                     ].map(([action, cost]) => (
                       <tr key={action} className="border-b border-gray-100 dark:border-gray-800">
                         <td className="px-4 py-2 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">{action}</td>
-                        <td className="px-4 py-2 border border-gray-200 dark:border-gray-700 font-medium text-violet-600 dark:text-violet-400">{cost}</td>
+                        <td className="px-4 py-2 border border-gray-200 dark:border-gray-700 font-medium text-brand-600 dark:text-brand-400">{cost}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -335,7 +334,7 @@ export default function HowToPage() {
             </p>
 
             <Step number={1} title="Open the ATS Score tab">
-              <p>From the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">ATS Score</strong> tab (the first tab, marked with a chart icon).</p>
+              <p>From the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">ATS Score</strong> tab (the first tab, marked with a chart icon).</p>
             </Step>
 
             <Step number={2} title="Click Run ATS Analysis">
@@ -370,7 +369,7 @@ export default function HowToPage() {
           <DocSection id="ai-suggestions" badge="Analyze" title="AI suggestions" subtitle="Get 3-15 targeted improvements covering action verbs, quantified achievements, and section completeness.">
 
             <Step number={1} title="Open the Suggestions tab">
-              <p>On the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">Suggestions</strong> tab.</p>
+              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">Suggestions</strong> tab.</p>
             </Step>
 
             <Step number={2} title="Click Get AI Suggestions">
@@ -408,7 +407,7 @@ export default function HowToPage() {
             </p>
 
             <Step number={1} title="Open the Enhance tab">
-              <p>On the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">Enhance</strong> tab.</p>
+              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">Enhance</strong> tab.</p>
             </Step>
 
             <Step number={2} title="Click Enhance Resume">
@@ -435,7 +434,7 @@ export default function HowToPage() {
             </p>
 
             <Step number={1} title="Open the JD Match tab">
-              <p>On the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">JD Match</strong> tab.</p>
+              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">JD Match</strong> tab.</p>
             </Step>
 
             <Step number={2} title="Paste the job description">
@@ -514,7 +513,7 @@ export default function HowToPage() {
           <DocSection id="themes" badge="Download" title="Themes and downloading your PDF" subtitle="Pick a visual style and download a polished, ATS-safe PDF resume in one click.">
 
             <Step number={1} title="Open the Theme tab">
-              <p>On the <Link href="/analyze" className="text-violet-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">Theme</strong> tab. You can also access the theme picker from the Chat page by clicking <strong className="text-gray-800 dark:text-gray-200">Change theme</strong> above the preview.</p>
+              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-gray-200">Theme</strong> tab. You can also access the theme picker from the Chat page by clicking <strong className="text-gray-800 dark:text-gray-200">Change theme</strong> above the preview.</p>
             </Step>
 
             <Step number={2} title="Choose a theme">
@@ -598,11 +597,11 @@ export default function HowToPage() {
           </DocSection>
 
           {/* Bottom CTA */}
-          <div className="rounded-2xl bg-gradient-to-br from-violet-600 to-blue-600 p-8 text-center text-white mt-8">
+          <div className="rounded-2xl bg-brand-600 p-8 text-center text-white mt-8">
             <h2 className="text-2xl font-bold mb-2">Ready to build your best resume?</h2>
-            <p className="text-violet-100 mb-6 text-sm">Create a free account and get 20 credits instantly. No credit card required.</p>
+            <p className="text-brand-100 mb-6 text-sm">Create a free account and get 20 credits instantly. No credit card required.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link href="/analyze" className="px-6 py-2.5 rounded-xl bg-white text-violet-700 font-semibold text-sm hover:bg-violet-50 transition-colors">
+              <Link href="/analyze" className="px-6 py-2.5 rounded-xl bg-white text-brand-700 font-semibold text-sm hover:bg-brand-50 transition-colors">
                 Get started free
               </Link>
               <Link href="/" className="px-6 py-2.5 rounded-xl border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition-colors">

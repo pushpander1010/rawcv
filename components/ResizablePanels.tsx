@@ -66,7 +66,7 @@ export default function ResizablePanels({
           onClick={() => setMobileTab("left")}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             mobileTab === "left"
-              ? "border-b-2 border-violet-600 text-violet-600"
+              ? "border-b-2 border-brand-600 text-brand-600"
               : "text-gray-500 dark:text-gray-400"
           }`}
         >
@@ -77,7 +77,7 @@ export default function ResizablePanels({
           onClick={() => { setMobileTab("right"); onRightTabClick?.(); }}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             mobileTab === "right"
-              ? "border-b-2 border-violet-600 text-violet-600"
+              ? "border-b-2 border-brand-600 text-brand-600"
               : "text-gray-500 dark:text-gray-400"
           }`}
         >
@@ -104,7 +104,7 @@ export default function ResizablePanels({
         {/* Drag handle */}
         <div
           onMouseDown={onMouseDown}
-          className="w-1 flex-shrink-0 cursor-col-resize bg-gray-200 dark:bg-gray-700 hover:bg-violet-400 dark:hover:bg-violet-600 transition-colors active:bg-violet-500 group relative"
+          className="w-1 flex-shrink-0 cursor-col-resize bg-gray-200 dark:bg-gray-700 hover:bg-brand-400 dark:hover:bg-brand-600 transition-colors active:bg-brand-500 group relative"
           title="Drag to resize"
         >
           <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">

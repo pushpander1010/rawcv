@@ -35,7 +35,7 @@ const FORMAT_META: Record<ResumeFormat, {
 }> = {
   general: {
     icon: "🌍",
-    color: "from-violet-500 to-indigo-500",
+    color: "from-brand-500 to-brand-500",
     highlights: ["✅ Standard for most countries", "✅ Photo optional", "✅ Up to 2 pages", "✅ Personal details included"],
     tips: [
       "Use reverse-chronological order (most recent first)",
@@ -49,7 +49,7 @@ const FORMAT_META: Record<ResumeFormat, {
   },
   eu: {
     icon: "🇪🇺",
-    color: "from-blue-600 to-indigo-700",
+    color: "from-blue-600 to-brand-700",
     highlights: ["✅ Photo required (recommended)", "✅ Languages section included", "✅ Up to 3 pages", "✅ Personal details included"],
     tips: [
       "Include a professional photo (headshot, neutral background)",
@@ -230,9 +230,7 @@ export default function InternationalPage() {
       }) }} />
 
       {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-violet-600/10 via-indigo-600/5 to-transparent dark:from-violet-900/15 dark:via-indigo-900/10 dark:to-transparent px-6 py-14 sm:py-20">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-40 -right-40 w-80 h-80 rounded-full bg-violet-500/10 blur-3xl" />
-        <div aria-hidden="true" className="pointer-events-none absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-brand-600/10 via-brand-600/5 to-transparent dark:from-brand-900/15 dark:via-brand-900/10 dark:to-transparent px-6 py-14 sm:py-20">
 
         <div className="max-w-5xl mx-auto relative">
           <div className="flex items-center gap-3 mb-4">
@@ -267,10 +265,10 @@ export default function InternationalPage() {
                   className={`
                     group relative rounded-3xl border-2 text-left overflow-hidden
                     transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]
-                    focus:outline-none focus:ring-4 focus:ring-violet-500/20
+                    focus:outline-none focus:ring-4 focus:ring-brand-500/20
                     ${isSelected
-                      ? "border-violet-500 dark:border-violet-400 shadow-xl shadow-violet-500/10 dark:shadow-violet-900/20"
-                      : "border-gray-200 dark:border-gray-700/80 bg-white dark:bg-gray-900 hover:border-violet-300 dark:hover:border-violet-700 hover:shadow-lg"
+                      ? "border-brand-500 dark:border-brand-400 shadow-xl shadow-brand-500/10 dark:shadow-brand-900/20"
+                      : "border-gray-200 dark:border-gray-700/80 bg-white dark:bg-gray-900 hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-lg"
                     }
                   `}
                   aria-pressed={isSelected}
@@ -283,7 +281,7 @@ export default function InternationalPage() {
                     <div className="flex items-center justify-between">
                       <span className="text-3xl">{m.icon}</span>
                       {isSelected && (
-                        <span className="w-6 h-6 bg-violet-500 rounded-full flex items-center justify-center">
+                        <span className="w-6 h-6 bg-brand-500 rounded-full flex items-center justify-center">
                           <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                           </svg>
@@ -301,7 +299,7 @@ export default function InternationalPage() {
                         <span className="font-semibold">📄 Max {fmt.maxPages} page{fmt.maxPages > 1 ? "s" : ""}</span>
                       </div>
                       {fmt.photoRequired && (
-                        <div className="flex items-center gap-1.5 text-xs text-violet-600 dark:text-violet-400 font-semibold">
+                        <div className="flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 font-semibold">
                           <span>📸 Photo required</span>
                         </div>
                       )}
@@ -359,7 +357,7 @@ export default function InternationalPage() {
             </Link>
           </div>
           <div className="mt-3 text-center">
-            <Link href="/resume-formats" className="text-xs font-bold text-violet-600 dark:text-violet-400 hover:underline">
+            <Link href="/resume-formats" className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
               Compare all formats worldwide →
             </Link>
           </div>
@@ -367,7 +365,7 @@ export default function InternationalPage() {
 
         {/* ── Convert Resume CTA ─────────────────────────────────────── */}
         {hasResume && (
-          <section className="rounded-3xl border border-violet-200 dark:border-violet-800/60 bg-gradient-to-r from-violet-50 to-indigo-50 dark:from-violet-950/30 dark:to-indigo-950/30 p-6 shadow-md">
+          <section className="rounded-3xl border border-brand-200 dark:border-brand-800/60 bg-gradient-to-r from-brand-50 to-brand-50 dark:from-brand-950/30 dark:to-brand-950/30 p-6 shadow-md">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
@@ -391,7 +389,7 @@ export default function InternationalPage() {
                     shrink-0 px-6 py-3 rounded-2xl text-sm font-bold transition-all
                     ${converting
                       ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
-                      : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-violet-500/20 hover:-translate-y-0.5 active:translate-y-0"
+                      : "bg-brand-600 text-white hover:from-brand-700 hover:to-brand-700 shadow-lg shadow-brand-500/20 hover:-translate-y-0.5 active:translate-y-0"
                     }
                   `}
                 >
@@ -444,7 +442,7 @@ export default function InternationalPage() {
                     <div className="space-y-2">
                       {conversionResult.changes.map((c, i) => (
                         <div key={i} className="flex gap-2 text-xs">
-                          <span className="text-violet-500 shrink-0">•</span>
+                          <span className="text-brand-500 shrink-0">•</span>
                           <div>
                             <span className="text-gray-800 dark:text-gray-200 font-medium">{c.what}</span>
                             {c.why && (
@@ -467,7 +465,7 @@ export default function InternationalPage() {
           <div className="lg:col-span-2 space-y-8">
 
             {/* Profile Photo */}
-            <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-violet-300 dark:hover:border-violet-800/80 transition-all duration-300">
+            <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-brand-300 dark:hover:border-brand-800/80 transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest">
@@ -490,7 +488,7 @@ export default function InternationalPage() {
 
             {/* Languages — only for EU / formats that include them */}
             {info.includeLanguages && (
-              <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-violet-300 dark:hover:border-violet-800/80 transition-all duration-300">
+              <div className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-brand-300 dark:hover:border-brand-800/80 transition-all duration-300">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-sm font-bold text-gray-950 dark:text-gray-150 uppercase tracking-widest">
@@ -503,7 +501,7 @@ export default function InternationalPage() {
                   <button
                     type="button"
                     onClick={addLanguage}
-                    className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-bold hover:from-violet-700 hover:to-indigo-700 shadow-md shadow-violet-500/10 transition-all hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="px-3 py-1.5 rounded-xl bg-brand-600 text-white text-xs font-bold hover:from-brand-700 hover:to-brand-700 shadow-md shadow-brand-500/10 transition-all hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   >
                     + Add Language
                   </button>
@@ -527,12 +525,12 @@ export default function InternationalPage() {
                           value={l.language}
                           onChange={(e) => updateLanguage(i, "language", e.target.value)}
                           placeholder="e.g. English, French, Spanish"
-                          className="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                          className="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                         />
                         <select
                           value={l.level}
                           onChange={(e) => updateLanguage(i, "level", e.target.value)}
-                          className="px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                          className="px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                         >
                           {PROFICIENCY_OPTIONS.map((opt) => (
                             <option key={opt.value} value={opt.value}>
@@ -612,7 +610,7 @@ export default function InternationalPage() {
                 <div className="flex flex-wrap gap-2">
                   {meta.sectionOrder.map((section, i) => (
                     <div key={i} className="flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 text-[10px] font-bold flex items-center justify-center">
+                      <span className="w-5 h-5 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">
                         {i + 1}
                       </span>
                       <span className="text-xs text-gray-700 dark:text-gray-300">{section}</span>
@@ -664,54 +662,54 @@ export default function InternationalPage() {
               <div className="space-y-3">
                 <Link
                   href="/cover-letter"
-                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 p-4 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:border-violet-200 dark:hover:border-violet-800 transition-all group"
+                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 p-4 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:border-brand-200 dark:hover:border-brand-800 transition-all group"
                 >
                   <span className="text-2xl">✉️</span>
                   <div className="text-left min-w-0 flex-1">
-                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
                       Cover Letter
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-500 truncate">
                       Create a {info.label.toLowerCase()} cover letter
                     </p>
                   </div>
-                  <svg className="w-4 h-4 text-gray-400 group-hover:text-violet-500 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-gray-400 group-hover:text-brand-500 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
 
                 <Link
                   href="/analyze"
-                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 p-4 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:border-violet-200 dark:hover:border-violet-800 transition-all group"
+                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 p-4 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:border-brand-200 dark:hover:border-brand-800 transition-all group"
                 >
                   <span className="text-2xl">📊</span>
                   <div className="text-left min-w-0 flex-1">
-                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
                       Analyze Resume
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-500 truncate">
                       Check ATS score & get suggestions
                     </p>
                   </div>
-                  <svg className="w-4 h-4 text-gray-400 group-hover:text-violet-500 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-gray-400 group-hover:text-brand-500 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
 
                 <Link
                   href="/analyze"
-                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 p-4 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:border-violet-200 dark:hover:border-violet-800 transition-all group"
+                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 p-4 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:border-brand-200 dark:hover:border-brand-800 transition-all group"
                 >
                   <span className="text-2xl">⚙️</span>
                   <div className="text-left min-w-0 flex-1">
-                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
                       Dashboard
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-500 truncate">
                       Edit resume, credits, and more
                     </p>
                   </div>
-                  <svg className="w-4 h-4 text-gray-400 group-hover:text-violet-500 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-gray-400 group-hover:text-brand-500 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
@@ -726,7 +724,7 @@ export default function InternationalPage() {
                 </h3>
                 <Link
                   href="/cover-letter"
-                  className="text-xs font-bold text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 hover:underline"
+                  className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 hover:underline"
                 >
                   + New
                 </Link>
@@ -739,7 +737,7 @@ export default function InternationalPage() {
                   </p>
                   <Link
                     href="/cover-letter"
-                    className="inline-block mt-2 text-xs font-bold text-violet-600 dark:text-violet-400 hover:underline"
+                    className="inline-block mt-2 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline"
                   >
                     Create one now →
                   </Link>
@@ -783,7 +781,7 @@ export default function InternationalPage() {
 
             {/* No resume? Upload CTA */}
             {!hasResume && (
-              <div className="rounded-3xl border border-dashed border-violet-300 dark:border-violet-700 bg-violet-50/50 dark:bg-violet-950/20 p-6 text-center">
+              <div className="rounded-3xl border border-dashed border-brand-300 dark:border-brand-700 bg-brand-50/50 dark:bg-brand-950/20 p-6 text-center">
                 <span className="text-3xl mb-2 block">📄</span>
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-1">
                   No resume uploaded yet
@@ -793,7 +791,7 @@ export default function InternationalPage() {
                 </p>
                 <Link
                   href="/analyze"
-                  className="inline-block px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 transition-colors"
+                  className="inline-block px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 transition-colors"
                 >
                   Go to Dashboard →
                 </Link>

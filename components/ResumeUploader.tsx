@@ -129,7 +129,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
         relative flex flex-col items-center justify-center gap-4
         border-2 border-dashed rounded-3xl p-12 cursor-pointer
         transition-all duration-200 select-none
-        ${dragging ? "border-violet-500 bg-violet-50 dark:bg-violet-950/20 shadow-inner" : "border-gray-300 dark:border-gray-700 hover:border-violet-500 hover:bg-violet-50/30 dark:hover:bg-violet-950/10"}
+        ${dragging ? "border-brand-500 bg-brand-50 dark:bg-brand-950/20 shadow-inner" : "border-gray-300 dark:border-gray-700 hover:border-brand-500 hover:bg-brand-50/30 dark:hover:bg-brand-950/10"}
         ${loading ? "pointer-events-none opacity-60" : ""}
       `}
     >
@@ -145,7 +145,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
       {loading ? (
         <>
           <svg
-            className="animate-spin h-10 w-10 text-violet-600"
+            className="animate-spin h-10 w-10 text-brand-600"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -158,7 +158,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
         </>
       ) : (
         <>
-          <div className="p-3 bg-violet-50 dark:bg-violet-950/30 rounded-2xl text-violet-600 dark:text-violet-400 shadow-sm border border-violet-100/50 dark:border-violet-900/20">
+          <div className="p-3 bg-brand-50 dark:bg-brand-950/30 rounded-2xl text-brand-600 dark:text-brand-400 shadow-sm border border-brand-100/50 dark:border-brand-900/20">
             <svg
               className="h-8 w-8"
               xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +180,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
               Drag &amp; drop your resume here
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
-              or <span className="text-violet-600 dark:text-violet-400 font-medium hover:underline">browse files</span>
+              or <span className="text-brand-600 dark:text-brand-400 font-medium hover:underline">browse files</span>
             </p>
           </div>
           <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
@@ -203,7 +203,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
             <button
               type="button"
               onClick={() => parseAndLoad(pendingFile)}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               Yes, replace
             </button>

@@ -464,7 +464,7 @@ export default function CoverLetterPage() {
             <button
               type="button"
               onClick={handleSave}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold transition-all duration-200 shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-all duration-200 shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               <span className="flex items-center gap-1.5">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -506,7 +506,7 @@ export default function CoverLetterPage() {
                       onClick={() => setFormat(key)}
                       className={`relative flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-xs font-medium transition-all duration-200 ${
                         selected
-                          ? "border-violet-500 bg-violet-50 dark:bg-violet-950/20 text-violet-700 dark:text-violet-300 shadow-sm"
+                          ? "border-brand-500 bg-brand-50 dark:bg-brand-950/20 text-brand-700 dark:text-brand-300 shadow-sm"
                           : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600"
                       }`}
                     >
@@ -537,7 +537,7 @@ export default function CoverLetterPage() {
                     value={recipientName}
                     onChange={(e) => setRecipientName(e.target.value)}
                     placeholder="e.g. Jane Smith"
-                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
                 <div>
@@ -550,7 +550,7 @@ export default function CoverLetterPage() {
                     value={recipientCompany}
                     onChange={(e) => setRecipientCompany(e.target.value)}
                     placeholder="e.g. Acme Corp"
-                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -563,7 +563,7 @@ export default function CoverLetterPage() {
                     value={recipientTitle}
                     onChange={(e) => setRecipientTitle(e.target.value)}
                     placeholder="e.g. HR Manager, Engineering Director"
-                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
               </div>
@@ -579,7 +579,7 @@ export default function CoverLetterPage() {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the full job description here. Our AI will use your resume data + this JD to craft a tailored cover letter..."
-                  className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-y"
+                  className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-y"
                 />
               </div>
 
@@ -588,7 +588,7 @@ export default function CoverLetterPage() {
                 type="button"
                 onClick={handleGenerate}
                 disabled={!jobDescription.trim() || generating}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
               >
                 {generating ? (
                   <>
@@ -635,7 +635,7 @@ export default function CoverLetterPage() {
                         key={letter.id}
                         className={`rounded-xl border p-3 transition-all duration-200 cursor-pointer ${
                           isActive
-                            ? "border-violet-300 dark:border-violet-700 bg-violet-50 dark:bg-violet-950/20"
+                            ? "border-brand-300 dark:border-brand-700 bg-brand-50 dark:bg-brand-950/20"
                             : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600"
                         }`}
                         onClick={() => loadLetter(letter)}
@@ -761,7 +761,7 @@ export default function CoverLetterPage() {
                         onChange={(e) => updateBody(idx, e.target.value)}
                         rows={3}
                         placeholder={`Paragraph ${idx + 1} — Write your cover letter content here...`}
-                        className="w-full text-sm text-gray-700 dark:text-gray-300 bg-transparent border border-transparent focus:border-violet-300 dark:focus:border-violet-600 rounded-lg p-2 resize-y leading-relaxed focus:outline-none focus:bg-white dark:focus:bg-gray-800 transition-colors placeholder-gray-500"
+                        className="w-full text-sm text-gray-700 dark:text-gray-300 bg-transparent border border-transparent focus:border-brand-300 dark:focus:border-brand-600 rounded-lg p-2 resize-y leading-relaxed focus:outline-none focus:bg-white dark:focus:bg-gray-800 transition-colors placeholder-gray-500"
                       />
                       {bodyParagraphs.length > 1 && (
                         <button
@@ -780,7 +780,7 @@ export default function CoverLetterPage() {
                   <button
                     type="button"
                     onClick={addParagraph}
-                    className="flex items-center gap-1 text-xs text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 font-medium transition-colors"
+                    className="flex items-center gap-1 text-xs text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 font-medium transition-colors"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />

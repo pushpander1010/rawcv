@@ -161,7 +161,7 @@ export default function ResumeFormatsPage() {
       <Script id="resume-formats-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <Script id="resume-formats-itemlist" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
 
-      <section className="bg-gradient-to-br from-violet-600/10 via-indigo-600/5 to-transparent dark:from-violet-900/15 dark:via-indigo-900/10 dark:to-transparent px-6 py-14 sm:py-20">
+      <section className="bg-gradient-to-br from-brand-600/10 via-brand-600/5 to-transparent dark:from-brand-900/15 dark:via-brand-900/10 dark:to-transparent px-6 py-14 sm:py-20">
         <div className="max-w-5xl mx-auto">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Resume Formats", href: "/resume-formats" }]} />
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-4">
@@ -212,7 +212,7 @@ export default function ResumeFormatsPage() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Detailed Format Guides</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {FORMATS.map((format) => (
-              <div key={format.country} className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-violet-300 dark:hover:border-violet-800/60 transition-all">
+              <div key={format.country} className="rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-md hover:border-brand-300 dark:hover:border-brand-800/60 transition-all">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">{format.flag}</span>
@@ -251,7 +251,7 @@ export default function ResumeFormatsPage() {
                 <p className="text-xs text-gray-600 dark:text-gray-400 italic mb-4">💡 {format.keyTip}</p>
 
                 {format.supported ? (
-                  <Link href={format.link} className="inline-block px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 transition-colors">
+                  <Link href={format.link} className="inline-block px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 transition-colors">
                     Convert to {format.country} Format →
                   </Link>
                 ) : (
@@ -290,10 +290,10 @@ export default function ResumeFormatsPage() {
         </section>
 
         {/* CTA */}
-        <section className="rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-600 p-8 text-center text-white">
+        <section className="rounded-3xl bg-brand-600 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">Ready to convert your resume?</h2>
-          <p className="text-sm text-violet-100 mb-6 max-w-lg mx-auto">Upload your resume and let AI adapt it to your target country&apos;s format. Your content stays the same — only structure changes.</p>
-          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white text-violet-700 text-sm font-bold hover:bg-violet-50 transition-colors shadow-lg">
+          <p className="text-sm text-brand-100 mb-6 max-w-lg mx-auto">Upload your resume and let AI adapt it to your target country&apos;s format. Your content stays the same — only structure changes.</p>
+          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white text-brand-700 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
             Start Converting →
           </Link>
         </section>

@@ -70,7 +70,7 @@ export default function FreeBuildClient() {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600 mb-4" />
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600 mb-4" />
           <p className="text-gray-600 dark:text-gray-400">Loading your resume...</p>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function FreeBuildClient() {
                 onClick={() => setActiveTab("preview")}
                 className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                   activeTab === "preview"
-                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20"
+                    ? "bg-brand-600 text-white shadow-md shadow-brand-500/20"
                     : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
@@ -108,7 +108,7 @@ export default function FreeBuildClient() {
                 onClick={() => setActiveTab("ats")}
                 className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                   activeTab === "ats"
-                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20"
+                    ? "bg-brand-600 text-white shadow-md shadow-brand-500/20"
                     : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
@@ -119,7 +119,7 @@ export default function FreeBuildClient() {
                 onClick={() => setActiveTab("keywords")}
                 className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                   activeTab === "keywords"
-                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20"
+                    ? "bg-brand-600 text-white shadow-md shadow-brand-500/20"
                     : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
@@ -130,7 +130,7 @@ export default function FreeBuildClient() {
                 onClick={() => setActiveTab("formatting")}
                 className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                   activeTab === "formatting"
-                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20"
+                    ? "bg-brand-600 text-white shadow-md shadow-brand-500/20"
                     : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
@@ -151,7 +151,7 @@ export default function FreeBuildClient() {
                   <button
                     type="button"
                     onClick={() => setShowThemePicker(!showThemePicker)}
-                    className="text-sm px-3.5 py-1.5 rounded-xl bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 hover:bg-violet-200 dark:hover:bg-violet-900/50 hover:scale-[1.02] active:scale-[0.98] font-semibold transition-all duration-200 shadow-sm"
+                    className="text-sm px-3.5 py-1.5 rounded-xl bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 hover:bg-brand-200 dark:hover:bg-brand-900/50 hover:scale-[1.02] active:scale-[0.98] font-semibold transition-all duration-200 shadow-sm"
                   >
                     {showThemePicker ? "Hide" : "Change"}
                   </button>
@@ -247,7 +247,7 @@ export default function FreeBuildClient() {
           )}
 
           {/* AI Features CTA */}
-          <div className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 rounded-xl border border-violet-200 dark:border-violet-800 p-6">
+          <div className="bg-gradient-to-br from-brand-50 to-brand-50 dark:from-brand-900/20 dark:to-brand-900/20 rounded-xl border border-brand-200 dark:border-brand-800 p-6">
             <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
               🚀 Upgrade Your Resume with AI
             </h3>
@@ -256,7 +256,7 @@ export default function FreeBuildClient() {
             </p>
             <a
               href="/analyze"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-violet-500/10 transition-all duration-200 w-full"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 w-full"
             >
               Explore Premium Features
               <svg
