@@ -7,6 +7,7 @@ import "./globals.css";
 import { ResumeProvider } from "@/context/ResumeContext";
 import { ToastProvider } from "@/components/Toast";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,16 +33,23 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "rawcv — AI-Powered Resume Builder & ATS Optimizer",
+  title: {
+    default: "rawcv — Free AI Resume Builder, ATS Score Checker & Job Match Tool",
+    template: "%s | rawcv",
+  },
   description:
-    "Build, analyze, and optimize your resume with AI. Get ATS scores, match resumes to job descriptions, enhance bullet points, and download polished PDFs. Free to start.",
+    "Build, analyze, and optimize your resume with AI — 100% free. Get instant ATS scores, match resumes to job descriptions, enhance bullet points, generate cover letters, and download polished PDFs. No signup required.",
   keywords: [
-    "resume builder", "AI resume", "ATS score", "resume optimizer",
+    "free resume builder", "AI resume builder", "ATS score checker", "resume optimizer",
     "job description match", "resume checker", "CV builder", "resume AI",
-    "ATS friendly resume", "resume enhancement"
+    "ATS friendly resume", "resume enhancement", "cover letter generator",
+    "resume templates", "resume analyzer", "AI resume writer", "resume scorer",
+    "job match tool", "resume PDF download", "international resume format",
+    "resume builder free", "ATS resume checker free", "AI CV builder"
   ],
-  authors: [{ name: "rawcv" }],
+  authors: [{ name: "rawcv", url: "https://www.rawcv.com" }],
   creator: "rawcv",
+  publisher: "rawcv",
   metadataBase: new URL("https://www.rawcv.com"),
   alternates: { canonical: "https://www.rawcv.com" },
   icons: {
@@ -54,22 +62,34 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.rawcv.com",
-    title: "rawcv — AI-Powered Resume Builder & ATS Optimizer",
+    title: "rawcv — Free AI Resume Builder & ATS Score Checker",
     description:
-      "Build, analyze, and optimize your resume with AI. Get ATS scores, match resumes to job descriptions, and download polished PDFs.",
+      "Build, analyze, and optimize your resume with AI — 100% free. Get ATS scores, job matching, AI suggestions, and polished PDF downloads.",
     siteName: "rawcv",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "rawcv — AI Resume Platform" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "rawcv — Free AI Resume Builder" }],
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "rawcv — AI-Powered Resume Builder & ATS Optimizer",
-    description: "Build, analyze, and optimize your resume with AI. Free to start.",
+    title: "rawcv — Free AI Resume Builder & ATS Score Checker",
+    description: "Build, analyze, and optimize your resume with AI — 100% free. No signup required.",
     images: ["/og-image.png"],
+    creator: "@rawcv",
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  verification: {
+    // Add your Google Search Console verification code here
+    // google: "your-verification-code",
   },
 };
 
@@ -80,6 +100,61 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          id="json-ld-org"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "rawcv",
+              url: "https://www.rawcv.com",
+              logo: "https://www.rawcv.com/favicon.svg",
+              description: "Free AI-powered resume builder with ATS scoring, job matching, and instant PDF downloads.",
+              sameAs: [],
+            }),
+          }}
+        />
+        <Script
+          id="json-ld-website"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "rawcv",
+              url: "https://www.rawcv.com",
+              description: "Free AI-powered resume builder, ATS score checker, and job match optimizer.",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: "https://www.rawcv.com/analyze",
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
+        <Script
+          id="json-ld-app"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "rawcv",
+              url: "https://www.rawcv.com",
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "Web",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              description: "Free AI-powered resume builder with ATS scoring, job description matching, AI suggestions, and PDF downloads.",
+            }),
+          }}
+        />
+      </head>
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6216304334889617"
@@ -87,12 +162,13 @@ export default function RootLayout({
         strategy="afterInteractive"
       />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lora.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lora.variable} antialiased bg-mesh`}
       >
         <ResumeProvider>
           <ToastProvider>
             <Navbar />
             {children}
+            <Footer />
             <Analytics />
           </ToastProvider>
         </ResumeProvider>
