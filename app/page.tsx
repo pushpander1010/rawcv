@@ -1,424 +1,243 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
-import { HeroCTA, FooterCTA, FooterNav } from "@/components/LandingCTA";
-import AdBanner from "@/components/AdBanner";
 
 export const metadata: Metadata = {
-  title: "rawcv — AI Resume Builder, ATS Score & Job Match Optimizer",
+  title: "rawcv — Free AI Resume Builder & ATS Score Checker",
   description:
-    "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, build cover letters, and download a polished PDF resume. Supports international resume formats for EU, Canada, US, and India.",
+    "Build, analyze, and optimize your resume with AI — 100% free. Get instant ATS scores, match resumes to job descriptions, and download polished PDFs. No signup required.",
   alternates: { canonical: "https://www.rawcv.com" },
 };
 
 const features = [
-  { icon: "📊", title: "ATS Score Analysis", description: "Instantly see how your resume scores against Applicant Tracking Systems with actionable fixes." },
-  { icon: "🎯", title: "JD Relevance Match", description: "Paste any job description and get a relevance score with missing keywords and skills highlighted." },
-  { icon: "✨", title: "AI Suggestions", description: "Get 3–15 targeted improvements covering action verbs, quantified achievements, and section completeness." },
-  { icon: "🔧", title: "Resume Enhancement", description: "Strengthen weak bullet points and your summary with stronger language — no JD required." },
-  { icon: "🎨", title: "Visual Themes", description: "Switch between 14 templates including Classic, Modern, Minimal, Executive, and Creative themes with a live preview." },
-  { icon: "💬", title: "Chat to Build or Customize", description: "Build a resume from scratch or tweak any section conversationally with an AI chat interface." },
-  { icon: "📝", title: "Cover Letter Builder", description: "Generate professional AI cover letters tailored to your resume and job description. Supports EU, Canada, and US formats." },
-  { icon: "🌍", title: "International Resume Formats", description: "Choose from EU, Canada, US, and India-specific resume formats with region-appropriate sections and conventions." },
+  { icon: "📊", title: "ATS Score Analysis", desc: "Get a score out of 100 with specific fixes to pass Applicant Tracking Systems." },
+  { icon: "🎯", title: "Job Match", desc: "Paste any job description and see exactly which keywords and skills are missing." },
+  { icon: "✨", title: "AI Suggestions", desc: "Get targeted improvements for action verbs, quantified achievements, and completeness." },
+  { icon: "🔧", title: "Bullet Enhancement", desc: "Strengthen weak bullet points with powerful, results-focused language." },
+  { icon: "💬", title: "AI Chat Builder", desc: "Build or customize your resume conversationally — just tell the AI what you want." },
+  { icon: "📝", title: "Cover Letters", desc: "Generate professional cover letters tailored to your resume and job description." },
+  { icon: "🎨", title: "14 Themes", desc: "Choose from professionally designed themes with live preview and instant PDF download." },
+  { icon: "🌍", title: "International Formats", desc: "EU, Canada, US, and India-specific resume formats with region-appropriate sections." },
 ];
 
 const faqs = [
-  { q: "Is rawcv free to use?", a: "Yes — rawcv is completely free to use. All features including ATS scoring, JD matching, AI suggestions, cover letter builder, and PDF download are available without any account or payment." },
+  { q: "Is rawcv really free?", a: "Yes — 100% free. All features including ATS scoring, JD matching, AI suggestions, cover letter builder, and PDF download are available without any account or payment." },
   { q: "What file formats are supported?", a: "rawcv accepts PDF, DOCX, and TXT files up to 5 MB." },
-  { q: "How does ATS scoring work?", a: "We run rule-based checks (missing sections, keyword density, date formatting) combined with AI analysis to give you a score out of 100 with specific issues to fix." },
-  { q: "Will my resume data be stored?", a: "Resume data is held in your browser session only. We do not permanently store your resume content on our servers." },
-  { q: "Can I use rawcv on mobile?", a: "Yes — rawcv is fully responsive. The chat and analysis tools work on any device." },
-  { q: "How does rawcv's ATS scoring work in detail?", a: "Our scanner runs over 100 rule-based checks covering section structure, keyword density, date formatting, contact info completeness, and file parseability, then layers an AI model to rate semantic relevance against common job families." },
-  { q: "Can I download my resume as PDF?", a: "Yes — after analysis you can pick one of five visual themes and download a polished, ATS-safe PDF with a single click." },
-  { q: "Is my resume data safe?", a: "Your resume data is only stored in your browser session. We do not permanently store your full resume content on our servers, and all AI processing is ephemeral." },
-  { q: "What AI models does rawcv use?", a: "rawcv uses a mix of open-source and commercial models to provide high-quality resume analysis and suggestions." },
-  { q: "How many resumes can I analyze?", a: "There's no limit — analyze as many resumes as you want, completely free." },
-  { q: "Does rawcv support Indian resume formats?", a: "Absolutely — rawcv is built for Indian job seekers and supports common Indian resume formats including detailed experience sections, project listings, certifications, and technical skill tables." },
-  { q: "Can I use rawcv for multiple job applications?", a: "Yes — each job application can be a separate analysis. Use the JD relevance tool with each new job description to tailor your resume without starting from scratch." },
-  { q: "How long does a credit last?", a: "Credits never expire. Buy a pack and use them at your own pace — whether that's in one day or spread across several months." },
-  { q: "What happens when I run out of credits?", a: "There are no credits — rawcv is completely free with unlimited usage." },
-  { q: "Can I cancel my subscription anytime?", a: "There's no subscription — rawcv is free to use with no strings attached." },
-  { q: "Does rawcv work for freshers?", a: "Yes — freshers and students benefit the most. Upload your first CV, get ATS feedback on sections you may be missing, and use AI to strengthen project descriptions and internship entries." },
-  { q: "How is rawcv different from Canva or Zety?", a: "Canva and Zety are design-first tools. rawcv focuses on ATS optimization and job-match analysis — it tells you exactly what keywords and sections are missing so you pass automated screening." },
-  { q: "Can I upload a resume from my phone?", a: "Yes — the entire upload, analysis, chat, and download flow works on mobile browsers. No app download needed." },
-  { q: "Do you offer bulk access for career coaches?", a: "rawcv is completely free for everyone, including career coaches and their clients. No limits." },
-  { q: "Can I share my resume for review?", a: "You can download your polished PDF and share it directly. We are working on shareable review links that let others see your ATS score and suggestions without an account." },
-  { q: "Does rawcv save my resume history?", a: "Your current session data is preserved in browser storage, so you can refresh the page without losing progress. Clearing browser data will reset your session." },
-  { q: "Can I use rawcv without creating an account?", a: "Yes — rawcv is completely free and requires no account. Just upload your resume and start analyzing." },
-  { q: "What kind of AI suggestions does rawcv provide?", a: "Suggestions range from replacing weak action verbs and adding quantified results to filling missing sections (summary, certifications) and rewording bullets to match job description language." },
-  { q: "Does rawcv support languages other than English?", a: "The interface is in English, and the AI models are optimized for English-language resumes. We plan to expand to other languages based on user demand." },
-  { q: "Can I edit my resume directly inside rawcv?", a: "Yes — the chat interface lets you modify any section conversationally, and the enhancement tool applies AI suggestions directly to your resume preview." },
-  { q: "Does rawcv support international resume formats?", a: "Yes — rawcv supports resume formats for EU (Europass-compatible), Canada, US, and India. Each format adjusts section ordering, required fields, and cultural expectations for recruiters in that region. You can select your preferred format when building or enhancing your resume." },
-  { q: "What is the EU resume format?", a: "The EU format follows Europass conventions with a clear reverse-chronological structure, personal information section, language proficiency levels (CEFR), and optional photo placement. It is widely accepted across EU member states." },
-  { q: "What is the Canada resume format?", a: "The Canadian resume format emphasizes a professional summary, key achievements with quantifiable results, and excludes personal details like age, marital status, or photo. It typically runs 1-2 pages and follows strict anti-discrimination hiring norms." },
-  { q: "What is the US resume format?", a: "The US resume format focuses on measurable achievements, action verbs, and is typically one page for early-to-mid career. It avoids personal information and uses a reverse-chronological structure optimized for both recruiters and ATS software." },
-  { q: "Does rawcv have a cover letter builder?", a: "Yes — you can generate professional AI cover letters tailored to your resume and the specific job description. Choose from General, EU, Canada, and US format options, then edit, save, and export as PDF. The cover letter builder is included with your credits." },
+  { q: "How does ATS scoring work?", a: "We run 100+ rule-based checks (missing sections, keyword density, date formatting) combined with AI analysis to give you a score out of 100 with specific issues to fix." },
+  { q: "Will my resume data be stored?", a: "No. Resume data is held in your browser session only. We do not permanently store your resume content on our servers." },
+  { q: "Can I use rawcv on mobile?", a: "Yes — rawcv is fully responsive. The chat, analysis, and download tools all work on mobile browsers." },
+  { q: "Do I need to create an account?", a: "No — just upload your resume and start analyzing. No sign-up, no credit card, no strings attached." },
 ];
 
 export default function LandingPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://www.rawcv.com/#website",
-        "url": "https://www.rawcv.com",
-        "name": "rawcv",
-        "description": "AI-powered resume builder, ATS scorer, job match optimizer, and cover letter generator with international resume formats",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://www.rawcv.com/analyze",
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "SoftwareApplication",
-        "@id": "https://www.rawcv.com/#app",
-        "name": "rawcv",
-        "url": "https://www.rawcv.com",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "Web",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "INR",
-          "description": "Free to use with all features"
-        },
-        "description": "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, build cover letters, and download a polished PDF resume. Supports international resume formats for EU, Canada, US, and India.",
-        "screenshot": "https://www.rawcv.com/og-image.png",
-        "featureList": [
-          "ATS Score Analysis",
-          "Job Description Relevance Match",
-          "AI Resume Suggestions",
-          "Resume Enhancement",
-          "Visual Themes",
-          "Chat-based Resume Building",
-          "Cover Letter Builder",
-          "International Resume Formats"
-        ]
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://www.rawcv.com/#org",
-        "name": "rawcv",
-        "url": "https://www.rawcv.com",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://www.rawcv.com/logo.png",
-          "width": 512,
-          "height": 512
-        }
-      }
-    ]
-  };
-
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen">
       <Script
         id="json-ld"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebSite",
+                "@id": "https://www.rawcv.com/#website",
+                url: "https://www.rawcv.com",
+                name: "rawcv",
+                description: "Free AI-powered resume builder with ATS scoring, job matching, and PDF downloads.",
+              },
+              {
+                "@type": "SoftwareApplication",
+                "@id": "https://www.rawcv.com/#app",
+                name: "rawcv",
+                url: "https://www.rawcv.com",
+                applicationCategory: "BusinessApplication",
+                operatingSystem: "Web",
+                offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              },
+            ],
+          }),
+        }}
       />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden pt-20 pb-24 px-6">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-gradient-to-br from-violet-200/60 via-blue-100/40 to-transparent dark:from-violet-900/30 dark:via-blue-900/20 blur-3xl" />
-        <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 text-center lg:text-left">
-            <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 uppercase">
-              AI-Powered Resume Platform
-            </span>
-            <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-6">
-              Land more interviews
-              <br />
-              <span className="bg-gradient-to-r from-violet-600 to-blue-500 text-violet-700 dark:text-violet-300">
-                with a smarter resume
-              </span>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-xl mx-auto lg:mx-0 mb-10">
-              Upload your CV, get an ATS score, match it to any job description, enhance it with AI,
-              and download a polished PDF — all in minutes.
-            </p>
-            <div className="flex justify-center lg:justify-start">
-              <HeroCTA />
-            </div>
+      {/* ═══════════════ HERO ═══════════════ */}
+      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
+        {/* Background orbs */}
+        <div aria-hidden="true" className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full bg-violet-500/10 blur-[120px]" />
+        <div aria-hidden="true" className="absolute top-20 right-1/4 w-[400px] h-[400px] rounded-full bg-indigo-500/10 blur-[100px]" />
+
+        <div className="relative max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-100 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20 mb-8">
+            <span className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
+            <span className="text-xs font-semibold text-violet-700 dark:text-violet-300">100% Free — No Signup Required</span>
           </div>
-          <div className="lg:col-span-5 relative w-full aspect-square max-w-[450px] mx-auto lg:max-w-none">
-            {/* Stunning image frame with neon border and shadow */}
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-violet-100 dark:border-violet-800/50 bg-white dark:bg-gray-900 p-2 transform hover:scale-[1.02] transition-transform duration-300">
-              <img 
-                src="/hero_illustration.png" 
-                alt="rawcv AI Resume Builder Illustration" 
-                className="w-full h-auto rounded-2xl object-cover"
-              />
-            </div>
+
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6">
+            Build a resume that
+            <br />
+            <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              actually gets interviews
+            </span>
+          </h1>
+
+          <p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Upload your CV, get an instant ATS score, match it to any job description,
+            enhance it with AI, and download a polished PDF — all in minutes.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <Link
+              href="/analyze"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-base font-bold shadow-xl shadow-violet-500/25 hover:shadow-violet-500/40 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+            >
+              Upload & Analyze Free
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
+            <Link
+              href="/build"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+            >
+              Build from Scratch
+            </Link>
+          </div>
+
+          {/* Stats */}
+          <div className="flex items-center justify-center gap-8 sm:gap-12 text-center">
+            {[
+              { value: "100+", label: "ATS Checks" },
+              { value: "14", label: "Themes" },
+              { value: "0$", label: "Forever Free" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white">{stat.value}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Hero resume mockup */}
-      <section className="pb-16 px-6 bg-white dark:bg-gray-950">
-        <div className="max-w-4xl mx-auto">
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
-            {/* Browser chrome */}
+      {/* ═══════════════ APP MOCKUP ═══════════════ */}
+      <section className="px-6 pb-20">
+        <div className="max-w-5xl mx-auto">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-gray-900">
             <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
               <span className="w-3 h-3 rounded-full bg-red-400" />
               <span className="w-3 h-3 rounded-full bg-yellow-400" />
               <span className="w-3 h-3 rounded-full bg-green-400" />
-              <div className="flex-1 mx-4 h-6 rounded-md bg-gray-200 dark:bg-gray-700 flex items-center px-3">
-                <span className="text-xs text-gray-600">rawcv.com/analyze</span>
+              <div className="flex-1 mx-4 h-7 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center px-4">
+                <span className="text-xs text-gray-500">rawcv.com/analyze</span>
               </div>
             </div>
-            {/* App UI mockup */}
-            <div className="flex h-72 overflow-hidden">
-              {/* Left panel — tools */}
-              <div className="w-64 border-r border-gray-100 dark:border-gray-800 p-4 flex flex-col gap-3 bg-white dark:bg-gray-900">
-                <div className="h-6 w-24 rounded-lg bg-violet-100 dark:bg-violet-900/40" />
+            <div className="flex h-64 sm:h-80 overflow-hidden">
+              <div className="w-56 sm:w-72 border-r border-gray-100 dark:border-gray-800 p-4 flex flex-col gap-3 bg-white dark:bg-gray-900">
+                <div className="h-7 w-28 rounded-lg bg-violet-100 dark:bg-violet-900/40" />
                 <div className="h-4 w-full rounded bg-gray-100 dark:bg-gray-800" />
                 <div className="h-4 w-5/6 rounded bg-gray-100 dark:bg-gray-800" />
                 <div className="h-4 w-4/6 rounded bg-gray-100 dark:bg-gray-800" />
-                <div className="mt-2 h-10 w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 opacity-80" />
-                <div className="mt-auto flex items-center gap-2 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
-                  <span className="text-emerald-600 text-lg">📊</span>
-                  <div>
-                    <div className="h-3 w-16 rounded bg-emerald-200 dark:bg-emerald-800 mb-1" />
-                    <div className="text-xs font-bold text-emerald-600">ATS Score: 92</div>
-                  </div>
+                <div className="mt-2 h-11 w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 opacity-80" />
+                <div className="mt-auto p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+                  <div className="text-xs font-bold text-emerald-600">ATS Score: 92/100</div>
                 </div>
               </div>
-              {/* Right panel — resume preview */}
-              <div className="flex-1 p-5 bg-gray-50 dark:bg-gray-950 overflow-hidden">
+              <div className="flex-1 p-5 bg-gray-50 dark:bg-gray-950">
                 <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 h-full">
-                  {/* Resume header */}
                   <div className="border-b-2 border-gray-800 dark:border-gray-200 pb-3 mb-3">
                     <div className="h-5 w-40 rounded bg-gray-800 dark:bg-gray-200 mb-2" />
                     <div className="flex gap-3">
                       <div className="h-3 w-24 rounded bg-gray-300 dark:bg-gray-600" />
                       <div className="h-3 w-20 rounded bg-gray-300 dark:bg-gray-600" />
-                      <div className="h-3 w-28 rounded bg-gray-300 dark:bg-gray-600" />
                     </div>
                   </div>
-                  {/* Experience section */}
                   <div className="mb-3">
                     <div className="h-3 w-20 rounded bg-gray-400 dark:bg-gray-500 mb-2" />
                     <div className="h-3 w-full rounded bg-gray-200 dark:bg-gray-700 mb-1" />
-                    <div className="h-3 w-5/6 rounded bg-gray-200 dark:bg-gray-700 mb-1" />
-                    <div className="h-3 w-4/6 rounded bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-3 w-5/6 rounded bg-gray-200 dark:bg-gray-700" />
                   </div>
-                  {/* Skills */}
                   <div className="flex gap-2 flex-wrap">
-                    {["React", "TypeScript", "Node.js", "Python", "AWS"].map(s => (
-                      <span key={s} className="px-2 py-0.5 rounded-full text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300">{s}</span>
+                    {["React", "TypeScript", "Node.js", "Python"].map((s) => (
+                      <span key={s} className="px-2.5 py-1 rounded-full text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 font-medium">{s}</span>
                     ))}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <p className="text-center text-xs text-gray-600 mt-3">Live preview updates as you chat or apply suggestions</p>
         </div>
       </section>
 
-      {/* ATS Check Section */}
-      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/30 border-t border-b border-gray-100 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5 relative w-full aspect-square max-w-[450px] mx-auto lg:max-w-none order-2 lg:order-1">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-emerald-100 dark:border-emerald-800/50 bg-white dark:bg-gray-900 p-2 transform hover:scale-[1.02] transition-transform duration-300">
-              <img 
-                src="/ats_illustration.png" 
-                alt="rawcv ATS Scanner & Keyword Matcher" 
-                className="w-full h-auto rounded-2xl object-cover"
-              />
-            </div>
-          </div>
-          <div className="lg:col-span-7 text-center lg:text-left order-1 lg:order-2">
-            <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 uppercase">
-              ATS Score & JD Optimizer
-            </span>
-            <h2 className="text-4xl font-bold tracking-tight mb-6">
-              Beat the bots with our
-              <br />
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-500 text-violet-700 dark:text-violet-300">
-                ATS Compatibility Checker
-              </span>
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0">
-              Our advanced scanning engine parses your resume and runs hundreds of checks. From section layout, contact details, date formatting, and keyword density to job description semantic matching.
+      {/* ═══════════════ FEATURES ═══════════════ */}
+      <section className="py-24 px-6" id="features">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4">Everything you need to get hired</h2>
+            <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+              Professional-grade resume tools powered by AI — completely free.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
-              <div className="flex gap-3">
-                <span className="text-emerald-600 dark:text-emerald-400 text-xl font-bold">✓</span>
-                <div>
-                  <h4 className="font-semibold text-gray-950 dark:text-gray-100 text-sm">Targeted Keyword Density</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Automatically identifies and highlights crucial industry terms missing from your profile.</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-emerald-600 dark:text-emerald-400 text-xl font-bold">✓</span>
-                <div>
-                  <h4 className="font-semibold text-gray-950 dark:text-gray-100 text-sm">Semantic JD Matching</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Uses contextual AI models to match your experience details directly against the job requirements.</p>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="features-heading">
-        <div className="max-w-5xl mx-auto">
-          <h2 id="features-heading" className="text-3xl font-bold text-center mb-3">
-            Everything you need to get hired
-          </h2>
-          <p className="text-center text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto">
-            rawcv combines rule-based ATS checks with the best AI models so you always know exactly what to fix.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
-              <div key={f.title} className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
-                <span className="text-3xl mb-4 block" aria-hidden="true">{f.icon}</span>
-                <h3 className="font-semibold text-base mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{f.description}</p>
+              <div key={f.title} className="group p-5 rounded-2xl border border-gray-200/60 dark:border-gray-800/60 bg-white/50 dark:bg-gray-900/50 hover:bg-white dark:hover:bg-gray-900 hover:border-violet-200 dark:hover:border-violet-800 hover:shadow-lg hover:shadow-violet-500/5 transition-all duration-300">
+                <span className="text-2xl block mb-3">{f.icon}</span>
+                <h3 className="font-bold text-sm mb-1.5 text-gray-900 dark:text-gray-100">{f.title}</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-20 px-6" aria-labelledby="how-heading">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 id="how-heading" className="text-3xl font-bold mb-12">Three steps to a better resume</h2>
-          <ol className="flex flex-col sm:flex-row gap-8 text-left" itemScope itemType="https://schema.org/HowTo">
+      {/* ═══════════════ HOW IT WORKS ═══════════════ */}
+      <section className="py-24 px-6 bg-gray-50/50 dark:bg-gray-900/30">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-center mb-16">Three steps to a better resume</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { step: "1", title: "Upload your resume", body: "Drag and drop a PDF, DOCX, or TXT file. We parse it into structured data in seconds." },
-              { step: "2", title: "Analyze & improve", body: "Run ATS scoring, paste a job description for relevance analysis, and apply AI suggestions." },
-              { step: "3", title: "Download your PDF", body: "Pick a theme, accept the changes you like, and download a polished, ATS-safe PDF." },
+              { step: "01", title: "Upload", desc: "Drag and drop your PDF, DOCX, or TXT file. We parse it in seconds.", color: "from-violet-500 to-purple-500" },
+              { step: "02", title: "Analyze", desc: "Run ATS scoring, paste a job description, and get AI-powered suggestions.", color: "from-purple-500 to-indigo-500" },
+              { step: "03", title: "Download", desc: "Pick a theme, apply changes, and download a polished ATS-safe PDF.", color: "from-indigo-500 to-blue-500" },
             ].map((item) => (
-              <li key={item.step} className="flex-1 flex gap-4" itemProp="step" itemScope itemType="https://schema.org/HowToStep">
-                <span aria-hidden="true" className="flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold flex items-center justify-center shadow-md shadow-violet-500/10">
+              <div key={item.step} className="relative">
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white font-black text-lg shadow-lg mb-4`}>
                   {item.step}
-                </span>
-                <div>
-                  <h3 className="font-semibold mb-1" itemProp="name">{item.title}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed" itemProp="text">{item.body}</p>
                 </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* Resume tips — replaces broken YouTube embed */}
-      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="tips-heading">
-        <div className="max-w-5xl mx-auto">
-          <h2 id="tips-heading" className="text-3xl font-bold text-center mb-3">
-            Quick resume tips that actually work
-          </h2>
-          <p className="text-center text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto">
-            Small changes that move the needle on ATS scores and recruiter callbacks.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                num: "01",
-                title: "Mirror the job description",
-                body: "Copy exact phrases from the job posting into your resume. ATS systems match keywords literally — synonyms don't count.",
-              },
-              {
-                num: "02",
-                title: "Quantify every bullet point",
-                body: 'Replace "managed a team" with "managed a team of 8 engineers, reducing deploy time by 40%." Numbers stand out to both ATS and humans.',
-              },
-              {
-                num: "03",
-                title: "Use a single-column layout",
-                body: "Multi-column resumes confuse most ATS parsers. A clean single-column format ensures every word gets read correctly.",
-              },
-              {
-                num: "04",
-                title: "Name your sections clearly",
-                body: 'Use standard headings: "Work Experience", "Education", "Skills". Creative labels like "My Journey" are invisible to ATS.',
-              },
-              {
-                num: "05",
-                title: "Keep it to one or two pages",
-                body: "Recruiters spend ~7 seconds on a first pass. One page for under 5 years of experience; two pages maximum for senior roles.",
-              },
-              {
-                num: "06",
-                title: "Save as PDF, not DOCX",
-                body: "PDFs preserve your formatting across every system. DOCX files can reflow unpredictably depending on the recruiter's Word version.",
-              },
-            ].map((tip) => (
-              <div
-                key={tip.num}
-                className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow"
-              >
-                <span className="text-xs font-bold text-violet-500 tracking-widest mb-3 block">
-                  {tip.num}
-                </span>
-                <h3 className="font-semibold text-base mb-2">{tip.title}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{tip.body}</p>
+                <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">{item.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Why rawcv — keyword-rich content for SEO */}
-      <section className="py-20 px-6" aria-labelledby="why-heading">
-        <div className="max-w-3xl mx-auto">
-          <h2 id="why-heading" className="text-3xl font-bold text-center mb-10">Why use an AI resume builder?</h2>
-          <div className="prose prose-gray dark:prose-invert max-w-none text-sm leading-relaxed space-y-4 text-gray-600 dark:text-gray-400">
-            <p>
-              Over <strong>75% of resumes are rejected by Applicant Tracking Systems (ATS)</strong> before a human ever reads them.
-              ATS software scans for keywords, formatting, and section completeness — and most resumes fail silently.
-              rawcv&apos;s free ATS resume checker gives you a score out of 100 with specific, actionable fixes so you know exactly what to change.
-            </p>
-            <p>
-              A <strong>job description resume matcher</strong> is equally critical. Recruiters spend an average of 7 seconds on a resume.
-              If your skills and experience don&apos;t mirror the language in the job posting, you&apos;re invisible.
-              rawcv&apos;s JD relevance tool highlights missing keywords and suggests where to add them naturally.
-            </p>
-            <p>
-              Our <strong>AI resume enhancer</strong> rewrites weak bullet points using strong action verbs and quantified achievements —
-              the two things that most consistently improve callback rates. You stay in control: accept, reject, or tweak every suggestion.
-            </p>
-            <p>
-              Whether you&apos;re a <strong>fresher building your first CV</strong>, a mid-career professional switching industries,
-              or a career coach helping clients, rawcv gives you professional-grade tools for free.
-              Start with 20 free credits — no credit card required.
-            </p>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Free */}
-      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="free-heading">
+      {/* ═══════════════ CTA ═══════════════ */}
+      <section className="py-24 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 id="free-heading" className="text-3xl font-bold mb-3">100% Free — No Catch</h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-xl mx-auto">
-            All features are completely free. No credits, no subscriptions, no hidden fees. Upload your resume and start analyzing right away.
-          </p>
-          <div className="flex justify-center">
-            <a href="/analyze" className="inline-flex items-center px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
-              Start analyzing — it&apos;s free →
-            </a>
+          <div className="relative p-12 rounded-3xl bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-600 overflow-hidden">
+            <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent)]" />
+            <div className="relative">
+              <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">Ready to land more interviews?</h2>
+              <p className="text-violet-100 mb-8 max-w-md mx-auto">Upload your resume and get instant AI-powered analysis — completely free, no account needed.</p>
+              <Link href="/analyze" className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-violet-700 font-bold shadow-xl hover:shadow-2xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-200">
+                Get Started Free
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ — structured data for Google */}
-      <section className="py-20 px-6" aria-labelledby="faq-heading">
+      {/* ═══════════════ FAQ ═══════════════ */}
+      <section className="py-24 px-6 bg-gray-50/50 dark:bg-gray-900/30" id="faq">
         <div className="max-w-2xl mx-auto">
-          <h2 id="faq-heading" className="text-3xl font-bold text-center mb-10">Frequently asked questions</h2>
+          <h2 className="text-3xl font-black tracking-tight text-center mb-12">Frequently asked questions</h2>
           <dl className="space-y-6" itemScope itemType="https://schema.org/FAQPage">
             {faqs.map((faq) => (
-              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question">
-                <dt className="font-semibold text-gray-900 dark:text-gray-100 mb-1" itemProp="name">{faq.q}</dt>
+              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800/60">
+                <dt className="font-bold text-gray-900 dark:text-gray-100 mb-2" itemProp="name">{faq.q}</dt>
                 <dd className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                   <span itemProp="text">{faq.a}</span>
                 </dd>
@@ -427,45 +246,6 @@ export default function LandingPage() {
           </dl>
         </div>
       </section>
-
-      {/* International Resume Formats — SEO internal links */}
-      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="formats-heading">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 id="formats-heading" className="text-3xl font-bold mb-3">Resume formats for every country</h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto">
-            Different countries have different rules for photos, personal details, page length, and section order. Choose the right format for your target market.
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { href: "/international/us", icon: "🇺🇸", label: "US Format", desc: "1-page, achievement-first" },
-              { href: "/international/eu", icon: "🇪🇺", label: "EU / Europass", desc: "Photo, CEFR levels, 3 pages" },
-              { href: "/international/canada", icon: "🇨🇦", label: "Canada Format", desc: "No photo, anti-discrimination" },
-              { href: "/resume-formats", icon: "🌍", label: "All Formats", desc: "8+ countries compared" },
-            ].map((fmt) => (
-              <Link
-                key={fmt.href}
-                href={fmt.href}
-                className="group bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-100 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-700 hover:shadow-md transition-all"
-              >
-                <span className="text-3xl block mb-2">{fmt.icon}</span>
-                <p className="font-semibold text-sm group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">{fmt.label}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{fmt.desc}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <FooterCTA />
-
-      {/* Footer */}
-      <footer className="border-t border-gray-100 dark:border-gray-800 py-8 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <span className="font-bold text-gray-700 dark:text-gray-300">rawcv</span>
-          <FooterNav />
-          <p>© {new Date().getFullYear()} rawcv. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 }
