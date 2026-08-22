@@ -699,7 +699,7 @@ export default function InternationalPage() {
                 </Link>
 
                 <Link
-                  href="/dashboard"
+                  href="/analyze"
                   className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 p-4 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:border-violet-200 dark:hover:border-violet-800 transition-all group"
                 >
                   <span className="text-2xl">⚙️</span>
@@ -792,7 +792,7 @@ export default function InternationalPage() {
                   Upload your resume on the dashboard to convert it to {info.label} format.
                 </p>
                 <Link
-                  href="/dashboard"
+                  href="/analyze"
                   className="inline-block px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 transition-colors"
                 >
                   Go to Dashboard →

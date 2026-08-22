@@ -4,7 +4,6 @@ import { Inter, Lora } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import SessionProvider from "@/components/SessionProvider";
 import { ResumeProvider } from "@/context/ResumeContext";
 import { ToastProvider } from "@/components/Toast";
 import Navbar from "@/components/Navbar";
@@ -90,15 +89,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lora.variable} antialiased`}
       >
-        <SessionProvider>
-          <ResumeProvider>
-            <ToastProvider>
-              <Navbar />
-              {children}
-              <Analytics />
-            </ToastProvider>
-          </ResumeProvider>
-        </SessionProvider>
+        <ResumeProvider>
+          <ToastProvider>
+            <Navbar />
+            {children}
+            <Analytics />
+          </ToastProvider>
+        </ResumeProvider>
       </body>
     </html>
   );

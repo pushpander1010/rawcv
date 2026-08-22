@@ -4,7 +4,6 @@ export const maxDuration = 120;
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, ATSResult, ATSIssue } from "@/types";
 import { completeAnalysis as complete } from "@/lib/ai-providers";
-import { chargeCredits } from "@/lib/credits";
 import { requireAuth } from "@/lib/api-guard";
 
 // ─── Rule-based checks ────────────────────────────────────────────────────────
@@ -149,7 +148,7 @@ Return JSON in this exact shape:
 }`;
 
 export async function POST(req: NextRequest) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
   let body: { parsed: ParsedResume; raw: string };
@@ -186,8 +185,6 @@ export async function POST(req: NextRequest) {
     // fall back to rule-based score only
   }
 
-  const chargeError = await chargeCredits("ATS analysis");
-  if (chargeError) return chargeError;
 
   return NextResponse.json({
     score: Math.round(baseScore),

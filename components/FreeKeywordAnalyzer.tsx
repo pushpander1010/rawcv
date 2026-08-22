@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { ParsedResume } from "@/types";
-import { dispatchCreditUpdate } from "@/lib/credit-utils";
 
 interface KeywordStats {
   total: number;
@@ -191,7 +190,7 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
               Sign up to get personalized keyword recommendations based on your target job descriptions.
             </p>
             <a
-              href="/login?redirect=/analyze"
+              href="/analyze"
               className="inline-flex items-center gap-1 text-xs font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300"
             >
               Explore Premium Features →

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { ParsedResume } from "@/types";
-import { dispatchCreditUpdate } from "@/lib/credit-utils";
 
 interface ATSIssue {
   type: string;
@@ -240,7 +239,7 @@ export default function FreeATSChecker({ resume }: Props) {
             Sign up to get AI-powered suggestions, JD matching, and more advanced ATS analysis.
           </p>
           <a
-            href="/login?redirect=/analyze"
+            href="/analyze"
             className="inline-flex items-center gap-1 text-xs font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300"
           >
             Explore Premium Features →

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume } from "@/types";
 import { complete } from "@/lib/ai-providers";
 import { requireAuth } from "@/lib/api-guard";
-import { chargeCredits } from "@/lib/credits";
 import { sanitizeResume } from "@/lib/sanitize-resume";
 
 export const runtime = "nodejs";
@@ -128,7 +127,7 @@ Guidelines:
 - For graduationYear, extract the year as a string (e.g. "2020", "Expected 2024")`;
 
 export async function POST(req: NextRequest) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
   try {
@@ -164,8 +163,6 @@ export async function POST(req: NextRequest) {
     }
 
     /* ── Charge credits before AI work ── */
-    const chargeError = await chargeCredits("Resume parse");
-    if (chargeError) return chargeError;
 
     /* ── AI parse ── */
     let parsed: ParsedResume;

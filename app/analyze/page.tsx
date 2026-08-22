@@ -15,7 +15,6 @@ import ChatBot from "@/components/ChatBot";import type { ATSResult, RelevanceRes
 import ResizablePanels from "@/components/ResizablePanels";
 import UndoButton from "@/components/UndoButton";
 import ResetButton from "@/components/ResetButton";
-import CreditWarningBanner from "@/components/CreditWarningBanner";
 
 type Tab = "ats" | "relevance" | "suggestions" | "enhance" | "theme" | "chat";
 
@@ -29,7 +28,7 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
 ];
 
 export default function AnalyzePage() {
-  const { state, setState, refreshCredits } = useResume();
+  const { state, setState } = useResume();
   const [activeTab, setActiveTab] = useState<Tab>("ats");
   const [atsLoading, setAtsLoading] = useState(false);
   const [atsError, setAtsError] = useState<string | null>(null);
@@ -94,7 +93,6 @@ export default function AnalyzePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "ATS analysis failed");
       setState((prev) => ({ ...prev, atsResult: data }));
-      refreshCredits();
     } catch (e) { setAtsError(e instanceof Error ? (e.name === "AbortError" ? "Request timed out. Please try again." : e.message) : "ATS analysis failed. Please try again."); }
     finally { clearTimeout(timer); setAtsLoading(false); }
   }
@@ -110,7 +108,6 @@ export default function AnalyzePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Relevance analysis failed");
       setState((prev) => ({ ...prev, relevanceResult: data }));
-      refreshCredits();
     } catch (e) { setRelevanceError(e instanceof Error ? (e.name === "AbortError" ? "Request timed out. Please try again." : e.message) : "Relevance analysis failed. Please try again."); }
     finally { clearTimeout(timer); setRelevanceLoading(false); }
   }
@@ -124,7 +121,6 @@ export default function AnalyzePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Suggestions failed");
       setState((prev) => ({ ...prev, suggestions: data }));
-      refreshCredits();
     } catch (e) { setSuggestionsError(e instanceof Error ? (e.name === "AbortError" ? "Request timed out. Please try again." : e.message) : "Could not generate suggestions. Please try again."); }
     finally { clearTimeout(timer); setSuggestionsLoading(false); }
   }
@@ -138,7 +134,6 @@ export default function AnalyzePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Enhancement failed");
       setState((prev) => ({ ...prev, enhancements: data }));
-      refreshCredits();
     } catch (e) { setEnhancementError(e instanceof Error ? (e.name === "AbortError" ? "Request timed out. Please try again." : e.message) : "Could not enhance resume. Please try again."); }
     finally { clearTimeout(timer); setEnhancementLoading(false); }
   }
@@ -178,7 +173,6 @@ export default function AnalyzePage() {
       </div>
 
       {/* Body — resizable panels */}
-      <CreditWarningBanner balance={state.creditBalance} />
       <ResizablePanels
         defaultLeftWidth={460}
         leftLabel="Analysis"

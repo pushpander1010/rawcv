@@ -255,7 +255,7 @@ export default function FreeBuildClient() {
               Get AI-powered suggestions, JD matching, ATS optimization, and more advanced analysis.
             </p>
             <a
-              href="/login?redirect=/analyze"
+              href="/analyze"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-violet-500/10 transition-all duration-200 w-full"
             >
               Explore Premium Features

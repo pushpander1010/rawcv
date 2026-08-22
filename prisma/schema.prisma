@@ -8,43 +8,4 @@ datasource db {
   provider = "postgresql"
 }
 
-enum CreditTransactionType {
-  purchase
-  ai_operation
-}
-
-model User {
-  id                   String    @id @default(cuid())
-  email                String    @unique
-  name                 String
-  hashedPassword       String?
-  emailVerified        Boolean   @default(false)
-  verificationToken    String?   @unique
-  passwordResetToken   String?   @unique
-  passwordResetExpiry  DateTime?
-  creditBalance        Float     @default(20)
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-
-  creditTransactions CreditTransaction[]
-}
-
-model CreditTransaction {
-  id                    String                 @id @default(cuid())
-  userId                String
-  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type                  CreditTransactionType
-  amount                Float
-  description           String
-  stripePaymentIntentId String?
-  createdAt             DateTime               @default(now())
-
-  @@index([userId])
-}
-
-/// Idempotency for Stripe webhooks (same event must not credit twice)
-model ProcessedStripeEvent {
-  id        String   @id @default(cuid())
-  eventId   String   @unique
-  createdAt DateTime @default(now())
-}
+// Schema simplified — auth/credits removed. Add models as needed.

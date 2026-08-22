@@ -1,13 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-
 export default function AnalyzeSeoBanner() {
-  const { status } = useSession();
-
-  // Show SEO content only for unauthenticated (or loading) users
-  if (status === "authenticated") return null;
-
   return (
     <section className="bg-white dark:bg-gray-950 py-12 md:py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

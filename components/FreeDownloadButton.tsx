@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import type { ParsedResume } from "@/types";
 import { fetchWithRetry, safeJsonParse } from "@/lib/fetch-retry";
 import { renderThemeHtml } from "@/lib/theme-renderer";
@@ -12,8 +10,6 @@ interface Props {
 }
 
 export default function FreeDownloadButton({ resume, theme, onValidationError }: Props) {
-  const router = useRouter();
-  const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -64,10 +60,8 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
   const handleDownload = async () => {
     setError(null);
 
-    // Validate resume
     if (!validateResume()) return;
 
-    // Proceed with download directly (no login check here anymore)
     setLoading(true);
     try {
       const safeName = (resume?.contact.name || "resume")
@@ -75,11 +69,8 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
 
-      // Use /api/export-free for unauthenticated users, /api/export for authenticated
-      const endpoint = session?.user ? "/api/export" : "/api/export-free";
-
       const res = await fetchWithRetry(
-        endpoint,
+        "/api/export-free",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -97,7 +88,6 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
           console.error("[FreeDownloadButton] Failed to parse error response:", parseErr);
         }
 
-        // Puppeteer unavailable — fall back to print dialog
         if (json.fallbackHtml) {
           openPrintWindow(json.fallbackHtml, safeName);
           setShowSuccessModal(true);
@@ -115,7 +105,6 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
       a.click();
       URL.revokeObjectURL(url);
 
-      // Show success popup and clear errors
       setError(null);
       setShowSuccessModal(true);
     } catch (e) {
@@ -268,13 +257,11 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
         </div>
       )}
 
-      {!session?.user && (
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          100% Free & No Account Required to print/download!
-        </p>
-      )}
+      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+        100% Free — No account required!
+      </p>
 
-      {/* Success Conversion Popup Modal */}
+      {/* Success Modal */}
       {showSuccessModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
           <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-100 dark:border-gray-800 transform animate-in zoom-in-95 duration-200">
@@ -288,22 +275,13 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Your ATS-safe PDF is ready. Want to optimize your bullet points and match your resume to specific job descriptions with AI?
               </p>
-              <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 rounded-xl p-4 text-left">
-                <h4 className="text-xs font-semibold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider mb-1">
-                  Free AI Credits Included
-                </h4>
-                <p className="text-xs text-emerald-700 dark:text-emerald-300">
-                  Create a free account to scan your CV for keywords, optimize work experience bullets, and get 20 AI credits instantly.
-                </p>
-              </div>
               <div className="flex flex-col gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => router.push("/login?redirect=/dashboard")}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold text-sm shadow-md shadow-emerald-500/10 hover:shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
+                <a
+                  href="/analyze"
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold text-sm shadow-md shadow-emerald-500/10 hover:shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 text-center"
                 >
-                  Claim 20 Free Credits & Scan Resume
-                </button>
+                  Analyze Your Resume with AI
+                </a>
                 <button
                   type="button"
                   onClick={() => setShowSuccessModal(false)}

@@ -13,7 +13,6 @@ const ALLOWED_MIME = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "text/plain",
 ];
-const PARSE_COST = 2;
 
 interface ResumeUploaderProps {}
 
@@ -27,8 +26,6 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
   const [pendingFile, setPendingFile] = useState<File | null>(null);
 
   const hasResume = !!state.parsed;
-  const balance = state.creditBalance;
-  const lowCredits = balance !== null && balance < PARSE_COST;
 
   function validateFile(file: File): string | null {
     const ext = "." + file.name.split(".").pop()?.toLowerCase();
@@ -44,18 +41,12 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
 
   const handleFile = useCallback(
     async (file: File) => {
-      if (lowCredits) {
-        showToast(`Upload requires ${PARSE_COST} credits. You have ${balance ?? 0}.`, "error");
-        return;
-      } // blocked — UI already shows the message
-
       const error = validateFile(file);
       if (error) {
         showToast(error, "error");
         return;
       }
 
-      // If a resume is already loaded, ask for confirmation first
       if (hasResume) {
         setPendingFile(file);
         return;
@@ -63,7 +54,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
 
       await parseAndLoad(file);
     },
-    [hasResume, lowCredits]
+    [hasResume]
   );
 
   const parseAndLoad = useCallback(
@@ -82,14 +73,12 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
           return;
         }
 
-        // Push current resume onto undo stack before overwriting
         pushUndo();
 
         setState((prev) => ({
           ...prev,
           raw: data.raw,
           parsed: data.parsed as ParsedResume,
-          // Clear analysis results — they belong to the old resume
           atsResult: null,
           relevanceResult: null,
           suggestions: [],
@@ -107,7 +96,6 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
     [setState, pushUndo, router, showToast]
   );
 
-  // Drag-and-drop handlers
   const onDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setDragging(true);
@@ -135,13 +123,13 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
-      onClick={() => !loading && !lowCredits && inputRef.current?.click()}
-      onKeyDown={(e) => e.key === "Enter" && !loading && !lowCredits && inputRef.current?.click()}
+      onClick={() => !loading && inputRef.current?.click()}
+      onKeyDown={(e) => e.key === "Enter" && !loading && inputRef.current?.click()}
       className={`
         relative flex flex-col items-center justify-center gap-4
         border-2 border-dashed rounded-3xl p-12 cursor-pointer
         transition-all duration-200 select-none
-        ${lowCredits ? "border-red-300 dark:border-red-700 bg-red-50/50 dark:bg-red-950/10 cursor-not-allowed" : dragging ? "border-violet-500 bg-violet-50 dark:bg-violet-950/20 shadow-inner" : "border-gray-300 dark:border-gray-700 hover:border-violet-500 hover:bg-violet-50/30 dark:hover:bg-violet-950/10"}
+        ${dragging ? "border-violet-500 bg-violet-50 dark:bg-violet-950/20 shadow-inner" : "border-gray-300 dark:border-gray-700 hover:border-violet-500 hover:bg-violet-50/30 dark:hover:bg-violet-950/10"}
         ${loading ? "pointer-events-none opacity-60" : ""}
       `}
     >
@@ -152,7 +140,6 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
         className="sr-only"
         onChange={onInputChange}
         aria-hidden="true"
-        disabled={lowCredits}
       />
 
       {loading ? (
@@ -168,27 +155,6 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
           <p className="text-sm text-gray-500 dark:text-gray-400">Parsing your resume…</p>
-        </>
-      ) : lowCredits ? (
-        <>
-          <svg className="h-10 w-10 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-          </svg>
-          <div className="text-center">
-            <p className="text-sm font-medium text-red-600 dark:text-red-400">
-              Low credits — upload requires {PARSE_COST} credits
-            </p>
-            <p className="text-xs text-red-400 dark:text-red-500 mt-1">
-              You have {balance ?? 0} credit{balance !== 1 ? "s" : ""} remaining
-            </p>
-          </div>
-          <a
-            href="/credits"
-            onClick={(e) => e.stopPropagation()}
-            className="mt-1 px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
-          >
-            Recharge
-          </a>
         </>
       ) : (
         <>
@@ -224,7 +190,6 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
       )}
     </div>
 
-    {/* Confirmation dialog — shown when a resume is already loaded */}
     {pendingFile && (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 max-w-sm w-full">

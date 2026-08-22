@@ -117,7 +117,7 @@ export default function AboutPage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3 justify-center md:justify-start">
               <Link
-                href="/register"
+                href="/analyze"
                 className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 Get started free

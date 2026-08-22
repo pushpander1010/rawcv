@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, Suggestion } from "@/types";
 import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
-import { chargeCredits } from "@/lib/credits";
 import { requireAuth } from "@/lib/api-guard";
 
 const SYSTEM_PROMPT = `You are an expert senior resume coach and career strategist. Thoroughly analyze the provided resume and generate targeted, high-impact improvement suggestions.
@@ -38,7 +37,7 @@ Rules:
 - Make the improved version genuinely better — not just a minor wording change`;
 
 export async function POST(req: NextRequest) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
   let body: { parsed: ParsedResume };
@@ -69,8 +68,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "ai_unavailable", message: "Could not generate enough suggestions. Please try again." }, { status: 502 });
     }
     // Charge only after successful AI response
-    const chargeError = await chargeCredits("AI suggestions");
-    if (chargeError) return chargeError;
     return NextResponse.json(suggestions);
   } catch {
     return NextResponse.json(

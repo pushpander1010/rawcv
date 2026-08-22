@@ -4,7 +4,6 @@ export const maxDuration = 60;
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume } from "@/types";
 import { completeChat as complete } from "@/lib/ai-providers";
-import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseMessages } from "@/lib/api-guard";
 import { sanitizeResume } from "@/lib/sanitize-resume";
 import { parseBuildResponse, parseCustomizeResponse, validateResumeUpdate } from "@/lib/chat-response-parser";
@@ -325,7 +324,7 @@ function sanitizeResumeState(rawState: Record<string, unknown>): Partial<ParsedR
 
 // ─── Route ─────────────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
   let body: ChatRequest;
@@ -418,8 +417,6 @@ export async function POST(req: NextRequest) {
     const aiResult = await complete(prompt, systemPrompt);
 
     // Charge 1 credit per chat message (cheaper than other AI operations)
-    const chargeError = await chargeCredits("Chat bot", 1);
-    if (chargeError) return chargeError;
 
     // ── Customize mode ────────────────────────────────────────────────────────
     if (mode === "customize") {
@@ -490,11 +487,9 @@ export async function POST(req: NextRequest) {
 
 // ─── Reset server-side state ───────────────────────────────────────────────────
 export async function DELETE() {
-  const auth = await requireAuth();
-  if (auth instanceof NextResponse) return auth;
-
-  buildStepStore.delete(auth.userId);
-  sectionHistoryStore.delete(auth.userId);
+  // Clear all stored state (no auth needed - public endpoint)
+  buildStepStore.clear();
+  sectionHistoryStore.clear();
 
   return NextResponse.json({ ok: true });
 }

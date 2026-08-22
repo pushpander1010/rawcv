@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
-import { HeroCTA, FooterCTA, PricingCTA, FooterNav } from "@/components/LandingCTA";
-import AuthRedirect from "@/components/AuthRedirect";
-import { pricingPlans } from "@/data/pricing";
+import { HeroCTA, FooterCTA, FooterNav } from "@/components/LandingCTA";
+import AdBanner from "@/components/AdBanner";
 
 export const metadata: Metadata = {
   title: "rawcv — AI Resume Builder, ATS Score & Job Match Optimizer",
@@ -24,7 +23,7 @@ const features = [
 ];
 
 const faqs = [
-  { q: "Is rawcv free to use?", a: "Yes — every new account gets 20 free credits. Free-tier AI models cost 0.5–1 credit per operation, so you can run many analyses before needing to top up." },
+  { q: "Is rawcv free to use?", a: "Yes — rawcv is completely free to use. All features including ATS scoring, JD matching, AI suggestions, cover letter builder, and PDF download are available without any account or payment." },
   { q: "What file formats are supported?", a: "rawcv accepts PDF, DOCX, and TXT files up to 5 MB." },
   { q: "How does ATS scoring work?", a: "We run rule-based checks (missing sections, keyword density, date formatting) combined with AI analysis to give you a score out of 100 with specific issues to fix." },
   { q: "Will my resume data be stored?", a: "Resume data is held in your browser session only. We do not permanently store your resume content on our servers." },
@@ -32,20 +31,20 @@ const faqs = [
   { q: "How does rawcv's ATS scoring work in detail?", a: "Our scanner runs over 100 rule-based checks covering section structure, keyword density, date formatting, contact info completeness, and file parseability, then layers an AI model to rate semantic relevance against common job families." },
   { q: "Can I download my resume as PDF?", a: "Yes — after analysis you can pick one of five visual themes and download a polished, ATS-safe PDF with a single click." },
   { q: "Is my resume data safe?", a: "Your resume data is only stored in your browser session. We do not permanently store your full resume content on our servers, and all AI processing is ephemeral." },
-  { q: "What AI models does rawcv use?", a: "rawcv uses a mix of open-source and commercial models. Free-tier operations use efficient models, while Pro and Power plans unlock priority access to premium models for higher-quality suggestions." },
-  { q: "How many resumes can I analyze with free credits?", a: "With 20 free credits and each basic analysis costing 0.5–1 credit, you can typically analyze 10 to 20 resumes or run 20+ JD matches before needing to top up." },
+  { q: "What AI models does rawcv use?", a: "rawcv uses a mix of open-source and commercial models to provide high-quality resume analysis and suggestions." },
+  { q: "How many resumes can I analyze?", a: "There's no limit — analyze as many resumes as you want, completely free." },
   { q: "Does rawcv support Indian resume formats?", a: "Absolutely — rawcv is built for Indian job seekers and supports common Indian resume formats including detailed experience sections, project listings, certifications, and technical skill tables." },
   { q: "Can I use rawcv for multiple job applications?", a: "Yes — each job application can be a separate analysis. Use the JD relevance tool with each new job description to tailor your resume without starting from scratch." },
   { q: "How long does a credit last?", a: "Credits never expire. Buy a pack and use them at your own pace — whether that's in one day or spread across several months." },
-  { q: "What happens when I run out of credits?", a: "You can still view your dashboard and past analyses, but new AI operations will be blocked. Simply purchase a Starter, Pro, or Power pack to resume." },
-  { q: "Can I cancel my subscription anytime?", a: "Yes — there are no long-term contracts. Your credits remain available even after cancelling any recurring plan." },
+  { q: "What happens when I run out of credits?", a: "There are no credits — rawcv is completely free with unlimited usage." },
+  { q: "Can I cancel my subscription anytime?", a: "There's no subscription — rawcv is free to use with no strings attached." },
   { q: "Does rawcv work for freshers?", a: "Yes — freshers and students benefit the most. Upload your first CV, get ATS feedback on sections you may be missing, and use AI to strengthen project descriptions and internship entries." },
   { q: "How is rawcv different from Canva or Zety?", a: "Canva and Zety are design-first tools. rawcv focuses on ATS optimization and job-match analysis — it tells you exactly what keywords and sections are missing so you pass automated screening." },
   { q: "Can I upload a resume from my phone?", a: "Yes — the entire upload, analysis, chat, and download flow works on mobile browsers. No app download needed." },
   { q: "Do you offer bulk pricing for career coaches?", a: "Yes — the Power plan at ₹999 gives 500 credits, ideal for coaches managing multiple clients. Contact us for custom enterprise pricing if you need more." },
   { q: "Can I share my resume for review?", a: "You can download your polished PDF and share it directly. We are working on shareable review links that let others see your ATS score and suggestions without an account." },
   { q: "Does rawcv save my resume history?", a: "Your current session data is preserved in browser storage, so you can refresh the page without losing progress. Clearing browser data will reset your session." },
-  { q: "Can I use rawcv without creating an account?", a: "A quick sign-up is required to receive your free credits and track usage. No credit card is needed for the free tier." },
+  { q: "Can I use rawcv without creating an account?", a: "Yes — rawcv is completely free and requires no account. Just upload your resume and start analyzing." },
   { q: "What kind of AI suggestions does rawcv provide?", a: "Suggestions range from replacing weak action verbs and adding quantified results to filling missing sections (summary, certifications) and rewording bullets to match job description language." },
   { q: "Does rawcv support languages other than English?", a: "The interface is in English, and the AI models are optimized for English-language resumes. We plan to expand to other languages based on user demand." },
   { q: "Can I edit my resume directly inside rawcv?", a: "Yes — the chat interface lets you modify any section conversationally, and the enhancement tool applies AI suggestions directly to your resume preview." },
@@ -79,11 +78,12 @@ export default function LandingPage() {
         "url": "https://www.rawcv.com",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
-        "offers": [
-          { "@type": "Offer", "name": "Starter", "price": "99", "priceCurrency": "INR" },
-          { "@type": "Offer", "name": "Pro", "price": "499", "priceCurrency": "INR" },
-          { "@type": "Offer", "name": "Power", "price": "999", "priceCurrency": "INR" }
-        ],
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "INR",
+          "description": "Free to use with all features"
+        },
         "description": "Free AI-powered resume platform. Upload your CV, get an ATS compatibility score, match it to any job description, enhance bullet points with AI, build cover letters, and download a polished PDF resume. Supports international resume formats for EU, Canada, US, and India.",
         "screenshot": "https://www.rawcv.com/og-image.png",
         "featureList": [
@@ -114,7 +114,6 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
-      <AuthRedirect />
       <Script
         id="json-ld"
         type="application/ld+json"
@@ -397,37 +396,17 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing */}      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="pricing-heading">
-        <div className="max-w-5xl mx-auto">
-          <h2 id="pricing-heading" className="text-3xl font-bold text-center mb-3">Pay only for what you use</h2>
-          <p className="text-center text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto">
-            Credits are consumed per AI operation. Every new account starts with 20 free credits.
+      {/* Free */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900/50" aria-labelledby="free-heading">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 id="free-heading" className="text-3xl font-bold mb-3">100% Free — No Catch</h2>
+          <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-xl mx-auto">
+            All features are completely free. No credits, no subscriptions, no hidden fees. Upload your resume and start analyzing right away.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {pricingPlans.map((plan) => (
-              <div key={plan.name} className={`relative rounded-2xl p-6 border flex flex-col ${plan.highlight ? "border-violet-500 bg-violet-50 dark:bg-violet-950/30 shadow-lg" : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"}`}>
-                {plan.highlight && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-semibold bg-violet-600 text-white">Most popular</span>
-                )}
-                <div className="mb-4">
-                  <p className="font-semibold text-base">{plan.name}</p>
-                  <p className="text-3xl font-extrabold mt-1">{plan.price}<span className="text-sm font-normal text-gray-600 ml-1">/ {plan.credits}</span></p>
-                  <p className="text-xs text-gray-600 mt-0.5">{plan.priceUsd} USD</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{plan.description}</p>
-                </div>
-                <ul className="space-y-2 mb-6 flex-1">
-                  {plan.features.map((feat) => (
-                    <li key={feat} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                      <svg className="w-4 h-4 text-violet-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {feat}
-                    </li>
-                  ))}
-                </ul>
-                <PricingCTA highlight={plan.highlight} />
-              </div>
-            ))}
+          <div className="flex justify-center">
+            <a href="/analyze" className="inline-flex items-center px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+              Start analyzing — it&apos;s free →
+            </a>
           </div>
         </div>
       </section>

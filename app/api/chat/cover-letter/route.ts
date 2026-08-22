@@ -3,7 +3,6 @@ export const maxDuration = 90;
 
 import { NextRequest, NextResponse } from "next/server";
 import { completeFast } from "@/lib/ai-providers";
-import { chargeCredits } from "@/lib/credits";
 import { requireAuth } from "@/lib/api-guard";
 import type { ResumeFormat } from "@/types";
 
@@ -35,7 +34,7 @@ Rules:
 - The closing should express enthusiasm and include a call to action`;
 
 export async function POST(req: NextRequest) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
   let body: {
@@ -100,8 +99,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const chargeError = await chargeCredits("AI cover letter generation");
-    if (chargeError) return chargeError;
 
     return NextResponse.json({
       opening: result.opening,

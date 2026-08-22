@@ -4,7 +4,6 @@ export const maxDuration = 120;
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, ResumeFormat } from "@/types";
 import { completeAnalysis } from "@/lib/ai-providers";
-import { chargeCredits } from "@/lib/credits";
 import { requireAuth } from "@/lib/api-guard";
 
 const FORMAT_INSTRUCTIONS: Record<ResumeFormat, string> = {
@@ -92,7 +91,7 @@ Return JSON matching this exact shape:
 }
 
 export async function POST(req: NextRequest) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
   let body: { parsed: ParsedResume; targetFormat: ResumeFormat };
@@ -146,8 +145,6 @@ export async function POST(req: NextRequest) {
     result.converted.format = targetFormat;
 
     // Charge credits after successful conversion
-    const chargeError = await chargeCredits("Format conversion");
-    if (chargeError) return chargeError;
 
     return NextResponse.json({
       converted: result.converted,

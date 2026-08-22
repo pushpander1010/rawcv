@@ -89,7 +89,7 @@ export default function HowToPage() {
           "@type": "HowToStep",
           "position": 1,
           "name": "Create a free account",
-          "text": "Go to rawcv.com/register and sign up with your email address. Once registered you receive 20 free credits instantly. Credits are consumed per AI operation so you can run several analyses before needing to top up."
+          "text": "Go to rawcv.com/analyze and sign up with your email address. Once registered you receive 20 free credits instantly. Credits are consumed per AI operation so you can run several analyses before needing to top up."
         },
         {
           "@type": "HowToStep",
@@ -158,7 +158,7 @@ export default function HowToPage() {
               Everything you need to go from a blank page to a polished, ATS-optimized resume.
             </p>
             <div className="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
-              <Link href="/register" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 transition-all duration-200">
+              <Link href="/analyze" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 transition-all duration-200">
                 Get started free
               </Link>
               <Link href="#getting-started" className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200">
@@ -214,7 +214,7 @@ export default function HowToPage() {
           <DocSection id="getting-started" badge="Start here" title="Getting started" subtitle="Create your free account and understand how rawcv works before you dive in.">
 
             <Step number={1} title="Create a free account">
-              <p>Go to <Link href="/register" className="text-violet-600 hover:underline font-medium">rawcv.com/register</Link> and sign up with your email address. No credit card required.</p>
+              <p>Go to <Link href="/analyze" className="text-violet-600 hover:underline font-medium">rawcv.com/analyze</Link> and sign up with your email address. No credit card required.</p>
               <p>Once registered you receive <strong className="text-gray-800 dark:text-gray-200">20 free credits</strong> instantly. Credits are consumed per AI operation so you can run several analyses before needing to top up.</p>
               <img src="/register_screen.jpg" alt="Registration page showing email and password fields with Sign up button" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-gray-700" />
             </Step>
@@ -555,35 +555,19 @@ export default function HowToPage() {
           </DocSection>
 
 
-          {/* CREDITS */}
-          <DocSection id="credits" badge="Billing" title="Credits and pricing" subtitle="rawcv uses a pay-as-you-go credit system. You only pay for the AI operations you actually use.">
+          {/* PRICING */}
+          <DocSection id="credits" badge="Free" title="100% Free" subtitle="rawcv is completely free to use. No credits, no subscriptions, no hidden fees.">
 
-            <Step number={1} title="Check your balance">
-              <p>Your current credit balance is shown in the top-right corner of every page. Click it to go to the <Link href="/credits" className="text-violet-600 hover:underline">Credits page</Link>.</p>
+            <Step number={1} title="No account needed">
+              <p>Just upload your resume and start analyzing. No sign-up, no credit card, no strings attached.</p>
             </Step>
 
-            <Step number={2} title="Choose a credit pack">
-              <p>Three packs are available. Credits never expire.</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                {[
-                  { name: "Starter", price: "Rs 99 / $1",  credits: "50 credits",  best: "Quick resume check" },
-                  { name: "Pro",     price: "Rs 499 / $5", credits: "250 credits", best: "Active job search" },
-                  { name: "Power",   price: "Rs 999 / $10",credits: "500 credits", best: "Power users and coaches" },
-                ].map((p) => (
-                  <div key={p.name} className="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
-                    <p className="font-semibold text-gray-900 dark:text-gray-100">{p.name}</p>
-                    <p className="text-xl font-extrabold mt-1 text-violet-600 dark:text-violet-400">{p.credits}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{p.price}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">{p.best}</p>
-                  </div>
-                ))}
-              </div>
+            <Step number={2} title="All features included">
+              <p>ATS scoring, JD matching, AI suggestions, cover letter builder, PDF downloads — everything is free and unlimited.</p>
             </Step>
 
-            <Step number={3} title="Pay securely">
-              <p>Payments are processed via <strong className="text-gray-800 dark:text-gray-200">Razorpay</strong> (India) or <strong className="text-gray-800 dark:text-gray-200">Stripe</strong> (international). Both support UPI, cards, net banking, and wallets.</p>
-              <p>Credits are added to your account instantly after payment confirmation.</p>
-              <Callout type="note">rawcv does not store your payment details. All transactions are handled directly by Razorpay or Stripe.</Callout>
+            <Step number={3} title="Supported by ads">
+              <p>rawcv is supported by Google Ads. You may see ads on some pages — this helps keep the service free for everyone.</p>
             </Step>
           </DocSection>
 
@@ -592,14 +576,14 @@ export default function HowToPage() {
           <DocSection id="faq" badge="FAQ" title="Frequently asked questions" subtitle="Quick answers to the most common questions about rawcv.">
             <dl className="space-y-6" itemScope itemType="https://schema.org/FAQPage">
               {[
-                { q: "Is rawcv free to use?", a: "Every new account gets 20 free credits. Free-tier AI models cost 0.5-1 credit per operation so you can run several analyses before needing to top up. PDF downloads are always free." },
+                { q: "Is rawcv free to use?", a: "Yes — rawcv is completely free. No account needed, no credits, no subscriptions. Just upload and analyze." },
                 { q: "Does rawcv store my resume?", a: "No. Resume data is held in your browser session only. We do not permanently store your resume content on our servers. If you close the tab or refresh you will need to re-upload." },
                 { q: "What file formats does rawcv accept?", a: "rawcv accepts PDF, DOCX, and TXT files up to 5 MB. For best results use a single-column PDF without tables or text boxes." },
                 { q: "Can I use rawcv on mobile?", a: "Yes - rawcv is fully responsive. The chat, analysis, and download tools all work on mobile browsers. The split-panel layout on the Analyze page collapses to a single column on small screens." },
                 { q: "How accurate is the ATS score?", a: "rawcv combines rule-based checks (missing sections, date formatting, keyword density) with AI analysis. The score is a strong indicator of ATS compatibility but is not a guarantee - different ATS platforms have different rules." },
                 { q: "Can I undo changes?", a: "Yes. The Undo button in the Analyze and Chat pages reverts the last accepted change. You can undo multiple times to step back through your edit history." },
-                { q: "Do credits expire?", a: "No. Credits never expire. Buy a pack and use it at your own pace." },
-                { q: "What AI models does rawcv use?", a: "rawcv uses a mix of models from OpenAI, Anthropic, Google, and Together AI depending on the operation. Pro and Power credit packs unlock access to the most capable models." },
+                { q: "Do credits expire?", a: "There are no credits — rawcv is completely free with unlimited usage." },
+                { q: "What AI models does rawcv use?", a: "rawcv uses a mix of models from OpenAI, Anthropic, Google, and Together AI depending on the operation." },
                 { q: "Can I create multiple versions of my resume?", a: "Yes - use the Tailor tool to create a job-specific version for each application. Each tailored version can be downloaded as a separate PDF." },
                 { q: "How do I contact support?", a: "Email us at support@rawcv.com. We typically respond within 24 hours on business days." },
               ].map((faq) => (
@@ -618,7 +602,7 @@ export default function HowToPage() {
             <h2 className="text-2xl font-bold mb-2">Ready to build your best resume?</h2>
             <p className="text-violet-100 mb-6 text-sm">Create a free account and get 20 credits instantly. No credit card required.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link href="/register" className="px-6 py-2.5 rounded-xl bg-white text-violet-700 font-semibold text-sm hover:bg-violet-50 transition-colors">
+              <Link href="/analyze" className="px-6 py-2.5 rounded-xl bg-white text-violet-700 font-semibold text-sm hover:bg-violet-50 transition-colors">
                 Get started free
               </Link>
               <Link href="/" className="px-6 py-2.5 rounded-xl border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition-colors">

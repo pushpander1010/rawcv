@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { ParsedResume } from "@/types";
-import { dispatchCreditUpdate } from "@/lib/credit-utils";
 
 interface FormatIssue {
   category: string;

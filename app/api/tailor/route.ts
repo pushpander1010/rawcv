@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, TailoredResume, TailorChange } from "@/types";
 import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
-import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseJD } from "@/lib/api-guard";
 
 const SYSTEM_PROMPT = `You are an expert resume tailoring specialist with deep knowledge of ATS optimization and recruiter psychology. Your job: rewrite the candidate's resume to be the strongest possible match for the target job description.
@@ -53,7 +52,7 @@ Rules:
 - Each tailored version must be factually grounded in the original resume`;
 
 export async function POST(req: NextRequest) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
   let body: { parsed: ParsedResume; jd: string };
@@ -84,8 +83,6 @@ export async function POST(req: NextRequest) {
     const finalResume = applyChanges(parsed, changes);
     const tailoredResume: TailoredResume = { changes, finalResume };
     // Charge only after successful AI response
-    const chargeError = await chargeCredits("JD tailoring");
-    if (chargeError) return chargeError;
     return NextResponse.json(tailoredResume);
   } catch {
     return NextResponse.json(

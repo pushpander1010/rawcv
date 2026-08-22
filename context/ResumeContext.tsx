@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
 import type {
   ParsedResume,
   ATSResult,
@@ -27,12 +26,11 @@ export interface ResumeState {
   selectedFormat: ResumeFormat;
   jd: string;
   lastOperationCost: number | null;
-  creditBalance: number | null;
-  chatResetSignal: number; // increments on reset so ChatBot can react
-  chatClearSignal: number; // increments on clear-chat so ChatBot clears messages only
-  chatMessages: Array<{ role: "user" | "assistant"; content: string }>; // persisted chat history
+  chatResetSignal: number;
+  chatClearSignal: number;
+  chatMessages: Array<{ role: "user" | "assistant"; content: string }>;
   coverLetters: CoverLetter[];
-  userPhoto: string | null; // base64 data URL - persisted in localStorage
+  userPhoto: string | null;
 }
 
 interface ResumeContextValue {
@@ -43,7 +41,6 @@ interface ResumeContextValue {
   canUndo: boolean;
   reset: () => void;
   clearChat: () => void;
-  refreshCredits: () => void;
   isHydrated: boolean;
 }
 
@@ -59,7 +56,6 @@ const defaultState: ResumeState = {
   selectedFormat: "general",
   jd: "",
   lastOperationCost: null,
-  creditBalance: null,
   chatResetSignal: 0,
   chatClearSignal: 0,
   chatMessages: [],
@@ -68,49 +64,38 @@ const defaultState: ResumeState = {
 };
 
 const MAX_UNDO = 20;
+const STORAGE_KEY = "rawcv_resume_state";
 
-function storageKey(userId: string | undefined) {
-  return userId ? `rawcv_resume_state_${userId}` : null;
-}
-
-// Fields we want to persist (skip transient UI/credit fields)
 const PERSIST_KEYS: (keyof ResumeState)[] = [
   "raw", "parsed", "atsResult", "relevanceResult",
   "suggestions", "enhancements", "tailoredResume", "selectedTheme", "selectedFormat", "jd",
   "chatMessages", "coverLetters", "userPhoto",
 ];
 
-function loadPersistedState(userId: string | undefined): Partial<ResumeState> {
+function loadPersistedState(): Partial<ResumeState> {
   try {
-    const key = storageKey(userId);
-    if (!key) return {};
-    const raw = localStorage.getItem(key);
+    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw) as Partial<ResumeState>;
-    
-    // Sanitize the parsed resume to ensure all fields are correct types
     if (parsed.parsed) {
       parsed.parsed = sanitizeResume(parsed.parsed);
     }
     if (parsed.tailoredResume?.finalResume) {
       parsed.tailoredResume.finalResume = sanitizeResume(parsed.tailoredResume.finalResume);
     }
-    
     return parsed;
   } catch {
     return {};
   }
 }
 
-function persistState(state: ResumeState, userId: string | undefined) {
+function persistState(state: ResumeState) {
   try {
-    const key = storageKey(userId);
-    if (!key) return;
     const toSave: Partial<ResumeState> = {};
     for (const k of PERSIST_KEYS) {
       (toSave as Record<string, unknown>)[k] = state[k];
     }
-    localStorage.setItem(key, JSON.stringify(toSave));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
   } catch {
     // storage quota or SSR — ignore
   }
@@ -119,36 +104,27 @@ function persistState(state: ResumeState, userId: string | undefined) {
 const ResumeContext = createContext<ResumeContextValue | null>(null);
 
 export function ResumeProvider({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession();
-  const userId = (session?.user as { id?: string } | undefined)?.id;
-
   const [state, setStateRaw] = useState<ResumeState>(defaultState);
-  const hydrated = useRef<string | null>(null);
+  const hydrated = useRef(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Rehydrate from localStorage when userId is known (or changes)
+  // Hydrate from localStorage once on mount
   useEffect(() => {
-    if (status === "loading") return;
-    const key = userId ?? "__guest__";
-    if (hydrated.current === key) return;
-    hydrated.current = key;
+    if (hydrated.current) return;
+    hydrated.current = true;
 
-    setStateRaw(defaultState);
-
-    if (userId) {
-      const saved = loadPersistedState(userId);
-      if (Object.keys(saved).length > 0) {
-        setStateRaw((prev) => ({ ...prev, ...saved }));
-      }
+    const saved = loadPersistedState();
+    if (Object.keys(saved).length > 0) {
+      setStateRaw((prev) => ({ ...prev, ...saved }));
     }
     setIsHydrated(true);
-  }, [userId, status]);
+  }, []);
 
   // Persist to localStorage whenever relevant state changes
   useEffect(() => {
-    if (!hydrated.current || !userId) return;
-    persistState(state, userId);
-  }, [state, userId]);
+    if (!hydrated.current) return;
+    persistState(state);
+  }, [state]);
 
   const setState: React.Dispatch<React.SetStateAction<ResumeState>> = useCallback((action) => {
     setStateRaw((prev) => {
@@ -188,20 +164,14 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     setStateRaw((prev) => ({
       ...defaultState,
       selectedTheme: prev.selectedTheme,
-      creditBalance: prev.creditBalance,
       chatResetSignal: prev.chatResetSignal + 1,
     }));
-    if (userId) {
-      try {
-        const key = storageKey(userId);
-        if (key) localStorage.removeItem(key);
-      } catch { /* ignore */ }
-    }
-    // Clear server-side step/history stores
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch { /* ignore */ }
     fetch("/api/chat", { method: "DELETE" }).catch(() => {});
-  }, [userId]);
+  }, []);
 
-  /** Clear chat messages only — keeps resume data, localStorage, and undo stack intact */
   const clearChat = useCallback(() => {
     setStateRaw((prev) => ({
       ...prev,
@@ -210,27 +180,9 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
-  // ── Credits ───────────────────────────────────────────────────────────────
-
-  const refreshCredits = useCallback(async () => {
-    try {
-      const res = await fetch("/api/credits");
-      if (res.ok) {
-        const data = await res.json();
-        setState((prev) => ({ ...prev, creditBalance: data.balance }));
-      }
-    } catch {
-      // silently ignore
-    }
-  }, [setState]);
-
-  useEffect(() => {
-    refreshCredits();
-  }, [refreshCredits]);
-
   return (
     <ResumeContext.Provider value={{
-      state, setState, pushUndo, undo, canUndo, reset, clearChat, refreshCredits, isHydrated,
+      state, setState, pushUndo, undo, canUndo, reset, clearChat, isHydrated,
     }}>
       {children}
     </ResumeContext.Provider>

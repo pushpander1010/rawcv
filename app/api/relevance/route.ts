@@ -4,7 +4,6 @@ export const maxDuration = 120;
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, RelevanceResult } from "@/types";
 import { completeAnalysis as complete } from "@/lib/ai-providers";
-import { chargeCredits } from "@/lib/credits";
 import { requireAuth, sanitiseJD } from "@/lib/api-guard";
 
 const SYSTEM_PROMPT = `You are an expert resume-to-job-description relevance analyst. Carefully compare the candidate's resume against the provided job description to determine how well they match.
@@ -31,7 +30,7 @@ Scoring guidance:
 - Note: For junior/fresher roles, be more lenient on years-of-experience gaps but strict on skill gaps`;
 
 export async function POST(req: NextRequest) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
   let body: { parsed: ParsedResume; jd: string };
@@ -64,8 +63,6 @@ export async function POST(req: NextRequest) {
     };
 
     // Charge only after successful AI response
-    const chargeError = await chargeCredits("JD relevance analysis");
-    if (chargeError) return chargeError;
 
     return NextResponse.json(safeResult);
   } catch {
