@@ -54,11 +54,13 @@ export default function AnalyzePage() {
         <div className="relative max-w-2xl w-full bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-200/60 dark:border-gray-800/60 p-12 text-center overflow-hidden">
           
           <div className="relative">
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-brand-100 to-brand-100 dark:from-brand-900/30 dark:to-brand-900/30 flex items-center justify-center">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-brand-600 dark:text-brand-400">
-                <path d="M12 16v-8m0 0l-3 3m3-3l3 3M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
+            <img
+              src="/upload_illustration.jpg"
+              alt="Upload your resume"
+              className="w-48 sm:w-56 mx-auto mb-6 rounded-xl border border-gray-100 dark:border-gray-800"
+              width={256}
+              height={140}
+            />
             
             <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">
               Upload your resume to get started

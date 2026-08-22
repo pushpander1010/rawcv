@@ -1019,7 +1019,7 @@ export default async function ArticlePage({ params }: PageProps) {
     "dateModified": article.date,
     "image": {
       "@type": "ImageObject",
-      "url": "https://www.rawcv.com/blog_illustration.png"
+      "url": "https://www.rawcv.com/blog_illustration.jpg"
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -1061,7 +1061,7 @@ export default async function ArticlePage({ params }: PageProps) {
           <div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden border border-brand-100 dark:border-brand-900/40 shadow-lg bg-gradient-to-br from-brand-100 via-brand-50 to-blue-50 dark:from-brand-950/20 dark:via-brand-950/10 dark:to-blue-950/10 flex items-center justify-center p-6">
             <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:20px_20px]" />
             <img 
-              src="/blog_illustration.png" 
+              src="/blog_illustration.jpg" 
               alt={article.title} 
               className="w-auto h-full max-h-40 sm:max-h-48 object-contain rounded-2xl transform hover:scale-[1.02] transition-transform duration-300"
             />

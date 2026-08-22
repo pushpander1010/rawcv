@@ -47,7 +47,7 @@ export default function BuildPage() {
           <div className="md:col-span-4 hidden md:block">
             <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
-                src="/builder_illustration.png" 
+                src="/builder_illustration.jpg" 
                 alt="rawcv Resume Builder Illustration" 
                 className="w-full h-auto rounded-xl object-cover"
               />

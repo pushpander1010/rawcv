@@ -114,6 +114,19 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ═══════════════ HERO IMAGE ═══════════════ */}
+      <section className="px-6 pb-20">
+        <div className="max-w-5xl mx-auto">
+          <img
+            src="/hero_illustration.jpg"
+            alt="AI resume builder and ATS analyzer illustration"
+            className="w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-card"
+            width={1400}
+            height={763}
+          />
+        </div>
+      </section>
+
       {/* ═══════════════ APP MOCKUP ═══════════════ */}
       <section className="px-6 pb-20">
         <div className="max-w-5xl mx-auto">
@@ -204,6 +217,16 @@ export default function LandingPage() {
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{item.desc}</p>
               </div>
             ))}
+          </div>
+
+          <div className="mt-12">
+            <img
+              src="/success_illustration.jpg"
+              alt="Job offer and hiring success illustration"
+              className="w-full max-w-3xl mx-auto rounded-2xl border border-gray-200 dark:border-gray-800 shadow-card"
+              width={1280}
+              height={698}
+            />
           </div>
         </div>
       </section>
