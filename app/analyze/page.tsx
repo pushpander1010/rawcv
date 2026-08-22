@@ -137,17 +137,33 @@ export default function AnalyzePage() {
   }
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-950" style={{ height: "100dvh" }}>
+    <main className="h-screen flex flex-col overflow-hidden" style={{ height: "100dvh" }}>
+      {/* Animated background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-violet-400/10 rounded-full blur-[100px] orb-1" />
+        <div className="absolute top-1/3 right-0 w-80 h-80 bg-indigo-400/10 rounded-full blur-[80px] orb-2" />
+        <div className="absolute bottom-0 left-1/3 w-72 h-72 bg-purple-400/8 rounded-full blur-[90px] orb-3" />
+        <div className="absolute inset-0 bg-grid opacity-50" />
+      </div>
+
       {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex-shrink-0 shadow-sm">
-        <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
-          <div className="flex-1 min-w-0">
-            <h1 className="text-xl font-bold truncate text-gray-900 dark:text-gray-100">
-              {state.parsed.contact.name ? `${state.parsed.contact.name}'s Resume` : "Resume Analysis"}
-            </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Analyze, optimize, and download your resume</p>
+      <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border-b border-gray-200/40 dark:border-gray-800/40 flex-shrink-0">
+        <div className="px-6 py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center flex-shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-white">
+                <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+              </svg>
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-sm font-bold truncate text-gray-900 dark:text-gray-100">
+                {state.parsed.contact.name || "Resume Analysis"}
+              </h1>
+              <p className="text-[11px] text-gray-400 dark:text-gray-500 truncate">ATS Score · JD Match · AI Suggestions</p>
+            </div>
           </div>
-          <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <UndoButton />
             <ResetButton />
             <DownloadButton />
@@ -155,16 +171,16 @@ export default function AnalyzePage() {
         </div>
 
         {/* Tab bar */}
-        <nav className="flex gap-1.5 px-6 py-3 overflow-x-auto scrollbar-hide border-t border-gray-100 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-900/80" aria-label="Analysis tools" role="tablist">
+        <nav className="flex gap-1 px-4 py-2 overflow-x-auto scrollbar-hide border-t border-gray-200/40 dark:border-gray-800/40" aria-label="Analysis tools" role="tablist">
           {TABS.map((tab) => (
             <button key={tab.id} role="tab" aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-violet-500 ${
+              className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold whitespace-nowrap rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500 ${
                 activeTab === tab.id
-                  ? "bg-violet-600 text-white shadow-lg shadow-violet-500/25"
-                  : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 shadow-sm"
+                  ? "bg-violet-600 text-white shadow-md shadow-violet-500/20"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-white/5"
               }`}>
-              <span aria-hidden="true" className="text-base">{tab.icon}</span>
+              <span aria-hidden="true" className="text-sm">{tab.icon}</span>
               {tab.label}
             </button>
           ))}

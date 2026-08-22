@@ -65,8 +65,16 @@ export default function ChatPage() {
 
   return (
     <main className="h-screen flex flex-col overflow-hidden" style={{ height: "100dvh" }}>
+      {/* Animated background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/3 w-96 h-96 bg-emerald-400/8 rounded-full blur-[100px] orb-1" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-teal-400/8 rounded-full blur-[80px] orb-2" />
+        <div className="absolute top-1/2 right-0 w-72 h-72 bg-cyan-400/6 rounded-full blur-[90px] orb-3" />
+        <div className="absolute inset-0 bg-dots opacity-40" />
+      </div>
+
       {/* Header */}
-      <header className="border-b border-gray-200/60 dark:border-gray-800/60 px-6 py-3 flex items-center justify-between gap-4 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl">
+      <header className="border-b border-gray-200/40 dark:border-gray-800/40 px-6 py-3 flex items-center justify-between gap-4 bg-white/70 dark:bg-gray-950/70 backdrop-blur-xl flex-shrink-0">
         <div className="flex items-center gap-3">
           <button
             type="button"

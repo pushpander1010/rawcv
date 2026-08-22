@@ -72,94 +72,107 @@ export default function TailorPage() {
   const changes = state.tailoredResume?.changes ?? [];
 
   return (
-    <main className="min-h-screen p-8 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          JD-Tailored Resume
-        </h1>
-        <div className="flex items-center gap-2">
-          <UndoButton />
+    <main className="min-h-screen relative">
+      {/* Animated background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-400/10 rounded-full blur-[100px] orb-1" />
+        <div className="absolute top-1/2 left-0 w-80 h-80 bg-indigo-400/10 rounded-full blur-[80px] orb-2" />
+        <div className="absolute bottom-0 right-0 w-72 h-72 bg-violet-400/8 rounded-full blur-[90px] orb-3" />
+        <div className="absolute inset-0 bg-grid opacity-50" />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-white">
+                <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path d="M14 2v6h6M8 13h8M8 17h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">Tailor to Job</h1>
+              <p className="text-xs text-gray-400 dark:text-gray-500">Match your resume to any job description</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <UndoButton />
             <ResetButton />
-          <DownloadButton />
+            <DownloadButton />
+          </div>
         </div>
-      </div>
 
-      <div className="mb-6 max-w-sm">
-      </div>
+        {/* JD input */}
+        <div className="mb-8 max-w-2xl">
+          <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-2xl border border-gray-200/40 dark:border-gray-800/40 p-6 shadow-lg shadow-gray-200/20 dark:shadow-none">
+            <label htmlFor="jd-input" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+              Paste Job Description
+            </label>
+            <textarea
+              id="jd-input"
+              value={jdInput}
+              onChange={(e) => setJdInput(e.target.value)}
+              placeholder="Paste the job description here and we'll tailor your resume to match…"
+              rows={5}
+              className="w-full rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white/50 dark:bg-gray-800/50 px-4 py-3 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400 resize-none transition-all"
+              aria-label="Job description input"
+            />
+            <button
+              type="button"
+              onClick={runTailor}
+              disabled={!jdInput.trim() || loading}
+              className="mt-4 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {loading ? "Tailoring…" : state.tailoredResume ? "Re-tailor" : "Tailor Resume →"}
+            </button>
+          </div>
 
-      {/* JD input */}
-      <div className="mb-8 max-w-2xl">
-        <label
-          htmlFor="jd-input"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-        >
-          Job Description
-        </label>
-        <textarea
-          id="jd-input"
-          value={jdInput}
-          onChange={(e) => setJdInput(e.target.value)}
-          placeholder="Paste the job description here…"
-          rows={6}
-          className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none mb-3"
-          aria-label="Job description input"
-        />
+          {error && (
+            <div role="alert" className="mt-4 flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-5 py-4 text-sm text-red-700 dark:text-red-300">
+              <span className="shrink-0 text-lg">⚠</span>
+              <span className="flex-1">{error}</span>
+              <button onClick={runTailor} className="shrink-0 text-xs font-medium underline hover:no-underline">Retry</button>
+            </div>
+          )}
+        </div>
 
-        <button
-          type="button"
-          onClick={runTailor}
-          disabled={!jdInput.trim() || loading}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-500"
-        >
-          {loading ? "Tailoring…" : state.tailoredResume ? "Re-tailor" : "Tailor Resume"}
-        </button>
+        {/* Main content: diff + preview side by side */}
+        {(changes.length > 0 || loading) && (
+          <div className="flex flex-col xl:flex-row gap-8">
+            {/* Changes list */}
+            <div className="xl:w-[480px] flex-shrink-0">
+              <TailorDiff changes={changes} loading={loading} />
+            </div>
 
-        {error && (
-          <div role="alert" className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
-            <span className="shrink-0">⚠</span>
-            <span className="flex-1">{error}</span>
-            <button onClick={runTailor} className="shrink-0 text-xs underline hover:no-underline">Retry</button>
+            {/* Live resume preview */}
+            <div className="flex-1 min-w-0 overflow-auto">
+              <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                Live Preview
+              </h2>
+              <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
+            </div>
+          </div>
+        )}
+
+        {/* Visual placeholder for initial state */}
+        {changes.length === 0 && !loading && (
+          <div className="mt-8 rounded-2xl border border-dashed border-gray-200/60 dark:border-gray-800/60 bg-white/30 dark:bg-gray-900/30 backdrop-blur-sm p-12 text-center max-w-4xl mx-auto">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 flex items-center justify-center">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-blue-500">
+                <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">
+              Paste a job description above
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+              Our AI will align your experience with the job requirements, showing exactly what to add, change, or remove.
+            </p>
           </div>
         )}
       </div>
-
-      {/* Main content: diff + preview side by side */}
-      {(changes.length > 0 || loading) && (
-        <div className="flex flex-col xl:flex-row gap-8">
-          {/* Changes list */}
-          <div className="xl:w-[480px] flex-shrink-0">
-            <TailorDiff changes={changes} loading={loading} />
-          </div>
-
-          {/* Live resume preview */}
-          <div className="flex-1 min-w-0 overflow-auto">
-            <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
-              Live Preview
-            </h2>
-            <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
-          </div>
-        </div>
-      )}
-
-      {/* Visual placeholder for initial state (resume loaded but not tailored yet) */}
-      {changes.length === 0 && !loading && (
-        <div className="mt-8 rounded-3xl border border-dashed border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/30 p-12 text-center max-w-4xl mx-auto relative overflow-hidden">
-          <div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-violet-500/5 blur-2xl" />
-          <div className="relative w-40 h-40 mx-auto mb-6 rounded-2xl overflow-hidden border border-violet-100 dark:border-violet-900/30 p-1 bg-gradient-to-b from-violet-50/50 to-white dark:from-violet-950/20 dark:to-gray-900 shadow-inner">
-            <img
-              src="/ats_illustration.png"
-              alt="ATS Matching Illustration"
-              className="w-full h-full object-cover rounded-xl"
-            />
-          </div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-            Tailor Your Resume to a Job Description
-          </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md mx-auto">
-            Paste the target job description above and hit &quot;Tailor Resume&quot;. Our AI will align your experience highlights with the JD, showing green additions and red deletions, alongside a live preview.
-          </p>
-        </div>
-      )}
     </main>
   );
 }
