@@ -66,21 +66,26 @@ export default function ChatPage() {
   return (
     <main className="h-screen flex flex-col overflow-hidden" style={{ height: "100dvh" }}>
       {/* Header */}
-      <header className="border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between gap-4 bg-white dark:bg-gray-950">
+      <header className="border-b border-gray-200/60 dark:border-gray-800/60 px-6 py-3 flex items-center justify-between gap-4 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => router.back()}
             aria-label="Go back"
-            className="text-gray-500 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+            className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5 transition-all"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-            {mode === "build" ? "Build Resume with AI" : "Customize Resume with AI"}
-          </h1>
+          <div>
+            <h1 className="text-base font-bold text-gray-900 dark:text-gray-100">
+              {mode === "build" ? "Build Resume with AI" : "Customize Resume"}
+            </h1>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {mode === "build" ? "Tell the AI about your experience" : "Ask AI to modify any section"}
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">

@@ -49,36 +49,33 @@ export default function AnalyzePage() {
 
   if (!state.parsed) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-violet-50/30 dark:from-gray-950 dark:to-violet-950/10 px-6 py-12">
-        <div className="relative max-w-lg w-full bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-10 text-center overflow-hidden">
-          <div aria-hidden="true" className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full bg-violet-500/10 dark:bg-violet-500/5 blur-3xl" />
+      <main className="min-h-[80vh] flex items-center justify-center px-6 py-16">
+        <div className="relative max-w-2xl w-full bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-200/60 dark:border-gray-800/60 p-12 text-center overflow-hidden">
+          <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-violet-500/8 blur-3xl" />
           
-          <div className="relative w-48 h-48 mx-auto mb-8 rounded-2xl overflow-hidden border border-violet-100 dark:border-violet-900/30 p-1.5 bg-gradient-to-b from-violet-50/50 to-white dark:from-violet-950/20 dark:to-gray-900 shadow-inner">
-            <img
-              src="/upload_illustration.png"
-              alt="Upload Resume Illustration"
-              className="w-full h-full object-cover rounded-xl"
-            />
-          </div>
-          
-          <h1 className="text-3xl font-extrabold mb-3 text-gray-900 dark:text-gray-100">
-            Upload Your Resume
-          </h1>
-          <p className="text-base text-gray-500 dark:text-gray-400 mb-8 max-w-sm mx-auto">
-            Get instant ATS scoring, keyword matching, AI suggestions, and a polished PDF download.
-          </p>
-          
-          <div className="max-w-sm mx-auto">
+          <div className="relative">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 flex items-center justify-center">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-violet-600 dark:text-violet-400">
+                <path d="M12 16v-8m0 0l-3 3m3-3l3 3M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            
+            <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+              Upload your resume to get started
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
+              PDF, DOCX, or TXT · max 5 MB
+            </p>
+            
             <ResumeUploader />
-          </div>
 
-          <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
-            <Link
-              href="/chat"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm"
-            >
-              💬 Or build from scratch
-            </Link>
+            <div className="mt-6 flex items-center gap-4 justify-center">
+              <span className="h-px w-12 bg-gray-200 dark:bg-gray-700" />
+              <Link href="/chat" className="text-sm text-violet-600 dark:text-violet-400 font-medium hover:underline">
+                Or build from scratch with AI →
+              </Link>
+              <span className="h-px w-12 bg-gray-200 dark:bg-gray-700" />
+            </div>
           </div>
         </div>
       </main>

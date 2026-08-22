@@ -9,18 +9,19 @@ const NAV_ITEMS = [
   { href: "/tailor", label: "Tailor" },
   { href: "/chat", label: "AI Chat" },
   { href: "/cover-letter", label: "Cover Letter" },
+  { href: "/international", label: "Formats" },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="mt-4 flex items-center justify-between rounded-2xl border border-white/20 dark:border-white/10 bg-white/60 dark:bg-gray-950/60 backdrop-blur-2xl px-5 py-3 shadow-lg shadow-black/5">
+    <nav className="sticky top-0 z-50 w-full border-b border-gray-200/40 dark:border-gray-800/40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-2xl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="h-16 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-shadow duration-300">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/25 group-hover:shadow-violet-500/40 transition-shadow duration-300">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-white">
                 <path d="M4 4h16v16H4V4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 <path d="M8 8h8M8 12h6M8 16h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -32,16 +33,19 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden xl:flex items-center gap-0.5">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-3.5 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-xl hover:bg-gray-100/80 dark:hover:bg-white/5 transition-all duration-200"
+                className="px-3 py-2 text-[13px] font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100/70 dark:hover:bg-white/5 transition-all duration-200"
               >
                 {item.label}
               </Link>
             ))}
+            <span className="w-px h-5 bg-gray-200 dark:bg-gray-700 mx-1" />
+            <Link href="/about" className="px-3 py-2 text-[13px] font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100/70 dark:hover:bg-white/5 transition-all">About</Link>
+            <Link href="/contact" className="px-3 py-2 text-[13px] font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100/70 dark:hover:bg-white/5 transition-all">Contact</Link>
           </div>
 
           {/* Right side */}
@@ -56,10 +60,9 @@ export default function Navbar() {
               </svg>
             </Link>
 
-            {/* Mobile toggle */}
             <button
               onClick={() => setOpen(!open)}
-              className="lg:hidden p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+              className="xl:hidden p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
               aria-label="Menu"
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -71,23 +74,20 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {open && (
-          <div className="lg:hidden mt-2 rounded-2xl border border-white/20 dark:border-white/10 bg-white/80 dark:bg-gray-950/80 backdrop-blur-2xl shadow-xl p-4 space-y-1">
+          <div className="xl:hidden pb-4 space-y-1 border-t border-gray-100 dark:border-gray-800 pt-3">
             {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-violet-50 dark:hover:bg-violet-500/10 hover:text-violet-700 dark:hover:text-violet-300 transition-colors"
-              >
+              <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
+                className="block px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-violet-50 dark:hover:bg-violet-500/10 hover:text-violet-700 dark:hover:text-violet-300 transition-colors">
                 {item.label}
               </Link>
             ))}
-            <div className="pt-2">
-              <Link
-                href="/analyze"
-                onClick={() => setOpen(false)}
-                className="block w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-sm shadow-lg"
-              >
+            <div className="border-t border-gray-100 dark:border-gray-800 my-2 pt-2">
+              <Link href="/about" onClick={() => setOpen(false)} className="block px-4 py-2 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800">About</Link>
+              <Link href="/contact" onClick={() => setOpen(false)} className="block px-4 py-2 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800">Contact</Link>
+              <Link href="/blog" onClick={() => setOpen(false)} className="block px-4 py-2 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800">Blog</Link>
+            </div>
+            <div className="px-4 pt-2">
+              <Link href="/analyze" onClick={() => setOpen(false)} className="block w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-sm shadow-lg">
                 Start Free →
               </Link>
             </div>

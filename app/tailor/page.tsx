@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useResume } from "@/context/ResumeContext";
+import ResumeUploader from "@/components/ResumeUploader";
 import TailorDiff from "@/components/TailorDiff";
 import ResumePreview from "@/components/ResumePreview";
 import DownloadButton from "@/components/DownloadButton";
@@ -17,35 +18,26 @@ export default function TailorPage() {
 
   if (!state.parsed) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-6 py-12">
-        <div className="relative max-w-md w-full bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 text-center overflow-hidden">
-          <div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-blue-500/10 dark:bg-blue-500/5 blur-2xl" />
+      <main className="min-h-[80vh] flex items-center justify-center px-6 py-16">
+        <div className="relative max-w-2xl w-full bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-200/60 dark:border-gray-800/60 p-12 text-center overflow-hidden">
+          <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-blue-500/8 blur-3xl" />
           
-          <div className="relative w-40 h-40 mx-auto mb-6 rounded-2xl overflow-hidden border border-violet-100 dark:border-violet-900/30 p-1 bg-gradient-to-b from-violet-50/50 to-white dark:from-violet-950/20 dark:to-gray-900 shadow-inner">
-            <img
-              src="/upload_illustration.png"
-              alt="Upload Resume Illustration"
-              className="w-full h-full object-cover rounded-xl"
-            />
-          </div>
-          
-          <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">
-            No Resume Loaded
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-8 max-w-xs mx-auto">
-            Upload your CV first to tailor it specifically for your target job description.
-          </p>
-          
-          <div className="flex flex-col gap-3">
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 text-white font-semibold shadow-lg shadow-violet-500/25 dark:shadow-none transition-all duration-200 hover:-translate-y-0.5"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          <div className="relative">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 flex items-center justify-center">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-blue-600 dark:text-blue-400">
+                <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path d="M14 2v6h6M8 13h8M8 17h8M8 9h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
-              Upload Resume
-            </Link>
+            </div>
+            
+            <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+              Upload resume to tailor it
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
+              Match your resume to any job description with AI
+            </p>
+            
+            <ResumeUploader />
           </div>
         </div>
       </main>
