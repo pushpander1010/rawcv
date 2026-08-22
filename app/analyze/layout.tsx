@@ -7,18 +7,18 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.rawcv.com/analyze" },
 };
 
-const learnMore = [
+const sections = [
   {
-    title: "ATS score & compatibility",
-    body: "Our engine simulates how top ATS platforms parse your resume, returning a score out of 100 with a section-by-section breakdown of length, headers, keywords, formatting, and file compatibility.",
+    title: "ATS Score & Compatibility Analysis",
+    body: "Upload your resume and paste the job description you're targeting. Our AI engine simulates how top-tier ATS platforms — the same ones used by Fortune 500 companies — will parse your document. You'll receive an ATS score out of 100, a detailed section-by-section breakdown, and a clear pass/fail indication. The analysis covers resume length, section headers, keyword density, formatting quirks, and file type compatibility to ensure your document survives the first automated screening.",
   },
   {
-    title: "Job description match",
-    body: "Paste the job you're targeting and see a match percentage with the exact keywords and skills present or missing — so you know precisely where to close the gap.",
+    title: "Job Description Match & Keyword Optimization",
+    body: "Job descriptions are treasure maps — every skill, qualification, and buzzword is a clue about what the hiring algorithm is looking for. Rawcv compares your resume against the job description and returns a match percentage, highlighting which required keywords are present and which are missing. You'll see exactly where to insert critical terms like project management methodologies, specific software proficiencies, or industry certifications to close the gap between your profile and the ideal candidate.",
   },
   {
-    title: "AI suggestions",
-    body: "Beyond flagging problems, you get actionable rewrites — stronger action verbs, quantified achievements, and section restructuring tailored to your industry and level.",
+    title: "AI-Powered Improvement Suggestions",
+    body: "Beyond just flagging problems, the tool generates actionable rewrite suggestions for each section of your resume. The AI recommends stronger action verbs, quantifiable achievement phrasing, and section restructuring to improve readability and impact. Whether you need to rephrase a bullet point, add missing metrics, or reorder your experience section, the suggestions are tailored to your specific industry and career level. Use the analysis as a roadmap — apply the changes, re-upload, and watch your ATS score climb in real time.",
   },
 ];
 
@@ -35,27 +35,27 @@ export default function AnalyzeLayout({
       {/* ── Learn more (SEO) ── */}
       <section className="bg-gray-50 dark:bg-gray-900/40 border-t border-gray-200 dark:border-gray-800">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <div className="max-w-2xl mb-12">
+          <div className="max-w-3xl">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
               How the resume analyzer helps you get hired
             </h2>
-            <p className="mt-3 text-gray-500 dark:text-gray-400">
-              Recruiters spend less than seven seconds on a resume — and most are pre-screened by an
-              ATS before a human ever reads them. Rawcv gives you the same data-driven breakdown
-              professional resume writers use.
+            <p className="mt-4 text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+              Your resume gets fewer than seven seconds of a recruiter&apos;s attention before it&apos;s
+              tossed into the yes or no pile. Most of those decisions are now made by Applicant
+              Tracking Systems (ATS) — the software that parses, scores, and ranks your resume before
+              a human ever lays eyes on it. Rawcv&apos;s AI Resume Analyzer gives you the same
+              advantage that professional resume writers use: an instant, data-driven breakdown of
+              exactly where your resume stands and what needs to change.
             </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {learnMore.map((f, i) => (
-              <div key={f.title} className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-card">
-                <div className="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center text-sm font-bold mb-4">
-                  {String(i + 1).padStart(2, "0")}
+            <div className="mt-12 space-y-10">
+              {sections.map((s) => (
+                <div key={s.title}>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{s.title}</h3>
+                  <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">{s.body}</p>
                 </div>
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{f.body}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
