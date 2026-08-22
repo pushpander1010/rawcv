@@ -53,6 +53,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   );
 
   const bottomRef   = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const inputRef    = useRef<HTMLTextAreaElement>(null);
   const initialised = useRef(false);
   const greetingInFlight  = useRef(false);
@@ -132,9 +133,10 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, loading]);
 
-  // Auto-scroll
+  // Auto-scroll (only the message list, never the window)
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = messagesRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [messages, loading]);
 
   // ── Greeting ───────────────────────────────────────────────────────────────
@@ -327,6 +329,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
       {/* Message list */}
       <div
+        ref={messagesRef}
         className="flex-1 overflow-y-auto px-4 py-4 space-y-4"
         aria-live="polite"
         aria-label="Chat conversation"

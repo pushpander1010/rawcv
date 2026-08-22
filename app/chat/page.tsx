@@ -99,6 +99,20 @@ export default function ChatPage() {
     }
   }, [state.parsed]);
 
+  // Land at the chat window on load/refresh instead of restoring old scroll position
+  useEffect(() => {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    const id = requestAnimationFrame(() => {
+      const el = chatWindowRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      window.scrollTo(0, Math.max(0, window.scrollY + rect.top - 64));
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   function handleComplete() {
     router.push("/analyze");
   }
