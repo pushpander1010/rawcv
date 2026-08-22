@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import HowToSchema from "@/components/HowToSchema";
 
 export const metadata: Metadata = {
   title: "Resume Templates — 9 Professional Themes for Your CV | rawcv",
@@ -62,5 +63,10 @@ export default function ResumeTemplatesLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <HowToSchema name="How to choose a resume template" description="Pick and customize a template in four steps." steps={[{ name: "Browse templates", text: "Browse the collection of professionally designed templates." }, { name: "Pick your style", text: "Choose the template that fits your industry and seniority." }, { name: "Customize", text: "Customize it with your own content." }, { name: "Download", text: "Download your resume as a PDF." }]} />
+      {children}
+    </>
+  );
 }

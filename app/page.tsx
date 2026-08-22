@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import Icon, { type IconName } from "@/components/Icon";
+import HowToSchema from "@/components/HowToSchema";
 
 export const metadata: Metadata = {
   title: "rawcv — Free AI Resume Builder & ATS Score Checker",
@@ -61,6 +62,7 @@ export default function LandingPage() {
         }}
       />
 
+<HowToSchema name="How to use rawcv" description="Build, analyze, and optimize your resume in four steps." steps={[{ name: "Upload your resume", text: "Upload your resume as a PDF, DOCX, or TXT file — no signup required." }, { name: "Get your ATS score", text: "Get an instant ATS score out of 100 with specific fixes to pass applicant tracking systems." }, { name: "Match a job description", text: "Paste any job description to see exactly which keywords and skills are missing." }, { name: "Download a polished PDF", text: "Apply AI suggestions, choose a theme, and download a polished ATS-safe PDF." }]} />
       {/* ═══════════════ HERO ═══════════════ */}
       <section className="pt-20 sm:pt-28 pb-16 px-6">
         <div className="max-w-4xl mx-auto text-center">

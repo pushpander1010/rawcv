@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import HowToSchema from "@/components/HowToSchema";
 
 export const metadata: Metadata = {
   title: "Complete Guide - How to Use rawcv AI Resume Builder | rawcv",
@@ -30,6 +31,7 @@ export default function HowToLayout({ children }: { children: React.ReactNode })
           }),
         }}
       />
+<HowToSchema name="How to use rawcv" description="The complete workflow for building and optimizing your resume." steps={[{ name: "Upload", text: "Upload your resume (PDF, DOCX, or TXT)." }, { name: "Analyze", text: "Run ATS scoring and match a job description." }, { name: "Improve", text: "Apply AI suggestions and enhancements." }, { name: "Download", text: "Pick a theme and download a polished PDF." }]} />
       {children}
     </>
   );

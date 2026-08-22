@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import HowToSchema from "@/components/HowToSchema";
 
 export const metadata: Metadata = {
   title: "AI Resume Chat Builder - Build & Customize Your CV | rawcv",
@@ -42,6 +43,7 @@ export default function ChatLayout({
         </div>
       </section>
 
+<HowToSchema name="How to build a resume with AI chat" description="Build your resume conversationally in four steps." steps={[{ name: "Start a conversation", text: "Open the AI chat builder and tell it about your background." }, { name: "Describe your experience", text: "Answer the AI's clarifying questions about tools, results, and metrics." }, { name: "Review the live preview", text: "Watch your resume update in real time in the preview panel." }, { name: "Download", text: "Download your completed resume as a polished PDF." }]} />
       {children}
 
       {/* ── Learn more (SEO) ── */}

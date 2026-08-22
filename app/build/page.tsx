@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Script from "next/script";
 import FreeBuildClient from "./FreeBuildClient";
+import HowToSchema from "@/components/HowToSchema";
 
 export const metadata: Metadata = {
   title: "Free Resume Builder - Create & Download | rawcv",
@@ -27,6 +28,7 @@ export const metadata: Metadata = {
 export default function BuildPage() {
   return (
     <main id="main" className="min-h-screen bg-white dark:bg-gray-950">
+<HowToSchema name="How to build a resume" description="Create a professional resume in four steps." steps={[{ name: "Choose a theme", text: "Pick from 9 professional ATS-friendly visual themes." }, { name: "Enter your details", text: "Fill in your contact info, experience, skills, and education." }, { name: "Preview live", text: "See your resume update in real time as you type." }, { name: "Download", text: "Download your resume as a polished PDF, free and without a watermark." }]} />
       {/* Header */}
       <div className="relative overflow-hidden border-b border-gray-200 dark:border-gray-800 bg-gradient-to-br from-brand-50/50 via-white to-gray-50 dark:from-gray-900/50 dark:via-gray-950 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
         <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">

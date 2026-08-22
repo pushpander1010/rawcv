@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import HowToSchema from "@/components/HowToSchema";
 
 // Define supported roles for static generation / examples
 const roleData: Record<string, {
@@ -515,6 +516,7 @@ export default function ResumeExamplePage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 pb-20">
+<HowToSchema name="How to use this resume example" description="Use this resume example to build your own in four steps." steps={[{ name: "Review the example", text: "Study the sample resume format for this role." }, { name: "Copy the structure", text: "Use the same sections and formatting for your own resume." }, { name: "Add your details", text: "Replace the sample content with your own experience and achievements." }, { name: "Tailor and download", text: "Tailor it to the job and download as a PDF." }]} />
       {/* Hero Header */}
       <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30">
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">

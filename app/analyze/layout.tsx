@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AnalyzeSeoBanner from "@/components/AnalyzeSeoBanner";
+import HowToSchema from "@/components/HowToSchema";
 
 export const metadata: Metadata = {
   title: "Analyze Resume - ATS Score, AI Suggestions & JD Match | rawcv",
@@ -30,6 +31,7 @@ export default function AnalyzeLayout({
   return (
     <>
       <AnalyzeSeoBanner />
+<HowToSchema name="How to analyze your resume" description="Check your ATS score and job match in four steps." steps={[{ name: "Upload your resume", text: "Upload your resume as a PDF, DOCX, or TXT file." }, { name: "Run ATS analysis", text: "Run the ATS checker for a score out of 100 with a section-by-section breakdown." }, { name: "Match a job description", text: "Paste the job description to get a match percentage and missing keywords." }, { name: "Apply AI suggestions", text: "Apply AI-powered suggestions, then re-run to watch your score climb." }]} />
       {children}
 
       {/* ── Learn more (SEO) ── */}

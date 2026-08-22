@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import HowToSchema from "@/components/HowToSchema";
 
 export const metadata: Metadata = {
   title: "Resume Formats by Country — Global CV Guide | rawcv",
@@ -15,5 +16,10 @@ export const metadata: Metadata = {
 };
 
 export default function ResumeFormatsLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      <HowToSchema name="How to choose a resume format" description="Pick the right regional format in four steps." steps={[{ name: "Choose your region", text: "Select the format for your target country." }, { name: "Review the rules", text: "Review region-specific formatting and section rules." }, { name: "Build", text: "Build your resume following the format." }, { name: "Download", text: "Download your resume as a PDF." }]} />
+      {children}
+    </>
+  );
 }
