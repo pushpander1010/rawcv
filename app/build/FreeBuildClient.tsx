@@ -101,7 +101,7 @@ export default function FreeBuildClient() {
                     : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
-                👁️ Preview
+                Preview
               </button>
               <button
                 type="button"
@@ -112,7 +112,7 @@ export default function FreeBuildClient() {
                     : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
-                📊 ATS Check
+                ATS Check
               </button>
               <button
                 type="button"
@@ -123,7 +123,7 @@ export default function FreeBuildClient() {
                     : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
-                🔍 Keywords
+                Keywords
               </button>
               <button
                 type="button"
@@ -134,7 +134,7 @@ export default function FreeBuildClient() {
                     : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-800"
                 }`}
               >
-                ✓ Format
+                Format
               </button>
             </div>
           </div>
@@ -209,7 +209,7 @@ export default function FreeBuildClient() {
 
                 <div className="mt-4 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
                   <p className="text-sm text-emerald-700 dark:text-emerald-300">
-                    ✅ <strong>Completely free</strong> — no watermark, no hidden charges
+                    <strong>Completely free</strong> — no watermark, no hidden charges
                   </p>
                 </div>
               </div>
@@ -249,7 +249,7 @@ export default function FreeBuildClient() {
           {/* AI Features CTA */}
           <div className="bg-gradient-to-br from-brand-50 to-brand-50 dark:from-brand-900/20 dark:to-brand-900/20 rounded-xl border border-brand-200 dark:border-brand-800 p-6">
             <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-              🚀 Upgrade Your Resume with AI
+              Upgrade Your Resume with AI
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               Get AI-powered suggestions, JD matching, ATS optimization, and more advanced analysis.

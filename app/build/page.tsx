@@ -68,7 +68,7 @@ export default function BuildPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
-              ✨ Make Your Resume AI-Ready
+              Make Your Resume AI-Ready
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               Unlock premium AI features to optimize your resume for ATS systems, match job descriptions, and get personalized suggestions.

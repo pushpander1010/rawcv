@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
+import Icon, { type IconName } from "@/components/Icon";
 
 export const metadata: Metadata = {
   title: "rawcv — Free AI Resume Builder & ATS Score Checker",
@@ -9,15 +10,15 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.rawcv.com" },
 };
 
-const features = [
-  { icon: "📊", title: "ATS Score Analysis", desc: "Get a score out of 100 with specific fixes to pass Applicant Tracking Systems." },
-  { icon: "🎯", title: "Job Match", desc: "Paste any job description and see exactly which keywords and skills are missing." },
-  { icon: "✨", title: "AI Suggestions", desc: "Get targeted improvements for action verbs, quantified achievements, and completeness." },
-  { icon: "🔧", title: "Bullet Enhancement", desc: "Strengthen weak bullet points with powerful, results-focused language." },
-  { icon: "💬", title: "AI Chat Builder", desc: "Build or customize your resume conversationally — just tell the AI what you want." },
-  { icon: "📝", title: "Cover Letters", desc: "Generate professional cover letters tailored to your resume and job description." },
-  { icon: "🎨", title: "14 Themes", desc: "Choose from professionally designed themes with live preview and instant PDF download." },
-  { icon: "🌍", title: "International Formats", desc: "EU, Canada, US, and India-specific resume formats with region-appropriate sections." },
+const features: { icon: IconName; title: string; desc: string }[] = [
+  { icon: "score", title: "ATS Score Analysis", desc: "Get a score out of 100 with specific fixes to pass Applicant Tracking Systems." },
+  { icon: "target", title: "Job Match", desc: "Paste any job description and see exactly which keywords and skills are missing." },
+  { icon: "sparkles", title: "AI Suggestions", desc: "Get targeted improvements for action verbs, quantified achievements, and completeness." },
+  { icon: "trend", title: "Bullet Enhancement", desc: "Strengthen weak bullet points with powerful, results-focused language." },
+  { icon: "chat", title: "AI Chat Builder", desc: "Build or customize your resume conversationally — just tell the AI what you want." },
+  { icon: "document", title: "Cover Letters", desc: "Generate professional cover letters tailored to your resume and job description." },
+  { icon: "layers", title: "14 Themes", desc: "Choose from professionally designed themes with live preview and instant PDF download." },
+  { icon: "globe", title: "International Formats", desc: "EU, Canada, US, and India-specific resume formats with region-appropriate sections." },
 ];
 
 const faqs = [
@@ -174,7 +175,9 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
               <div key={f.title} className="group p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200">
-                <div className="w-11 h-11 rounded-xl bg-brand-50 dark:bg-brand-950/60 flex items-center justify-center text-xl mb-4">{f.icon}</div>
+                <div className="w-11 h-11 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center mb-4">
+                  <Icon name={f.icon} size={20} />
+                </div>
                 <h3 className="font-semibold text-sm mb-1.5 text-gray-900 dark:text-gray-100">{f.title}</h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{f.desc}</p>
               </div>

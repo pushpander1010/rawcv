@@ -16,16 +16,17 @@ import ResizablePanels from "@/components/ResizablePanels";
 import UndoButton from "@/components/UndoButton";
 import ResetButton from "@/components/ResetButton";
 import AdBanner from "@/components/AdBanner";
+import Icon, { type IconName } from "@/components/Icon";
 
 type Tab = "ats" | "relevance" | "suggestions" | "enhance" | "theme" | "chat";
 
-const TABS: { id: Tab; label: string; icon: string }[] = [
-  { id: "ats",         label: "ATS Score",    icon: "📊" },
-  { id: "relevance",   label: "JD Match",     icon: "🎯" },
-  { id: "suggestions", label: "Suggestions",  icon: "✨" },
-  { id: "enhance",     label: "Enhance",      icon: "🔧" },
-  { id: "chat",        label: "User Input",   icon: "💬" },
-  { id: "theme",       label: "Theme",        icon: "🎨" },
+const TABS: { id: Tab; label: string; icon: IconName }[] = [
+  { id: "ats",         label: "ATS Score",    icon: "score" },
+  { id: "relevance",   label: "JD Match",     icon: "target" },
+  { id: "suggestions", label: "Suggestions",  icon: "sparkles" },
+  { id: "enhance",     label: "Enhance",      icon: "trend" },
+  { id: "chat",        label: "User Input",   icon: "chat" },
+  { id: "theme",       label: "Theme",        icon: "layers" },
 ];
 
 export default function AnalyzePage() {
@@ -170,7 +171,7 @@ export default function AnalyzePage() {
                   ? "bg-brand-600 text-white"
                   : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
               }`}>
-              <span aria-hidden="true" className="text-sm">{tab.icon}</span>
+              <Icon name={tab.icon} size={14} />
               {tab.label}
             </button>
           ))}
@@ -189,7 +190,7 @@ export default function AnalyzePage() {
             <div className="space-y-6">
               <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-9 h-9 rounded-lg bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center text-lg">📊</div>
+                  <div className="w-9 h-9 rounded-lg bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center text-brand-600 dark:text-brand-400"><Icon name="score" size={18} /></div>
                   <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">ATS Score</h2>
                 </div>
                 {!state.atsResult && !atsLoading && (
@@ -219,7 +220,7 @@ export default function AnalyzePage() {
             <div className="space-y-6">
               <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-lg">🎯</div>
+                  <div className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400"><Icon name="target" size={18} /></div>
                   <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Job Match</h2>
                 </div>
                 <textarea value={jdInput} onChange={(e) => setJdInput(e.target.value)}
@@ -257,7 +258,7 @@ export default function AnalyzePage() {
             <div className="space-y-6">
               <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-lg">✨</div>
+                  <div className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-amber-600 dark:text-amber-400"><Icon name="sparkles" size={18} /></div>
                   <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Suggestions</h2>
                 </div>
                 {!state.suggestions.length && !suggestionsLoading && (
@@ -287,7 +288,7 @@ export default function AnalyzePage() {
             <div className="space-y-6">
               <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-lg">🔧</div>
+                  <div className="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400"><Icon name="trend" size={18} /></div>
                   <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Enhance</h2>
                 </div>
                 {!state.enhancements.length && !enhancementLoading && (
@@ -317,7 +318,7 @@ export default function AnalyzePage() {
             <div className="space-y-6">
               <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center text-lg">🎨</div>
+                  <div className="w-9 h-9 rounded-lg bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center text-pink-600 dark:text-pink-400"><Icon name="layers" size={18} /></div>
                   <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Theme</h2>
                 </div>
               </div>
