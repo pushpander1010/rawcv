@@ -11,6 +11,7 @@ interface Props {
   leftLabel?: React.ReactNode;
   rightLabel?: React.ReactNode;
   onRightTabClick?: () => void;
+  highlightRight?: boolean;
 }
 
 export default function ResizablePanels({
@@ -22,6 +23,7 @@ export default function ResizablePanels({
   leftLabel = "Tools",
   rightLabel = "Preview",
   onRightTabClick,
+  highlightRight = false,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [leftWidth, setLeftWidth] = useState(defaultLeftWidth);
@@ -75,11 +77,11 @@ export default function ResizablePanels({
         <button
           type="button"
           onClick={() => { setMobileTab("right"); onRightTabClick?.(); }}
-          className={`flex-1 py-3 text-sm font-medium transition-colors ${
+          className={`flex-1 py-3 text-sm font-medium transition-colors rounded ${
             mobileTab === "right"
               ? "border-b-2 border-brand-600 text-brand-600"
               : "text-gray-500 dark:text-gray-400"
-          }`}
+          } ${highlightRight ? "animate-tab-blink" : ""}`}
         >
           {rightLabel}
         </button>
