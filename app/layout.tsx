@@ -7,7 +7,6 @@ import "./globals.css";
 import { ResumeProvider } from "@/context/ResumeContext";
 import { ToastProvider } from "@/components/Toast";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -162,13 +161,12 @@ export default function RootLayout({
         strategy="afterInteractive"
       />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lora.variable} antialiased bg-mesh`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lora.variable} antialiased`}
       >
         <ResumeProvider>
           <ToastProvider>
             <Navbar />
             {children}
-            <Footer />
             <Analytics />
           </ToastProvider>
         </ResumeProvider>

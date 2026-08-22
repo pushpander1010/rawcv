@@ -72,20 +72,12 @@ export default function TailorPage() {
   const changes = state.tailoredResume?.changes ?? [];
 
   return (
-    <main className="min-h-screen relative">
-      {/* Animated background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none" style={{ background: "linear-gradient(135deg, #eff6ff 0%, #e0e7ff 25%, #eef2ff 50%, #f0f9ff 75%, #f5f3ff 100%)" }}>
-        <div className="absolute -top-20 right-1/4 w-[500px] h-[500px] rounded-full bg-blue-300/40 blur-[120px] animate-float-slow" />
-        <div className="absolute top-1/2 -left-20 w-[400px] h-[400px] rounded-full bg-indigo-300/40 blur-[100px] animate-float-medium" />
-        <div className="absolute -bottom-20 right-0 w-[350px] h-[350px] rounded-full bg-violet-300/30 blur-[80px] animate-float-fast" />
-        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(99,102,241,0.08) 1px, transparent 0)", backgroundSize: "32px 32px" }} />
-      </div>
-
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-white">
                 <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 <path d="M14 2v6h6M8 13h8M8 17h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -105,8 +97,8 @@ export default function TailorPage() {
 
         {/* JD input */}
         <div className="mb-8 max-w-2xl">
-          <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-2xl border border-gray-200/40 dark:border-gray-800/40 p-6 shadow-lg shadow-gray-200/20 dark:shadow-none">
-            <label htmlFor="jd-input" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+            <label htmlFor="jd-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               Paste Job Description
             </label>
             <textarea

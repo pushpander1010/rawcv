@@ -64,16 +64,9 @@ export default function ChatPage() {
   );
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden" style={{ height: "100dvh" }}>
-      {/* Animated background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none" style={{ background: "linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 25%, #f5f3ff 50%, #eff6ff 75%, #ecfdf5 100%)" }}>
-        <div className="absolute -top-20 left-1/3 w-[500px] h-[500px] rounded-full bg-emerald-300/30 blur-[120px] animate-float-slow" />
-        <div className="absolute -bottom-20 right-1/4 w-[400px] h-[400px] rounded-full bg-teal-300/30 blur-[100px] animate-float-medium" />
-        <div className="absolute top-1/2 -right-20 w-[350px] h-[350px] rounded-full bg-cyan-300/25 blur-[80px] animate-float-fast" />
-      </div>
-
+    <main className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-950" style={{ height: "100dvh" }}>
       {/* Header */}
-      <header className="border-b border-emerald-200/30 dark:border-emerald-800/30 px-6 py-3 flex items-center justify-between gap-4 bg-white/80 dark:bg-gray-950/80 backdrop-blur-2xl flex-shrink-0 shadow-sm shadow-emerald-500/5">
+      <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-6 py-3 flex items-center justify-between gap-4 flex-shrink-0">
         <div className="flex items-center gap-3">
           <button
             type="button"
