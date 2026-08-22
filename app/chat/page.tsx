@@ -66,15 +66,14 @@ export default function ChatPage() {
   return (
     <main className="h-screen flex flex-col overflow-hidden" style={{ height: "100dvh" }}>
       {/* Animated background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/3 w-96 h-96 bg-emerald-400/8 rounded-full blur-[100px] orb-1" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-teal-400/8 rounded-full blur-[80px] orb-2" />
-        <div className="absolute top-1/2 right-0 w-72 h-72 bg-cyan-400/6 rounded-full blur-[90px] orb-3" />
-        <div className="absolute inset-0 bg-dots opacity-40" />
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none" style={{ background: "linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 25%, #f5f3ff 50%, #eff6ff 75%, #ecfdf5 100%)" }}>
+        <div className="absolute -top-20 left-1/3 w-[500px] h-[500px] rounded-full bg-emerald-300/30 blur-[120px] animate-float-slow" />
+        <div className="absolute -bottom-20 right-1/4 w-[400px] h-[400px] rounded-full bg-teal-300/30 blur-[100px] animate-float-medium" />
+        <div className="absolute top-1/2 -right-20 w-[350px] h-[350px] rounded-full bg-cyan-300/25 blur-[80px] animate-float-fast" />
       </div>
 
       {/* Header */}
-      <header className="border-b border-gray-200/40 dark:border-gray-800/40 px-6 py-3 flex items-center justify-between gap-4 bg-white/70 dark:bg-gray-950/70 backdrop-blur-xl flex-shrink-0">
+      <header className="border-b border-emerald-200/30 dark:border-emerald-800/30 px-6 py-3 flex items-center justify-between gap-4 bg-white/80 dark:bg-gray-950/80 backdrop-blur-2xl flex-shrink-0 shadow-sm shadow-emerald-500/5">
         <div className="flex items-center gap-3">
           <button
             type="button"

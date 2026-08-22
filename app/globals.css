@@ -20,78 +20,8 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* Gradient mesh background */
-.bg-mesh {
-  background-image:
-    radial-gradient(at 10% 0%, rgba(124, 58, 237, 0.05) 0px, transparent 50%),
-    radial-gradient(at 90% 0%, rgba(99, 102, 241, 0.04) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.03) 0px, transparent 50%);
-}
-
-@media (prefers-color-scheme: dark) {
-  .bg-mesh {
-    background-image:
-      radial-gradient(at 10% 0%, rgba(124, 58, 237, 0.08) 0px, transparent 50%),
-      radial-gradient(at 90% 0%, rgba(99, 102, 241, 0.06) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
-  }
-}
-
-/* Animated floating orbs */
-@keyframes float1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -30px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.9); }
-}
-@keyframes float2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-40px, 20px) scale(1.05); }
-  66% { transform: translate(30px, -40px) scale(0.95); }
-}
-@keyframes float3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(20px, 40px) scale(0.95); }
-  66% { transform: translate(-30px, -20px) scale(1.1); }
-}
-
-.orb-1 { animation: float1 20s ease-in-out infinite; }
-.orb-2 { animation: float2 25s ease-in-out infinite; }
-.orb-3 { animation: float3 30s ease-in-out infinite; }
-
-/* Grid pattern */
-.bg-grid {
-  background-image:
-    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-@media (prefers-color-scheme: dark) {
-  .bg-grid {
-    background-image:
-      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  }
-}
-
-/* Dot pattern */
-.bg-dots {
-  background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-@media (prefers-color-scheme: dark) {
-  .bg-dots {
-    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-  }
-}
-
 /* Smooth scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 999px; }
 .dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); }
-
-@layer utilities {
-  .text-balance { text-wrap: balance; }
-}

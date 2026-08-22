@@ -139,15 +139,15 @@ export default function AnalyzePage() {
   return (
     <main className="h-screen flex flex-col overflow-hidden" style={{ height: "100dvh" }}>
       {/* Animated background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-violet-400/10 rounded-full blur-[100px] orb-1" />
-        <div className="absolute top-1/3 right-0 w-80 h-80 bg-indigo-400/10 rounded-full blur-[80px] orb-2" />
-        <div className="absolute bottom-0 left-1/3 w-72 h-72 bg-purple-400/8 rounded-full blur-[90px] orb-3" />
-        <div className="absolute inset-0 bg-grid opacity-50" />
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none" style={{ background: "linear-gradient(135deg, #f5f3ff 0%, #ede9fe 25%, #e0e7ff 50%, #eef2ff 75%, #faf5ff 100%)" }}>
+        <div className="absolute -top-20 -left-20 w-[500px] h-[500px] rounded-full bg-violet-300/40 blur-[120px] animate-float-slow" />
+        <div className="absolute top-1/3 -right-20 w-[400px] h-[400px] rounded-full bg-indigo-300/40 blur-[100px] animate-float-medium" />
+        <div className="absolute -bottom-20 left-1/3 w-[350px] h-[350px] rounded-full bg-purple-300/30 blur-[80px] animate-float-fast" />
+        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(124,58,237,0.08) 1px, transparent 0)", backgroundSize: "32px 32px" }} />
       </div>
 
       {/* Header */}
-      <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border-b border-gray-200/40 dark:border-gray-800/40 flex-shrink-0">
+      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border-b border-violet-200/30 dark:border-violet-800/30 flex-shrink-0 shadow-sm shadow-violet-500/5">
         <div className="px-6 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center flex-shrink-0">

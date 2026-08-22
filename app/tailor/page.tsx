@@ -74,11 +74,11 @@ export default function TailorPage() {
   return (
     <main className="min-h-screen relative">
       {/* Animated background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-400/10 rounded-full blur-[100px] orb-1" />
-        <div className="absolute top-1/2 left-0 w-80 h-80 bg-indigo-400/10 rounded-full blur-[80px] orb-2" />
-        <div className="absolute bottom-0 right-0 w-72 h-72 bg-violet-400/8 rounded-full blur-[90px] orb-3" />
-        <div className="absolute inset-0 bg-grid opacity-50" />
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none" style={{ background: "linear-gradient(135deg, #eff6ff 0%, #e0e7ff 25%, #eef2ff 50%, #f0f9ff 75%, #f5f3ff 100%)" }}>
+        <div className="absolute -top-20 right-1/4 w-[500px] h-[500px] rounded-full bg-blue-300/40 blur-[120px] animate-float-slow" />
+        <div className="absolute top-1/2 -left-20 w-[400px] h-[400px] rounded-full bg-indigo-300/40 blur-[100px] animate-float-medium" />
+        <div className="absolute -bottom-20 right-0 w-[350px] h-[350px] rounded-full bg-violet-300/30 blur-[80px] animate-float-fast" />
+        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(99,102,241,0.08) 1px, transparent 0)", backgroundSize: "32px 32px" }} />
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-8">
