@@ -152,7 +152,6 @@ export default function AnalyzePage() {
               <h1 className="text-sm font-bold truncate text-gray-900 dark:text-gray-100">
                 {state.parsed.contact.name || "Resume Analysis"}
               </h1>
-              <p className="text-[11px] text-gray-400 dark:text-gray-500 truncate">ATS Score · JD Match · AI Suggestions</p>
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
@@ -189,13 +188,10 @@ export default function AnalyzePage() {
           {/* ATS */}
           {activeTab === "ats" && (
             <div className="space-y-6">
-              <div className="bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/30 dark:to-indigo-950/30 rounded-2xl p-6 border border-violet-100 dark:border-violet-900/30">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center text-xl">📊</div>
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">ATS Compatibility Score</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Check how well your resume passes Applicant Tracking Systems</p>
-                  </div>
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-9 h-9 rounded-lg bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center text-lg">📊</div>
+                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">ATS Score</h2>
                 </div>
                 {!state.atsResult && !atsLoading && (
                   <button type="button" onClick={runATS} className="w-full px-5 py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold text-sm shadow-lg shadow-violet-500/25 hover:shadow-violet-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500">
@@ -222,13 +218,10 @@ export default function AnalyzePage() {
           {/* JD Relevance */}
           {activeTab === "relevance" && (
             <div className="space-y-6">
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 rounded-2xl p-6 border border-blue-100 dark:border-blue-900/30">
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-xl">🎯</div>
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Job Description Match</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">See how well your resume matches a specific job</p>
-                  </div>
+                  <div className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-lg">🎯</div>
+                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Job Match</h2>
                 </div>
                 <textarea value={jdInput} onChange={(e) => setJdInput(e.target.value)}
                   placeholder="Paste the job description here…" rows={6}
@@ -263,13 +256,10 @@ export default function AnalyzePage() {
           {/* Suggestions */}
           {activeTab === "suggestions" && (
             <div className="space-y-6">
-              <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 rounded-2xl p-6 border border-amber-100 dark:border-amber-900/30">
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-xl">✨</div>
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">AI Suggestions</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Get targeted improvements for clarity, impact, and completeness</p>
-                  </div>
+                  <div className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-lg">✨</div>
+                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Suggestions</h2>
                 </div>
                 {!state.suggestions.length && !suggestionsLoading && (
                   <button type="button" onClick={runSuggestions} className="w-full px-5 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold text-sm shadow-lg shadow-amber-500/25 hover:shadow-amber-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
@@ -296,13 +286,10 @@ export default function AnalyzePage() {
           {/* Enhance */}
           {activeTab === "enhance" && (
             <div className="space-y-6">
-              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-2xl p-6 border border-emerald-100 dark:border-emerald-900/30">
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-xl">🔧</div>
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Resume Enhancement</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Strengthen bullet points and summary with powerful language</p>
-                  </div>
+                  <div className="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-lg">🔧</div>
+                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Enhance</h2>
                 </div>
                 {!state.enhancements.length && !enhancementLoading && (
                   <button type="button" onClick={runEnhancement} className="w-full px-5 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold text-sm shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
@@ -329,13 +316,10 @@ export default function AnalyzePage() {
           {/* Theme */}
           {activeTab === "theme" && (
             <div className="space-y-6">
-              <div className="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/30 dark:to-rose-950/30 rounded-2xl p-6 border border-pink-100 dark:border-pink-900/30">
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center text-xl">🎨</div>
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Visual Theme</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Pick a professional style for your resume</p>
-                  </div>
+                  <div className="w-9 h-9 rounded-lg bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center text-lg">🎨</div>
+                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Theme</h2>
                 </div>
               </div>
               <ThemePicker />

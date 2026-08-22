@@ -80,11 +80,8 @@ export default function ChatPage() {
           </button>
           <div>
             <h1 className="text-base font-bold text-gray-900 dark:text-gray-100">
-              {mode === "build" ? "Build Resume with AI" : "Customize Resume"}
+              {mode === "build" ? "Build Resume" : "Customize Resume"}
             </h1>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              {mode === "build" ? "Tell the AI about your experience" : "Ask AI to modify any section"}
-            </p>
           </div>
         </div>
 
