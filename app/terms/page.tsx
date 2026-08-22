@@ -33,12 +33,10 @@ export default function TermsPage() {
           </ul>
         </Section>
 
-        <Section title="4. Credits and payments">
+        <Section title="4. Free service">
           <ul>
-            <li>Credits are consumed per AI operation as described on the pricing page.</li>
-            <li>Purchased credits are non-refundable except where required by applicable law.</li>
-            <li>We reserve the right to change credit pricing with reasonable notice.</li>
-            <li>Payments are processed by Razorpay or Stripe. We do not store payment card details.</li>
+            <li>rawcv is completely free to use. All features are available without payment or account creation.</li>
+            <li>We reserve the right to modify or discontinue any feature with reasonable notice.</li>
           </ul>
         </Section>
 

@@ -65,7 +65,7 @@ const TOC = [
   { id: "jd-relevance",    label: "JD relevance check" },
   { id: "tailor",          label: "Tailor to a job" },
   { id: "themes",          label: "Themes and download" },
-  { id: "credits",         label: "Credits and pricing" },
+  { id: "free",         label: "100% Free" },
   { id: "faq",             label: "FAQ" },
 ];
 

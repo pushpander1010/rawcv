@@ -60,12 +60,8 @@ const VALUES = [
     desc: "AI suggestions are clearly labelled as AI-generated. We always remind you to review and verify any content before submitting it to employers.",
   },
   {
-    title: "Accessible pricing",
-    desc: "Every account starts with 20 free credits. Paid top-ups start at ₹99 — because a good resume tool shouldn't cost more than a job application fee.",
-  },
-  {
     title: "No dark patterns",
-    desc: "No auto-renewing subscriptions, no hidden fees, no credit card required to start. You buy credits when you need them and they never expire.",
+    desc: "No sign-up walls, no hidden fees, no tricks. Just upload your resume and get instant AI-powered analysis.",
   },
 ];
 
@@ -200,38 +196,6 @@ export default function AboutPage() {
               </div>
             ))}
           </dl>
-        </section>
-
-        {/* Pricing summary */}
-        <section aria-labelledby="pricing-heading">
-          <h2 id="pricing-heading" className="text-2xl font-bold mb-4">Pricing</h2>
-          <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-            rawcv uses a credit system. Every new account receives 20 free credits — enough to run several analyses and download a resume. Credits are consumed per AI operation (typically 1–2 credits each).
-          </p>
-          <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
-            When you need more, you can top up with a one-time purchase. There are no subscriptions, no auto-renewals, and credits never expire.
-          </p>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {[
-              { name: "Starter", credits: "50 credits", price: "₹99", note: "Quick resume check" },
-              { name: "Pro", credits: "250 credits", price: "₹499", note: "Active job seekers", highlight: true },
-              { name: "Power", credits: "500 credits", price: "₹999", note: "Power users & coaches" },
-            ].map((plan) => (
-              <div
-                key={plan.name}
-                className={`rounded-xl border p-4 text-center ${
-                  plan.highlight
-                    ? "border-violet-300 dark:border-violet-700 bg-violet-50 dark:bg-violet-950/30"
-                    : "border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900"
-                }`}
-              >
-                <div className="font-bold text-gray-900 dark:text-gray-100 mb-1">{plan.name}</div>
-                <div className="text-2xl font-extrabold text-violet-600 dark:text-violet-400 mb-1">{plan.price}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{plan.credits}</div>
-                <div className="text-xs text-gray-500">{plan.note}</div>
-              </div>
-            ))}
-          </div>
         </section>
 
         {/* Contact */}

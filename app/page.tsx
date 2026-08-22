@@ -41,7 +41,7 @@ const faqs = [
   { q: "Does rawcv work for freshers?", a: "Yes — freshers and students benefit the most. Upload your first CV, get ATS feedback on sections you may be missing, and use AI to strengthen project descriptions and internship entries." },
   { q: "How is rawcv different from Canva or Zety?", a: "Canva and Zety are design-first tools. rawcv focuses on ATS optimization and job-match analysis — it tells you exactly what keywords and sections are missing so you pass automated screening." },
   { q: "Can I upload a resume from my phone?", a: "Yes — the entire upload, analysis, chat, and download flow works on mobile browsers. No app download needed." },
-  { q: "Do you offer bulk pricing for career coaches?", a: "Yes — the Power plan at ₹999 gives 500 credits, ideal for coaches managing multiple clients. Contact us for custom enterprise pricing if you need more." },
+  { q: "Do you offer bulk access for career coaches?", a: "rawcv is completely free for everyone, including career coaches and their clients. No limits." },
   { q: "Can I share my resume for review?", a: "You can download your polished PDF and share it directly. We are working on shareable review links that let others see your ATS score and suggestions without an account." },
   { q: "Does rawcv save my resume history?", a: "Your current session data is preserved in browser storage, so you can refresh the page without losing progress. Clearing browser data will reset your session." },
   { q: "Can I use rawcv without creating an account?", a: "Yes — rawcv is completely free and requires no account. Just upload your resume and start analyzing." },
