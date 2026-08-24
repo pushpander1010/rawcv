@@ -972,6 +972,155 @@ const ARTICLES: Record<
       </>
     ),
   },
+  "resume-analysis-guide": {
+    title: "What is Resume Analysis? How ATS Scoring Works (2026)",
+    description: "Understand how resume analysis and ATS scoring actually work — what tools check, how scores are calculated, and how to raise yours before you apply.",
+    category: "ATS Optimization",
+    date: "August 23, 2026",
+    readTime: "6 min read",
+    content: (
+      <>
+        <p>
+          Before your resume ever reaches a human recruiter, it is usually scored by software. This process — called <strong>resume analysis</strong> or <strong>ATS scoring</strong> — determines whether your application moves forward or gets filtered out. Understanding how it works is the single highest-leverage skill in modern job hunting.
+        </p>
+
+        <h2>What is Resume Analysis?</h2>
+        <p>
+          Resume analysis is the automated evaluation of your resume against a specific job description. An applicant tracking system (ATS) or AI tool extracts your text, identifies your skills and experience, and compares them to what the job posting asks for. The output is usually a <strong>score from 0 to 100</strong> that represents how well your resume matches the role.
+        </p>
+        <p>
+          Most large companies use ATS software like Workday, Greenhouse, Taleo, or Lever to manage applications. When thousands of people apply for a single role, these systems act as the first filter — and roughly <strong>75% of resumes never make it past them</strong>.
+        </p>
+
+        <h2>What Do Resume Analysis Tools Actually Check?</h2>
+        <ul>
+          <li><strong>Keyword matching:</strong> Does your resume contain the exact skills and terms from the job description? ATS tools index your resume against the posting&apos;s required keywords.</li>
+          <li><strong>Formatting and parseability:</strong> Can the software read your resume cleanly? Single-column layouts, standard headings, and simple fonts parse best.</li>
+          <li><strong>Contact and location:</strong> Are your name, email, phone, and city present and correctly structured?</li>
+          <li><strong>Experience relevance:</strong> Do your job titles, companies, and years of experience align with the role&apos;s seniority?</li>
+          <li><strong>Skills coverage:</strong> What percentage of the required hard skills (tools, languages, certifications) does your resume demonstrate?</li>
+          <li><strong>Education and credentials:</strong> Does your degree level match the minimum requirement?</li>
+        </ul>
+
+        <h2>How is an ATS Score Calculated?</h2>
+        <p>
+          The exact formula is proprietary and varies by tool, but most resume analysis systems weight several factors: keyword overlap (often 40-60% of the score), section completeness, experience relevance, skills match, and formatting quality. A high score means your resume is a strong text-level match for the role — it is <em>not</em> a guarantee of an interview, but a low score almost always means rejection.
+        </p>
+        <p>
+          AI-powered analyzers go a step further. They use language models to evaluate the <em>quality</em> of your bullet points — checking whether achievements are quantified, action verbs are strong, and descriptions are specific rather than generic.
+        </p>
+
+        <h2>How to Raise Your Resume Analysis Score</h2>
+        <ul>
+          <li><strong>Mirror the job description.</strong> Identify the exact skills and phrasing the posting uses, and reflect them naturally in your summary, skills, and experience sections.</li>
+          <li><strong>Use standard section headings.</strong> &quot;Work Experience,&quot; &quot;Education,&quot; and &quot;Skills&quot; are recognized by every parser. Creative headings get dropped.</li>
+          <li><strong>Stick to one column.</strong> Tables, text boxes, and multi-column layouts confuse parsers and can scramble your content.</li>
+          <li><strong>Quantify your achievements.</strong> Numbers and percentages make bullets concrete and demonstrate impact — &quot;reduced costs by 20%&quot; beats &quot;responsible for cost savings.&quot;</li>
+          <li><strong>Include a full skills section.</strong> List both hard skills (tools, technologies) and relevant soft skills as separate, scannable lists.</li>
+        </ul>
+
+        <h2>Run Your Resume Through an Analyzer Before You Apply</h2>
+        <p>
+          The fastest way to improve is to test before you submit. Paste your resume and the job description into a free resume analyzer to get an instant ATS score, keyword gap report, and specific suggestions. You can do exactly that with the free <Link href="/analyze" className="text-brand-600 hover:text-brand-700 font-medium underline underline-offset-2">resume analysis tool on rawcv</Link> — it scores your resume against any job description and tells you which keywords to add.
+        </p>
+      </>
+    ),
+  },
+  "cv-vs-resume-difference": {
+    title: "CV vs Resume: What's the Difference and Which Do You Need?",
+    description: "Confused between a CV and a resume? Learn the key differences, when to use each, and which format gets you hired in India and abroad.",
+    category: "Resume Basics",
+    date: "August 23, 2026",
+    readTime: "4 min read",
+    content: (
+      <>
+        <p>
+          &quot;CV&quot; and &quot;resume&quot; are often used interchangeably, but they are not the same document. Knowing the difference — and which one an employer expects — can make or break your application, especially if you are applying across borders.
+        </p>
+
+        <h2>The Core Difference: Length and Purpose</h2>
+        <p>
+          A <strong>resume</strong> is a concise, one-to-two page summary of your skills and experience, tailored to a specific job. A <strong>CV</strong> (curriculum vitae) is a longer, comprehensive record of your entire academic and professional history — often three pages or more, with no tailoring.
+        </p>
+        <ul>
+          <li><strong>Resume:</strong> Short (1-2 pages), targeted, achievement-focused. Standard in the United States, Canada, and increasingly in India&apos;s private sector.</li>
+          <li><strong>CV:</strong> Long (3+ pages), exhaustive, static. Standard in academia, research, medicine, and across Europe, the Middle East, and parts of Asia.</li>
+        </ul>
+
+        <h2>What&apos;s Inside Each Document</h2>
+        <p>
+          A resume highlights what matters for the role: a professional summary, work experience with quantified achievements, a skills section, and education. A CV includes everything — full publication lists, research projects, conferences, teaching experience, awards, grants, and references, often in chronological order.
+        </p>
+
+        <h2>When to Use a Resume vs a CV</h2>
+        <ul>
+          <li><strong>Use a resume</strong> for corporate, tech, and most private-sector jobs in India, the US, and Canada. Recruiters spend 6-7 seconds on first review, so brevity wins.</li>
+          <li><strong>Use a CV</strong> for academic, research, scientific, and medical roles, or when applying to jobs in Europe and the UK, where &quot;CV&quot; is the standard term for what Americans call a resume.</li>
+        </ul>
+        <p>
+          A useful rule of thumb: <strong>if the employer is in Europe, they want a CV. If they are in the US, they want a resume. In India, &quot;CV&quot; and &quot;resume&quot; are used interchangeably in job postings, and both usually mean a 1-2 page resume.</strong>
+        </p>
+
+        <h2>The India Reality</h2>
+        <p>
+          In India, job portals and employers routinely use &quot;CV&quot; and &quot;resume&quot; as synonyms, and almost every corporate role actually expects a 1-2 page resume. Freshers and experienced professionals alike should default to a clean, ATS-friendly resume unless they are applying for academic or research positions.
+        </p>
+
+        <h2>Build the Right Document the Easy Way</h2>
+        <p>
+          Whether you need a resume or a CV, the core principles are the same: clear headings, quantified achievements, and relevant keywords. Use the free <Link href="/build" className="text-brand-600 hover:text-brand-700 font-medium underline underline-offset-2">resume builder on rawcv</Link> to create a clean, ATS-friendly resume in minutes — no signup required.
+        </p>
+      </>
+    ),
+  },
+  "ai-resume-builder-guide": {
+    title: "How AI Resume Builders Work in 2026 (and Why You Should Use One)",
+    description: "AI resume builders can draft, analyze, and optimize your resume in minutes. Here's how they work, what they can and can't do, and how to pick the right one.",
+    category: "Resume Tools",
+    date: "August 23, 2026",
+    readTime: "5 min read",
+    content: (
+      <>
+        <p>
+          AI has transformed resume writing. What used to take hours of staring at a blank page now takes minutes — AI resume builders can draft your summary, rewrite weak bullet points, tailor your resume to a specific job, and score it against applicant tracking systems. Here is how they actually work, and what you should still do yourself.
+        </p>
+
+        <h2>What an AI Resume Builder Actually Does</h2>
+        <ul>
+          <li><strong>Drafts content:</strong> Turns your raw job history into a polished summary and strong, achievement-focused bullet points.</li>
+          <li><strong>Tailors to the job:</strong> Compares your resume to a job description and rewrites it to mirror the exact keywords and skills the employer wants.</li>
+          <li><strong>Scores against the ATS:</strong> Runs your resume through the same kind of keyword matching an applicant tracking system uses, and tells you what to add.</li>
+          <li><strong>Formats and exports:</strong> Produces a clean, single-column, ATS-friendly layout ready to download as a PDF.</li>
+        </ul>
+
+        <h2>How the AI Works Under the Hood</h2>
+        <p>
+          Modern resume tools use large language models trained on millions of real resumes and job descriptions. When you paste your experience, the model identifies your skills, understands the role you are targeting, and generates text in the style of a strong professional resume. A separate matching engine then compares your resume against the job posting word-by-word to optimize for ATS keyword matching.
+        </p>
+
+        <h2>What AI Does Well — and What It Can&apos;t Do</h2>
+        <p>
+          AI is excellent at <strong>phrasing, structure, keyword optimization, and eliminating weak language</strong> like &quot;responsible for&quot; or &quot;team player.&quot; What it cannot do is invent real achievements for you. The numbers, results, and specifics still have to come from your actual experience — an AI-generated claim you can&apos;t back up in an interview is worse than no claim at all.
+        </p>
+        <ul>
+          <li><strong>AI handles:</strong> wording, formatting, keyword matching, ATS optimization, and tailoring.</li>
+          <li><strong>You handle:</strong> factual accuracy, choosing which achievements to highlight, and final review.</li>
+        </ul>
+
+        <h2>How to Pick an AI Resume Builder</h2>
+        <ul>
+          <li><strong>Free and no-signup:</strong> The best tools let you build and download without creating an account or entering a credit card.</li>
+          <li><strong>ATS scoring built in:</strong> A builder that also analyzes your resume against job descriptions gives you a complete loop — build, then verify.</li>
+          <li><strong>Clean, single-column output:</strong> Avoid tools that produce multi-column or graphic-heavy designs that break ATS parsing.</li>
+        </ul>
+
+        <h2>Try It Free — No Signup Needed</h2>
+        <p>
+          You can experience all of this right now. The free <Link href="/build" className="text-brand-600 hover:text-brand-700 font-medium underline underline-offset-2">AI resume builder on rawcv</Link> drafts and formats your resume, and the <Link href="/analyze" className="text-brand-600 hover:text-brand-700 font-medium underline underline-offset-2">ATS analyzer</Link> scores it against any job description — no account required.
+        </p>
+      </>
+    ),
+  },
 };
 
 export async function generateStaticParams() {

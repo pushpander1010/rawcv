@@ -4,14 +4,14 @@ import Breadcrumb from "@/components/Breadcrumb";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Resume Templates — 14 Professional Themes for Your CV | rawcv",
+  title: "Resume Templates — 9 Professional Themes for Your CV | rawcv",
   description:
-    "Explore 14 professionally designed resume templates: Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant plus EU, Canada, US, International, and ATS-Optimized formats. Find the perfect ATS-friendly theme for your job search. Free to use.",
+    "Explore 9 professionally designed resume templates — Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant — plus EU, Canada, US, International, and ATS-Optimized formats. ATS-friendly, AI-optimized, and free to use.",
   alternates: { canonical: "https://www.rawcv.com/resume-templates" },
   openGraph: {
-    title: "Resume Templates — 14 Professional Themes for Your CV | rawcv",
+    title: "Resume Templates — 9 Professional Themes for Your CV | rawcv",
     description:
-      "Explore 14 professionally designed resume templates: Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant plus EU, Canada, US, International, and ATS-Optimized formats. ATS-friendly, AI-optimized, and free to use.",
+      "Explore 9 professionally designed resume templates — Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant — plus EU, Canada, US, International, and ATS-Optimized formats. ATS-friendly, AI-optimized, and free to use.",
     url: "https://www.rawcv.com/resume-templates",
   },
 };

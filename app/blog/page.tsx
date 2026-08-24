@@ -133,6 +133,33 @@ const POSTS = [
     readTime: "5 min read",
     gradient: "from-sky-500 to-blue-500",
   },
+  {
+    slug: "resume-analysis-guide",
+    title: "What is Resume Analysis? How ATS Scoring Works (2026)",
+    description: "Understand how resume analysis and ATS scoring actually work — what tools check, how scores are calculated, and how to raise yours before you apply.",
+    category: "ATS Optimization",
+    date: "Aug 23, 2026",
+    readTime: "6 min read",
+    gradient: "from-violet-500 to-purple-500",
+  },
+  {
+    slug: "cv-vs-resume-difference",
+    title: "CV vs Resume: What's the Difference and Which Do You Need?",
+    description: "Confused between a CV and a resume? Learn the key differences, when to use each, and which format gets you hired in India and abroad.",
+    category: "Resume Basics",
+    date: "Aug 23, 2026",
+    readTime: "4 min read",
+    gradient: "from-teal-500 to-emerald-500",
+  },
+  {
+    slug: "ai-resume-builder-guide",
+    title: "How AI Resume Builders Work in 2026 (and Why You Should Use One)",
+    description: "AI resume builders can draft, analyze, and optimize your resume in minutes. Here's how they work, what they can and can't do, and how to pick the right one.",
+    category: "Resume Tools",
+    date: "Aug 23, 2026",
+    readTime: "5 min read",
+    gradient: "from-cyan-500 to-blue-500",
+  },
 ];
 
 export default function BlogPage() {

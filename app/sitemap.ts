@@ -18,6 +18,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "backend-developer", "devops-engineer", "data-scientist", "ui-ux-designer",
     "marketing-manager", "hr-manager", "business-analyst", "graphic-designer",
     "content-writer", "sales-manager", "financial-analyst",
+    "project-manager", "digital-marketing-manager", "accountant", "chartered-accountant",
+    "mechanical-engineer", "civil-engineer", "teacher", "nurse",
+    "customer-service-representative", "quality-assurance-engineer", "cybersecurity-analyst", "java-developer",
   ];
 
   const blogPosts = [
@@ -35,6 +38,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "software-engineer-resume-guide-2026",
     "indian-resume-vs-us-resume",
     "best-resume-format-for-freshers-2026",
+    "resume-analysis-guide",
+    "cv-vs-resume-difference",
+    "ai-resume-builder-guide",
   ];
 
   return [

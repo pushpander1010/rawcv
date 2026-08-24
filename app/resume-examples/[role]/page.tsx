@@ -476,6 +476,330 @@ The B2B sales landscape in India spans multiple segments, from selling to SMBs a
 A standout financial analyst resume must demonstrate technical proficiency with numbers and the ability to communicate complex financial insights clearly. Indian employers value candidates who are certified or trained in financial modeling, familiar with Indian accounting standards and SEBI regulations, and experienced with tools like Bloomberg Terminal and Power BI. The sample resume uses specific, quantified achievements to demonstrate these capabilities, including building models for M&A deals totaling $150M, reducing the monthly close cycle from ten days to three days, and conducting valuation analyses for 20+ listed Indian companies. These concrete examples provide hiring managers with immediate evidence of your competence.
 
 The financial analyst role in India spans diverse sectors with different emphasis areas. In investment banking, the focus is on M&A modeling, due diligence, and deal execution. In equity research, the emphasis is on sector analysis, company valuation, and report writing. In corporate finance, the priorities are budgeting, forecasting, and variance analysis. Your resume should be tailored to reflect the specific demands of your target role while following the clean, achievement-oriented structure shown in this example. Use this template as your foundation, customize the skills and experience sections to match your unique background, and always lead with the most impressive and relevant accomplishments. A well-crafted financial analyst resume will help you secure interviews at India's top financial institutions and corporate finance teams.`
+  },
+  "project-manager": {
+    title: "Project Manager",
+    summary: "Certified Project Manager with 5+ years of experience delivering complex software and infrastructure projects on time and within budget. Skilled in Agile/Scrum, stakeholder management, risk mitigation, and cross-functional team leadership.",
+    skills: ["Agile & Scrum", "Project Planning", "Risk Management", "Stakeholder Communication", "Jira", "Budget Management", "Resource Allocation", "PMP Certified"],
+    experience: [
+      {
+        company: "TechNova Solutions, Bengaluru",
+        title: "Senior Project Manager",
+        dates: "2022 - Present",
+        bullets: [
+          "Led 12+ cross-functional projects worth $8M combined, achieving 95% on-time delivery and a 20% reduction in schedule slippage.",
+          "Implemented Scrum ceremonies and sprint planning, boosting team velocity by 30% across 3 product squads.",
+          "Managed stakeholder expectations across C-suite and engineering, presenting weekly status reports and risk registers."
+        ]
+      },
+      {
+        company: "InfraWorks Ltd., Pune",
+        title: "Project Manager",
+        dates: "2019 - 2022",
+        bullets: [
+          "Coordinated a 25-member team to deliver a cloud migration project two weeks ahead of schedule.",
+          "Reduced project costs by 15% through vendor renegotiation and resource-leveling."
+        ]
+      }
+    ],
+    seoContent: `Project management has become one of the most in-demand professions across India's technology, construction, and infrastructure sectors. From IT services companies like TCS, Infosys, and Wipro to product startups in Bengaluru and large infrastructure projects in the Delhi NCR, skilled project managers are essential for delivering work on time, within budget, and to specification. If you are searching for a project manager resume example that reflects the expectations of Indian employers, this page provides the complete template you need. The sample above demonstrates how to present your project delivery record, your familiarity with Agile and Scrum methodologies, and your ability to manage stakeholders in a format that impresses both recruiters and applicant tracking systems.\n\nA standout project manager resume must demonstrate measurable delivery outcomes rather than a simple list of duties. Indian hiring managers look for evidence of projects shipped on time, budgets managed, teams led, and risks mitigated. The sample resume uses specific, quantified achievements such as leading twelve projects worth eight million dollars, reducing schedule slippage by twenty percent, and boosting team velocity by thirty percent. These concrete numbers give recruiters immediate proof of your competence and separate you from candidates who simply list responsibilities.\n\nThe project management role in India spans multiple industries, each with its own emphasis. In IT services, the focus is on Agile delivery, sprint management, and client communication. In construction and infrastructure, the priority is on timelines, safety, and vendor coordination. In product companies, project managers often blend product ownership with delivery management. Whichever path you follow, tailor your resume to mirror the keywords in the job description and lead with your most impressive quantifiable results. Use this template as your foundation, customize the summary and experience sections to match your own background, and you will dramatically improve your chances of landing interviews at India's top companies.`
+  },
+  "digital-marketing-manager": {
+    title: "Digital Marketing Manager",
+    summary: "Results-driven Digital Marketing Manager with 4+ years of experience in SEO, paid advertising, content strategy, and analytics. Proven track record of growing organic traffic, lowering customer acquisition costs, and driving measurable revenue.",
+    skills: ["SEO & SEM", "Google Ads", "Meta Ads", "Content Marketing", "Google Analytics 4", "Email Marketing", "Marketing Automation", "Social Media Strategy"],
+    experience: [
+      {
+        company: "GrowthLabs Digital, Gurugram",
+        title: "Digital Marketing Manager",
+        dates: "2022 - Present",
+        bullets: [
+          "Grew organic traffic from 20K to 250K monthly visitors through SEO and content strategy, a 12x increase in 18 months.",
+          "Managed a ₹1.5 Cr annual paid media budget across Google and Meta, reducing CAC by 35% while scaling leads 2.5x.",
+          "Launched email and WhatsApp marketing funnels that recovered 18% of abandoned carts and lifted repeat purchases by 22%."
+        ]
+      },
+      {
+        company: "BrandSpark Media, Mumbai",
+        title: "Senior Marketing Executive",
+        dates: "2020 - 2022",
+        bullets: [
+          "Executed paid social campaigns that generated 40K+ qualified leads at an average CPL under ₹40.",
+          "Redesigned the content calendar around keyword clusters, increasing blog-driven conversions by 28%."
+        ]
+      }
+    ],
+    seoContent: `Digital marketing is one of the fastest-growing career tracks in India, driven by the rapid shift of businesses online and the explosion of e-commerce, D2C brands, and SaaS companies. From marketing agencies in Gurugram and Mumbai to in-house teams at consumer brands and technology companies, organizations need digital marketing managers who can plan campaigns, manage budgets, and prove return on investment. If you are searching for a digital marketing manager resume example tailored to the Indian job market, this page offers exactly what you need. The sample above demonstrates how to present your experience with SEO, paid advertising, content marketing, and analytics in a way that showcases measurable business impact.\n\nA compelling digital marketing resume must be built around numbers, because marketing is ultimately judged by results. Indian employers value candidates who can demonstrate growth in organic traffic, reductions in customer acquisition cost, improvements in conversion rates, and strong return on ad spend. The sample resume highlights achievements like growing organic traffic from twenty thousand to two hundred fifty thousand monthly visitors, reducing CAC by thirty-five percent, and managing an annual budget of one point five crore rupees. These quantified accomplishments prove that you are a revenue-focused marketer, not just someone who runs campaigns.\n\nThe digital marketing role in India offers diverse specializations, and your resume should reflect the one you are targeting. Performance marketers focus on paid channels and ROI, SEO specialists on organic search and content, and growth marketers on the full funnel. Some roles are brand-focused while others are strictly acquisition-focused. When tailoring your resume, align your experience bullets and skills with the specific channel and industry of your target role, mirror the keywords in the job description, and always lead with your strongest revenue impact. Use this template as your starting point and you will stand out to India's top marketing employers.`
+  },
+  "accountant": {
+    title: "Accountant",
+    summary: "Detail-oriented Accountant with 4+ years of experience in financial reporting, taxation, accounts payable and receivable, and statutory compliance. Proficient in Tally, SAP, and GST filing with a strong command of Indian accounting standards.",
+    skills: ["Tally ERP", "GST Filing", "TDS Computation", "Financial Reporting", "Accounts Payable & Receivable", "SAP FICO", "Bank Reconciliation", "Indian Accounting Standards"],
+    experience: [
+      {
+        company: "Sharma & Associates, New Delhi",
+        title: "Senior Accountant",
+        dates: "2022 - Present",
+        bullets: [
+          "Managed end-to-end accounting for 15+ SME clients, including monthly bookkeeping, GST returns, and TDS compliance with zero late-filing penalties.",
+          "Streamlined the month-end close process, reducing reporting turnaround from 8 days to 3 days.",
+          "Reconciled bank statements and ledgers worth ₹40 Cr annually, resolving discrepancies within 48 hours."
+        ]
+      },
+      {
+        company: "MetroRetail Pvt. Ltd., Noida",
+        title: "Accountant",
+        dates: "2020 - 2022",
+        bullets: [
+          "Processed accounts payable and receivable for a ₹60 Cr turnover business, improving vendor payment accuracy by 20%.",
+          "Prepared financial statements and assisted in statutory audits, ensuring 100% compliance with Indian accounting standards."
+        ]
+      }
+    ],
+    seoContent: `Accounting remains one of the most stable and respected professions in India, with consistent demand across every industry from manufacturing and retail to IT services and professional consulting firms. Every organization, whether a small proprietorship or a large listed company, needs skilled accountants to manage bookkeeping, taxation, and statutory compliance. If you are searching for an accountant resume example that reflects the expectations of Indian employers, this page provides the complete template you need. The sample above demonstrates how to present your expertise in Tally and SAP, your command of GST and TDS regulations, and your ability to manage financial reporting in a format that resonates with recruiters.\n\nA strong accountant resume must demonstrate accuracy, compliance, and efficiency, because these are the qualities employers value most in finance professionals. Indian hiring managers look for evidence of clean GST filings, accurate bookkeeping, timely reporting, and familiarity with Indian accounting standards and the Income Tax Act. The sample resume uses specific, quantified achievements such as managing accounting for fifteen SME clients, reconciling ledgers worth forty crore rupees annually, and reducing month-end close time from eight days to three. These concrete examples provide immediate proof of your competence and reliability.\n\nThe accounting role in India spans diverse environments, each with its own emphasis. In chartered accountancy firms, the focus is on client bookkeeping, audit support, and tax compliance. In corporate finance teams, the priority is on financial reporting, budgeting, and internal controls. In small and medium businesses, accountants often wear multiple hats covering everything from payroll to statutory filings. Whichever path you follow, tailor your resume to reflect the specific tools and regulations relevant to your target employer, and lead with your most impressive quantifiable achievements. Use this template as your foundation and you will secure interviews at India's top finance and accounting firms.`
+  },
+  "chartered-accountant": {
+    title: "Chartered Accountant",
+    summary: "Qualified Chartered Accountant with 4+ years of experience in statutory audit, taxation, and financial advisory. Expertise in direct and indirect taxation, Ind AS/IFRS reporting, and internal controls, with a strong record of client delivery.",
+    skills: ["Statutory Audit", "Direct & Indirect Taxation", "Ind AS / IFRS", "GST Advisory", "Internal Controls", "Financial Due Diligence", "Transfer Pricing", "Companies Act Compliance"],
+    experience: [
+      {
+        company: "Deloitte India, Mumbai",
+        title: "Assistant Manager - Audit & Assurance",
+        dates: "2022 - Present",
+        bullets: [
+          "Led statutory audit engagements for 8 listed and unlisted clients with combined revenue of ₹2,500 Cr, delivering clean audit reports on schedule.",
+          "Identified internal control weaknesses at a manufacturing client, recommending fixes that reduced inventory write-offs by ₹1.2 Cr.",
+          "Mentored a team of 5 article assistants, improving engagement efficiency and audit quality review scores."
+        ]
+      },
+      {
+        company: "Khandelwal & Co. LLP, Jaipur",
+        title: "Chartered Accountant",
+        dates: "2020 - 2022",
+        bullets: [
+          "Prepared and filed GST and income tax returns for 40+ corporate and individual clients with zero compliance errors.",
+          "Advised SMEs on GST structuring and input tax credit optimization, saving clients an average of ₹8 Lakh annually."
+        ]
+      }
+    ],
+    seoContent: `The Chartered Accountant qualification is widely regarded as the gold standard of finance and accounting credentials in India, opening doors to careers in audit, taxation, consulting, and corporate finance. From the Big Four firms like Deloitte, EY, KPMG, and PwC to mid-size practices and in-house finance teams at leading companies, qualified CAs are in constant demand across the country. If you are searching for a chartered accountant resume example that meets the high expectations of Indian employers, this page provides the complete template you need. The sample above demonstrates how to present your audit and taxation expertise, your command of Ind AS and IFRS, and your advisory capabilities in a format that impresses recruiters.\n\nA standout CA resume must communicate technical depth, client delivery, and professional credibility. Indian hiring managers look for evidence of successful audit engagements, clean tax compliance, strong knowledge of the Companies Act and Income Tax Act, and the ability to manage teams and client relationships. The sample resume uses specific, quantified achievements such as leading audits for clients with combined revenue of twenty-five hundred crore rupees, identifying control weaknesses that saved one point two crore rupees, and filing returns for forty plus clients with zero errors. These concrete results demonstrate the rigor and reliability that define a top-tier chartered accountant.\n\nThe career path for CAs in India is broad, spanning audit and assurance, taxation, corporate finance, investment banking, and entrepreneurship. In the Big Four, the emphasis is on audit quality, client management, and technical excellence. In industry, the focus shifts to financial planning, reporting, and business partnering. When tailoring your resume, align your experience with the specific domain you are targeting, highlight your technical specializations and any post-qualification certifications, and lead with quantifiable outcomes. Use this template as your foundation and you will position yourself strongly for roles at India's most prestigious firms and companies.`
+  },
+  "mechanical-engineer": {
+    title: "Mechanical Engineer",
+    summary: "Mechanical Engineer with 4+ years of experience in product design, manufacturing, and quality control. Proficient in SolidWorks, AutoCAD, and CNC programming with a strong foundation in thermodynamics and machine design.",
+    skills: ["SolidWorks", "AutoCAD", "CNC Programming", "GD&T", "Thermodynamics", "Machine Design", "Six Sigma", "Manufacturing Processes"],
+    experience: [
+      {
+        company: "Bharat Auto Components, Pune",
+        title: "Senior Mechanical Engineer",
+        dates: "2022 - Present",
+        bullets: [
+          "Designed and validated 15+ automotive components using SolidWorks and FEA analysis, reducing material cost by 18% while maintaining safety standards.",
+          "Led a Six Sigma project that reduced production line defects by 22%, saving the plant ₹30 Lakh annually.",
+          "Implemented CNC process improvements that increased machining throughput by 15%."
+        ]
+      },
+      {
+        company: "Precision Engineering Works, Chennai",
+        title: "Mechanical Engineer",
+        dates: "2020 - 2022",
+        bullets: [
+          "Prepared detailed manufacturing drawings and GD&T specifications for 50+ parts, reducing rework by 25%.",
+          "Coordinated with vendors and the quality team to resolve dimensional issues, cutting rejection rates by 12%."
+        ]
+      }
+    ],
+    seoContent: `Mechanical engineering is one of India's most established and versatile engineering disciplines, powering industries from automotive and aerospace to energy, manufacturing, and heavy machinery. With major automotive hubs in Pune and Chennai, and manufacturing clusters across Gujarat, Maharashtra, and Tamil Nadu, skilled mechanical engineers are in steady demand throughout the country. If you are searching for a mechanical engineer resume example tailored to the Indian job market, this page provides the complete template you need. The sample above demonstrates how to present your design, manufacturing, and quality expertise in a format that resonates with recruiters at both engineering firms and manufacturing companies.\n\nA compelling mechanical engineering resume must demonstrate hands-on technical skills and measurable engineering outcomes. Indian employers value candidates proficient in CAD tools like SolidWorks and AutoCAD, familiar with manufacturing processes and GD&T, and experienced with quality methodologies like Six Sigma. The sample resume uses specific, quantified achievements such as designing fifteen automotive components, reducing material costs by eighteen percent, and cutting production defects by twenty-two percent. These concrete numbers provide immediate evidence of your engineering impact and separate you from candidates who simply list software skills.\n\nThe mechanical engineering field in India offers diverse career paths across design, manufacturing, quality, and maintenance. In product and design roles, the focus is on CAD modeling, simulation, and prototyping. In manufacturing, the priority is on process optimization, CNC operations, and production efficiency. In quality engineering, the emphasis is on inspection, standards compliance, and defect reduction. Whichever path you pursue, tailor your resume to highlight the specific tools, processes, and industries relevant to your target employer, and lead with quantifiable results. Use this template as your foundation and you will stand out in India's competitive engineering job market.`
+  },
+  "civil-engineer": {
+    title: "Civil Engineer",
+    summary: "Civil Engineer with 4+ years of experience in structural design, construction management, and site supervision. Proficient in AutoCAD, STAAD Pro, and project scheduling with a strong record of on-budget project delivery.",
+    skills: ["AutoCAD", "STAAD Pro", "Structural Design", "Construction Management", "Project Scheduling", "Site Supervision", "Quantity Surveying", "AutoCAD Civil 3D"],
+    experience: [
+      {
+        company: "L&T Construction, Hyderabad",
+        title: "Senior Civil Engineer",
+        dates: "2022 - Present",
+        bullets: [
+          "Supervised construction of a 12-storey commercial complex with a project value of ₹85 Cr, delivering the structure 3 weeks ahead of schedule.",
+          "Prepared and reviewed structural drawings for 200+ RCC elements, ensuring 100% compliance with IS codes and safety standards.",
+          "Coordinated with architects, contractors, and vendors, resolving 30+ site issues and reducing material wastage by 12%."
+        ]
+      },
+      {
+        company: "Srinivasa Constructions, Bengaluru",
+        title: "Civil Engineer",
+        dates: "2020 - 2022",
+        bullets: [
+          "Managed site execution for residential projects totaling 500,000 sq ft, maintaining zero safety incidents across 24 months.",
+          "Prepared quantity surveys and cost estimates, reducing project budget overruns by 8%."
+        ]
+      }
+    ],
+    seoContent: `Civil engineering is the backbone of India's infrastructure growth, with the country investing heavily in roads, bridges, metro systems, housing, and commercial real estate. From large EPC contractors like L&T and Shapoorji Pallonji to regional builders and government infrastructure agencies, civil engineers are in constant demand across the nation. If you are searching for a civil engineer resume example tailored to the Indian job market, this page provides the complete template you need. The sample above demonstrates how to present your structural design, construction management, and site supervision experience in a format that impresses recruiters at both large contractors and boutique firms.\n\nA strong civil engineering resume must demonstrate technical competence and on-ground project delivery. Indian employers value candidates proficient in AutoCAD and STAAD Pro, familiar with IS codes and construction standards, and experienced in site supervision and project scheduling. The sample resume uses specific, quantified achievements such as supervising an eighty-five crore rupee commercial complex, preparing drawings for two hundred structural elements, and reducing material wastage by twelve percent. These concrete results provide immediate evidence of your ability to deliver projects on time and within budget.\n\nThe civil engineering field in India offers diverse career paths across design, construction, and project management. In design roles, the focus is on structural analysis, drafting, and specification. In construction, the priority is on site execution, contractor coordination, and quality control. In project management, the emphasis is on scheduling, budgeting, and stakeholder communication. Whichever path you pursue, tailor your resume to highlight the specific tools, codes, and project types relevant to your target employer, and lead with measurable outcomes. Use this template as your foundation and you will secure interviews at India's leading construction and infrastructure companies.`
+  },
+  "teacher": {
+    title: "Teacher",
+    summary: "Dedicated Teacher with 5+ years of experience in curriculum planning, classroom instruction, and student assessment. Skilled in creating engaging lesson plans and fostering an inclusive learning environment that drives academic growth.",
+    skills: ["Curriculum Planning", "Classroom Management", "Lesson Planning", "Student Assessment", "Educational Technology", "Differentiated Instruction", "Parent Communication", "CBSE/ICSE Curriculum"],
+    experience: [
+      {
+        company: "Green Valley Public School, New Delhi",
+        title: "Senior Teacher - Science",
+        dates: "2021 - Present",
+        bullets: [
+          "Taught Science to 120+ students across grades 8-10, improving average board exam scores by 18% over two years.",
+          "Designed 40+ interactive lesson plans integrating smart-class technology, increasing student participation by 35%.",
+          "Mentored 3 junior teachers and led the school's science exhibition, which won a district-level award."
+        ]
+      },
+      {
+        company: "Sunrise Academy, Jaipur",
+        title: "Teacher",
+        dates: "2019 - 2021",
+        bullets: [
+          "Delivered engaging lessons to 90+ students while maintaining a 95% parent satisfaction rating.",
+          "Introduced formative assessment techniques that helped identify and support 15 struggling students."
+        ]
+      }
+    ],
+    seoContent: `Teaching is one of the most respected and stable professions in India, with consistent demand for qualified educators across CBSE, ICSE, state board, and international schools, as well as coaching institutes and ed-tech platforms. From metropolitan schools in Delhi, Mumbai, and Bengaluru to institutions in smaller cities and towns, skilled teachers shape the next generation and are always needed. If you are searching for a teacher resume example tailored to the Indian job market, this page provides the complete template you need. The sample above demonstrates how to present your classroom instruction, curriculum planning, and student assessment experience in a format that resonates with school administrators.\n\nA compelling teacher resume must demonstrate both pedagogical skill and measurable impact on student learning. Indian schools value candidates who can plan engaging lessons, manage classrooms effectively, integrate technology, and communicate with parents. The sample resume uses specific, quantified achievements such as improving board exam scores by eighteen percent, designing forty interactive lesson plans, and maintaining a ninety-five percent parent satisfaction rating. These concrete results prove that you are an effective educator, not just someone who delivers content.\n\nThe teaching profession in India offers diverse opportunities across subjects, grade levels, and institution types. In schools, the emphasis is on curriculum delivery, student outcomes, and classroom management. In coaching institutes, the focus is on exam preparation and results. In ed-tech companies, teachers create online content and deliver live classes. Whichever path you pursue, tailor your resume to highlight your subject expertise, teaching certifications, and student outcomes, and lead with measurable achievements. Use this template as your foundation and you will stand out to India's leading schools and educational institutions.`
+  },
+  "nurse": {
+    title: "Nurse",
+    summary: "Compassionate Registered Nurse with 4+ years of experience in patient care, clinical assessment, and care coordination. Skilled in medication administration, patient monitoring, and documentation with a focus on patient safety.",
+    skills: ["Patient Care", "Medication Administration", "Clinical Assessment", "IV Therapy", "Patient Monitoring", "Wound Care", "Electronic Health Records", "Patient Education"],
+    experience: [
+      {
+        company: "Apollo Hospitals, Chennai",
+        title: "Senior Staff Nurse",
+        dates: "2022 - Present",
+        bullets: [
+          "Delivered direct patient care to 12+ patients per shift in a 40-bed medical-surgical unit, maintaining a 98% patient satisfaction score.",
+          "Administered medications and IV therapy following strict safety protocols, achieving zero medication errors over 18 months.",
+          "Mentored 4 junior nurses and led infection control initiatives that reduced hospital-acquired infections by 15%."
+        ]
+      },
+      {
+        company: "Fortis Hospital, New Delhi",
+        title: "Staff Nurse",
+        dates: "2020 - 2022",
+        bullets: [
+          "Monitored patient vitals and documented care in EHR systems, supporting timely clinical decisions for 150+ patients monthly.",
+          "Collaborated with physicians and care teams on treatment plans, improving patient discharge readiness scores by 20%."
+        ]
+      }
+    ],
+    seoContent: `Nursing is one of India's most respected and essential healthcare professions, with strong demand across hospitals, clinics, and community health settings, both domestically and internationally. From leading hospital chains like Apollo and Fortis to government health facilities and specialized care centers, skilled nurses are the backbone of patient care delivery. If you are searching for a nurse resume example tailored to the Indian job market, this page provides the complete template you need. The sample above demonstrates how to present your patient care, clinical assessment, and documentation skills in a format that resonates with healthcare recruiters.\n\nA strong nursing resume must demonstrate clinical competence, patient safety, and compassionate care. Indian and international employers alike value candidates with solid medication administration skills, accurate documentation, infection control awareness, and strong communication with patients and families. The sample resume uses specific, quantified achievements such as caring for twelve patients per shift with a ninety-eight percent satisfaction score, achieving zero medication errors over eighteen months, and reducing hospital-acquired infections by fifteen percent. These concrete results provide immediate evidence of your skill and reliability as a nurse.\n\nThe nursing profession offers diverse career paths across specializations and settings. In hospital medical-surgical units, the focus is on acute patient care and monitoring. In critical care, the emphasis is on advanced assessment and life support. In community health, nurses deliver preventive care and education. Many Indian nurses also pursue international opportunities in the UK, US, Australia, and the Gulf, where documentation skills and certifications like IELTS and NCLEX matter greatly. Whichever path you pursue, tailor your resume to highlight your specialization, certifications, and patient outcomes, and lead with measurable achievements. Use this template as your foundation and you will stand out to leading healthcare employers.`
+  },
+  "customer-service-representative": {
+    title: "Customer Service Representative",
+    summary: "Customer-focused professional with 3+ years of experience in customer support, issue resolution, and relationship management across voice and digital channels. Skilled in CRM tools and committed to high customer satisfaction.",
+    skills: ["Customer Support", "CRM Software (Zendesk/Salesforce)", "Issue Resolution", "Call Handling", "Email & Chat Support", "Conflict Resolution", "Product Knowledge", "Customer Retention"],
+    experience: [
+      {
+        company: "TechServe Solutions, Bengaluru",
+        title: "Senior Customer Service Representative",
+        dates: "2022 - Present",
+        bullets: [
+          "Resolved 70+ customer queries daily across voice, email, and chat, maintaining a 96% customer satisfaction (CSAT) score.",
+          "Reduced average handling time by 20% while improving first-contact resolution rate from 78% to 88%.",
+          "Handled escalations and retained at-risk customers, recovering ₹15 Lakh in annual recurring revenue."
+        ]
+      },
+      {
+        company: "ShopEase Pvt. Ltd., Gurugram",
+        title: "Customer Support Executive",
+        dates: "2021 - 2022",
+        bullets: [
+          "Processed 50+ orders and returns daily with 99% accuracy, reducing refund-related complaints by 25%.",
+          "Documented customer feedback that informed two product improvements, reducing repeat tickets by 15%."
+        ]
+      }
+    ],
+    seoContent: `Customer service is one of the fastest-growing employment sectors in India, driven by the country's emergence as a global hub for business process outsourcing and customer experience management. From BPO companies in Bengaluru, Gurugram, and Pune to in-house support teams at e-commerce, fintech, and SaaS companies, skilled customer service professionals are in constant demand. If you are searching for a customer service representative resume example tailored to the Indian job market, this page provides the complete template you need. The sample above demonstrates how to present your support skills, CRM expertise, and customer satisfaction record in a format that resonates with recruiters.\n\nA compelling customer service resume must demonstrate communication skill, problem-solving ability, and a measurable impact on customer satisfaction and retention. Indian and international employers value candidates who can handle high query volumes, resolve issues on first contact, and use CRM tools like Zendesk and Salesforce effectively. The sample resume uses specific, quantified achievements such as resolving seventy queries daily with a ninety-six percent CSAT score, improving first-contact resolution from seventy-eight to eighty-eight percent, and recovering fifteen lakh rupees in annual revenue. These concrete numbers prove your value as a customer-facing professional.\n\nThe customer service field offers diverse career paths across voice, chat, email, and social media support. In BPO and call center roles, the focus is on query volume and resolution metrics. In in-house support teams, the emphasis is on product knowledge and customer retention. Many professionals progress into team leadership, quality assurance, or customer success roles. Whichever path you pursue, tailor your resume to highlight your channel expertise, CRM proficiency, and customer satisfaction metrics, and lead with quantifiable results. Use this template as your foundation and you will stand out to India's leading service and technology companies.`
+  },
+  "quality-assurance-engineer": {
+    title: "Quality Assurance Engineer",
+    summary: "Detail-oriented QA Engineer with 4+ years of experience in manual and automated testing of web and mobile applications. Proficient in Selenium, Cypress, and API testing with a strong focus on quality and release readiness.",
+    skills: ["Manual Testing", "Selenium", "Cypress", "API Testing (Postman/REST Assured)", "Test Automation", "JIRA", "Agile Testing", "SQL"],
+    experience: [
+      {
+        company: "SoftGrid Technologies, Pune",
+        title: "Senior QA Engineer",
+        dates: "2022 - Present",
+        bullets: [
+          "Built and maintained an automated test suite of 400+ test cases using Selenium and Cypress, reducing regression testing time by 60%.",
+          "Identified and documented 120+ critical bugs pre-release, improving production quality and cutting post-release defects by 35%.",
+          "Led API testing for 30+ REST endpoints using Postman, ensuring contract compliance across 3 microservices."
+        ]
+      },
+      {
+        company: "AppWorks Solutions, Hyderabad",
+        title: "QA Engineer",
+        dates: "2020 - 2022",
+        bullets: [
+          "Executed manual and automated tests across web and mobile apps, maintaining a 99% test execution rate per sprint.",
+          "Collaborated with developers in an Agile environment, reducing bug turnaround time by 25%."
+        ]
+      }
+    ],
+    seoContent: `Quality assurance has become an essential function in India's booming software industry, with every product company, IT services firm, and startup investing in rigorous testing to ensure reliable releases. From technology hubs in Bengaluru, Pune, and Hyderabad to remote-first product teams, skilled QA engineers are in steady demand across the country. If you are searching for a quality assurance engineer resume example tailored to the Indian job market, this page provides the complete template you need. The sample above demonstrates how to present your manual and automated testing expertise, your API testing skills, and your impact on release quality in a format that resonates with recruiters.\n\nA strong QA resume must demonstrate both testing rigor and measurable impact on product quality. Indian employers value candidates proficient in automation tools like Selenium and Cypress, experienced with API testing using Postman or REST Assured, and familiar with Agile testing practices and defect tracking in JIRA. The sample resume uses specific, quantified achievements such as building an automated suite of four hundred test cases, reducing regression time by sixty percent, and cutting post-release defects by thirty-five percent. These concrete results prove that you are a quality-focused engineer who adds real value to the release process.\n\nThe QA field in India offers diverse career paths across manual testing, test automation, performance testing, and SDET (software development engineer in test) roles. In manual testing roles, the focus is on test case design and execution. In automation roles, the emphasis is on building and maintaining test frameworks. In SDET roles, QA engineers write production-grade code for test infrastructure. Whichever path you pursue, tailor your resume to highlight your tooling expertise, automation experience, and quality metrics, and lead with quantifiable outcomes. Use this template as your foundation and you will stand out in India's competitive software testing market.`
+  },
+  "cybersecurity-analyst": {
+    title: "Cybersecurity Analyst",
+    summary: "Security-focused analyst with 4+ years of experience in threat monitoring, vulnerability assessment, and incident response. Skilled in SIEM tools, network security, and security compliance frameworks.",
+    skills: ["SIEM (Splunk/QRadar)", "Network Security", "Vulnerability Assessment", "Incident Response", "Firewall Management", "Penetration Testing", "SOC Operations", "ISO 27001 / NIST"],
+    experience: [
+      {
+        company: "SecureNet Technologies, Bengaluru",
+        title: "Senior Cybersecurity Analyst",
+        dates: "2022 - Present",
+        bullets: [
+          "Monitored security events across a 5,000-endpoint environment using Splunk, detecting and containing 200+ threats annually.",
+          "Led incident response for 15+ security incidents, reducing average containment time from 6 hours to 2 hours.",
+          "Conducted quarterly vulnerability assessments, driving remediation that reduced critical vulnerabilities by 40%."
+        ]
+      },
+      {
+        company: "FinSecure Bank, Mumbai",
+        title: "Security Analyst",
+        dates: "2020 - 2022",
+        bullets: [
+          "Managed firewall and IDS/IPS systems protecting banking infrastructure, maintaining 99.99% security uptime.",
+          "Supported ISO 27001 and RBI compliance audits, achieving zero major non-conformities across two audit cycles."
+        ]
+      }
+    ],
+    seoContent: `Cybersecurity has emerged as one of the most critical and fast-growing career fields in India, as organizations across banking, IT services, government, and e-commerce race to defend against an escalating threat landscape. From security operations centers in Bengaluru and Hyderabad to in-house security teams at banks and technology companies, skilled cybersecurity analysts are in urgent demand nationwide. If you are searching for a cybersecurity analyst resume example tailored to the Indian job market, this page provides the complete template you need. The sample above demonstrates how to present your threat monitoring, incident response, and vulnerability assessment experience in a format that impresses recruiters.\n\nA compelling cybersecurity resume must demonstrate technical depth and measurable impact on security posture. Indian employers value candidates experienced with SIEM tools like Splunk and QRadar, familiar with network security and firewall management, and knowledgeable about compliance frameworks like ISO 27001 and RBI guidelines. The sample resume uses specific, quantified achievements such as monitoring a five thousand endpoint environment, containing two hundred threats annually, and reducing average incident containment time from six hours to two. These concrete results prove your ability to protect an organization's critical assets.\n\nThe cybersecurity field offers diverse career paths across SOC analysis, penetration testing, security engineering, and governance risk and compliance (GRC). In SOC roles, the focus is on continuous monitoring and incident response. In penetration testing, the emphasis is on offensive security and vulnerability discovery. In GRC, the priority is on compliance, policy, and risk management. Whichever path you pursue, tailor your resume to highlight your specific security tooling, certifications like CEH or CISSP, and security metrics, and lead with quantifiable outcomes. Use this template as your foundation and you will stand out to India's leading security employers.`
+  },
+  "java-developer": {
+    title: "Java Developer",
+    summary: "Experienced Java Developer with 4+ years of experience building scalable backend services and enterprise applications. Proficient in Spring Boot, Hibernate, and microservices architecture with strong database skills.",
+    skills: ["Java 8/11/17", "Spring Boot", "Hibernate/JPA", "Microservices", "REST APIs", "MySQL/PostgreSQL", "Docker", "AWS"],
+    experience: [
+      {
+        company: "Infosys, Bengaluru",
+        title: "Senior Java Developer",
+        dates: "2022 - Present",
+        bullets: [
+          "Developed and maintained 10+ microservices using Spring Boot handling 2M+ daily requests with 99.95% availability.",
+          "Optimized database queries and introduced caching with Redis, reducing API response times by 45%.",
+          "Led the migration of a legacy monolith to microservices architecture, improving deployment frequency by 3x."
+        ]
+      },
+      {
+        company: "TechMinds Solutions, Chennai",
+        title: "Java Developer",
+        dates: "2020 - 2022",
+        bullets: [
+          "Built REST APIs for an e-commerce platform serving 500K+ users, integrating payment and inventory services.",
+          "Wrote unit and integration tests using JUnit and Mockito, achieving 85% code coverage."
+        ]
+      }
+    ],
+    seoContent: `Java remains one of the most widely used programming languages in India's enterprise technology landscape, powering core banking systems, e-commerce platforms, and large-scale enterprise applications. From IT services giants like Infosys, TCS, and Wipro to product companies and fintech startups, skilled Java developers are among the most in-demand professionals in the country. If you are searching for a Java developer resume example tailored to the Indian job market, this page provides the complete template you need. The sample above demonstrates how to present your Spring Boot, microservices, and database expertise in a format that resonates with recruiters.\n\nA standout Java developer resume must demonstrate depth in the Java ecosystem and measurable impact on system performance and scalability. Indian employers value candidates proficient in Spring Boot and Hibernate, experienced with microservices architecture and REST API design, and comfortable with relational databases and cloud platforms. The sample resume uses specific, quantified achievements such as developing ten microservices handling two million daily requests, reducing API response times by forty-five percent, and tripling deployment frequency through a migration to microservices. These concrete results provide immediate evidence of your engineering capability.\n\nThe Java developer career path in India spans enterprise application development, microservices, and full-stack roles. In enterprise settings, the focus is on building and maintaining large-scale backend systems. In product companies, the emphasis is on scalability, performance, and modern cloud-native practices. Many Java developers also branch into DevOps, architecture, or technical leadership over time. Whichever path you pursue, tailor your resume to highlight your specific Java stack, cloud experience, and performance improvements, and lead with quantifiable outcomes. Use this template as your foundation and you will secure interviews at India's top technology companies.`
   }
 };
 
