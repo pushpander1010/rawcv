@@ -54,12 +54,12 @@ const nextConfig = {
               // as a transition — remove once Next.js CSP nonce support lands.
               // For now, keep unsafe-inline for script-src but
               // we DO remove unsafe-eval which was the critical gap.
-              "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com https://pagead2.googlesyndication.com https://partner.googleadservices.com https://www.googletagmanager.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://adservice.google.com https://www.google.com",
+              "script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://partner.googleadservices.com https://www.googletagmanager.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://adservice.google.com https://www.google.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com https://pagead2.googlesyndication.com https://www.google-analytics.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://adservice.google.com https://googleads.g.doubleclick.net https://www.google.com",
-              "frame-src https://api.razorpay.com https://checkout.razorpay.com https://www.youtube.com https://youtube.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
+              "connect-src 'self' https://pagead2.googlesyndication.com https://www.google-analytics.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://adservice.google.com https://googleads.g.doubleclick.net https://www.google.com",
+              "frame-src https://www.youtube.com https://youtube.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
               "frame-ancestors 'none'",
               // Form actions restricted to self
               "form-action 'self'",
@@ -100,14 +100,12 @@ const nextConfig = {
     ];
   },
   experimental: {
-    serverComponentsExternalPackages: ["pdf-parse", "mammoth", "pdfjs-dist", "mupdf", "puppeteer", "puppeteer-core", "@sparticuz/chromium-min"],
+    serverComponentsExternalPackages: ["mammoth", "mupdf", "puppeteer", "puppeteer-core", "@sparticuz/chromium-min"],
   },
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals = [
         ...(Array.isArray(config.externals) ? config.externals : [config.externals].filter(Boolean)),
-        "pdfjs-dist",
-        "pdf-parse",
         "mammoth",
         // mupdf is ESM with top-level await — must be imported as module, not require()'d
         ({ request }, callback) => {
