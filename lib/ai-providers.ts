@@ -3,10 +3,10 @@ import { z } from "zod";
 const DefaultSchema = z.any();
 
 // ─── Models ───────────────────────────────────────────────────────────────────
-const MODEL_PARSE    = "google/gemini-2.5-flash-lite"; // resume parsing — fast & cheap
-const MODEL_CHAT     = "xiaomi/mimo-v2.5";            // chat / build / customize
-const MODEL_ANALYSIS = "xiaomi/mimo-v2.5";             // ATS, JD relevance, suggestions, enhance
-const MODEL_FAST     = "google/gemini-2.5-flash-lite"; // fast generation (cover letters, etc.)
+const MODEL_PARSE    = "google/gemini-2.5-flash-lite";       // resume parsing — gemini light (fast)
+const MODEL_CHAT     = "meta/muse-spark-1.2-contributor"; // chat / build / customize — Muse contrib
+const MODEL_ANALYSIS = "meta/muse-spark-1.2-contributor";   // ATS, JD, suggestions — Muse contrib
+const MODEL_FAST     = "meta/muse-spark-1.2-contributor";   // cover letters — Muse contrib
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
