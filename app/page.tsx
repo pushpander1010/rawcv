@@ -33,7 +33,7 @@ const faqs = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-slate-950">
       <Script
         id="json-ld"
         type="application/ld+json"
@@ -70,13 +70,13 @@ export default function LandingPage() {
             <span className="text-xs font-semibold text-blue-700">100% Free — No Signup Required</span>
           </div>
 
-          <h1 className="text-[32px] sm:text-[48px] lg:text-[52px] font-extrabold tracking-tight leading-[1.05] text-slate-900 mb-4">
+          <h1 className="text-[32px] sm:text-[48px] lg:text-[52px] font-extrabold tracking-tight leading-[1.05] text-slate-900 dark:text-white mb-4">
             Build a resume that
             <br />
             <span className="text-blue-600">actually gets interviews</span>
           </h1>
 
-          <p className="text-[16px] sm:text-[18px] text-slate-500 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-[16px] sm:text-[18px] text-slate-500 dark:text-slate-400 max-w-2xl mx-auto mb-8 leading-relaxed">
             Upload your CV, get an instant ATS score, match it to any job description,
             enhance it with AI, and download a polished PDF — all in minutes.
           </p>
@@ -107,8 +107,8 @@ export default function LandingPage() {
               { value: "0$", label: "Forever Free" },
             ].map((stat) => (
               <div key={stat.label}>
-                <div className="text-[22px] sm:text-[26px] font-bold text-slate-900 leading-none">{stat.value}</div>
-                <div className="text-[12.5px] text-slate-500 mt-1">{stat.label}</div>
+                <div className="text-[22px] sm:text-[26px] font-bold text-slate-900 dark:text-white leading-none">{stat.value}</div>
+                <div className="text-[12.5px] text-slate-500 dark:text-slate-400 mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -121,7 +121,7 @@ export default function LandingPage() {
           <img
             src="/hero_illustration.jpg"
             alt="AI resume builder and ATS analyzer illustration"
-            className="w-full rounded-2xl border border-slate-200"
+            className="w-full rounded-2xl border border-slate-200 dark:border-slate-800"
             width={1400}
             height={763}
           />
@@ -131,17 +131,17 @@ export default function LandingPage() {
       {/* ═══════════════ APP MOCKUP ═══════════════ */}
       <section className="px-4 sm:px-6 pb-16 sm:pb-20">
         <div className="max-w-5xl mx-auto">
-          <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-white">
-            <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 border-b border-slate-200">
+          <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+            <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
               <span className="w-3 h-3 rounded-full bg-red-400" />
               <span className="w-3 h-3 rounded-full bg-yellow-400" />
               <span className="w-3 h-3 rounded-full bg-green-400" />
-              <div className="flex-1 mx-4 h-7 rounded-lg bg-white border border-slate-200 flex items-center px-4">
-                <span className="text-xs text-slate-500">rawcv.com/analyze</span>
+              <div className="flex-1 mx-4 h-7 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center px-4">
+                <span className="text-xs text-slate-500 dark:text-slate-400">rawcv.com/analyze</span>
               </div>
             </div>
             <div className="flex h-64 sm:h-80 overflow-hidden">
-              <div className="w-56 sm:w-72 border-r border-slate-200 p-4 flex flex-col gap-3 bg-white">
+              <div className="w-56 sm:w-72 border-r border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-3 bg-white dark:bg-slate-900">
                 <div className="h-7 w-28 rounded-lg bg-blue-50 border border-blue-100" />
                 <div className="h-3.5 w-full rounded bg-slate-100" />
                 <div className="h-3.5 w-5/6 rounded bg-slate-100" />
@@ -151,8 +151,8 @@ export default function LandingPage() {
                   <div className="text-xs font-bold text-emerald-700">ATS Score: 92/100</div>
                 </div>
               </div>
-              <div className="flex-1 p-5 bg-slate-50">
-                <div className="bg-white rounded-xl border border-slate-200 p-5 h-full">
+              <div className="flex-1 p-5 bg-slate-50 dark:bg-slate-950">
+                <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 h-full">
                   <div className="border-b-2 border-slate-900 pb-3 mb-3">
                     <div className="h-4 w-36 rounded bg-slate-900 mb-2" />
                     <div className="flex gap-3">
@@ -178,22 +178,22 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ FEATURES ═══════════════ */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 border-y border-slate-200" id="features">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 dark:bg-slate-900/40 border-y border-slate-200 dark:border-slate-800" id="features">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-slate-900">Everything you need to get hired</h2>
-            <p className="text-[14.5px] text-slate-500 max-w-xl mx-auto mt-2">
+            <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-slate-900 dark:text-white">Everything you need to get hired</h2>
+            <p className="text-[14.5px] text-slate-500 dark:text-slate-400 max-w-xl mx-auto mt-2">
               Professional-grade resume tools powered by AI — completely free.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
-              <div key={f.title} className="p-6 rounded-2xl border border-slate-200 bg-white">
+              <div key={f.title} className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center mb-4">
                   <Icon name={f.icon} size={18} />
                 </div>
-                <h3 className="font-semibold text-[14px] mb-1 text-slate-900">{f.title}</h3>
-                <p className="text-[13px] text-slate-500 leading-relaxed">{f.desc}</p>
+                <h3 className="font-semibold text-[14px] mb-1 text-slate-900 dark:text-white">{f.title}</h3>
+                <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -201,22 +201,22 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ HOW IT WORKS ═══════════════ */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-white">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-white dark:bg-slate-950">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-center text-slate-900">Three steps to a better resume</h2>
-          <p className="text-center text-[14.5px] text-slate-500 mt-2 mb-10">From upload to download in under 5 minutes.</p>
+          <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-center text-slate-900 dark:text-white">Three steps to a better resume</h2>
+          <p className="text-center text-[14.5px] text-slate-500 dark:text-slate-400 mt-2 mb-10">From upload to download in under 5 minutes.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { step: "01", title: "Upload", desc: "Drag and drop your PDF, DOCX, or TXT file. We parse it in seconds." },
               { step: "02", title: "Analyze", desc: "Run ATS scoring, paste a job description, and get AI-powered suggestions." },
               { step: "03", title: "Download", desc: "Pick a theme, apply changes, and download a polished ATS-safe PDF." },
             ].map((item) => (
-              <div key={item.step} className="p-6 rounded-2xl border border-slate-200 bg-slate-50">
+              <div key={item.step} className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
                 <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold text-sm mb-4">
                   {item.step}
                 </div>
-                <h3 className="font-semibold text-[15px] mb-1.5 text-slate-900">{item.title}</h3>
-                <p className="text-[13.5px] text-slate-500 leading-relaxed">{item.desc}</p>
+                <h3 className="font-semibold text-[15px] mb-1.5 text-slate-900 dark:text-white">{item.title}</h3>
+                <p className="text-[13.5px] text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -225,7 +225,7 @@ export default function LandingPage() {
             <img
               src="/success_illustration.jpg"
               alt="Job offer and hiring success illustration"
-              className="w-full max-w-3xl mx-auto rounded-2xl border border-slate-200"
+              className="w-full max-w-3xl mx-auto rounded-2xl border border-slate-200 dark:border-slate-700"
               width={1280}
               height={698}
             />
@@ -239,7 +239,7 @@ export default function LandingPage() {
           <div className="p-8 sm:p-12 rounded-3xl bg-slate-900">
             <h2 className="text-[24px] sm:text-[30px] font-bold text-white leading-tight">Ready to land more interviews?</h2>
             <p className="text-[14.5px] text-slate-300 mt-2 mb-7 max-w-md mx-auto">Upload your resume and get instant AI-powered analysis — completely free, no account needed.</p>
-            <Link href="/analyze" className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-slate-900 font-semibold text-[14px] hover:bg-slate-100 transition-colors">
+            <Link href="/analyze" className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-slate-900 dark:text-white font-semibold text-[14px] hover:bg-slate-100 transition-colors">
               Get Started Free
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -250,14 +250,14 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ FAQ ═══════════════ */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 border-t border-slate-200" id="faq">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 dark:bg-slate-900/40 border-t border-slate-200 dark:border-slate-800" id="faq">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-[22px] sm:text-[26px] font-bold tracking-tight text-center mb-8 text-slate-900">Frequently asked questions</h2>
+          <h2 className="text-[22px] sm:text-[26px] font-bold tracking-tight text-center mb-8 text-slate-900 dark:text-white">Frequently asked questions</h2>
           <dl className="space-y-3" itemScope itemType="https://schema.org/FAQPage">
             {faqs.map((faq) => (
-              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200">
-                <dt className="font-semibold text-[14.5px] text-slate-900 mb-1.5" itemProp="name">{faq.q}</dt>
-                <dd className="text-[13.5px] text-slate-500 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                <dt className="font-semibold text-[14.5px] text-slate-900 dark:text-white mb-1.5" itemProp="name">{faq.q}</dt>
+                <dd className="text-[13.5px] text-slate-500 dark:text-slate-400 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                   <span itemProp="text">{faq.a}</span>
                 </dd>
               </div>

@@ -50,14 +50,14 @@ export default function AnalyzePage() {
 
   if (!state.parsed) {
     return (
-      <main className="bg-slate-50 px-4 sm:px-6 py-10 sm:py-14">
+      <main className="bg-slate-50 dark:bg-slate-950 px-4 sm:px-6 py-10 sm:py-14">
         <div className="max-w-[560px] mx-auto">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10 text-center">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-10 text-center">
             <div className="w-14 h-14 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-5 text-blue-600">
               <Icon name="upload" size={22} />
             </div>
-            <h2 className="text-[18px] font-bold text-slate-900">Upload your resume to get started</h2>
-            <p className="text-[13.5px] text-slate-500 mt-1.5 mb-6">PDF, DOCX, or TXT · max 5 MB</p>
+            <h2 className="text-[18px] font-bold text-slate-900 dark:text-white">Upload your resume to get started</h2>
+            <p className="text-[13.5px] text-slate-500 dark:text-slate-400 mt-1.5 mb-6">PDF, DOCX, or TXT · max 5 MB</p>
             <ResumeUploader />
             <div className="mt-6 flex items-center gap-3 justify-center">
               <span className="h-px w-10 bg-slate-200" />
@@ -127,9 +127,9 @@ export default function AnalyzePage() {
   }
 
   return (
-    <main className="flex flex-col overflow-hidden bg-slate-50" style={{ height: "calc(100dvh - 64px)" }}>
+    <main className="flex flex-col overflow-hidden bg-slate-50 dark:bg-slate-950" style={{ height: "calc(100dvh - 64px)" }}>
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 flex-shrink-0">
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex-shrink-0">
         <div className="px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
@@ -139,10 +139,10 @@ export default function AnalyzePage() {
               </svg>
             </div>
             <div className="min-w-0">
-              <h2 className="text-[14px] font-semibold truncate text-slate-900">
+              <h2 className="text-[14px] font-semibold truncate text-slate-900 dark:text-white">
                 {state.parsed.contact.name || "Resume Analysis"}
               </h2>
-              <p className="text-[12px] text-slate-500 truncate hidden sm:block">ATS &amp; job match tools</p>
+              <p className="text-[12px] text-slate-500 dark:text-slate-400 truncate hidden sm:block">ATS &amp; job match tools</p>
             </div>
           </div>
           <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -153,14 +153,14 @@ export default function AnalyzePage() {
         </div>
 
         {/* Tab bar */}
-        <nav className="flex gap-1.5 px-3 sm:px-4 py-2.5 overflow-x-auto scrollbar-hide border-t border-slate-100 bg-slate-50" aria-label="Analysis tools" role="tablist">
+        <nav className="flex gap-1.5 px-3 sm:px-4 py-2.5 overflow-x-auto scrollbar-hide border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900" aria-label="Analysis tools" role="tablist">
           {TABS.map((tab) => (
             <button key={tab.id} role="tab" aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium whitespace-nowrap rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 activeTab === tab.id
                   ? "bg-slate-900 text-white"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-white border border-transparent hover:border-slate-200"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white border border-transparent hover:border-slate-200"
               }`}>
               <Icon name={tab.icon} size={14} />
               {tab.label}
@@ -182,7 +182,7 @@ export default function AnalyzePage() {
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
                   <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600"><Icon name="score" size={16} /></div>
-                  <h2 className="text-[15px] font-semibold text-slate-900">ATS Score</h2>
+                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">ATS Score</h2>
                 </div>
                 {!state.atsResult && !atsLoading && (
                   <button type="button" onClick={runATS} className="w-full px-5 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[14px] transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -212,7 +212,7 @@ export default function AnalyzePage() {
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
                   <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600"><Icon name="target" size={16} /></div>
-                  <h2 className="text-[15px] font-semibold text-slate-900">Job Match</h2>
+                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Job Match</h2>
                 </div>
                 <textarea value={jdInput} onChange={(e) => setJdInput(e.target.value)}
                   placeholder="Paste the job description here…" rows={6}
@@ -250,7 +250,7 @@ export default function AnalyzePage() {
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
                   <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600"><Icon name="sparkles" size={16} /></div>
-                  <h2 className="text-[15px] font-semibold text-slate-900">Suggestions</h2>
+                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Suggestions</h2>
                 </div>
                 {!state.suggestions.length && !suggestionsLoading && (
                   <button type="button" onClick={runSuggestions} className="w-full px-5 py-3 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-[14px] transition-colors focus:outline-none focus:ring-2 focus:ring-slate-900">
@@ -280,7 +280,7 @@ export default function AnalyzePage() {
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
                   <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600"><Icon name="trend" size={16} /></div>
-                  <h2 className="text-[15px] font-semibold text-slate-900">Enhance</h2>
+                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Enhance</h2>
                 </div>
                 {!state.enhancements.length && !enhancementLoading && (
                   <button type="button" onClick={runEnhancement} className="w-full px-5 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[14px] transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500">
@@ -309,7 +309,7 @@ export default function AnalyzePage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"><Icon name="layers" size={16} /></div>
-                <h2 className="text-[15px] font-semibold text-slate-900">Theme</h2>
+                <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Theme</h2>
               </div>
               <ThemePicker />
             </div>
@@ -325,7 +325,7 @@ export default function AnalyzePage() {
           </div>
         }
         right={
-          <div className="p-4 sm:p-6 bg-slate-50">
+          <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-950">
             <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
           </div>
         }

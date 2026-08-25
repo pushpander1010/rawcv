@@ -22,6 +22,11 @@ body {
   line-height: 1.6;
 }
 
+html.dark body {
+  color: #e2e8f0;
+  background: #0b1220;
+}
+
 /* Hide horizontal scrollbars on tab strips while keeping scroll working */
 .scrollbar-hide {
   -ms-overflow-style: none;
@@ -33,6 +38,9 @@ body {
 
 ::selection {
   background: rgb(37 99 235 / 0.15);
+}
+html.dark ::selection {
+  background: rgb(59 130 246 / 0.3);
 }
 
 /* Blinking border for the mobile preview tab when content updates */
@@ -53,10 +61,4 @@ body {
 :focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
-}
-
-/* Prose defaults for long-form content */
-.prose-muted p {
-  color: #475569;
-  line-height: 1.75;
 }

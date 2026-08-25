@@ -5,6 +5,7 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { ResumeProvider } from "@/context/ResumeContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { ToastProvider } from "@/components/Toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -99,8 +100,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('rawcv-theme');var d=s? s==='dark' : window.matchMedia('(prefers-color-scheme: dark)').matches; if(d) document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
         <Script
           id="json-ld-org"
           type="application/ld+json"
@@ -164,6 +170,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lora.variable} antialiased`}
       >
+        <ThemeProvider>
         <ResumeProvider>
           <ToastProvider>
             <Navbar />
@@ -172,6 +179,7 @@ export default function RootLayout({
             <Analytics />
           </ToastProvider>
         </ResumeProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
