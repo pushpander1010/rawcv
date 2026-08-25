@@ -194,7 +194,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
     <form className="space-y-10">
       {/* Contact Info */}
       <section className="space-y-5">
-        <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white border-b border-gray-100 pb-2">
           Contact Info
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -207,7 +207,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
               value={resume.contact.name}
               onChange={(e) => handleContactChange("name", e.target.value)}
               placeholder="John Doe"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
             />
             {touched.name && errors.name && (
               <p className="mt-1.5 text-xs text-red-600 font-medium">{errors.name}</p>
@@ -223,7 +223,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
               value={resume.contact.email}
               onChange={(e) => handleContactChange("email", e.target.value)}
               placeholder="john@example.com"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
             />
             {touched.email && errors.email && (
               <p className="mt-1.5 text-xs text-red-600 font-medium">{errors.email}</p>
@@ -239,7 +239,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
               value={resume.contact.phone || ""}
               onChange={(e) => handleContactChange("phone", e.target.value)}
               placeholder="+1 (555) 123-4567"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
             />
           </div>
 
@@ -252,7 +252,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
               value={resume.contact.location || ""}
               onChange={(e) => handleContactChange("location", e.target.value)}
               placeholder="San Francisco, CA"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
             />
           </div>
 
@@ -265,7 +265,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
               value={resume.contact.linkedin || ""}
               onChange={(e) => handleContactChange("linkedin", e.target.value)}
               placeholder="linkedin.com/in/johndoe"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
             />
           </div>
 
@@ -278,7 +278,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
               value={resume.contact.website || ""}
               onChange={(e) => handleContactChange("website", e.target.value)}
               placeholder="johndoe.com"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
             />
           </div>
         </div>
@@ -286,7 +286,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
 
       {/* Professional Summary */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white border-b border-gray-100 pb-2">
           Professional Summary
         </h2>
         <textarea
@@ -294,14 +294,14 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
           onChange={(e) => handleSummaryChange(e.target.value)}
           placeholder="Write a brief overview of your professional background, core strengths, and career goals..."
           rows={4}
-          className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+          className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
         />
       </section>
 
       {/* Work Experience */}
       <section className="space-y-5">
         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             Work Experience
           </h2>
           <button
@@ -318,41 +318,41 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
 
         <div className="space-y-4">
           {resume.experience.map((exp, idx) => (
-            <div key={idx} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 shadow-sm hover:shadow-md transition-all duration-200 space-y-4">
+            <div key={idx} className="p-5 rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 shadow-sm hover:shadow-md transition-all duration-200 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input
                   type="text"
                   value={exp.company}
                   onChange={(e) => updateExperience(idx, "company", e.target.value)}
                   placeholder="Company name"
-                  className="px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                  className="px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
                 />
                 <input
                   type="text"
                   value={exp.title}
                   onChange={(e) => updateExperience(idx, "title", e.target.value)}
                   placeholder="Job title"
-                  className="px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                  className="px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1">Start Month & Year</label>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-slate-300 mb-1">Start Month & Year</label>
                   <input
                     type="month"
                     value={exp.startDate}
                     onChange={(e) => updateExperience(idx, "startDate", e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1">End Month & Year</label>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-slate-300 mb-1">End Month & Year</label>
                   <input
                     type="month"
                     value={exp.endDate === "Present" ? "" : exp.endDate}
                     onChange={(e) => updateExperience(idx, "endDate", e.target.value || "Present")}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
                   />
                 </div>
               </div>
@@ -368,7 +368,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 }
                 placeholder="Bullet points (one per line)&#10;• Achieved X by doing Y&#10;• Led Z initiative"
                 rows={3}
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
               />
 
               <div className="flex justify-end pt-1">
@@ -391,7 +391,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       {/* Education */}
       <section className="space-y-5">
         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             Education
           </h2>
           <button
@@ -408,13 +408,13 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
 
         <div className="space-y-4">
           {resume.education.map((edu, idx) => (
-            <div key={idx} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 shadow-sm hover:shadow-md transition-all duration-200 space-y-4">
+            <div key={idx} className="p-5 rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 shadow-sm hover:shadow-md transition-all duration-200 space-y-4">
               <input
                 type="text"
                 value={edu.institution}
                 onChange={(e) => updateEducation(idx, "institution", e.target.value)}
                 placeholder="University name"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
               />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -423,14 +423,14 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                   value={edu.degree}
                   onChange={(e) => updateEducation(idx, "degree", e.target.value)}
                   placeholder="Degree (e.g., Bachelor of Science)"
-                  className="px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                  className="px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
                 />
                 <input
                   type="text"
                   value={edu.field}
                   onChange={(e) => updateEducation(idx, "field", e.target.value)}
                   placeholder="Field of study"
-                  className="px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                  className="px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
                 />
               </div>
 
@@ -441,7 +441,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 placeholder="Graduation year (e.g., 2024)"
                 min="1950"
                 max="2100"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
               />
 
               <div className="flex justify-end pt-1">
@@ -463,7 +463,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
 
       {/* Skills */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white border-b border-gray-100 pb-2">
           Skills
         </h2>
         <textarea
@@ -471,7 +471,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
           onChange={(e) => handleSkillsChange(e.target.value)}
           placeholder="Enter skills separated by commas (e.g., JavaScript, React, Node.js, Python, AWS)"
           rows={3}
-          className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+          className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
         />
         {resume.skills.length > 0 && (
           <div className="flex flex-wrap gap-2 pt-1">
@@ -490,7 +490,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       {/* Certifications */}
       <section className="space-y-5">
         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             Certifications
           </h2>
           <button
@@ -513,7 +513,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 value={cert}
                 onChange={(e) => updateCertification(idx, e.target.value)}
                 placeholder="Certification name (e.g., AWS Certified Solutions Architect)"
-                className="flex-1 px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                className="flex-1 px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
               />
               <button
                 type="button"
@@ -533,7 +533,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       {/* Projects */}
       <section className="space-y-5">
         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             Projects
           </h2>
           <button
@@ -550,13 +550,13 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
 
         <div className="space-y-4">
           {(resume.projects || []).map((proj, idx) => (
-            <div key={idx} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 shadow-sm hover:shadow-md transition-all duration-200 space-y-4">
+            <div key={idx} className="p-5 rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 shadow-sm hover:shadow-md transition-all duration-200 space-y-4">
               <input
                 type="text"
                 value={proj.name}
                 onChange={(e) => updateProject(idx, "name", e.target.value)}
                 placeholder="Project name"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
               />
 
               <textarea
@@ -564,7 +564,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 onChange={(e) => updateProject(idx, "description", e.target.value)}
                 placeholder="Brief project description and key accomplishments..."
                 rows={2}
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
               />
 
               <input
@@ -578,7 +578,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                   )
                 }
                 placeholder="Technologies used (comma-separated, e.g., React, TypeScript, TailwindCSS)"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
               />
 
               <div className="flex justify-end pt-1">

@@ -219,7 +219,7 @@ export default function FreeFormattingChecker({ resume }: Props) {
       {score !== null && (
         <div className={`p-4 rounded-lg border ${getScoreBg(score)}`}>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-gray-900">Formatting Score</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">Formatting Score</h3>
             <div className={`text-3xl font-bold ${getScoreColor(score)}`}>{score}</div>
           </div>
 
@@ -243,24 +243,24 @@ export default function FreeFormattingChecker({ resume }: Props) {
 
       {issues.length > 0 && (
         <div className="space-y-3">
-          <h3 className="font-semibold text-gray-900 text-sm">Issues Found</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Issues Found</h3>
           {issues.map((issue, idx) => (
             <div
               key={idx}
-              className="p-3 rounded-lg border border-gray-200 bg-gray-50 space-y-2"
+              className="p-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 space-y-2"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900 text-sm">
+                  <p className="font-medium text-gray-900 dark:text-white text-sm">
                     {issue.issue}
                   </p>
-                  <p className="text-xs text-gray-500 mt-0.5">{issue.category}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-300 mt-0.5">{issue.category}</p>
                 </div>
                 <span className={`px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${getSeverityColor(issue.severity)}`}>
                   {issue.severity.toUpperCase()}
                 </span>
               </div>
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-gray-600 dark:text-slate-300">
                 💡 {issue.suggestion}
               </p>
             </div>

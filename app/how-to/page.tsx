@@ -16,8 +16,8 @@ function Step({ number, title, children }: { number: number; title: string; chil
         {number}
       </div>
       <div className="flex-1 min-w-0">
-        <h3 className="text-base font-semibold text-gray-900 mb-2">{title}</h3>
-        <div className="text-sm text-gray-600 leading-relaxed space-y-3">{children}</div>
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">{title}</h3>
+        <div className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed space-y-3">{children}</div>
       </div>
     </div>
   );
@@ -47,9 +47,9 @@ function DocSection({ id, badge, title, subtitle, children }: {
         <span className="inline-block px-2.5 py-1 rounded-lg bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wide">
           {badge}
         </span>
-        <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h2>
       </div>
-      <p className="text-gray-500 mb-8 text-sm">{subtitle}</p>
+      <p className="text-gray-500 dark:text-slate-300 mb-8 text-sm">{subtitle}</p>
       <div className="border-t border-gray-100 pt-8">{children}</div>
     </section>
   );
@@ -137,7 +137,7 @@ export default function HowToPage() {
     };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white">
       <Script id="how-to-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Breadcrumb */}
@@ -152,21 +152,21 @@ export default function HowToPage() {
             <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 uppercase tracking-wide">
               Documentation
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">How to use rawcv</h1>
-            <p className="text-gray-500 max-w-xl mx-auto md:mx-0 text-lg">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight">How to use rawcv</h1>
+            <p className="text-gray-500 dark:text-slate-300 max-w-xl mx-auto md:mx-0 text-lg">
               Everything you need to go from a blank page to a polished, ATS-optimized resume.
             </p>
             <div className="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
               <Link href="/analyze" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:-translate-y-0.5 transition-all duration-200">
                 Get started free
               </Link>
-              <Link href="#getting-started" className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200">
+              <Link href="#getting-started" className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 dark:border-slate-700 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:bg-slate-800 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200">
                 Read the guide
               </Link>
             </div>
           </div>
           <div className="md:col-span-4 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white dark:bg-slate-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/resume_guide_illustration.jpg" 
                 alt="rawcv Builder Guide Illustration" 
@@ -182,14 +182,14 @@ export default function HowToPage() {
         {/* Sticky sidebar TOC */}
         <aside className="hidden lg:block w-56 flex-shrink-0">
           <div className="sticky top-20">
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 mb-4">On this page</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-slate-300 mb-4">On this page</p>
             <nav aria-label="Table of contents">
               <ul className="space-y-1">
                 {TOC.map((item) => (
                   <li key={item.id}>
                     <a
                       href={`#${item.id}`}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-500 hover:text-brand-600 hover:bg-brand-50 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-500 dark:text-slate-300 hover:text-brand-600 hover:bg-brand-50 transition-colors"
                     >
                       {item.label}
                     </a>
@@ -215,7 +215,7 @@ export default function HowToPage() {
             <Step number={1} title="Create a free account">
               <p>Go to <Link href="/analyze" className="text-brand-600 hover:underline font-medium">rawcv.com/analyze</Link> and sign up with your email address. No credit card required.</p>
               <p>Once registered you receive <strong className="text-gray-800">20 free credits</strong> instantly. Credits are consumed per AI operation so you can run several analyses before needing to top up.</p>
-              <img src="/register_screen.jpg" alt="Registration page showing email and password fields with Sign up button" className="w-full rounded-2xl my-6 border border-gray-200" />
+              <img src="/register_screen.jpg" alt="Registration page showing email and password fields with Sign up button" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-slate-700" />
             </Step>
 
             <Step number={2} title="Understand the credit system">
@@ -223,9 +223,9 @@ export default function HowToPage() {
               <div className="overflow-x-auto mt-3">
                 <table className="w-full text-xs border-collapse">
                   <thead>
-                    <tr className="bg-gray-50">
-                      <th className="text-left px-4 py-2 font-semibold text-gray-700 border border-gray-200">Action</th>
-                      <th className="text-left px-4 py-2 font-semibold text-gray-700 border border-gray-200">Credits used</th>
+                    <tr className="bg-gray-50 dark:bg-slate-800">
+                      <th className="text-left px-4 py-2 font-semibold text-gray-700 border border-gray-200 dark:border-slate-700">Action</th>
+                      <th className="text-left px-4 py-2 font-semibold text-gray-700 border border-gray-200 dark:border-slate-700">Credits used</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -240,8 +240,8 @@ export default function HowToPage() {
                       ["PDF download",              "Free"],
                     ].map(([action, cost]) => (
                       <tr key={action} className="border-b border-gray-100">
-                        <td className="px-4 py-2 border border-gray-200 text-gray-600">{action}</td>
-                        <td className="px-4 py-2 border border-gray-200 font-medium text-brand-600">{cost}</td>
+                        <td className="px-4 py-2 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300">{action}</td>
+                        <td className="px-4 py-2 border border-gray-200 dark:border-slate-700 font-medium text-brand-600">{cost}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -258,7 +258,7 @@ export default function HowToPage() {
                 <li><strong className="text-gray-800">Tailor</strong> - rewrite your resume for a specific job description</li>
                 <li><strong className="text-gray-800">Chat</strong> - build or edit your resume conversationally with AI</li>
               </ul>
-              <img src="/navigation_screen.jpg" alt="Top navigation bar showing Dashboard, Analyze, Tailor, Chat, How to links and credit balance badge" className="w-full rounded-2xl my-6 border border-gray-200" />
+              <img src="/navigation_screen.jpg" alt="Top navigation bar showing Dashboard, Analyze, Tailor, Chat, How to links and credit balance badge" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-slate-700" />
             </Step>
           </DocSection>
 
@@ -268,7 +268,7 @@ export default function HowToPage() {
 
             <Step number={1} title="Go to the home page or dashboard">
               <p>From the home page, scroll to the upload area in the hero section. If you are already logged in, the uploader appears immediately after the welcome message.</p>
-              <img src="/resume_upload_screen.jpg" alt="Home page hero with drag-and-drop upload zone" className="w-full rounded-2xl my-6 border border-gray-200" />
+              <img src="/resume_upload_screen.jpg" alt="Home page hero with drag-and-drop upload zone" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-slate-700" />
             </Step>
 
             <Step number={2} title="Drag and drop or click to browse">
@@ -329,7 +329,7 @@ export default function HowToPage() {
           {/* ATS SCORE */}
           <DocSection id="ats-score" badge="Analyze" title="ATS score check" subtitle="Find out how well your resume passes Applicant Tracking Systems and exactly what to fix.">
 
-            <p className="text-sm text-gray-600 mb-8">
+            <p className="text-sm text-gray-600 dark:text-slate-300 mb-8">
               Over 75% of resumes are rejected by ATS software before a human ever reads them. rawcv runs the same checks that enterprise ATS platforms use and gives you a score out of 100 with specific, actionable issues.
             </p>
 
@@ -402,7 +402,7 @@ export default function HowToPage() {
           {/* ENHANCE */}
           <DocSection id="enhance" badge="Analyze" title="Enhance your resume" subtitle="Strengthen weak bullet points and your summary with stronger language - no job description required.">
 
-            <p className="text-sm text-gray-600 mb-8">
+            <p className="text-sm text-gray-600 dark:text-slate-300 mb-8">
               The Enhance tool is different from Suggestions. Instead of pointing out problems it rewrites your existing content with stronger action verbs, more specific language, and a more professional tone while keeping your facts intact.
             </p>
 
@@ -429,7 +429,7 @@ export default function HowToPage() {
           {/* JD RELEVANCE */}
           <DocSection id="jd-relevance" badge="Analyze" title="Job description relevance check" subtitle="Paste any job description and instantly see how well your resume matches - with missing keywords highlighted.">
 
-            <p className="text-sm text-gray-600 mb-8">
+            <p className="text-sm text-gray-600 dark:text-slate-300 mb-8">
               Recruiters spend an average of 7 seconds on a resume. If your skills and experience do not mirror the language in the job posting you are invisible. The JD Match tool scores your resume against a specific job description and tells you exactly what is missing.
             </p>
 
@@ -471,7 +471,7 @@ export default function HowToPage() {
           {/* TAILOR */}
           <DocSection id="tailor" badge="Tailor" title="Tailor your resume to a job" subtitle="Automatically rewrite your resume to match a specific job description - keywords, tone, and structure all optimised.">
 
-            <p className="text-sm text-gray-600 mb-8">
+            <p className="text-sm text-gray-600 dark:text-slate-300 mb-8">
               The Tailor tool goes further than the JD relevance check. Instead of just telling you what is missing it rewrites your resume to incorporate the right keywords and reframe your experience in the language the employer is looking for.
             </p>
 
@@ -529,12 +529,12 @@ export default function HowToPage() {
                   { name: "Sharp",     desc: "Geometric, high contrast" },
                   { name: "Terra",     desc: "Warm earth tones" },
                 ].map((t) => (
-                  <div key={t.name} className="rounded-xl border border-gray-200 p-3 text-center">
+                  <div key={t.name} className="rounded-xl border border-gray-200 dark:border-slate-700 p-3 text-center">
                     <div className="w-full h-16 rounded-lg bg-gray-100 mb-2 flex items-center justify-center">
-                      <span className="text-xs font-semibold text-gray-500">{t.name}</span>
+                      <span className="text-xs font-semibold text-gray-500 dark:text-slate-300">{t.name}</span>
                     </div>
                     <p className="text-xs font-semibold text-gray-800">{t.name}</p>
-                    <p className="text-[10px] text-gray-500 mt-0.5">{t.desc}</p>
+                    <p className="text-[10px] text-gray-500 dark:text-slate-300 mt-0.5">{t.desc}</p>
                   </div>
                 ))}
               </div>
@@ -587,8 +587,8 @@ export default function HowToPage() {
                 { q: "How do I contact support?", a: "Email us at support@rawcv.com. We typically respond within 24 hours on business days." },
               ].map((faq) => (
                 <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="border-b border-gray-100 pb-6 last:border-0">
-                  <dt className="font-semibold text-gray-900 mb-2" itemProp="name">{faq.q}</dt>
-                  <dd className="text-sm text-gray-500 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+                  <dt className="font-semibold text-gray-900 dark:text-white mb-2" itemProp="name">{faq.q}</dt>
+                  <dd className="text-sm text-gray-500 dark:text-slate-300 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                     <span itemProp="text">{faq.a}</span>
                   </dd>
                 </div>
@@ -601,10 +601,10 @@ export default function HowToPage() {
             <h2 className="text-2xl font-bold mb-2">Ready to build your best resume?</h2>
             <p className="text-brand-100 mb-6 text-sm">Create a free account and get 20 credits instantly. No credit card required.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link href="/analyze" className="px-6 py-2.5 rounded-xl bg-white text-brand-700 font-semibold text-sm hover:bg-brand-50 transition-colors">
+              <Link href="/analyze" className="px-6 py-2.5 rounded-xl bg-white dark:bg-slate-900 text-brand-700 font-semibold text-sm hover:bg-brand-50 transition-colors">
                 Get started free
               </Link>
-              <Link href="/" className="px-6 py-2.5 rounded-xl border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition-colors">
+              <Link href="/" className="px-6 py-2.5 rounded-xl border border-white/30 text-white text-sm font-medium hover:bg-white dark:bg-slate-900/10 transition-colors">
                 Back to home
               </Link>
             </div>

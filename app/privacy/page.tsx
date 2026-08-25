@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-white px-6 py-16">
+    <div className="min-h-screen bg-white dark:bg-slate-900 px-6 py-16">
       <div className="max-w-2xl mx-auto prose prose-gray prose-sm sm:prose-base">
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Privacy Policy", href: "/privacy" }]} />
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Privacy Policy</h1>
         <p className="text-sm text-gray-400 mb-10">Last updated: April 14, 2026</p>
 
         <Section title="1. Who we are">
@@ -87,8 +87,8 @@ export default function PrivacyPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="text-lg font-semibold text-gray-900 mb-3">{title}</h2>
-      <div className="text-sm text-gray-600 leading-relaxed space-y-2">{children}</div>
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">{title}</h2>
+      <div className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed space-y-2">{children}</div>
     </section>
   );
 }

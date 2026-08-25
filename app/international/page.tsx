@@ -216,7 +216,7 @@ export default function InternationalPage() {
   const alreadyInFormat = state.parsed?.format === state.selectedFormat;
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-800">
       {/* FAQ Schema */}
       <Script id="international-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
@@ -235,11 +235,11 @@ export default function InternationalPage() {
         <div className="max-w-5xl mx-auto relative">
           <div className="flex items-center gap-3 mb-4">
             <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "International", href: "/international" }]} />
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
               International Resume
             </h1>
           </div>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-600 dark:text-slate-300 max-w-2xl leading-relaxed">
             Choose the format that matches your target region. Each format adjusts
             page length, photo requirements, personal details, and language sections
             to meet local expectations.
@@ -289,12 +289,12 @@ export default function InternationalPage() {
                     </div>
 
                     <div>
-                      <p className="font-bold text-base text-gray-900">{fmt.label}</p>
-                      <p className="text-xs text-gray-500 mt-1 leading-relaxed">{fmt.description}</p>
+                      <p className="font-bold text-base text-gray-900 dark:text-white">{fmt.label}</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-300 mt-1 leading-relaxed">{fmt.description}</p>
                     </div>
 
                     <div className="pt-1 space-y-1">
-                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                      <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-slate-300">
                         <span className="font-semibold">📄 Max {fmt.maxPages} page{fmt.maxPages > 1 ? "s" : ""}</span>
                       </div>
                       {fmt.photoRequired && (
@@ -303,7 +303,7 @@ export default function InternationalPage() {
                         </div>
                       )}
                       {!fmt.includePersonalDetails && (
-                        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-slate-300">
                           <span>🔒 No personal details</span>
                         </div>
                       )}
@@ -311,11 +311,11 @@ export default function InternationalPage() {
 
                     {/* Hover guidance */}
                     {showFormatGuidance === key && !isSelected && (
-                      <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-3xl p-5 flex flex-col justify-center animate-fade-in">
-                        <p className="text-xs font-bold text-gray-900 mb-2 uppercase tracking-wider">This format:</p>
+                      <div className="absolute inset-0 bg-white dark:bg-slate-900/95 backdrop-blur-sm rounded-3xl p-5 flex flex-col justify-center animate-fade-in">
+                        <p className="text-xs font-bold text-gray-900 dark:text-white mb-2 uppercase tracking-wider">This format:</p>
                         <ul className="space-y-1">
                           {m.highlights.map((h, i) => (
-                            <li key={i} className="text-xs text-gray-600">{h}</li>
+                            <li key={i} className="text-xs text-gray-600 dark:text-slate-300">{h}</li>
                           ))}
                         </ul>
                       </div>
@@ -328,30 +328,30 @@ export default function InternationalPage() {
         </section>
 
         {/* ── Learn more about each format ──────────────────────────── */}
-        <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md">
+        <section className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
           <h3 className="text-sm font-bold text-gray-950 uppercase tracking-widest mb-3">
             Detailed Format Guides
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <Link href="/international/eu" className="flex items-center gap-3 rounded-2xl border border-gray-100 p-4 hover:bg-gray-50 hover:border-blue-300 transition-all group">
+            <Link href="/international/eu" className="flex items-center gap-3 rounded-2xl border border-gray-100 p-4 hover:bg-gray-50 dark:bg-slate-800 hover:border-blue-300 transition-all group">
               <span className="text-2xl">🇪🇺</span>
               <div>
-                <p className="text-sm font-bold text-gray-900 group-hover:text-blue-600">EU / Europass Guide</p>
-                <p className="text-xs text-gray-500">Photo, CEFR levels, section order</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-blue-600">EU / Europass Guide</p>
+                <p className="text-xs text-gray-500 dark:text-slate-300">Photo, CEFR levels, section order</p>
               </div>
             </Link>
-            <Link href="/international/canada" className="flex items-center gap-3 rounded-2xl border border-gray-100 p-4 hover:bg-gray-50 hover:border-red-300 transition-all group">
+            <Link href="/international/canada" className="flex items-center gap-3 rounded-2xl border border-gray-100 p-4 hover:bg-gray-50 dark:bg-slate-800 hover:border-red-300 transition-all group">
               <span className="text-2xl">🇨🇦</span>
               <div>
-                <p className="text-sm font-bold text-gray-900 group-hover:text-red-600">Canada Guide</p>
-                <p className="text-xs text-gray-500">Anti-discrimination, bilingual tips</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-red-600">Canada Guide</p>
+                <p className="text-xs text-gray-500 dark:text-slate-300">Anti-discrimination, bilingual tips</p>
               </div>
             </Link>
-            <Link href="/international/us" className="flex items-center gap-3 rounded-2xl border border-gray-100 p-4 hover:bg-gray-50 hover:border-blue-300 transition-all group">
+            <Link href="/international/us" className="flex items-center gap-3 rounded-2xl border border-gray-100 p-4 hover:bg-gray-50 dark:bg-slate-800 hover:border-blue-300 transition-all group">
               <span className="text-2xl">🇺🇸</span>
               <div>
-                <p className="text-sm font-bold text-gray-900 group-hover:text-blue-600">US Guide</p>
-                <p className="text-xs text-gray-500">1-page format, action verbs, ATS</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-blue-600">US Guide</p>
+                <p className="text-xs text-gray-500 dark:text-slate-300">1-page format, action verbs, ATS</p>
               </div>
             </Link>
           </div>
@@ -369,11 +369,11 @@ export default function InternationalPage() {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xl">🔄</span>
-                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-widest">
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest">
                     Convert Your Resume
                   </h3>
                 </div>
-                <p className="text-xs text-gray-600 leading-relaxed">
+                <p className="text-xs text-gray-600 dark:text-slate-300 leading-relaxed">
                   {alreadyInFormat
                     ? `Your resume is already in the ${info.label} format.`
                     : `AI-powered conversion will adapt your resume to ${info.label} conventions — section order, content style, and format rules. No facts will be changed.`}
@@ -422,7 +422,7 @@ export default function InternationalPage() {
                     ✅ Conversion applied successfully!
                   </p>
                   {conversionResult.summaryRewrite && (
-                    <div className="mt-2 rounded-lg bg-white/60 p-3">
+                    <div className="mt-2 rounded-lg bg-white dark:bg-slate-900/60 p-3">
                       <p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-600 mb-1">
                         Summary rewritten for {info.label} format:
                       </p>
@@ -434,8 +434,8 @@ export default function InternationalPage() {
                 </div>
 
                 {conversionResult.changes.length > 0 && (
-                  <div className="rounded-xl border border-gray-200 bg-white p-4">
-                    <p className="text-xs font-bold text-gray-900 mb-2 uppercase tracking-wide">
+                  <div className="rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+                    <p className="text-xs font-bold text-gray-900 dark:text-white mb-2 uppercase tracking-wide">
                       Changes made:
                     </p>
                     <div className="space-y-2">
@@ -445,7 +445,7 @@ export default function InternationalPage() {
                           <div>
                             <span className="text-gray-800 font-medium">{c.what}</span>
                             {c.why && (
-                              <span className="text-gray-500 ml-1">— {c.why}</span>
+                              <span className="text-gray-500 dark:text-slate-300 ml-1">— {c.why}</span>
                             )}
                           </div>
                         </div>
@@ -464,13 +464,13 @@ export default function InternationalPage() {
           <div className="lg:col-span-2 space-y-8">
 
             {/* Profile Photo */}
-            <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md hover:border-brand-300 transition-all duration-300">
+            <div className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md hover:border-brand-300 transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-sm font-bold text-gray-950 uppercase tracking-widest">
                     Profile Photo
                   </h3>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-slate-300 mt-1">
                     {state.selectedFormat === "eu"
                       ? "Photos are strongly recommended for EU resumes."
                       : state.selectedFormat === "general"
@@ -487,13 +487,13 @@ export default function InternationalPage() {
 
             {/* Languages — only for EU / formats that include them */}
             {info.includeLanguages && (
-              <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md hover:border-brand-300 transition-all duration-300">
+              <div className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md hover:border-brand-300 transition-all duration-300">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-sm font-bold text-gray-950 uppercase tracking-widest">
                       Languages
                     </h3>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-slate-300 mt-1">
                       Add your language proficiencies. Displayed prominently in EU/Europass format resumes.
                     </p>
                   </div>
@@ -507,8 +507,8 @@ export default function InternationalPage() {
                 </div>
 
                 {lang.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-gray-200 p-6 text-center">
-                    <p className="text-sm text-gray-500">
+                  <div className="rounded-2xl border border-dashed border-gray-200 dark:border-slate-700 p-6 text-center">
+                    <p className="text-sm text-gray-500 dark:text-slate-300">
                       No languages added yet. Click &quot;Add Language&quot; to get started.
                     </p>
                   </div>
@@ -517,19 +517,19 @@ export default function InternationalPage() {
                     {lang.map((l, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50/50 p-3"
+                        className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50 dark:bg-slate-800/50 p-3"
                       >
                         <input
                           type="text"
                           value={l.language}
                           onChange={(e) => updateLanguage(i, "language", e.target.value)}
                           placeholder="e.g. English, French, Spanish"
-                          className="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                          className="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                         />
                         <select
                           value={l.level}
                           onChange={(e) => updateLanguage(i, "level", e.target.value)}
-                          className="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                          className="px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                         >
                           {PROFICIENCY_OPTIONS.map((opt) => (
                             <option key={opt.value} value={opt.value}>
@@ -555,14 +555,14 @@ export default function InternationalPage() {
             )}
 
             {/* Format-specific guidance card */}
-            <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md">
+            <div className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">{meta.icon}</span>
                 <div>
                   <h3 className="text-sm font-bold text-gray-950 uppercase tracking-widest">
                     {info.label} Format Details
                   </h3>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-xs text-gray-500 dark:text-slate-300 mt-0.5">
                     What this format includes
                   </p>
                 </div>
@@ -575,11 +575,11 @@ export default function InternationalPage() {
                   { label: "Personal details", value: info.includePersonalDetails ? "Included" : "Not included" },
                   { label: "Cover letter", value: info.coverLetterRequired ? "Recommended" : "Optional" },
                 ].map((item) => (
-                  <div key={item.label} className="rounded-xl bg-gray-50 p-3">
-                    <p className="text-xxs font-semibold uppercase tracking-wide text-gray-500">
+                  <div key={item.label} className="rounded-xl bg-gray-50 dark:bg-slate-800 p-3">
+                    <p className="text-xxs font-semibold uppercase tracking-wide text-gray-500 dark:text-slate-300">
                       {item.label}
                     </p>
-                    <p className="text-sm font-bold text-gray-900 mt-0.5">
+                    <p className="text-sm font-bold text-gray-900 dark:text-white mt-0.5">
                       {item.value}
                     </p>
                   </div>
@@ -588,14 +588,14 @@ export default function InternationalPage() {
             </div>
 
             {/* Region-specific tips */}
-            <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md">
+            <div className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
               <div className="flex items-center gap-3 mb-5">
                 <span className="text-2xl">💡</span>
                 <div>
                   <h3 className="text-sm font-bold text-gray-950 uppercase tracking-widest">
                     {info.label} Resume Tips
                   </h3>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-xs text-gray-500 dark:text-slate-300 mt-0.5">
                     Follow these conventions for the best results
                   </p>
                 </div>
@@ -625,7 +625,7 @@ export default function InternationalPage() {
                 </p>
                 <ul className="space-y-1.5">
                   {meta.dos.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs text-gray-600">
+                    <li key={i} className="flex items-start gap-2 text-xs text-gray-600 dark:text-slate-300">
                       <span className="text-emerald-500 mt-0.5 shrink-0">•</span>
                       {item}
                     </li>
@@ -640,7 +640,7 @@ export default function InternationalPage() {
                 </p>
                 <ul className="space-y-1.5">
                   {meta.donts.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs text-gray-600">
+                    <li key={i} className="flex items-start gap-2 text-xs text-gray-600 dark:text-slate-300">
                       <span className="text-red-400 mt-0.5 shrink-0">•</span>
                       {item}
                     </li>
@@ -654,21 +654,21 @@ export default function InternationalPage() {
           <div className="space-y-6">
 
             {/* Quick actions */}
-            <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md">
+            <div className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
               <h3 className="text-sm font-bold text-gray-950 uppercase tracking-widest mb-4">
                 Quick Actions
               </h3>
               <div className="space-y-3">
                 <Link
                   href="/cover-letter"
-                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 bg-gray-50/50 p-4 hover:bg-gray-100 hover:border-brand-200 transition-all group"
+                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 bg-gray-50 dark:bg-slate-800/50 p-4 hover:bg-gray-100 hover:border-brand-200 transition-all group"
                 >
                   <span className="text-2xl">✉️</span>
                   <div className="text-left min-w-0 flex-1">
-                    <p className="text-sm font-bold text-gray-900 group-hover:text-brand-600 transition-colors">
+                    <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-brand-600 transition-colors">
                       Cover Letter
                     </p>
-                    <p className="text-xs text-gray-500 truncate">
+                    <p className="text-xs text-gray-500 dark:text-slate-300 truncate">
                       Create a {info.label.toLowerCase()} cover letter
                     </p>
                   </div>
@@ -679,14 +679,14 @@ export default function InternationalPage() {
 
                 <Link
                   href="/analyze"
-                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 bg-gray-50/50 p-4 hover:bg-gray-100 hover:border-brand-200 transition-all group"
+                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 bg-gray-50 dark:bg-slate-800/50 p-4 hover:bg-gray-100 hover:border-brand-200 transition-all group"
                 >
                   <span className="text-2xl">📊</span>
                   <div className="text-left min-w-0 flex-1">
-                    <p className="text-sm font-bold text-gray-900 group-hover:text-brand-600 transition-colors">
+                    <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-brand-600 transition-colors">
                       Analyze Resume
                     </p>
-                    <p className="text-xs text-gray-500 truncate">
+                    <p className="text-xs text-gray-500 dark:text-slate-300 truncate">
                       Check ATS score & get suggestions
                     </p>
                   </div>
@@ -697,14 +697,14 @@ export default function InternationalPage() {
 
                 <Link
                   href="/analyze"
-                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 bg-gray-50/50 p-4 hover:bg-gray-100 hover:border-brand-200 transition-all group"
+                  className="flex items-center gap-3 w-full rounded-2xl border border-gray-100 bg-gray-50 dark:bg-slate-800/50 p-4 hover:bg-gray-100 hover:border-brand-200 transition-all group"
                 >
                   <span className="text-2xl">⚙️</span>
                   <div className="text-left min-w-0 flex-1">
-                    <p className="text-sm font-bold text-gray-900 group-hover:text-brand-600 transition-colors">
+                    <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-brand-600 transition-colors">
                       Dashboard
                     </p>
-                    <p className="text-xs text-gray-500 truncate">
+                    <p className="text-xs text-gray-500 dark:text-slate-300 truncate">
                       Edit resume, credits, and more
                     </p>
                   </div>
@@ -716,7 +716,7 @@ export default function InternationalPage() {
             </div>
 
             {/* Cover letters for this format */}
-            <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md">
+            <div className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-bold text-gray-950 uppercase tracking-widest">
                   Cover Letters
@@ -730,8 +730,8 @@ export default function InternationalPage() {
               </div>
 
               {coverLettersByFormat.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-gray-200 p-5 text-center">
-                  <p className="text-xs text-gray-500">
+                <div className="rounded-2xl border border-dashed border-gray-200 dark:border-slate-700 p-5 text-center">
+                  <p className="text-xs text-gray-500 dark:text-slate-300">
                     No cover letters yet for this format.
                   </p>
                   <Link
@@ -746,17 +746,17 @@ export default function InternationalPage() {
                   {coverLettersByFormat.map((cl) => (
                     <div
                       key={cl.id}
-                      className="rounded-2xl border border-gray-100 bg-gray-50/50 p-3 flex items-start justify-between gap-2 hover:bg-gray-100 transition-colors group"
+                      className="rounded-2xl border border-gray-100 bg-gray-50 dark:bg-slate-800/50 p-3 flex items-start justify-between gap-2 hover:bg-gray-100 transition-colors group"
                     >
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs font-bold text-gray-900 truncate">
+                        <p className="text-xs font-bold text-gray-900 dark:text-white truncate">
                           {cl.recipientCompany
                             ? cl.recipientName
                               ? `${cl.recipientCompany} — ${cl.recipientName}`
                               : cl.recipientCompany
                             : "Untitled cover letter"}
                         </p>
-                        <p className="text-xxs text-gray-500 mt-0.5">
+                        <p className="text-xxs text-gray-500 dark:text-slate-300 mt-0.5">
                           {new Date(cl.createdAt).toLocaleDateString(undefined, {
                             year: "numeric", month: "short", day: "numeric",
                           })}
@@ -782,10 +782,10 @@ export default function InternationalPage() {
             {!hasResume && (
               <div className="rounded-3xl border border-dashed border-brand-300 bg-brand-50/50 p-6 text-center">
                 <span className="text-3xl mb-2 block">📄</span>
-                <p className="text-sm font-bold text-gray-900 mb-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">
                   No resume uploaded yet
                 </p>
-                <p className="text-xs text-gray-500 mb-3">
+                <p className="text-xs text-gray-500 dark:text-slate-300 mb-3">
                   Upload your resume on the dashboard to convert it to {info.label} format.
                 </p>
                 <Link

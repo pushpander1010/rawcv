@@ -60,13 +60,13 @@ export default function AnalyzeLayout({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
           {/* Header */}
           <div className="max-w-3xl mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] font-semibold tracking-widest uppercase text-slate-500 dark:text-slate-400 mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] font-semibold tracking-widest uppercase text-slate-500 dark:text-slate-300 mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-600" /> Why it works
             </div>
             <h2 className="text-[24px] sm:text-[28px] font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
               How the resume analyzer helps you get hired
             </h2>
-            <p className="mt-3 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">
+            <p className="mt-3 text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
               Your resume gets fewer than seven seconds of a recruiter&apos;s attention before it&apos;s
               tossed into the yes or no pile. Most of those decisions are now made by Applicant
               Tracking Systems (ATS) — the software that parses, scores, and ranks your resume before
@@ -82,10 +82,10 @@ export default function AnalyzeLayout({
               <div key={s.title} className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-7 flex flex-col">
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <IconBadge name={s.icon} />
-                  <span className="text-[11px] font-bold tracking-widest text-slate-400 dark:text-slate-500 dark:text-slate-400 mt-2">0{i + 1}</span>
+                  <span className="text-[11px] font-bold tracking-widest text-slate-400 dark:text-slate-500 dark:text-slate-300 mt-2">0{i + 1}</span>
                 </div>
                 <h3 className="text-[15px] font-semibold text-slate-900 dark:text-white leading-snug mb-2.5">{s.title}</h3>
-                <p className="text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-400">{s.body}</p>
+                <p className="text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-300">{s.body}</p>
               </div>
             ))}
           </div>

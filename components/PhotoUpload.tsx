@@ -298,7 +298,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
           </div>
           <div>
             <p className="text-sm font-semibold text-gray-700">Profile photo</p>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-gray-500 dark:text-slate-300 mt-0.5">
               This photo will be used in resume themes that support photos.
             </p>
             <button
@@ -333,7 +333,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
               <p className="text-sm font-bold text-gray-700">
                 Upload your photo
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-slate-300 mt-1">
                 Drag & drop or click to browse. JPG/PNG, max 5 MB.
               </p>
               <p className="text-xs text-brand-500 font-semibold mt-2">
@@ -360,11 +360,11 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
       {/* Crop/Edit Modal */}
       {showCropModal && originalImage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="p-5 border-b border-gray-100">
-              <h3 className="text-lg font-bold text-gray-900">Edit Photo</h3>
-              <p className="text-xs text-gray-500 mt-1">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Edit Photo</h3>
+              <p className="text-xs text-gray-500 dark:text-slate-300 mt-1">
                 Drag the crop box to move it. Drag corners/edges to resize.
               </p>
             </div>
@@ -447,10 +447,10 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
                       left: `${cropArea.x}%`, top: `${cropArea.y}%`,
                       width: `${cropArea.width}%`, height: `${cropArea.height}%`,
                     }}>
-                      <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white/30" />
-                      <div className="absolute left-2/3 top-0 bottom-0 w-px bg-white/30" />
-                      <div className="absolute top-1/3 left-0 right-0 h-px bg-white/30" />
-                      <div className="absolute top-2/3 left-0 right-0 h-px bg-white/30" />
+                      <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white dark:bg-slate-900/30" />
+                      <div className="absolute left-2/3 top-0 bottom-0 w-px bg-white dark:bg-slate-900/30" />
+                      <div className="absolute top-1/3 left-0 right-0 h-px bg-white dark:bg-slate-900/30" />
+                      <div className="absolute top-2/3 left-0 right-0 h-px bg-white dark:bg-slate-900/30" />
                     </div>
                   </>
                 )}
@@ -472,7 +472,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
               <button
                 type="button"
                 onClick={cancelCrop}
-                className="flex-1 py-2.5 rounded-xl text-sm font-bold border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold border border-gray-200 dark:border-slate-700 text-gray-700 hover:bg-gray-50 dark:bg-slate-800 transition-colors"
               >
                 Cancel
               </button>
@@ -509,7 +509,7 @@ function Slider({ label, value, min, max, step, displayValue, onChange }: {
 }) {
   return (
     <div>
-      <div className="flex justify-between text-xs font-semibold text-gray-500 mb-1">
+      <div className="flex justify-between text-xs font-semibold text-gray-500 dark:text-slate-300 mb-1">
         <span>{label}</span>
         <span>{displayValue}</span>
       </div>
@@ -589,7 +589,7 @@ function Handle({ pos, crop, onDown }: {
       onPointerDown={(e) => onDown(e, pos)}
     >
       <div
-        className="bg-white border-2 border-brand-500 rounded-full shadow-md"
+        className="bg-white dark:bg-slate-900 border-2 border-brand-500 rounded-full shadow-md"
         style={{ width: DOT, height: DOT, margin: (SIZE - DOT) / 2 }}
       />
     </div>

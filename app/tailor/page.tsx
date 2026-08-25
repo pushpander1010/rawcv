@@ -19,7 +19,7 @@ export default function TailorPage() {
   if (!state.parsed) {
     return (
       <main className="min-h-[80vh] flex items-center justify-center px-6 py-16">
-        <div className="relative max-w-2xl w-full bg-white rounded-3xl shadow-xl border border-gray-200/60 p-12 text-center overflow-hidden">
+        <div className="relative max-w-2xl w-full bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-gray-200 dark:border-slate-700/60 p-12 text-center overflow-hidden">
           
           <div className="relative">
             <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-brand-50 flex items-center justify-center">
@@ -29,10 +29,10 @@ export default function TailorPage() {
               </svg>
             </div>
             
-            <h1 className="text-2xl font-bold mb-2 text-gray-900">
+            <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
               Upload resume to tailor it
             </h1>
-            <p className="text-sm text-gray-500 mb-8">
+            <p className="text-sm text-gray-500 dark:text-slate-300 mb-8">
               Match your resume to any job description with AI
             </p>
             
@@ -71,7 +71,7 @@ export default function TailorPage() {
   const changes = state.tailoredResume?.changes ?? [];
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-800">
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -83,7 +83,7 @@ export default function TailorPage() {
               </svg>
             </div>
             <div>
-              <h1 className="text-lg font-bold text-gray-900">Tailor to Job</h1>
+              <h1 className="text-lg font-bold text-gray-900 dark:text-white">Tailor to Job</h1>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -95,7 +95,7 @@ export default function TailorPage() {
 
         {/* JD input */}
         <div className="mb-8 max-w-2xl">
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
             <label htmlFor="jd-input" className="block text-sm font-medium text-gray-700 mb-3">
               Paste Job Description
             </label>
@@ -105,7 +105,7 @@ export default function TailorPage() {
               onChange={(e) => setJdInput(e.target.value)}
               placeholder="Paste the job description here and we'll tailor your resume to match…"
               rows={5}
-              className="w-full rounded-xl border border-gray-200/60 bg-white/50 px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400 resize-none transition-all"
+              className="w-full rounded-xl border border-gray-200 dark:border-slate-700/60 bg-white dark:bg-slate-900/50 px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400 resize-none transition-all"
               aria-label="Job description input"
             />
             <button
@@ -137,7 +137,7 @@ export default function TailorPage() {
 
             {/* Live resume preview */}
             <div className="flex-1 min-w-0 overflow-auto">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              <h2 className="text-sm font-semibold text-gray-500 dark:text-slate-300 uppercase tracking-wide mb-3">
                 Live Preview
               </h2>
               <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
@@ -147,17 +147,17 @@ export default function TailorPage() {
 
         {/* Visual placeholder for initial state */}
         {changes.length === 0 && !loading && (
-          <div className="mt-8 rounded-2xl border border-dashed border-gray-200/60 bg-white/30 backdrop-blur-sm p-12 text-center max-w-4xl mx-auto">
+          <div className="mt-8 rounded-2xl border border-dashed border-gray-200 dark:border-slate-700/60 bg-white dark:bg-slate-900/30 backdrop-blur-sm p-12 text-center max-w-4xl mx-auto">
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-brand-50 flex items-center justify-center">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-blue-500">
                 <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
               </svg>
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
               Paste a job description above
             </h3>
-            <p className="text-sm text-gray-500 max-w-md mx-auto">
+            <p className="text-sm text-gray-500 dark:text-slate-300 max-w-md mx-auto">
               Our AI will align your experience with the job requirements, showing exactly what to add, change, or remove.
             </p>
           </div>

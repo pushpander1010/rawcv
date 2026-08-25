@@ -63,28 +63,28 @@ export default function EUFormatPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-800">
       <Script id="eu-format-article" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Script id="eu-format-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       {/* Hero */}
-      <section className="bg-gray-50 px-6 py-14 sm:py-20">
+      <section className="bg-gray-50 dark:bg-slate-800 px-6 py-14 sm:py-20">
         <div className="max-w-4xl mx-auto">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "International", href: "/international" }, { label: "EU Format", href: "/international/eu" }]} />
           <div className="flex items-center gap-3 mb-4">
             <span className="text-4xl">🇪🇺</span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
               EU / Europass Resume Format
             </h1>
           </div>
-          <p className="text-lg text-gray-600 max-w-2xl leading-relaxed">
+          <p className="text-lg text-gray-600 dark:text-slate-300 max-w-2xl leading-relaxed">
             The European CV format follows Europass conventions with personal details, a professional photo, language proficiency levels, and a detailed reverse-chronological structure. Up to 3 pages is standard.
           </p>
           <div className="flex flex-wrap gap-3 mt-6">
             <Link href="/international" className="px-5 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20">
               Convert Your Resume →
             </Link>
-            <Link href="/how-to" className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-bold hover:bg-gray-100 transition-colors">
+            <Link href="/how-to" className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-700 text-sm font-bold hover:bg-gray-100 transition-colors">
               How to Use rawcv
             </Link>
           </div>
@@ -100,27 +100,27 @@ export default function EUFormatPage() {
             { label: "Languages", value: "CEFR Levels", icon: "🗣️" },
             { label: "Personal Info", value: "Included", icon: "👤" },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-2xl border border-gray-200 bg-white p-4 text-center">
+            <div key={stat.label} className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 text-center">
               <span className="text-2xl block mb-1">{stat.icon}</span>
-              <p className="text-lg font-bold text-gray-900">{stat.value}</p>
-              <p className="text-xs text-gray-500">{stat.label}</p>
+              <p className="text-lg font-bold text-gray-900 dark:text-white">{stat.value}</p>
+              <p className="text-xs text-gray-500 dark:text-slate-300">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Section Order */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Section Order</h2>
-          <p className="text-sm text-gray-500 mb-6">Follow this exact order for maximum compatibility with EU recruiters and ATS systems.</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Section Order</h2>
+          <p className="text-sm text-gray-500 dark:text-slate-300 mb-6">Follow this exact order for maximum compatibility with EU recruiters and ATS systems.</p>
           <div className="space-y-4">
             {SECTION_ORDER.map((section) => (
-              <div key={section.num} className="flex gap-4 rounded-2xl border border-gray-200 bg-white p-5">
+              <div key={section.num} className="flex gap-4 rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
                 <div className="shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-700 text-sm font-bold flex items-center justify-center">
                   {section.num}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-gray-900">{section.title}</h3>
-                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">{section.desc}</p>
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-white">{section.title}</h3>
+                  <p className="text-xs text-gray-600 dark:text-slate-300 mt-1 leading-relaxed">{section.desc}</p>
                 </div>
               </div>
             ))}
@@ -128,21 +128,21 @@ export default function EUFormatPage() {
         </section>
 
         {/* CEFR Levels */}
-        <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">🗣️ CEFR Language Levels Explained</h2>
+        <section className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">🗣️ CEFR Language Levels Explained</h2>
           <div className="space-y-3">
             {[
               { level: "A1-A2", label: "Basic", desc: "Can understand and use everyday expressions. Can introduce yourself and handle simple interactions." },
               { level: "B1-B2", label: "Intermediate", desc: "Can deal with most travel situations. Can produce connected text and explain opinions. B2 is the minimum for professional work." },
               { level: "C1-C2", label: "Advanced", desc: "Can use language flexibly for social, academic, and professional purposes. C2 is near-native proficiency." },
             ].map((item) => (
-              <div key={item.level} className="flex gap-3 rounded-xl bg-gray-50 p-4">
+              <div key={item.level} className="flex gap-3 rounded-xl bg-gray-50 dark:bg-slate-800 p-4">
                 <span className="shrink-0 px-3 py-1 rounded-lg bg-blue-100 text-blue-700 text-xs font-bold self-start">
                   {item.level}
                 </span>
                 <div>
-                  <p className="text-sm font-bold text-gray-900">{item.label}</p>
-                  <p className="text-xs text-gray-600 mt-0.5">{item.desc}</p>
+                  <p className="text-sm font-bold text-gray-900 dark:text-white">{item.label}</p>
+                  <p className="text-xs text-gray-600 dark:text-slate-300 mt-0.5">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -150,12 +150,12 @@ export default function EUFormatPage() {
         </section>
 
         {/* Tips */}
-        <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">💡 EU Resume Tips</h2>
+        <section className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">💡 EU Resume Tips</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-2">✅ Do</p>
-              <ul className="space-y-2 text-xs text-gray-600">
+              <ul className="space-y-2 text-xs text-gray-600 dark:text-slate-300">
                 <li>• Include a professional photo with neutral background</li>
                 <li>• List languages with CEFR levels</li>
                 <li>• Include nationality and date of birth</li>
@@ -165,7 +165,7 @@ export default function EUFormatPage() {
             </div>
             <div>
               <p className="text-xs font-bold text-red-600 uppercase tracking-wide mb-2">❌ Don&apos;t</p>
-              <ul className="space-y-2 text-xs text-gray-600">
+              <ul className="space-y-2 text-xs text-gray-600 dark:text-slate-300">
                 <li>• Don&apos;t use US-style ultra-concise bullets</li>
                 <li>• Don&apos;t skip the languages section</li>
                 <li>• Don&apos;t use unprofessional selfies as your photo</li>
@@ -178,17 +178,17 @@ export default function EUFormatPage() {
 
         {/* FAQ */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {FAQ_ITEMS.map((item, i) => (
-              <details key={i} className="rounded-2xl border border-gray-200 bg-white overflow-hidden group">
-                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 hover:bg-gray-50 transition-colors list-none flex items-center justify-between">
+              <details key={i} className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden group">
+                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
                   {item.q}
                   <svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
-                <div className="px-5 pb-4 text-xs text-gray-600 leading-relaxed">
+                <div className="px-5 pb-4 text-xs text-gray-600 dark:text-slate-300 leading-relaxed">
                   {item.a}
                 </div>
               </details>
@@ -200,7 +200,7 @@ export default function EUFormatPage() {
         <section className="rounded-3xl bg-brand-600 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">Ready to build your EU resume?</h2>
           <p className="text-sm text-brand-100 mb-6 max-w-lg mx-auto">Upload your resume and convert it to EU format with AI. Your content stays intact — only structure and conventions change.</p>
-          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white text-brand-700 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
+          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-brand-700 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
             Convert to EU Format →
           </Link>
         </section>

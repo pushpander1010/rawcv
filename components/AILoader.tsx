@@ -154,7 +154,7 @@ export default function AILoader({
 
       {/* Step text */}
       <p
-        className="text-sm font-medium text-gray-600 text-center transition-opacity duration-150"
+        className="text-sm font-medium text-gray-600 dark:text-slate-300 text-center transition-opacity duration-150"
         style={{ opacity: visible ? 1 : 0 }}
         aria-live="polite"
         aria-atomic="true"

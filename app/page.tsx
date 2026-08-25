@@ -76,7 +76,7 @@ export default function LandingPage() {
             <span className="text-blue-600">actually gets interviews</span>
           </h1>
 
-          <p className="text-[16px] sm:text-[18px] text-slate-500 dark:text-slate-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-[16px] sm:text-[18px] text-slate-500 dark:text-slate-300 max-w-2xl mx-auto mb-8 leading-relaxed">
             Upload your CV, get an instant ATS score, match it to any job description,
             enhance it with AI, and download a polished PDF — all in minutes.
           </p>
@@ -93,7 +93,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/build"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
             >
               Build from Scratch
             </Link>
@@ -108,7 +108,7 @@ export default function LandingPage() {
             ].map((stat) => (
               <div key={stat.label}>
                 <div className="text-[22px] sm:text-[26px] font-bold text-slate-900 dark:text-white leading-none">{stat.value}</div>
-                <div className="text-[12.5px] text-slate-500 dark:text-slate-400 mt-1">{stat.label}</div>
+                <div className="text-[12.5px] text-slate-500 dark:text-slate-300 mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -137,7 +137,7 @@ export default function LandingPage() {
               <span className="w-3 h-3 rounded-full bg-yellow-400" />
               <span className="w-3 h-3 rounded-full bg-green-400" />
               <div className="flex-1 mx-4 h-7 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center px-4">
-                <span className="text-xs text-slate-500 dark:text-slate-400">rawcv.com/analyze</span>
+                <span className="text-xs text-slate-500 dark:text-slate-300">rawcv.com/analyze</span>
               </div>
             </div>
             <div className="flex h-64 sm:h-80 overflow-hidden">
@@ -182,7 +182,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 sm:mb-12">
             <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-slate-900 dark:text-white">Everything you need to get hired</h2>
-            <p className="text-[14.5px] text-slate-500 dark:text-slate-400 max-w-xl mx-auto mt-2">
+            <p className="text-[14.5px] text-slate-500 dark:text-slate-300 max-w-xl mx-auto mt-2">
               Professional-grade resume tools powered by AI — completely free.
             </p>
           </div>
@@ -193,7 +193,7 @@ export default function LandingPage() {
                   <Icon name={f.icon} size={18} />
                 </div>
                 <h3 className="font-semibold text-[14px] mb-1 text-slate-900 dark:text-white">{f.title}</h3>
-                <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
+                <p className="text-[13px] text-slate-500 dark:text-slate-300 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -204,7 +204,7 @@ export default function LandingPage() {
       <section className="py-16 sm:py-20 px-4 sm:px-6 bg-white dark:bg-slate-950">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-center text-slate-900 dark:text-white">Three steps to a better resume</h2>
-          <p className="text-center text-[14.5px] text-slate-500 dark:text-slate-400 mt-2 mb-10">From upload to download in under 5 minutes.</p>
+          <p className="text-center text-[14.5px] text-slate-500 dark:text-slate-300 mt-2 mb-10">From upload to download in under 5 minutes.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { step: "01", title: "Upload", desc: "Drag and drop your PDF, DOCX, or TXT file. We parse it in seconds." },
@@ -216,7 +216,7 @@ export default function LandingPage() {
                   {item.step}
                 </div>
                 <h3 className="font-semibold text-[15px] mb-1.5 text-slate-900 dark:text-white">{item.title}</h3>
-                <p className="text-[13.5px] text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
+                <p className="text-[13.5px] text-slate-500 dark:text-slate-300 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -239,7 +239,7 @@ export default function LandingPage() {
           <div className="p-8 sm:p-12 rounded-3xl bg-slate-900">
             <h2 className="text-[24px] sm:text-[30px] font-bold text-white leading-tight">Ready to land more interviews?</h2>
             <p className="text-[14.5px] text-slate-300 mt-2 mb-7 max-w-md mx-auto">Upload your resume and get instant AI-powered analysis — completely free, no account needed.</p>
-            <Link href="/analyze" className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-slate-900 dark:text-white font-semibold text-[14px] hover:bg-slate-100 transition-colors">
+            <Link href="/analyze" className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold text-[14px] hover:bg-slate-100 transition-colors">
               Get Started Free
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -257,7 +257,7 @@ export default function LandingPage() {
             {faqs.map((faq) => (
               <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                 <dt className="font-semibold text-[14.5px] text-slate-900 dark:text-white mb-1.5" itemProp="name">{faq.q}</dt>
-                <dd className="text-[13.5px] text-slate-500 dark:text-slate-400 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+                <dd className="text-[13.5px] text-slate-500 dark:text-slate-300 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                   <span itemProp="text">{faq.a}</span>
                 </dd>
               </div>

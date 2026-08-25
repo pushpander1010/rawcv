@@ -156,7 +156,7 @@ export default function ResumeFormatsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-800">
       <Script id="resume-formats-article" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Script id="resume-formats-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <Script id="resume-formats-itemlist" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
@@ -164,10 +164,10 @@ export default function ResumeFormatsPage() {
       <section className="bg-gradient-to-br from-brand-600/10 via-brand-600/5 to-transparent px-6 py-14 sm:py-20">
         <div className="max-w-5xl mx-auto">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Resume Formats", href: "/resume-formats" }]} />
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4">
             Resume Formats by Country
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl leading-relaxed">
+          <p className="text-lg text-gray-600 dark:text-slate-300 max-w-2xl leading-relaxed">
             Every country has different expectations for resume format, length, photo requirements, and content. Compare formats below and convert your resume with AI.
           </p>
         </div>
@@ -175,31 +175,31 @@ export default function ResumeFormatsPage() {
 
       <div className="max-w-5xl mx-auto px-6 pb-20 -mt-4 space-y-10">
         {/* Comparison Table */}
-        <section className="rounded-3xl border border-gray-200 bg-white shadow-md overflow-hidden">
+        <section className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wide">Country</th>
-                  <th className="px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wide">Pages</th>
-                  <th className="px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wide">Photo</th>
-                  <th className="px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wide hidden sm:table-cell">Personal Details</th>
-                  <th className="px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wide hidden md:table-cell">Style</th>
+                <tr className="border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
+                  <th className="px-4 py-3 text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-wide">Country</th>
+                  <th className="px-4 py-3 text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-wide">Pages</th>
+                  <th className="px-4 py-3 text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-wide">Photo</th>
+                  <th className="px-4 py-3 text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell">Personal Details</th>
+                  <th className="px-4 py-3 text-xs font-bold text-gray-500 dark:text-slate-300 uppercase tracking-wide hidden md:table-cell">Style</th>
                 </tr>
               </thead>
               <tbody>
                 {FORMATS.map((format) => (
-                  <tr key={format.country} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
+                  <tr key={format.country} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 dark:bg-slate-800 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">{format.flag}</span>
-                        <span className="text-sm font-bold text-gray-900">{format.country}</span>
+                        <span className="text-sm font-bold text-gray-900 dark:text-white">{format.country}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-xs text-gray-600">{format.pages}</td>
-                    <td className="px-4 py-3 text-xs text-gray-600">{format.photo}</td>
-                    <td className="px-4 py-3 text-xs text-gray-600 hidden sm:table-cell">{format.personalDetails}</td>
-                    <td className="px-4 py-3 text-xs text-gray-600 hidden md:table-cell">{format.style}</td>
+                    <td className="px-4 py-3 text-xs text-gray-600 dark:text-slate-300">{format.pages}</td>
+                    <td className="px-4 py-3 text-xs text-gray-600 dark:text-slate-300">{format.photo}</td>
+                    <td className="px-4 py-3 text-xs text-gray-600 dark:text-slate-300 hidden sm:table-cell">{format.personalDetails}</td>
+                    <td className="px-4 py-3 text-xs text-gray-600 dark:text-slate-300 hidden md:table-cell">{format.style}</td>
                   </tr>
                 ))}
               </tbody>
@@ -209,14 +209,14 @@ export default function ResumeFormatsPage() {
 
         {/* Detailed Cards */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Detailed Format Guides</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Detailed Format Guides</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {FORMATS.map((format) => (
-              <div key={format.country} className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md hover:border-brand-300 transition-all">
+              <div key={format.country} className="rounded-3xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md hover:border-brand-300 transition-all">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">{format.flag}</span>
-                    <h3 className="text-lg font-bold text-gray-900">{format.country}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">{format.country}</h3>
                   </div>
                   {format.supported && (
                     <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase">
@@ -226,21 +226,21 @@ export default function ResumeFormatsPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="rounded-xl bg-gray-50 p-3">
-                    <p className="text-[10px] font-semibold uppercase text-gray-500">Pages</p>
-                    <p className="text-xs font-bold text-gray-900">{format.pages}</p>
+                  <div className="rounded-xl bg-gray-50 dark:bg-slate-800 p-3">
+                    <p className="text-[10px] font-semibold uppercase text-gray-500 dark:text-slate-300">Pages</p>
+                    <p className="text-xs font-bold text-gray-900 dark:text-white">{format.pages}</p>
                   </div>
-                  <div className="rounded-xl bg-gray-50 p-3">
-                    <p className="text-[10px] font-semibold uppercase text-gray-500">Photo</p>
-                    <p className="text-xs font-bold text-gray-900">{format.photo}</p>
+                  <div className="rounded-xl bg-gray-50 dark:bg-slate-800 p-3">
+                    <p className="text-[10px] font-semibold uppercase text-gray-500 dark:text-slate-300">Photo</p>
+                    <p className="text-xs font-bold text-gray-900 dark:text-white">{format.photo}</p>
                   </div>
                 </div>
 
                 <div className="mb-3">
-                  <p className="text-[10px] font-semibold uppercase text-gray-500 mb-1">Section Order</p>
+                  <p className="text-[10px] font-semibold uppercase text-gray-500 dark:text-slate-300 mb-1">Section Order</p>
                   <div className="flex flex-wrap gap-1">
                     {format.sectionOrder.map((section, i) => (
-                      <span key={i} className="text-[10px] text-gray-600">
+                      <span key={i} className="text-[10px] text-gray-600 dark:text-slate-300">
                         {i > 0 && <span className="text-gray-300 mr-1">→</span>}
                         {section}
                       </span>
@@ -248,14 +248,14 @@ export default function ResumeFormatsPage() {
                   </div>
                 </div>
 
-                <p className="text-xs text-gray-600 italic mb-4">💡 {format.keyTip}</p>
+                <p className="text-xs text-gray-600 dark:text-slate-300 italic mb-4">💡 {format.keyTip}</p>
 
                 {format.supported ? (
                   <Link href={format.link} className="inline-block px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 transition-colors">
                     Convert to {format.country} Format →
                   </Link>
                 ) : (
-                  <Link href="/international" className="inline-block px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-xs font-bold hover:bg-gray-50 transition-colors">
+                  <Link href="/international" className="inline-block px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 text-xs font-bold hover:bg-gray-50 dark:bg-slate-800 transition-colors">
                     General Conversion →
                   </Link>
                 )}
@@ -266,7 +266,7 @@ export default function ResumeFormatsPage() {
 
         {/* FAQ */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {[
               { q: "What is the best resume format for international job applications?", a: "The best format depends on your target country. US uses 1-page achievement-focused, EU uses 3-page detailed with photo, Canada mirrors US but longer. Always research the specific conventions of your target market." },
@@ -274,14 +274,14 @@ export default function ResumeFormatsPage() {
               { q: "Can rawcv convert my resume to any format?", a: "rawcv currently supports AI-powered conversion for US, EU/Europass, Canada, and General formats. Each conversion adapts section order, content style, and format rules while preserving all factual information." },
               { q: "How long should a resume be?", a: "US: 1 page. Canada: 1-2 pages. UK: 2 pages. EU: up to 3 pages. India: 2-3 pages. Australia: 2-3 pages. The length depends on your experience level and the country's conventions." },
             ].map((item, i) => (
-              <details key={i} className="rounded-2xl border border-gray-200 bg-white overflow-hidden group">
-                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 hover:bg-gray-50 transition-colors list-none flex items-center justify-between">
+              <details key={i} className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden group">
+                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
                   {item.q}
                   <svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
-                <div className="px-5 pb-4 text-xs text-gray-600 leading-relaxed">
+                <div className="px-5 pb-4 text-xs text-gray-600 dark:text-slate-300 leading-relaxed">
                   {item.a}
                 </div>
               </details>
@@ -293,7 +293,7 @@ export default function ResumeFormatsPage() {
         <section className="rounded-3xl bg-brand-600 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">Ready to convert your resume?</h2>
           <p className="text-sm text-brand-100 mb-6 max-w-lg mx-auto">Upload your resume and let AI adapt it to your target country&apos;s format. Your content stays the same — only structure changes.</p>
-          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white text-brand-700 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
+          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-brand-700 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
             Start Converting →
           </Link>
         </section>

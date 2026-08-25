@@ -71,7 +71,7 @@ export default function FreeBuildClient() {
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600 mb-4" />
-          <p className="text-gray-600">Loading your resume...</p>
+          <p className="text-gray-600 dark:text-slate-300">Loading your resume...</p>
         </div>
       </div>
     );
@@ -90,7 +90,7 @@ export default function FreeBuildClient() {
       <div className="lg:col-span-2 order-1 lg:order-2">
         <div className="sticky top-24 space-y-6">
           {/* Tab Navigation */}
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-4">
             <div className="flex gap-2 overflow-x-auto pb-1">
               <button
                 type="button"
@@ -143,9 +143,9 @@ export default function FreeBuildClient() {
           {activeTab === "preview" && (
             <>
               {/* Theme Selector */}
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Theme
                   </h2>
                   <button
@@ -158,30 +158,30 @@ export default function FreeBuildClient() {
                 </div>
 
                 {showThemePicker && (
-                  <div className="mb-6 pb-6 border-b border-gray-200">
+                  <div className="mb-6 pb-6 border-b border-gray-200 dark:border-slate-700">
                     <ThemePicker onSelect={handleThemeSelect} />
                   </div>
                 )}
 
-                <div className="text-sm text-gray-600">
-                  Current: <span className="font-semibold text-gray-900 capitalize">{selectedTheme}</span>
+                <div className="text-sm text-gray-600 dark:text-slate-300">
+                  Current: <span className="font-semibold text-gray-900 dark:text-white capitalize">{selectedTheme}</span>
                 </div>
               </div>
 
               {/* Preview */}
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   Preview
                 </h2>
 
                 {resume ? (
-                  <div className="overflow-auto max-h-96 border border-gray-200 rounded-lg">
+                  <div className="overflow-auto max-h-96 border border-gray-200 dark:border-slate-700 rounded-lg">
                     <ResumePreview resume={resume} theme={selectedTheme} />
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                  <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-slate-800 rounded-lg border-2 border-dashed border-gray-300">
                     <div className="text-center">
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 dark:text-slate-300">
                         Start filling out the form to see your resume preview
                       </p>
                     </div>
@@ -190,8 +190,8 @@ export default function FreeBuildClient() {
               </div>
 
               {/* Download Section */}
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   Download
                 </h2>
 
@@ -218,8 +218,8 @@ export default function FreeBuildClient() {
 
           {/* ATS Check Tab */}
           {activeTab === "ats" && (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 ATS Compatibility Check
               </h2>
               <FreeATSChecker resume={resume} />
@@ -228,8 +228,8 @@ export default function FreeBuildClient() {
 
           {/* Keywords Tab */}
           {activeTab === "keywords" && (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Keyword Analysis
               </h2>
               <FreeKeywordAnalyzer resume={resume} />
@@ -238,8 +238,8 @@ export default function FreeBuildClient() {
 
           {/* Formatting Tab */}
           {activeTab === "formatting" && (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Formatting Check
               </h2>
               <FreeFormattingChecker resume={resume} />
@@ -248,10 +248,10 @@ export default function FreeBuildClient() {
 
           {/* AI Features CTA */}
           <div className="bg-gradient-to-br from-brand-50 to-brand-50 rounded-xl border border-brand-200 p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
               Upgrade Your Resume with AI
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 dark:text-slate-300 mb-4">
               Get AI-powered suggestions, JD matching, ATS optimization, and more advanced analysis.
             </p>
             <a

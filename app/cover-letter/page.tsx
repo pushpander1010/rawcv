@@ -441,22 +441,22 @@ export default function CoverLetterPage() {
   const formatInfo = FORMAT_TEMPLATES[format];
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-800">
       {/* ── Header ──────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-30 border-b border-gray-200 bg-white/80 backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => router.back()}
               aria-label="Go back"
-              className="text-gray-500 hover:text-gray-600 transition-colors"
+              className="text-gray-500 hover:text-gray-600 dark:text-slate-300 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="text-lg font-bold text-gray-900">
+            <h1 className="text-lg font-bold text-gray-900 dark:text-white">
               Cover Letter Builder
             </h1>
           </div>
@@ -491,8 +491,8 @@ export default function CoverLetterPage() {
           {/* ── Left: Form + Saved ────────────────────────────── */}
           <div className="xl:col-span-5 space-y-8 order-2 xl:order-1">
             {/* Format Selector */}
-            <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+            <section className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm p-5">
+              <h2 className="text-sm font-semibold text-gray-500 dark:text-slate-300 uppercase tracking-wide mb-4">
                 Format
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -516,19 +516,19 @@ export default function CoverLetterPage() {
                   );
                 })}
               </div>
-              <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+              <p className="mt-3 text-xs text-gray-500 dark:text-slate-300 leading-relaxed">
                 {formatInfo.description}
               </p>
             </section>
 
             {/* Form Fields */}
-            <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+            <section className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 space-y-4">
+              <h2 className="text-sm font-semibold text-gray-500 dark:text-slate-300 uppercase tracking-wide">
                 Recipient Details
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label htmlFor="recipient-name" className="block text-xs font-medium text-gray-600 mb-1">
+                  <label htmlFor="recipient-name" className="block text-xs font-medium text-gray-600 dark:text-slate-300 mb-1">
                     Recipient Name
                   </label>
                   <input
@@ -537,11 +537,11 @@ export default function CoverLetterPage() {
                     value={recipientName}
                     onChange={(e) => setRecipientName(e.target.value)}
                     placeholder="e.g. Jane Smith"
-                    className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
                 <div>
-                  <label htmlFor="recipient-company" className="block text-xs font-medium text-gray-600 mb-1">
+                  <label htmlFor="recipient-company" className="block text-xs font-medium text-gray-600 dark:text-slate-300 mb-1">
                     Company
                   </label>
                   <input
@@ -550,11 +550,11 @@ export default function CoverLetterPage() {
                     value={recipientCompany}
                     onChange={(e) => setRecipientCompany(e.target.value)}
                     placeholder="e.g. Acme Corp"
-                    className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor="recipient-title" className="block text-xs font-medium text-gray-600 mb-1">
+                  <label htmlFor="recipient-title" className="block text-xs font-medium text-gray-600 dark:text-slate-300 mb-1">
                     Recipient Title
                   </label>
                   <input
@@ -563,14 +563,14 @@ export default function CoverLetterPage() {
                     value={recipientTitle}
                     onChange={(e) => setRecipientTitle(e.target.value)}
                     placeholder="e.g. HR Manager, Engineering Director"
-                    className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
               </div>
 
               {/* Job Description */}
               <div>
-                <label htmlFor="job-description" className="block text-xs font-medium text-gray-600 mb-1">
+                <label htmlFor="job-description" className="block text-xs font-medium text-gray-600 dark:text-slate-300 mb-1">
                   Job Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -579,7 +579,7 @@ export default function CoverLetterPage() {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the full job description here. Our AI will use your resume data + this JD to craft a tailored cover letter..."
-                  className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-y"
+                  className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-y"
                 />
               </div>
 
@@ -617,13 +617,13 @@ export default function CoverLetterPage() {
             </section>
 
             {/* Saved Cover Letters */}
-            <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+            <section className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm p-5">
+              <h2 className="text-sm font-semibold text-gray-500 dark:text-slate-300 uppercase tracking-wide mb-4">
                 Saved Cover Letters ({savedLetters.length})
               </h2>
 
               {savedLetters.length === 0 ? (
-                <p className="text-xs text-gray-500 text-center py-6">
+                <p className="text-xs text-gray-500 dark:text-slate-300 text-center py-6">
                   No cover letters saved yet. Generate one and hit &quot;Save&quot;.
                 </p>
               ) : (
@@ -643,19 +643,19 @@ export default function CoverLetterPage() {
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-1.5 mb-1">
-                              <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
+                              <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 dark:text-slate-300">
                                 {FORMAT_TEMPLATES[letter.format]?.label ?? letter.format}
                               </span>
                               {letter.recipientCompany && (
-                                <span className="text-xs text-gray-500 truncate">
+                                <span className="text-xs text-gray-500 dark:text-slate-300 truncate">
                                   {letter.recipientCompany}
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-slate-300">
                               {formatDate(letter.createdAt)}
                             </p>
-                            <p className="text-xs text-gray-500 mt-1 truncate">
+                            <p className="text-xs text-gray-500 dark:text-slate-300 mt-1 truncate">
                               {letter.opening || "No salutation set"}
                             </p>
                           </div>
@@ -665,7 +665,7 @@ export default function CoverLetterPage() {
                               e.stopPropagation();
                               deleteLetter(letter.id);
                             }}
-                            className="shrink-0 p-1 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition-colors"
+                            className="shrink-0 p-1 rounded-lg text-gray-500 dark:text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
                             aria-label={`Delete cover letter for ${letter.recipientCompany || "unknown"}`}
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -683,10 +683,10 @@ export default function CoverLetterPage() {
 
           {/* ── Right: Editable Output Preview ──────────────────── */}
           <div className="xl:col-span-7 order-1 xl:order-2">
-            <div className="sticky top-20 bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="sticky top-20 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm overflow-hidden">
               {/* Toolbar */}
-              <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-sm font-semibold text-gray-600">
+              <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
+                <h2 className="text-sm font-semibold text-gray-600 dark:text-slate-300">
                   Letter Preview
                 </h2>
                 <button
@@ -708,10 +708,10 @@ export default function CoverLetterPage() {
                 <div className="mb-6">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                         {userName || "Your Name"}
                       </h3>
-                      <p className="text-xs text-gray-500 mt-1 space-x-2">
+                      <p className="text-xs text-gray-500 dark:text-slate-300 mt-1 space-x-2">
                         {[userEmail, userPhone, userLocation].filter(Boolean).map((item, i, arr) => (
                           <span key={i}>
                             {item}
@@ -720,7 +720,7 @@ export default function CoverLetterPage() {
                         ))}
                       </p>
                     </div>
-                    <span className="text-xs text-gray-500 whitespace-nowrap">
+                    <span className="text-xs text-gray-500 dark:text-slate-300 whitespace-nowrap">
                       {new Date().toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",
@@ -734,8 +734,8 @@ export default function CoverLetterPage() {
                 {(recipientName || recipientCompany || recipientTitle) && (
                   <div className="mb-5 text-sm text-gray-700">
                     {recipientName && <div className="font-medium">{recipientName}</div>}
-                    {recipientTitle && <div className="text-gray-500 text-xs">{recipientTitle}</div>}
-                    {recipientCompany && <div className="text-gray-500 text-xs">{recipientCompany}</div>}
+                    {recipientTitle && <div className="text-gray-500 dark:text-slate-300 text-xs">{recipientTitle}</div>}
+                    {recipientCompany && <div className="text-gray-500 dark:text-slate-300 text-xs">{recipientCompany}</div>}
                   </div>
                 )}
 
@@ -761,7 +761,7 @@ export default function CoverLetterPage() {
                         onChange={(e) => updateBody(idx, e.target.value)}
                         rows={3}
                         placeholder={`Paragraph ${idx + 1} — Write your cover letter content here...`}
-                        className="w-full text-sm text-gray-700 bg-transparent border border-transparent focus:border-brand-300 rounded-lg p-2 resize-y leading-relaxed focus:outline-none focus:bg-white transition-colors placeholder-gray-500"
+                        className="w-full text-sm text-gray-700 bg-transparent border border-transparent focus:border-brand-300 rounded-lg p-2 resize-y leading-relaxed focus:outline-none focus:bg-white dark:bg-slate-900 transition-colors placeholder-gray-500"
                       />
                       {bodyParagraphs.length > 1 && (
                         <button
@@ -810,7 +810,7 @@ export default function CoverLetterPage() {
                       value={signature}
                       onChange={(e) => setSignature(e.target.value)}
                       placeholder={userName || "Your Name"}
-                      className="w-full text-base font-bold text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500"
+                      className="w-full text-base font-bold text-gray-900 dark:text-white bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500"
                     />
                   </div>
                 </div>

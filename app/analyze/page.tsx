@@ -57,7 +57,7 @@ export default function AnalyzePage() {
               <Icon name="upload" size={22} />
             </div>
             <h2 className="text-[18px] font-bold text-slate-900 dark:text-white">Upload your resume to get started</h2>
-            <p className="text-[13.5px] text-slate-500 dark:text-slate-400 mt-1.5 mb-6">PDF, DOCX, or TXT · max 5 MB</p>
+            <p className="text-[13.5px] text-slate-500 dark:text-slate-300 mt-1.5 mb-6">PDF, DOCX, or TXT · max 5 MB</p>
             <ResumeUploader />
             <div className="mt-6 flex items-center gap-3 justify-center">
               <span className="h-px w-10 bg-slate-200" />
@@ -142,7 +142,7 @@ export default function AnalyzePage() {
               <h2 className="text-[14px] font-semibold truncate text-slate-900 dark:text-white">
                 {state.parsed.contact.name || "Resume Analysis"}
               </h2>
-              <p className="text-[12px] text-slate-500 dark:text-slate-400 truncate hidden sm:block">ATS &amp; job match tools</p>
+              <p className="text-[12px] text-slate-500 dark:text-slate-300 truncate hidden sm:block">ATS &amp; job match tools</p>
             </div>
           </div>
           <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -160,7 +160,7 @@ export default function AnalyzePage() {
               className={`flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium whitespace-nowrap rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 activeTab === tab.id
                   ? "bg-slate-900 text-white"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white border border-transparent hover:border-slate-200"
+                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:text-white hover:bg-white border border-transparent hover:border-slate-200"
               }`}>
               <Icon name={tab.icon} size={14} />
               {tab.label}
@@ -175,7 +175,7 @@ export default function AnalyzePage() {
         leftLabel="Analysis"
         rightLabel="Resume Preview"
         left={
-                  <div className={activeTab === "chat" ? "flex flex-col h-full overflow-hidden bg-white" : "p-4 sm:p-6 overflow-y-auto flex-1 bg-white"}>
+                  <div className={activeTab === "chat" ? "flex flex-col h-full overflow-hidden bg-white dark:bg-slate-900" : "p-4 sm:p-6 overflow-y-auto flex-1 bg-white dark:bg-slate-900"}>
           {/* ATS */}
           {activeTab === "ats" && (
             <div className="space-y-5">
@@ -199,7 +199,7 @@ export default function AnalyzePage() {
               )}
               {(state.atsResult || atsLoading) && <ATSScoreCard result={state.atsResult ?? { score: 0, issues: [] }} loading={atsLoading} />}
               {state.atsResult && (
-                <button type="button" onClick={runATS} className="w-full px-4 py-2.5 rounded-full border border-slate-200 bg-white text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+                <button type="button" onClick={runATS} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
                   Re-run analysis
                 </button>
               )}
@@ -216,7 +216,7 @@ export default function AnalyzePage() {
                 </div>
                 <textarea value={jdInput} onChange={(e) => setJdInput(e.target.value)}
                   placeholder="Paste the job description here…" rows={6}
-                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-[14px] placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all resize-none mb-3"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-[14px] placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all resize-none mb-3"
                   aria-label="Job description input" />
                 {!state.relevanceResult && !relevanceLoading && (
                   <button type="button" onClick={runRelevance} disabled={!jdInput.trim()}
@@ -237,7 +237,7 @@ export default function AnalyzePage() {
               )}
               {state.relevanceResult && (
                 <div className="flex gap-2">
-                  <button type="button" onClick={runRelevance} className="flex-1 px-4 py-2.5 rounded-full border border-slate-200 bg-white text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">Re-run</button>
+                  <button type="button" onClick={runRelevance} className="flex-1 px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">Re-run</button>
                   <Link href="/tailor" className="flex-1 text-center px-4 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-[13.5px] font-semibold transition-colors">Tailor resume →</Link>
                 </div>
               )}
@@ -267,7 +267,7 @@ export default function AnalyzePage() {
               )}
               {(state.suggestions.length > 0 || suggestionsLoading) && <SuggestionsList suggestions={state.suggestions} loading={suggestionsLoading} />}
               {state.suggestions.length > 0 && (
-                <button type="button" onClick={runSuggestions} className="w-full px-4 py-2.5 rounded-full border border-slate-200 bg-white text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+                <button type="button" onClick={runSuggestions} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
                   Re-run suggestions
                 </button>
               )}
@@ -297,7 +297,7 @@ export default function AnalyzePage() {
               )}
               {(state.enhancements.length > 0 || enhancementLoading) && <EnhancementList enhancements={state.enhancements} loading={enhancementLoading} />}
               {state.enhancements.length > 0 && (
-                <button type="button" onClick={runEnhancement} className="w-full px-4 py-2.5 rounded-full border border-slate-200 bg-white text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+                <button type="button" onClick={runEnhancement} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
                   Re-run enhancement
                 </button>
               )}
@@ -308,7 +308,7 @@ export default function AnalyzePage() {
           {activeTab === "theme" && (
             <div className="space-y-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"><Icon name="layers" size={16} /></div>
+                <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700"><Icon name="layers" size={16} /></div>
                 <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Theme</h2>
               </div>
               <ThemePicker />

@@ -164,7 +164,7 @@ const POSTS = [
 
 export default function BlogPage() {
   return (
-    <main className="min-h-screen bg-white text-gray-900 py-16 px-6">
+    <main className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white py-16 px-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center mb-16">
@@ -172,15 +172,15 @@ export default function BlogPage() {
             <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 uppercase">
               rawcv Blog
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-gray-900">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-white">
               Guides &amp; Resume Strategy
             </h1>
-            <p className="text-lg text-gray-500 max-w-xl mx-auto md:mx-0">
+            <p className="text-lg text-gray-500 dark:text-slate-300 max-w-xl mx-auto md:mx-0">
               Practical advice to help you craft compelling resumes, beat applicant filters, and stand out in the modern job market.
             </p>
           </div>
           <div className="md:col-span-5 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white dark:bg-slate-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/blog_illustration.jpg" 
                 alt="rawcv Blog & Resume Strategy Illustration" 
@@ -196,13 +196,13 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group block relative bg-white rounded-3xl p-5 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
+              className="group block relative bg-white dark:bg-slate-900 rounded-3xl p-5 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
             >
               {/* Card visual banner */}
               <div className={`w-full aspect-[16/10] rounded-2xl bg-gradient-to-br ${post.gradient} mb-5 flex items-center justify-center relative overflow-hidden shadow-inner`}>
                 {/* Background grid pattern or glow */}
                 <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:14px_24px]" />
-                <div className="absolute w-32 h-32 rounded-full bg-white/20 blur-2xl -top-10 -right-10" />
+                <div className="absolute w-32 h-32 rounded-full bg-white dark:bg-slate-900/20 blur-2xl -top-10 -right-10" />
                 
                 {/* Emojis that represent the category/post */}
                 <span className="text-4xl filter drop-shadow-md transform group-hover:scale-110 transition-transform duration-300">
@@ -232,11 +232,11 @@ export default function BlogPage() {
                 </span>
               </div>
 
-              <h2 className="text-lg font-bold mb-2 text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-2">
+              <h2 className="text-lg font-bold mb-2 text-gray-900 dark:text-white group-hover:text-brand-600 transition-colors line-clamp-2">
                 {post.title}
               </h2>
               
-              <p className="text-xs text-gray-500 leading-relaxed line-clamp-3 mb-4">
+              <p className="text-xs text-gray-500 dark:text-slate-300 leading-relaxed line-clamp-3 mb-4">
                 {post.description}
               </p>
 

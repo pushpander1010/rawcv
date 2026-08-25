@@ -86,7 +86,7 @@ export default function ResumePreview({ resume, theme, bare = false }: Props) {
   if (bare) return <ThemeComponent resume={safe} />;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 min-w-0">
+    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-lg overflow-hidden border border-gray-100 min-w-0">
       {/* Scrollable area */}
       <div
         ref={scrollRef}
@@ -100,7 +100,7 @@ export default function ResumePreview({ resume, theme, bare = false }: Props) {
 
       {/* Horizontal slider — mobile only, shown when content overflows */}
       {needsScroll && (
-        <div className="md:hidden flex items-center gap-2 px-3 py-2 border-t border-gray-100 bg-gray-50">
+        <div className="md:hidden flex items-center gap-2 px-3 py-2 border-t border-gray-100 bg-gray-50 dark:bg-slate-800">
           <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M15 19l-7-7 7-7" />
           </svg>

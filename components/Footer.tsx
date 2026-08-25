@@ -12,7 +12,7 @@ export default function Footer() {
               </div>
               <span className="font-bold text-[17px] text-slate-900 dark:text-white">raw<span className="text-blue-600">cv</span></span>
             </Link>
-            <p className="text-[13.5px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs">
+            <p className="text-[13.5px] text-slate-500 dark:text-slate-300 leading-relaxed max-w-xs">
               Free AI-powered resume builder with ATS scoring, job matching, and instant PDF downloads.
             </p>
           </div>
@@ -27,7 +27,7 @@ export default function Footer() {
                 { href: "/chat", label: "AI Chat" },
                 { href: "/cover-letter", label: "Cover Letter" },
               ].map((l) => (
-                <li key={l.href}><Link href={l.href} className="text-[14px] text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{l.label}</Link></li>
+                <li key={l.href}><Link href={l.href} className="text-[14px] text-slate-500 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{l.label}</Link></li>
               ))}
             </ul>
           </div>
@@ -41,7 +41,7 @@ export default function Footer() {
                 { href: "/how-to", label: "How-To Guide" },
                 { href: "/blog", label: "Blog" },
               ].map((l) => (
-                <li key={l.href}><Link href={l.href} className="text-[14px] text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{l.label}</Link></li>
+                <li key={l.href}><Link href={l.href} className="text-[14px] text-slate-500 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{l.label}</Link></li>
               ))}
             </ul>
           </div>
@@ -55,7 +55,7 @@ export default function Footer() {
                 { href: "/privacy", label: "Privacy" },
                 { href: "/terms", label: "Terms" },
               ].map((l) => (
-                <li key={l.href}><Link href={l.href} className="text-[14px] text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{l.label}</Link></li>
+                <li key={l.href}><Link href={l.href} className="text-[14px] text-slate-500 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{l.label}</Link></li>
               ))}
             </ul>
           </div>

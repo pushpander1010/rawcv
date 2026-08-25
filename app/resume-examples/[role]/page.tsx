@@ -839,10 +839,10 @@ export default function ResumeExamplePage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 pb-20">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white pb-20">
 <HowToSchema name="How to use this resume example" description="Use this resume example to build your own in four steps." steps={[{ name: "Review the example", text: "Study the sample resume format for this role." }, { name: "Copy the structure", text: "Use the same sections and formatting for your own resume." }, { name: "Add your details", text: "Replace the sample content with your own experience and achievements." }, { name: "Tailor and download", text: "Tailor it to the job and download as a PDF." }]} />
       {/* Hero Header */}
-      <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 bg-gray-50">
+      <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 bg-gray-50 dark:bg-slate-800">
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left space-y-4">
             <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 uppercase">
@@ -851,12 +851,12 @@ export default function ResumeExamplePage({ params }: Props) {
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-950 leading-tight">
               {role.title} Resume Guide &amp; Example
             </h1>
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto md:mx-0">
+            <p className="text-lg text-gray-500 dark:text-slate-300 max-w-2xl mx-auto md:mx-0">
               Use this ATS-friendly resume sample and build guide to stand out to hiring managers and pass applicant tracking systems.
             </p>
           </div>
           <div className="md:col-span-4 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white dark:bg-slate-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/resume_guide_illustration.jpg" 
                 alt={`${role.title} Guide Illustration`} 
@@ -870,10 +870,10 @@ export default function ResumeExamplePage({ params }: Props) {
       {/* Relevant to You - SEO Content Section */}
       <section className="max-w-5xl mx-auto px-6 py-12">
         <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-50/80 to-white border border-brand-100 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <span className="text-brand-600">✦</span> Relevant to you: {role.title} Career Guide for Indian Professionals
           </h2>
-          <div className="text-sm text-gray-600 leading-relaxed space-y-3">
+          <div className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed space-y-3">
             {role.seoContent.split('\n\n').map((paragraph, i) => (
               <p key={i}>{paragraph.trim()}</p>
             ))}
@@ -887,46 +887,46 @@ export default function ResumeExamplePage({ params }: Props) {
           {/* Left Column: Build Guide */}
           <div className="lg:col-span-7 space-y-8">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">How to write a {role.title} resume</h2>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to write a {role.title} resume</h2>
+              <p className="text-sm text-gray-500 dark:text-slate-300 leading-relaxed">
                 When writing a resume for a {role.title} role, you must emphasize your technical skill set, quantifiable accomplishments, and projects. Use standard formats and highlight relevant keywords from the job description.
               </p>
             </div>
 
             {/* Tip 1 */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <span className="text-brand-600">01.</span> Write a strong summary
               </h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-sm text-gray-500 dark:text-slate-300 leading-relaxed">
                 Briefly introduce your professional background, main skill sets, and how you bring value. Mention your years of experience and key domains of expertise.
               </p>
             </div>
 
             {/* Tip 2 */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <span className="text-brand-600">02.</span> Highlight key skills
               </h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-sm text-gray-500 dark:text-slate-300 leading-relaxed">
                 List the core platforms, programming languages, and methodologies you know. Group them logically so they are easy for recruiters and ATS machines to read.
               </p>
             </div>
 
             {/* Tip 3 */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <span className="text-brand-600">03.</span> Focus on achievements
               </h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-sm text-gray-500 dark:text-slate-300 leading-relaxed">
                 Instead of just listing tasks, quantify your bullets. For example, mention percentages, dollars, metrics, and size of databases or projects you worked with.
               </p>
             </div>
 
             {/* Interactive Builder Call-To-Action */}
             <div className="p-6 rounded-3xl bg-brand-50 border border-brand-100 space-y-4">
-              <h3 className="font-bold text-gray-900 text-base">Customize this resume with AI</h3>
-              <p className="text-xs text-gray-500 leading-relaxed">
+              <h3 className="font-bold text-gray-900 dark:text-white text-base">Customize this resume with AI</h3>
+              <p className="text-xs text-gray-500 dark:text-slate-300 leading-relaxed">
                 Open rawcv&apos;s free resume builder, choose your favorite layout, paste your details, and export a perfectly formatted PDF.
               </p>
               <Link
@@ -940,20 +940,20 @@ export default function ResumeExamplePage({ params }: Props) {
 
           {/* Right Column: Visual Interactive Resume Template Example */}
           <div className="lg:col-span-5">
-            <div className="bg-white rounded-3xl p-6 border border-brand-200 shadow-xl space-y-6 relative overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-brand-200 shadow-xl space-y-6 relative overflow-hidden">
               <div className="absolute top-3 right-3 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
                 Score: 98% ATS-Friendly ✅
               </div>
 
-              <div className="border-b border-gray-200 pb-4">
-                <div className="font-bold text-lg text-gray-900">JANE SMITH</div>
+              <div className="border-b border-gray-200 dark:border-slate-700 pb-4">
+                <div className="font-bold text-lg text-gray-900 dark:text-white">JANE SMITH</div>
                 <div className="text-xs text-gray-400 mt-1">jane.smith@example.com · (555) 123-4567 · San Francisco, CA</div>
               </div>
 
               {/* Summary section */}
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-brand-600 tracking-wider uppercase">Professional Summary</h4>
-                <p className="text-xs text-gray-600 leading-relaxed">{role.summary}</p>
+                <p className="text-xs text-gray-600 dark:text-slate-300 leading-relaxed">{role.summary}</p>
               </div>
 
               {/* Skills section */}
@@ -973,13 +973,13 @@ export default function ResumeExamplePage({ params }: Props) {
                 <h4 className="text-xs font-bold text-brand-600 tracking-wider uppercase">Work Experience</h4>
                 {role.experience.map((exp, index) => (
                   <div key={index} className="space-y-1">
-                    <div className="flex justify-between text-xs font-semibold text-gray-900">
+                    <div className="flex justify-between text-xs font-semibold text-gray-900 dark:text-white">
                       <span>{exp.company} — {exp.title}</span>
                       <span className="text-gray-400">{exp.dates}</span>
                     </div>
                     <ul className="list-disc pl-4 space-y-0.5">
                       {exp.bullets.map((bullet, bulletIdx) => (
-                        <li key={bulletIdx} className="text-[10px] text-gray-500 leading-relaxed">
+                        <li key={bulletIdx} className="text-[10px] text-gray-500 dark:text-slate-300 leading-relaxed">
                           {bullet}
                         </li>
                       ))}
@@ -994,7 +994,7 @@ export default function ResumeExamplePage({ params }: Props) {
 
       {/* Role Navigation */}
       <section className="max-w-4xl mx-auto px-6 pt-12 border-t border-gray-100">
-        <h3 className="text-center text-gray-500 font-semibold mb-6">Other Resume Examples</h3>
+        <h3 className="text-center text-gray-500 dark:text-slate-300 font-semibold mb-6">Other Resume Examples</h3>
         <div className="flex justify-center flex-wrap gap-4">
           {Object.keys(roleData).map((r) => {
             if (r === roleName) return null;
@@ -1002,7 +1002,7 @@ export default function ResumeExamplePage({ params }: Props) {
               <Link
                 key={r}
                 href={`/resume-examples/${r}`}
-                className="px-4 py-2 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-sm transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 text-brand-600 font-semibold shadow-sm"
+                className="px-4 py-2 rounded-xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 border border-gray-200 dark:border-slate-700 text-sm transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 text-brand-600 font-semibold shadow-sm"
               >
                 {roleData[r].title} Example
               </Link>

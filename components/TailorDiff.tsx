@@ -47,7 +47,7 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
   const isDecided = change.accepted !== false || change.accepted === false;
 
   return (
-    <li className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+    <li className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-gray-100">
         <div className="flex items-center gap-2">
@@ -78,7 +78,7 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
               <button
                 type="button"
                 onClick={() => onReject(change.id)}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
               >
                 Reject
               </button>
@@ -102,7 +102,7 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
           <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
             Original
           </p>
-          <p className="text-sm text-gray-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 leading-relaxed">
+          <p className="text-sm text-gray-600 dark:text-slate-300 bg-red-50 border border-red-100 rounded-lg px-3 py-2 leading-relaxed">
             {change.original}
           </p>
         </div>
@@ -117,7 +117,7 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
                 value={editValue}
                 onChange={(e) => setEditValue(e.target.value)}
                 rows={3}
-                className="w-full rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full rounded-lg border border-blue-300 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 aria-label="Edit tailored text"
               />
               <div className="flex gap-2">
@@ -131,7 +131,7 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
                 <button
                   type="button"
                   onClick={() => setEditing(false)}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-800 transition-colors"
                 >
                   Cancel
                 </button>
@@ -244,7 +244,7 @@ export default function TailorDiff({ changes, loading = false }: TailorDiffProps
 
   if (showLoader) {
     return (
-      <section aria-label="Tailored changes" className="rounded-2xl border border-gray-200 bg-white">
+      <section aria-label="Tailored changes" className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <AILoader type="tailor" />
       </section>
     );
@@ -253,7 +253,7 @@ export default function TailorDiff({ changes, loading = false }: TailorDiffProps
   if (changes.length === 0) {
     return (
       <section aria-label="Tailored changes">
-        <p className="text-sm text-gray-500 text-center py-6">
+        <p className="text-sm text-gray-500 dark:text-slate-300 text-center py-6">
           No tailored changes available. Run tailoring to generate suggestions.
         </p>
       </section>

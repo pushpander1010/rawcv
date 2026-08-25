@@ -34,14 +34,14 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-3 py-2 text-[14px] font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                className="px-3 py-2 text-[14px] font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-800 transition-colors"
               >
                 {item.label}
               </Link>
             ))}
             <span className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-2" />
-            <Link href="/about" className="px-3 py-2 text-[14px] font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">About</Link>
-            <Link href="/contact" className="px-3 py-2 text-[14px] font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Contact</Link>
+            <Link href="/about" className="px-3 py-2 text-[14px] font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-800 transition-colors">About</Link>
+            <Link href="/contact" className="px-3 py-2 text-[14px] font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-800 transition-colors">Contact</Link>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
@@ -70,13 +70,13 @@ export default function Navbar() {
           <div className="lg:hidden pb-5 border-t border-slate-100 dark:border-slate-800 pt-3 space-y-1">
             {NAV_ITEMS.map((item) => (
               <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
-                className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-800 transition-colors">
                 {item.label}
               </Link>
             ))}
             <div className="border-t border-slate-100 dark:border-slate-800 my-2 pt-2 space-y-1">
-              <Link href="/about" onClick={() => setOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">About</Link>
-              <Link href="/contact" onClick={() => setOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">Contact</Link>
+              <Link href="/about" onClick={() => setOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-800">About</Link>
+              <Link href="/contact" onClick={() => setOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-800">Contact</Link>
             </div>
             <div className="px-3 pt-2 flex items-center gap-2">
               <Link href="/analyze" onClick={() => setOpen(false)} className="flex-1 text-center px-4 py-3 rounded-full bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors">

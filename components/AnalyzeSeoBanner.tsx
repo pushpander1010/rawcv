@@ -5,7 +5,7 @@ export default function AnalyzeSeoBanner() {
         <h1 className="text-[24px] sm:text-[28px] font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
           AI Resume Analyzer &amp; ATS Checker
         </h1>
-        <p className="mt-2 text-[14.5px] text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
+        <p className="mt-2 text-[14.5px] text-slate-500 dark:text-slate-300 max-w-2xl leading-relaxed">
           Get an instant ATS score, match your resume to any job description, and apply
           AI-powered improvements — free, no signup.
         </p>

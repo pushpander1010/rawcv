@@ -387,7 +387,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       )}
 
       {/* Input area */}
-      <div className="border-t border-gray-200 px-4 py-3 flex flex-col gap-2">
+      <div className="border-t border-gray-200 dark:border-slate-700 px-4 py-3 flex flex-col gap-2">
         <div className="flex gap-2 items-end">
           <textarea
             ref={inputRef}
@@ -402,7 +402,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             rows={2}
             disabled={loading || isComplete}
             aria-label="Chat message input"
-            className="flex-1 resize-none rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 disabled:opacity-50"
+            className="flex-1 resize-none rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 disabled:opacity-50"
           />
           <button
             type="button"
@@ -428,7 +428,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
                 disabled={loading}
                 aria-label="Clear chat history"
                 title="Clear chat history (resume data is kept)"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-500 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-40"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-xs text-gray-500 dark:text-slate-300 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-40"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -441,7 +441,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             <button
               type="button"
               onClick={onEnd}
-              className="ml-auto px-4 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-500 hover:bg-gray-50 hover:text-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="ml-auto px-4 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-xs text-gray-500 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-800 hover:text-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
             >
               End Chat
             </button>

@@ -68,7 +68,7 @@ export default function RelevanceScoreCard({ result, loading = false }: Relevanc
 
   if (showLoader) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <AILoader type="relevance" />
       </div>
     );
@@ -86,23 +86,23 @@ export default function RelevanceScoreCard({ result, loading = false }: Relevanc
   return (
     <section
       aria-label="JD Relevance Score"
-      className="rounded-2xl border border-slate-200 bg-white p-6"
+      className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6"
     >
-      <h2 className="text-[15px] font-semibold text-slate-900 mb-4">
+      <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-4">
         JD Relevance Score
       </h2>
 
       {/* Gauge */}
       <div className="flex flex-col items-center gap-1.5 mb-6">
         <CircularGauge score={score} />
-        <p className="text-[13.5px] font-medium text-slate-600">{label}</p>
+        <p className="text-[13.5px] font-medium text-slate-600 dark:text-slate-300">{label}</p>
         <p className="text-xs text-slate-400">out of 100</p>
       </div>
 
       {/* Missing keywords */}
       {missingKeywords.length > 0 && (
         <div className="mb-4">
-          <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-2">
+          <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-widest mb-2">
             Missing Keywords
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -116,7 +116,7 @@ export default function RelevanceScoreCard({ result, loading = false }: Relevanc
       {/* Missing skills */}
       {missingSkills.length > 0 && (
         <div className="mb-4">
-          <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-2">
+          <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-widest mb-2">
             Missing Skills
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -130,7 +130,7 @@ export default function RelevanceScoreCard({ result, loading = false }: Relevanc
       {/* Recommendations */}
       {showRecommendations && (
         <div>
-          <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-2">
+          <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-widest mb-2">
             Recommendations
           </p>
           <ol className="space-y-2" aria-label="Improvement recommendations">
@@ -148,7 +148,7 @@ export default function RelevanceScoreCard({ result, loading = false }: Relevanc
       )}
 
       {!showRecommendations && score >= 70 && (
-        <p className="text-[13.5px] text-center text-slate-500">
+        <p className="text-[13.5px] text-center text-slate-500 dark:text-slate-300">
           Your resume is a solid match for this role.
         </p>
       )}

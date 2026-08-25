@@ -38,12 +38,12 @@ function SuggestionCard({ suggestion, applied, onApply }: SuggestionCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <li className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+    <li className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
       {/* Header row */}
       <div className="flex items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-2 min-w-0">
           <SectionBadge section={suggestion.section} />
-          <p className="text-sm text-gray-600 truncate">
+          <p className="text-sm text-gray-600 dark:text-slate-300 truncate">
             {suggestion.reason}
           </p>
         </div>
@@ -69,7 +69,7 @@ function SuggestionCard({ suggestion, applied, onApply }: SuggestionCardProps) {
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
             aria-label="Toggle suggestion details"
-            className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:text-slate-300 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <svg
               className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`}
@@ -88,7 +88,7 @@ function SuggestionCard({ suggestion, applied, onApply }: SuggestionCardProps) {
             <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
               Original
             </p>
-            <p className="text-sm text-gray-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 leading-relaxed">
+            <p className="text-sm text-gray-600 dark:text-slate-300 bg-red-50 border border-red-100 rounded-lg px-3 py-2 leading-relaxed">
               {suggestion.original}
             </p>
           </div>
@@ -170,7 +170,7 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
 
   if (showLoader) {
     return (
-      <section aria-label="AI Suggestions" className="rounded-2xl border border-gray-200 bg-white">
+      <section aria-label="AI Suggestions" className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <AILoader type="suggestions" />
       </section>
     );
@@ -179,7 +179,7 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
   if (suggestions.length === 0) {
     return (
       <section aria-label="AI Suggestions">
-        <p className="text-sm text-gray-500 text-center py-6">
+        <p className="text-sm text-gray-500 dark:text-slate-300 text-center py-6">
           No suggestions available. Run the analysis to generate improvements.
         </p>
       </section>

@@ -39,7 +39,7 @@ function ImpactBadge({ impact }: { impact: ATSIssue["impact"] }) {
 function IssueRow({ issue }: { issue: ATSIssue }) {
   const [expanded, setExpanded] = useState(false);
   return (
-    <li className="rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
+    <li className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 overflow-hidden">
       <button type="button" onClick={() => setExpanded((v) => !v)} className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-expanded={expanded}>
         <span className="text-[13.5px] font-medium text-slate-800 truncate">{issue.type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</span>
         <span className="flex items-center gap-2 shrink-0">
@@ -47,7 +47,7 @@ function IssueRow({ issue }: { issue: ATSIssue }) {
           <svg className={`h-4 w-4 text-slate-400 transition-transform ${expanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
         </span>
       </button>
-      {expanded && <div className="px-4 pb-3 text-[13.5px] text-slate-600 border-t border-slate-200 pt-2.5 leading-relaxed">{issue.description}</div>}
+      {expanded && <div className="px-4 pb-3 text-[13.5px] text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-slate-700 pt-2.5 leading-relaxed">{issue.description}</div>}
     </li>
   );
 }
@@ -64,7 +64,7 @@ export default function ATSScoreCard({ result, loading = false }: ATSScoreCardPr
 
   if (showLoader) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <AILoader type="ats" />
       </div>
     );
@@ -76,7 +76,7 @@ export default function ATSScoreCard({ result, loading = false }: ATSScoreCardPr
   const color = score >= 80 ? "text-emerald-600" : score >= 60 ? "text-amber-600" : "text-red-600";
 
   return (
-    <section aria-label="ATS Score" className="rounded-2xl border border-slate-200 bg-white p-6">
+    <section aria-label="ATS Score" className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
       <div className="flex flex-col items-center gap-1.5 mb-6">
         <CircularGauge score={score} />
         <p className={`text-[13.5px] font-semibold ${color}`}>{label}</p>
@@ -84,7 +84,7 @@ export default function ATSScoreCard({ result, loading = false }: ATSScoreCardPr
       </div>
       {showIssues && (
         <div>
-          <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-3">
+          <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-widest mb-3">
             Issues to fix ({issues.length})
           </p>
           <ul className="space-y-2" aria-label="ATS issues">

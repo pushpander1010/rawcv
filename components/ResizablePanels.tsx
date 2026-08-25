@@ -62,7 +62,7 @@ export default function ResizablePanels({
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
       {/* Mobile tab switcher — always visible, never scrolls */}
-      <div className="flex md:hidden flex-shrink-0 border-b border-gray-200 bg-white z-10">
+      <div className="flex md:hidden flex-shrink-0 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 z-10">
         <button
           type="button"
           onClick={() => setMobileTab("left")}
@@ -89,7 +89,7 @@ export default function ResizablePanels({
 
       {/* Mobile: single panel — scrolls independently below the fixed tab bar */}
       <div className="flex md:hidden flex-1 min-h-0 overflow-hidden">
-        <div className={`flex-1 overflow-hidden bg-white ${mobileTab === "left" ? "flex flex-col" : "hidden"}`}>
+        <div className={`flex-1 overflow-hidden bg-white dark:bg-slate-900 ${mobileTab === "left" ? "flex flex-col" : "hidden"}`}>
           {left}
         </div>
         <div className={`flex-1 overflow-y-auto overflow-x-auto bg-gray-100 ${mobileTab === "right" ? "block" : "hidden"}`}>
@@ -99,7 +99,7 @@ export default function ResizablePanels({
 
       {/* Desktop: resizable side-by-side */}
       <div ref={containerRef} className="hidden md:flex flex-1 min-h-0 overflow-hidden">
-        <div style={{ width: leftWidth, flexShrink: 0 }} className="flex flex-col h-full overflow-hidden border-r border-gray-200 bg-white">
+        <div style={{ width: leftWidth, flexShrink: 0 }} className="flex flex-col h-full overflow-hidden border-r border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
           {left}
         </div>
 
@@ -111,7 +111,7 @@ export default function ResizablePanels({
         >
           <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
             {[0,1,2,3,4].map(i => (
-              <div key={i} className="w-1 h-1 rounded-full bg-white" />
+              <div key={i} className="w-1 h-1 rounded-full bg-white dark:bg-slate-900" />
             ))}
           </div>
         </div>
