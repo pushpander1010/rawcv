@@ -128,40 +128,22 @@ export default function TailorPage() {
         </div>
 
         {/* Main content: diff + preview side by side */}
-        {(changes.length > 0 || loading) && (
-          <div className="flex flex-col xl:flex-row gap-8">
-            {/* Changes list */}
+        <div className="flex flex-col xl:flex-row gap-8">
+          {/* Changes list — only after tailoring */}
+          {(changes.length > 0 || loading) && (
             <div className="xl:w-[480px] flex-shrink-0">
               <TailorDiff changes={changes} loading={loading} />
             </div>
+          )}
 
-            {/* Live resume preview */}
-            <div className="flex-1 min-w-0 overflow-auto">
-              <h2 className="text-sm font-semibold text-gray-500 dark:text-slate-300 uppercase tracking-wide mb-3">
-                Live Preview
-              </h2>
-              <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
-            </div>
+          {/* Live resume preview — always shown once a resume is loaded */}
+          <div className="flex-1 min-w-0 overflow-auto">
+            <h2 className="text-sm font-semibold text-gray-500 dark:text-slate-300 uppercase tracking-wide mb-3">
+              Live Preview
+            </h2>
+            <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
           </div>
-        )}
-
-        {/* Visual placeholder for initial state */}
-        {changes.length === 0 && !loading && (
-          <div className="mt-8 rounded-2xl border border-dashed border-gray-200 dark:border-slate-700/60 bg-white dark:bg-slate-900/30 backdrop-blur-sm p-12 text-center max-w-4xl mx-auto">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-brand-50 dark:bg-brand-950/30 flex items-center justify-center">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-blue-500">
-                <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
-              Paste a job description above
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-slate-300 max-w-md mx-auto">
-              Our AI will align your experience with the job requirements, showing exactly what to add, change, or remove.
-            </p>
-          </div>
-        )}
+        </div>
       </div>
     </main>
   );
