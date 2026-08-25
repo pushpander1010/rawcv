@@ -127,22 +127,22 @@ export default function ChatPage() {
   );
 
   return (
-    <main ref={chatWindowRef} className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-slate-800 scroll-mt-16" style={{ height: "100dvh" }}>
+    <main ref={chatWindowRef} className="h-screen flex flex-col overflow-hidden bg-slate-50 dark:bg-slate-950 scroll-mt-16" style={{ height: "100dvh" }}>
       {/* Header */}
-      <header className="bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 px-6 py-3 flex items-center justify-between gap-4 flex-shrink-0">
+      <header className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 px-6 py-3 flex items-center justify-between gap-4 flex-shrink-0">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => router.back()}
             aria-label="Go back"
-            className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 dark:bg-slate-800 transition-all"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-800 transition-all"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
           <div>
-            <h1 className="text-base font-bold text-gray-900 dark:text-white">
+            <h1 className="text-base font-bold text-slate-900 dark:text-white">
               {mode === "build" ? "Build Resume" : "Customize Resume"}
             </h1>
           </div>
@@ -177,15 +177,15 @@ export default function ChatPage() {
         }
         right={
           <div className="flex flex-col h-full">
-            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
-              <h2 className="text-sm font-medium text-gray-600 dark:text-slate-300">Live Preview</h2>
+            <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
+              <h2 className="text-sm font-medium text-slate-600 dark:text-slate-300">Live Preview</h2>
               <button type="button" onClick={() => setShowThemePicker((v) => !v)}
                 className="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-300 transition-colors focus:outline-none">
                 {showThemePicker ? "Hide themes" : "Change theme"}
               </button>
             </div>
             {showThemePicker && (
-              <div className="px-4 py-3 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
+              <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
                 <ThemePicker />
               </div>
             )}
@@ -193,7 +193,7 @@ export default function ChatPage() {
               {state.parsed ? (
                 <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 dark:text-slate-300 gap-3">
+                <div className="flex flex-col items-center justify-center h-full text-center text-slate-500 dark:text-slate-300 gap-3">
                   <svg className="w-12 h-12 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>

@@ -19,7 +19,7 @@ export default function TailorPage() {
   if (!state.parsed) {
     return (
       <main className="min-h-[80vh] flex items-center justify-center px-6 py-16">
-        <div className="relative max-w-2xl w-full bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-gray-200 dark:border-slate-700/60 p-12 text-center overflow-hidden">
+        <div className="relative max-w-2xl w-full bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-700/60 p-12 text-center overflow-hidden">
           
           <div className="relative">
             <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-brand-50 dark:bg-brand-950/30 flex items-center justify-center">
@@ -29,10 +29,10 @@ export default function TailorPage() {
               </svg>
             </div>
             
-            <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">
               Upload resume to tailor it
             </h1>
-            <p className="text-sm text-gray-500 dark:text-slate-300 mb-8">
+            <p className="text-sm text-slate-500 dark:text-slate-300 mb-8">
               Match your resume to any job description with AI
             </p>
             
@@ -71,7 +71,7 @@ export default function TailorPage() {
   const changes = state.tailoredResume?.changes ?? [];
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-slate-800">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -83,7 +83,7 @@ export default function TailorPage() {
               </svg>
             </div>
             <div>
-              <h1 className="text-lg font-bold text-gray-900 dark:text-white">Tailor to Job</h1>
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white">Tailor to Job</h1>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -95,8 +95,8 @@ export default function TailorPage() {
 
         {/* JD input */}
         <div className="mb-8 max-w-2xl">
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-            <label htmlFor="jd-input" className="block text-sm font-medium text-gray-700 dark:text-slate-200 mb-3">
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+            <label htmlFor="jd-input" className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-3">
               Paste Job Description
             </label>
             <textarea
@@ -105,7 +105,7 @@ export default function TailorPage() {
               onChange={(e) => setJdInput(e.target.value)}
               placeholder="Paste the job description here and we'll tailor your resume to match…"
               rows={5}
-              className="w-full rounded-xl border border-gray-200 dark:border-slate-700/60 bg-white dark:bg-slate-900/50 px-4 py-3 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400 resize-none transition-all"
+              className="w-full rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-900/50 px-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400 resize-none transition-all"
               aria-label="Job description input"
             />
             <button
@@ -138,7 +138,7 @@ export default function TailorPage() {
 
           {/* Live resume preview — always shown once a resume is loaded */}
           <div className="flex-1 min-w-0 overflow-auto">
-            <h2 className="text-sm font-semibold text-gray-500 dark:text-slate-300 uppercase tracking-wide mb-3">
+            <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wide mb-3">
               Live Preview
             </h2>
             <ResumePreview resume={state.parsed} theme={state.selectedTheme} />

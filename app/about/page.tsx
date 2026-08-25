@@ -88,7 +88,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white">
       <Script
         id="about-jsonld"
         type="application/ld+json"
@@ -100,14 +100,14 @@ export default function AboutPage() {
       </div>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50 dark:from-slate-900 to-white dark:to-slate-900 border-b border-gray-100 dark:border-slate-800 px-6 py-16">
+      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50 dark:from-slate-900 to-white dark:to-slate-900 border-b border-slate-100 dark:border-slate-800 px-6 py-16">
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left">
             <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 dark:text-brand-300 uppercase">
               Our Vision
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-white">About rawcv</h1>
-            <p className="text-gray-500 dark:text-slate-300 max-w-xl mx-auto md:mx-0 text-lg leading-relaxed">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white">About rawcv</h1>
+            <p className="text-slate-500 dark:text-slate-300 max-w-xl mx-auto md:mx-0 text-lg leading-relaxed">
               A free AI-powered resume platform built to help every job seeker compete on equal footing — regardless of budget or background.
             </p>
             <div className="mt-8 flex flex-wrap gap-3 justify-center md:justify-start">
@@ -119,7 +119,7 @@ export default function AboutPage() {
               </Link>
               <Link
                 href="/how-to"
-                className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-200 dark:border-slate-700 text-sm font-semibold text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="inline-flex items-center px-6 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 dark:bg-slate-800 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 Read the guide
               </Link>
@@ -142,13 +142,13 @@ export default function AboutPage() {
         {/* Mission */}
         <section aria-labelledby="mission-heading">
           <h2 id="mission-heading" className="text-2xl font-bold mb-4">Our mission</h2>
-          <p className="text-gray-600 dark:text-slate-300 leading-relaxed mb-4">
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
             Most resume advice is generic. Most resume tools are expensive. And most job seekers have no idea why their applications aren&apos;t getting responses.
           </p>
-          <p className="text-gray-600 dark:text-slate-300 leading-relaxed mb-4">
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
             rawcv was built to change that. We give every job seeker access to the same AI-powered analysis that was previously only available through expensive career coaches or enterprise HR software. Upload your resume, get a real ATS score, see exactly what&apos;s missing, and fix it — in minutes, not days.
           </p>
-          <p className="text-gray-600 dark:text-slate-300 leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
             We believe a well-crafted resume shouldn&apos;t require a subscription or a career coach. It should be accessible to anyone with an internet connection and 20 minutes to spare.
           </p>
         </section>
@@ -160,11 +160,11 @@ export default function AboutPage() {
             {FEATURES.map((f) => (
               <div
                 key={f.title}
-                className="rounded-xl border border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800 p-5"
+                className="rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 p-5"
               >
                 <div className="text-2xl mb-3" aria-hidden="true">{f.icon}</div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">{f.title}</h3>
-                <p className="text-xs text-gray-500 dark:text-slate-300 leading-relaxed">{f.desc}</p>
+                <h3 className="font-semibold text-slate-900 dark:text-white mb-2 text-sm">{f.title}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -173,13 +173,13 @@ export default function AboutPage() {
         {/* How it works */}
         <section aria-labelledby="how-heading">
           <h2 id="how-heading" className="text-2xl font-bold mb-6">How it works</h2>
-          <p className="text-gray-600 dark:text-slate-300 leading-relaxed mb-6">
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
             rawcv is a web application — no download or installation required. It runs entirely in your browser and connects to AI models via a secure server-side proxy. Your resume content is never stored permanently; it lives in your browser session only.
           </p>
-          <p className="text-gray-600 dark:text-slate-300 leading-relaxed mb-6">
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
             Under the hood, rawcv uses large language models (LLMs) accessed via OpenRouter to power its analysis, suggestion, and enhancement features. The ATS scoring combines rule-based checks with AI analysis to give you a comprehensive, actionable score.
           </p>
-          <p className="text-gray-600 dark:text-slate-300 leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
             PDF generation happens server-side using mupdf, producing clean, ATS-safe documents that render correctly in every applicant tracking system.
           </p>
         </section>
@@ -189,9 +189,9 @@ export default function AboutPage() {
           <h2 id="values-heading" className="text-2xl font-bold mb-8">Our values</h2>
           <dl className="grid sm:grid-cols-2 gap-5">
             {VALUES.map((v) => (
-              <div key={v.title} className="rounded-xl border border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800 p-5">
-                <dt className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">{v.title}</dt>
-                <dd className="text-xs text-gray-500 dark:text-slate-300 leading-relaxed">{v.desc}</dd>
+              <div key={v.title} className="rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 p-5">
+                <dt className="font-semibold text-slate-900 dark:text-white mb-2 text-sm">{v.title}</dt>
+                <dd className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed">{v.desc}</dd>
               </div>
             ))}
           </dl>
@@ -200,7 +200,7 @@ export default function AboutPage() {
         {/* Contact */}
         <section aria-labelledby="contact-heading">
           <h2 id="contact-heading" className="text-2xl font-bold mb-4">Contact</h2>
-          <p className="text-gray-600 dark:text-slate-300 leading-relaxed mb-2">
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-2">
             Have a question, found a bug, or want to give feedback? We&apos;d love to hear from you.
           </p>
           <ul className="text-sm space-y-1">
@@ -220,7 +220,7 @@ export default function AboutPage() {
         </section>
 
         {/* Footer links */}
-        <div className="pt-6 border-t border-gray-100 dark:border-slate-800 text-sm text-gray-600 dark:text-slate-300 flex flex-wrap gap-4">
+        <div className="pt-6 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-600 dark:text-slate-300 flex flex-wrap gap-4">
           <Link href="/" className="text-brand-600 hover:underline">Home</Link>
           <Link href="/how-to" className="text-brand-600 hover:underline">How-to guide</Link>
           <Link href="/privacy" className="text-brand-600 hover:underline">Privacy Policy</Link>

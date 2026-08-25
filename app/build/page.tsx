@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function BuildPage() {
   return (
-    <main id="main" className="min-h-screen bg-white dark:bg-slate-950">
+    <main id="main" className="min-h-screen bg-slate-50 dark:bg-slate-950">
 <HowToSchema name="How to build a resume" description="Create a professional resume in four steps." steps={[{ name: "Choose a theme", text: "Pick from 9 professional ATS-friendly visual themes." }, { name: "Enter your details", text: "Fill in your contact info, experience, skills, and education." }, { name: "Preview live", text: "See your resume update in real time as you type." }, { name: "Download", text: "Download your resume as a polished PDF, free and without a watermark." }]} />
       {/* Header — editorial, no gradient */}
       <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12 sm:py-14 px-4 sm:px-6 lg:px-8">

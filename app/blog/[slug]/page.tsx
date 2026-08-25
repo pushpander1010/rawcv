@@ -1177,7 +1177,7 @@ export default async function ArticlePage({ params }: PageProps) {
   };
 
   return (
-    <main className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white py-16 px-6">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white py-16 px-6">
       <Script id="article-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <article className="max-w-2xl mx-auto">
         {/* Navigation back */}
@@ -1194,7 +1194,7 @@ export default async function ArticlePage({ params }: PageProps) {
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300">
               {article.category}
             </span>
-            <span className="text-xs text-gray-400 dark:text-slate-500">
+            <span className="text-xs text-slate-400 dark:text-slate-500">
               {article.date} · {article.readTime}
             </span>
           </div>
@@ -1202,7 +1202,7 @@ export default async function ArticlePage({ params }: PageProps) {
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 leading-tight">
             {article.title}
           </h1>
-          <p className="text-lg text-gray-500 dark:text-slate-300 leading-relaxed mb-8">
+          <p className="text-lg text-slate-500 dark:text-slate-300 leading-relaxed mb-8">
             {article.description}
           </p>
 
@@ -1218,16 +1218,16 @@ export default async function ArticlePage({ params }: PageProps) {
         </header>
 
         {/* Article Body */}
-        <div className="font-serif prose prose-gray max-w-none text-base leading-relaxed space-y-6 text-gray-755">
+        <div className="font-serif prose prose-gray max-w-none text-base leading-relaxed space-y-6 text-slate-755">
           {article.content}
         </div>
 
         {/* Call to action footer */}
         <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-brand-50 dark:from-slate-900 to-brand-50 border border-brand-100 dark:border-brand-800 text-center">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
             Put these tips into action
           </h3>
-          <p className="text-sm text-gray-500 dark:text-slate-300 mb-6 max-w-md mx-auto">
+          <p className="text-sm text-slate-500 dark:text-slate-300 mb-6 max-w-md mx-auto">
             Use rawcv to build a clean, single-column resume, check its ATS score, and match it against any job description for free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -1239,7 +1239,7 @@ export default async function ArticlePage({ params }: PageProps) {
             </Link>
             <Link
               href="/"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 dark:border-slate-700 text-sm font-semibold text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 dark:bg-slate-800 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
             >
               Upload &amp; Analyze
             </Link>

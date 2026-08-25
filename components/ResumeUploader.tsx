@@ -129,7 +129,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
         relative flex flex-col items-center justify-center gap-4
         border-2 border-dashed rounded-3xl p-12 cursor-pointer
         transition-all duration-200 select-none
-        ${dragging ? "border-brand-500 bg-brand-50 dark:bg-brand-950/30 shadow-inner" : "border-gray-300 dark:border-slate-700 hover:border-brand-500 hover:bg-brand-50/30"}
+        ${dragging ? "border-brand-500 bg-brand-50 dark:bg-brand-950/30 shadow-inner" : "border-slate-300 dark:border-slate-700 hover:border-brand-500 hover:bg-brand-50/30"}
         ${loading ? "pointer-events-none opacity-60" : ""}
       `}
     >
@@ -154,7 +154,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
-          <p className="text-sm text-gray-500 dark:text-slate-300">Parsing your resume…</p>
+          <p className="text-sm text-slate-500 dark:text-slate-300">Parsing your resume…</p>
         </>
       ) : (
         <>
@@ -176,14 +176,14 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
             </svg>
           </div>
           <div className="text-center">
-            <p className="text-base font-semibold text-gray-800 dark:text-slate-100">
+            <p className="text-base font-semibold text-slate-800 dark:text-slate-100">
               Drag &amp; drop your resume here
             </p>
-            <p className="text-sm text-gray-500 dark:text-slate-300 mt-1.5">
+            <p className="text-sm text-slate-500 dark:text-slate-300 mt-1.5">
               or <span className="text-brand-600 font-medium hover:underline">browse files</span>
             </p>
           </div>
-          <p className="text-xs text-gray-500 dark:text-slate-300 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">
             PDF, DOCX, or TXT · max 5 MB
           </p>
         </>
@@ -192,12 +192,12 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
 
     {pendingFile && (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 p-6 max-w-sm w-full">
-          <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-6 max-w-sm w-full">
+          <h2 className="text-base font-semibold text-slate-900 dark:text-white mb-2">
             Replace current resume?
           </h2>
-          <p className="text-sm text-gray-500 dark:text-slate-300 mb-5">
-            You have a resume loaded with edits. Uploading <span className="font-medium text-gray-700 dark:text-slate-200">{pendingFile.name}</span> will replace it. Your current version will be saved to undo history.
+          <p className="text-sm text-slate-500 dark:text-slate-300 mb-5">
+            You have a resume loaded with edits. Uploading <span className="font-medium text-slate-700 dark:text-slate-200">{pendingFile.name}</span> will replace it. Your current version will be saved to undo history.
           </p>
           <div className="flex gap-3">
             <button
@@ -210,7 +210,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
             <button
               type="button"
               onClick={() => setPendingFile(null)}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-sm text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400"
             >
               Cancel
             </button>

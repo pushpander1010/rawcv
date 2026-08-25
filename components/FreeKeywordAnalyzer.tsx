@@ -144,7 +144,7 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
 
           {/* Top Keywords */}
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-2 text-sm">
               Top Keywords
             </h3>
             <div className="flex flex-wrap gap-2">

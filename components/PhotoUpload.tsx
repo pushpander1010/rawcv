@@ -297,8 +297,8 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             </button>
           </div>
           <div>
-            <p className="text-sm font-semibold text-gray-700 dark:text-slate-200">Profile photo</p>
-            <p className="text-xs text-gray-500 dark:text-slate-300 mt-0.5">
+            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Profile photo</p>
+            <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
               This photo will be used in resume themes that support photos.
             </p>
             <button
@@ -322,7 +322,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
           className={`relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-200
             ${isDragging
               ? "border-brand-500 bg-brand-50 dark:bg-brand-950/30"
-              : "border-gray-250 hover:border-brand-400 hover:bg-brand-50 dark:bg-brand-950/30/50"
+              : "border-slate-250 hover:border-brand-400 hover:bg-brand-50 dark:bg-brand-950/30/50"
             }`}
         >
           <div className="flex flex-col items-center gap-3">
@@ -330,10 +330,10 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
               📷
             </div>
             <div>
-              <p className="text-sm font-bold text-gray-700 dark:text-slate-200">
+              <p className="text-sm font-bold text-slate-700 dark:text-slate-200">
                 Upload your photo
               </p>
-              <p className="text-xs text-gray-500 dark:text-slate-300 mt-1">
+              <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">
                 Drag & drop or click to browse. JPG/PNG, max 5 MB.
               </p>
               <p className="text-xs text-brand-500 font-semibold mt-2">
@@ -362,9 +362,9 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             {/* Header */}
-            <div className="p-5 border-b border-gray-100 dark:border-slate-800">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Edit Photo</h3>
-              <p className="text-xs text-gray-500 dark:text-slate-300 mt-1">
+            <div className="p-5 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Edit Photo</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">
                 Drag the crop box to move it. Drag corners/edges to resize.
               </p>
             </div>
@@ -372,7 +372,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             {/* Image preview with crop overlay — percentage-based, no CSS zoom */}
             <div className="p-5">
               <div
-                className="relative rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-800 select-none"
+                className="relative rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 select-none"
                 style={{ maxHeight: "50vh" }}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
@@ -468,11 +468,11 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             </div>
 
             {/* Action buttons */}
-            <div className="p-5 border-t border-gray-100 dark:border-slate-800 flex gap-3">
+            <div className="p-5 border-t border-slate-100 dark:border-slate-800 flex gap-3">
               <button
                 type="button"
                 onClick={cancelCrop}
-                className="flex-1 py-2.5 rounded-xl text-sm font-bold border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors"
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors"
               >
                 Cancel
               </button>
@@ -509,7 +509,7 @@ function Slider({ label, value, min, max, step, displayValue, onChange }: {
 }) {
   return (
     <div>
-      <div className="flex justify-between text-xs font-semibold text-gray-500 dark:text-slate-300 mb-1">
+      <div className="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-300 mb-1">
         <span>{label}</span>
         <span>{displayValue}</span>
       </div>
@@ -520,7 +520,7 @@ function Slider({ label, value, min, max, step, displayValue, onChange }: {
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-1.5 rounded-full appearance-none bg-gray-200 dark:bg-slate-700 accent-brand-600 cursor-pointer"
+        className="w-full h-1.5 rounded-full appearance-none bg-slate-200 dark:bg-slate-700 accent-brand-600 cursor-pointer"
       />
     </div>
   );

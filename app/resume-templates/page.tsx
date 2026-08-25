@@ -74,7 +74,7 @@ const themes: ThemeInfo[] = [
       "Compact experience lines",
       "Subtle thin separator lines",
     ],
-    previewColors: "from-gray-400 to-gray-300",
+    previewColors: "from-slate-400 to-slate-300",
     previewClass: "bg-gradient-to-br",
     bestFor: "Design, UX, Writing, Research",
   },
@@ -180,7 +180,7 @@ const themes: ThemeInfo[] = [
 
 function TemplateCard({ theme }: { theme: ThemeInfo }) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+    <div className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       {/* Preview area */}
       <Link
         href={`/build?theme=${theme.id}`}
@@ -194,23 +194,23 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
         <div className="absolute inset-x-4 top-4 bottom-4 rounded-lg bg-white dark:bg-slate-900/90 p-3 shadow-inner flex flex-col gap-1.5 text-[10px]">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-4 h-4 rounded-full bg-black/10" />
-            <div className="h-2 w-16 rounded bg-gray-300" />
+            <div className="h-2 w-16 rounded bg-slate-300" />
           </div>
-          <div className="h-1.5 w-3/4 rounded bg-gray-200 dark:bg-slate-700" />
-          <div className="h-1.5 w-1/2 rounded bg-gray-200 dark:bg-slate-700" />
-          <div className="mt-1 border-t border-gray-200 dark:border-slate-700 pt-1 space-y-1">
+          <div className="h-1.5 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
+          <div className="h-1.5 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
+          <div className="mt-1 border-t border-slate-200 dark:border-slate-700 pt-1 space-y-1">
             <div className="flex gap-2">
-              <div className="w-6 h-1 rounded bg-gray-300" />
+              <div className="w-6 h-1 rounded bg-slate-300" />
               <div className="flex-1 space-y-0.5">
-                <div className="h-1 rounded bg-gray-200 dark:bg-slate-700" />
-                <div className="h-1 rounded bg-gray-200 dark:bg-slate-700" />
+                <div className="h-1 rounded bg-slate-200 dark:bg-slate-700" />
+                <div className="h-1 rounded bg-slate-200 dark:bg-slate-700" />
               </div>
             </div>
-            <div className="h-1 w-2/3 rounded bg-gray-200 dark:bg-slate-700" />
+            <div className="h-1 w-2/3 rounded bg-slate-200 dark:bg-slate-700" />
           </div>
         </div>
         {/* Theme name badge */}
-        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900/90 backdrop-blur-sm text-xs font-bold text-gray-900 dark:text-white shadow-sm">
+        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900/90 backdrop-blur-sm text-xs font-bold text-slate-900 dark:text-white shadow-sm">
           {theme.name}
         </div>
       </Link>
@@ -219,7 +219,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
       <div className="p-5">
         <div className="flex items-start justify-between mb-2">
           <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               {theme.name}
             </h3>
             <p className="text-xs text-brand-600 font-semibold uppercase tracking-wide">
@@ -231,7 +231,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
           </span>
         </div>
 
-        <p className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed mb-3 line-clamp-2">
+        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3 line-clamp-2">
           {theme.description}
         </p>
 
@@ -240,7 +240,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
           {theme.features.map((f) => (
             <li
               key={f}
-              className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-slate-300"
+              className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-300"
             >
               <span className="w-1 h-1 rounded-full bg-brand-50 dark:bg-brand-950/300 flex-shrink-0" />
               {f}
@@ -248,9 +248,9 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
           ))}
         </ul>
 
-        <p className="text-[10px] text-gray-600 dark:text-slate-300 mb-3">
+        <p className="text-[10px] text-slate-600 dark:text-slate-300 mb-3">
           Best for:{" "}
-          <span className="font-medium text-gray-600 dark:text-slate-300">
+          <span className="font-medium text-slate-600 dark:text-slate-300">
             {theme.bestFor}
           </span>
         </p>
@@ -270,14 +270,14 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
 
 function FAQ({ question, answer }: { question: string; answer: string }) {
   return (
-    <details className="group border-b border-gray-200 dark:border-slate-700 pb-4 mb-4 last:border-b-0 last:pb-0 last:mb-0">
-      <summary className="flex items-center justify-between cursor-pointer list-none text-sm font-semibold text-gray-900 dark:text-white py-2 hover:text-brand-600 transition-colors">
+    <details className="group border-b border-slate-200 dark:border-slate-700 pb-4 mb-4 last:border-b-0 last:pb-0 last:mb-0">
+      <summary className="flex items-center justify-between cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-white py-2 hover:text-brand-600 transition-colors">
         {question}
-        <span className="text-gray-500 dark:text-slate-300 group-open:rotate-45 transition-transform text-lg leading-none">
+        <span className="text-slate-500 dark:text-slate-300 group-open:rotate-45 transition-transform text-lg leading-none">
           +
         </span>
       </summary>
-      <p className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed pt-1">
+      <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed pt-1">
         {answer}
       </p>
     </details>
@@ -368,9 +368,9 @@ export default function ResumeTemplatesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
       />
 
-      <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white pb-20">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pb-20">
         {/* ── Hero ── */}
-        <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800">
+        <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800">
           <div className="relative max-w-4xl mx-auto">
             <Breadcrumb
               items={[
@@ -385,7 +385,7 @@ export default function ResumeTemplatesPage() {
               <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-brand-600">
                 14 Professional Resume Templates
               </h1>
-              <p className="text-lg text-gray-500 dark:text-slate-300 max-w-2xl mx-auto">
+              <p className="text-lg text-slate-500 dark:text-slate-300 max-w-2xl mx-auto">
                 Choose from 14 expertly crafted templates, each optimised for ATS
                 compatibility and recruiter appeal. Preview, switch, and build
                 your perfect resume in minutes — no design skills required.
@@ -393,17 +393,17 @@ export default function ResumeTemplatesPage() {
             </div>
             {/* Quick stats */}
             <div className="flex flex-wrap justify-center gap-6 text-sm">
-              <div className="flex items-center gap-2 text-gray-500 dark:text-slate-300">
+              <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300">
                 <span className="text-brand-500 font-bold">14</span> Templates
               </div>
-              <div className="flex items-center gap-2 text-gray-500 dark:text-slate-300">
+              <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300">
                 <span className="text-brand-500 font-bold">100%</span>{" "}
                 ATS-Friendly
               </div>
-              <div className="flex items-center gap-2 text-gray-500 dark:text-slate-300">
+              <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300">
                 <span className="text-brand-500 font-bold">Free</span> to Use
               </div>
-              <div className="flex items-center gap-2 text-gray-500 dark:text-slate-300">
+              <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300">
                 <span className="text-brand-500 font-bold">AI</span> Optimized
               </div>
             </div>
@@ -420,9 +420,9 @@ export default function ResumeTemplatesPage() {
         </section>
 
         {/* ── SEO Content Section ── */}
-        <section className="border-t border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800/50">
-          <div className="max-w-4xl mx-auto px-6 py-16 space-y-8 text-sm text-gray-600 dark:text-slate-300 leading-relaxed">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <section className="border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+          <div className="max-w-4xl mx-auto px-6 py-16 space-y-8 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
               Why the Right Resume Template Matters
             </h2>
             <p>
@@ -448,7 +448,7 @@ export default function ResumeTemplatesPage() {
               including Workday, Greenhouse, Lever, Taleo, iCIMS, and SAP
               SuccessFactors.
             </p>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               Choosing the Right Template for Your Career Stage
             </h3>
             <p>
@@ -475,7 +475,7 @@ export default function ResumeTemplatesPage() {
               is a universally safe option that works across industries without
               appearing either too flashy or too plain.
             </p>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               Template Features That Boost Your Chances
             </h3>
             <p>
@@ -506,14 +506,14 @@ export default function ResumeTemplatesPage() {
         {/* ── FAQ Section ── */}
         <section className="max-w-3xl mx-auto px-6 py-16">
           <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
               Frequently Asked Questions
             </h2>
-            <p className="text-sm text-gray-500 dark:text-slate-300">
+            <p className="text-sm text-slate-500 dark:text-slate-300">
               Everything you need to know about our resume templates.
             </p>
           </div>
-          <div className="bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-200 dark:border-slate-700">
+          <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
             <FAQ
               question="Are your resume templates ATS-friendly?"
               answer="Yes, every template at rawcv is designed with ATS parsing in mind. We avoid tables, columns that confuse parsers, embedded images, and non-standard fonts. Each template generates clean HTML that converts to text-based PDFs compatible with nearly all applicant tracking systems including Workday, Greenhouse, Lever, Taleo, and SAP SuccessFactors."

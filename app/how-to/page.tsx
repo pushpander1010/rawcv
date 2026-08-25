@@ -16,8 +16,8 @@ function Step({ number, title, children }: { number: number; title: string; chil
         {number}
       </div>
       <div className="flex-1 min-w-0">
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">{title}</h3>
-        <div className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed space-y-3">{children}</div>
+        <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-2">{title}</h3>
+        <div className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed space-y-3">{children}</div>
       </div>
     </div>
   );
@@ -47,10 +47,10 @@ function DocSection({ id, badge, title, subtitle, children }: {
         <span className="inline-block px-2.5 py-1 rounded-lg bg-brand-100 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wide">
           {badge}
         </span>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{title}</h2>
       </div>
-      <p className="text-gray-500 dark:text-slate-300 mb-8 text-sm">{subtitle}</p>
-      <div className="border-t border-gray-100 dark:border-slate-800 pt-8">{children}</div>
+      <p className="text-slate-500 dark:text-slate-300 mb-8 text-sm">{subtitle}</p>
+      <div className="border-t border-slate-100 dark:border-slate-800 pt-8">{children}</div>
     </section>
   );
 }
@@ -137,7 +137,7 @@ export default function HowToPage() {
     };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white">
       <Script id="how-to-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Breadcrumb */}
@@ -146,21 +146,21 @@ export default function HowToPage() {
       </div>
 
       {/* Hero */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-brand-50 dark:from-slate-900 to-white dark:to-slate-900 border-b border-gray-100 dark:border-slate-800 px-6 py-16">
+      <div className="relative overflow-hidden bg-gradient-to-b from-brand-50 dark:from-slate-900 to-white dark:to-slate-900 border-b border-slate-100 dark:border-slate-800 px-6 py-16">
         <div className="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left space-y-4">
             <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 dark:text-brand-300 uppercase tracking-wide">
               Documentation
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight">How to use rawcv</h1>
-            <p className="text-gray-500 dark:text-slate-300 max-w-xl mx-auto md:mx-0 text-lg">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">How to use rawcv</h1>
+            <p className="text-slate-500 dark:text-slate-300 max-w-xl mx-auto md:mx-0 text-lg">
               Everything you need to go from a blank page to a polished, ATS-optimized resume.
             </p>
             <div className="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
               <Link href="/analyze" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:-translate-y-0.5 transition-all duration-200">
                 Get started free
               </Link>
-              <Link href="#getting-started" className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 dark:border-slate-700 text-sm font-semibold text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200">
+              <Link href="#getting-started" className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 dark:bg-slate-800 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200">
                 Read the guide
               </Link>
             </div>
@@ -182,14 +182,14 @@ export default function HowToPage() {
         {/* Sticky sidebar TOC */}
         <aside className="hidden lg:block w-56 flex-shrink-0">
           <div className="sticky top-20">
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-slate-300 mb-4">On this page</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-600 dark:text-slate-300 mb-4">On this page</p>
             <nav aria-label="Table of contents">
               <ul className="space-y-1">
                 {TOC.map((item) => (
                   <li key={item.id}>
                     <a
                       href={`#${item.id}`}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-500 dark:text-slate-300 hover:text-brand-600 hover:bg-brand-50 dark:bg-brand-950/30 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-slate-500 dark:text-slate-300 hover:text-brand-600 hover:bg-brand-50 dark:bg-brand-950/30 transition-colors"
                     >
                       {item.label}
                     </a>
@@ -214,8 +214,8 @@ export default function HowToPage() {
 
             <Step number={1} title="Create a free account">
               <p>Go to <Link href="/analyze" className="text-brand-600 hover:underline font-medium">rawcv.com/analyze</Link> and sign up with your email address. No credit card required.</p>
-              <p>Once registered you receive <strong className="text-gray-800 dark:text-slate-100">20 free credits</strong> instantly. Credits are consumed per AI operation so you can run several analyses before needing to top up.</p>
-              <img src="/register_screen.jpg" alt="Registration page showing email and password fields with Sign up button" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-slate-700" />
+              <p>Once registered you receive <strong className="text-slate-800 dark:text-slate-100">20 free credits</strong> instantly. Credits are consumed per AI operation so you can run several analyses before needing to top up.</p>
+              <img src="/register_screen.jpg" alt="Registration page showing email and password fields with Sign up button" className="w-full rounded-2xl my-6 border border-slate-200 dark:border-slate-700" />
             </Step>
 
             <Step number={2} title="Understand the credit system">
@@ -223,9 +223,9 @@ export default function HowToPage() {
               <div className="overflow-x-auto mt-3">
                 <table className="w-full text-xs border-collapse">
                   <thead>
-                    <tr className="bg-gray-50 dark:bg-slate-800">
-                      <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-slate-200 border border-gray-200 dark:border-slate-700">Action</th>
-                      <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-slate-200 border border-gray-200 dark:border-slate-700">Credits used</th>
+                    <tr className="bg-slate-50 dark:bg-slate-800">
+                      <th className="text-left px-4 py-2 font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">Action</th>
+                      <th className="text-left px-4 py-2 font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">Credits used</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -239,9 +239,9 @@ export default function HowToPage() {
                       ["Chat message (build/edit)", "0.5 - 1"],
                       ["PDF download",              "Free"],
                     ].map(([action, cost]) => (
-                      <tr key={action} className="border-b border-gray-100 dark:border-slate-800">
-                        <td className="px-4 py-2 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300">{action}</td>
-                        <td className="px-4 py-2 border border-gray-200 dark:border-slate-700 font-medium text-brand-600">{cost}</td>
+                      <tr key={action} className="border-b border-slate-100 dark:border-slate-800">
+                        <td className="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">{action}</td>
+                        <td className="px-4 py-2 border border-slate-200 dark:border-slate-700 font-medium text-brand-600">{cost}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -253,12 +253,12 @@ export default function HowToPage() {
             <Step number={3} title="Navigate the app">
               <p>The top navigation bar gives you access to all tools:</p>
               <ul className="list-disc list-inside space-y-1 mt-2">
-                <li><strong className="text-gray-800 dark:text-slate-100">Dashboard</strong> - overview of your resume and quick actions</li>
-                <li><strong className="text-gray-800 dark:text-slate-100">Analyze</strong> - ATS score, JD match, AI suggestions, enhancement, and theme picker</li>
-                <li><strong className="text-gray-800 dark:text-slate-100">Tailor</strong> - rewrite your resume for a specific job description</li>
-                <li><strong className="text-gray-800 dark:text-slate-100">Chat</strong> - build or edit your resume conversationally with AI</li>
+                <li><strong className="text-slate-800 dark:text-slate-100">Dashboard</strong> - overview of your resume and quick actions</li>
+                <li><strong className="text-slate-800 dark:text-slate-100">Analyze</strong> - ATS score, JD match, AI suggestions, enhancement, and theme picker</li>
+                <li><strong className="text-slate-800 dark:text-slate-100">Tailor</strong> - rewrite your resume for a specific job description</li>
+                <li><strong className="text-slate-800 dark:text-slate-100">Chat</strong> - build or edit your resume conversationally with AI</li>
               </ul>
-              <img src="/navigation_screen.jpg" alt="Top navigation bar showing Dashboard, Analyze, Tailor, Chat, How to links and credit balance badge" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-slate-700" />
+              <img src="/navigation_screen.jpg" alt="Top navigation bar showing Dashboard, Analyze, Tailor, Chat, How to links and credit balance badge" className="w-full rounded-2xl my-6 border border-slate-200 dark:border-slate-700" />
             </Step>
           </DocSection>
 
@@ -268,12 +268,12 @@ export default function HowToPage() {
 
             <Step number={1} title="Go to the home page or dashboard">
               <p>From the home page, scroll to the upload area in the hero section. If you are already logged in, the uploader appears immediately after the welcome message.</p>
-              <img src="/resume_upload_screen.jpg" alt="Home page hero with drag-and-drop upload zone" className="w-full rounded-2xl my-6 border border-gray-200 dark:border-slate-700" />
+              <img src="/resume_upload_screen.jpg" alt="Home page hero with drag-and-drop upload zone" className="w-full rounded-2xl my-6 border border-slate-200 dark:border-slate-700" />
             </Step>
 
             <Step number={2} title="Drag and drop or click to browse">
-              <p>Drag your resume file directly onto the upload zone, or click <strong className="text-gray-800 dark:text-slate-100">Browse files</strong> to open a file picker.</p>
-              <p>Supported formats: <code className="bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs font-mono">.pdf</code>, <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">.docx</code>, <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">.txt</code> up to <strong className="text-gray-800 dark:text-slate-100">5 MB</strong>.</p>
+              <p>Drag your resume file directly onto the upload zone, or click <strong className="text-slate-800 dark:text-slate-100">Browse files</strong> to open a file picker.</p>
+              <p>Supported formats: <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs font-mono">.pdf</code>, <code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">.docx</code>, <code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">.txt</code> up to <strong className="text-slate-800 dark:text-slate-100">5 MB</strong>.</p>
               <Callout type="tip">For best parsing results use a single-column PDF without tables or text boxes. Multi-column layouts can confuse the parser.</Callout>
             </Step>
 
@@ -282,7 +282,7 @@ export default function HowToPage() {
             </Step>
 
             <Step number={4} title="Review the parsed resume">
-              <p>Once parsed you are redirected to the <strong className="text-gray-800 dark:text-slate-100">Analyze</strong> page. The right panel shows a live preview of your resume rendered in the selected theme.</p>
+              <p>Once parsed you are redirected to the <strong className="text-slate-800 dark:text-slate-100">Analyze</strong> page. The right panel shows a live preview of your resume rendered in the selected theme.</p>
               <p>Check that your name, contact details, and work history look correct. If anything is missing or wrong, use the Chat tool to fix it.</p>
               <Callout type="note">rawcv does not permanently store your resume content. Data lives in your browser session. If you refresh or close the tab you will need to re-upload.</Callout>
             </Step>
@@ -294,7 +294,7 @@ export default function HowToPage() {
           <DocSection id="build-resume" badge="Step 1 alt" title="Build a resume from scratch" subtitle="No existing resume? Use the AI chat interface to build one section by section through a conversation.">
 
             <Step number={1} title="Open the Chat tool">
-              <p>Click <strong className="text-gray-800 dark:text-slate-100">Chat</strong> in the top navigation, or click <strong className="text-gray-800">Build from scratch</strong> on the home page.</p>
+              <p>Click <strong className="text-slate-800 dark:text-slate-100">Chat</strong> in the top navigation, or click <strong className="text-slate-800">Build from scratch</strong> on the home page.</p>
               <p>The chat interface opens in build mode - the AI will guide you through creating each section of your resume.</p>
             </Step>
 
@@ -316,11 +316,11 @@ export default function HowToPage() {
             </Step>
 
             <Step number={4} title="Edit any section mid-conversation">
-              <p>Made a mistake? Just tell the AI: <em className="text-gray-700 dark:text-slate-200">&quot;Change my job title at Acme Corp to Senior Engineer&quot;</em> or <em className="text-gray-700">&quot;Remove the Python skill&quot;</em>. It will update the resume immediately.</p>
+              <p>Made a mistake? Just tell the AI: <em className="text-slate-700 dark:text-slate-200">&quot;Change my job title at Acme Corp to Senior Engineer&quot;</em> or <em className="text-slate-700">&quot;Remove the Python skill&quot;</em>. It will update the resume immediately.</p>
             </Step>
 
             <Step number={5} title="Finish and go to Analyze">
-              <p>When you are happy with the content click <strong className="text-gray-800 dark:text-slate-100">View Analysis</strong> in the header. You will be taken to the Analyze page where you can run ATS scoring and get AI suggestions.</p>
+              <p>When you are happy with the content click <strong className="text-slate-800 dark:text-slate-100">View Analysis</strong> in the header. You will be taken to the Analyze page where you can run ATS scoring and get AI suggestions.</p>
             </Step>
 
           </DocSection>
@@ -329,16 +329,16 @@ export default function HowToPage() {
           {/* ATS SCORE */}
           <DocSection id="ats-score" badge="Analyze" title="ATS score check" subtitle="Find out how well your resume passes Applicant Tracking Systems and exactly what to fix.">
 
-            <p className="text-sm text-gray-600 dark:text-slate-300 mb-8">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">
               Over 75% of resumes are rejected by ATS software before a human ever reads them. rawcv runs the same checks that enterprise ATS platforms use and gives you a score out of 100 with specific, actionable issues.
             </p>
 
             <Step number={1} title="Open the ATS Score tab">
-              <p>From the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-slate-100">ATS Score</strong> tab (the first tab, marked with a chart icon).</p>
+              <p>From the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-slate-800 dark:text-slate-100">ATS Score</strong> tab (the first tab, marked with a chart icon).</p>
             </Step>
 
             <Step number={2} title="Click Run ATS Analysis">
-              <p>Click the blue <strong className="text-gray-800 dark:text-slate-100">Run ATS Analysis</strong> button. The analysis takes 5-15 seconds.</p>
+              <p>Click the blue <strong className="text-slate-800 dark:text-slate-100">Run ATS Analysis</strong> button. The analysis takes 5-15 seconds.</p>
             </Step>
 
             <Step number={3} title="Read your score and issues">
@@ -358,7 +358,7 @@ export default function HowToPage() {
                 <li>Starting bullet points with strong action verbs (Led, Built, Increased)</li>
                 <li>Adding measurable results such as &quot;Reduced load time by 40%&quot;</li>
               </ul>
-              <p className="mt-2">Use the Chat tool or the Enhance tool to apply fixes, then click <strong className="text-gray-800 dark:text-slate-100">Re-run analysis</strong> to see your updated score.</p>
+              <p className="mt-2">Use the Chat tool or the Enhance tool to apply fixes, then click <strong className="text-slate-800 dark:text-slate-100">Re-run analysis</strong> to see your updated score.</p>
               <Callout type="tip">Aim for a score above 80 before applying to competitive roles. Scores above 90 are excellent.</Callout>
             </Step>
 
@@ -369,31 +369,31 @@ export default function HowToPage() {
           <DocSection id="ai-suggestions" badge="Analyze" title="AI suggestions" subtitle="Get 3-15 targeted improvements covering action verbs, quantified achievements, and section completeness.">
 
             <Step number={1} title="Open the Suggestions tab">
-              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-slate-100">Suggestions</strong> tab.</p>
+              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-slate-800 dark:text-slate-100">Suggestions</strong> tab.</p>
             </Step>
 
             <Step number={2} title="Click Get AI Suggestions">
-              <p>Click the violet <strong className="text-gray-800 dark:text-slate-100">Get AI Suggestions</strong> button. The AI reads your entire resume and generates targeted improvements in 5-20 seconds.</p>
+              <p>Click the violet <strong className="text-slate-800 dark:text-slate-100">Get AI Suggestions</strong> button. The AI reads your entire resume and generates targeted improvements in 5-20 seconds.</p>
             </Step>
 
             <Step number={3} title="Review each suggestion">
               <p>Suggestions appear as cards. Each card shows:</p>
               <ul className="list-disc list-inside space-y-1 mt-2">
-                <li>The <strong className="text-gray-800 dark:text-slate-100">section</strong> it applies to (e.g. Work Experience, Summary)</li>
-                <li>The <strong className="text-gray-800 dark:text-slate-100">original text</strong> with the problem highlighted</li>
-                <li>The <strong className="text-gray-800 dark:text-slate-100">suggested replacement</strong></li>
-                <li>A brief <strong className="text-gray-800 dark:text-slate-100">reason</strong> explaining why the change improves your resume</li>
+                <li>The <strong className="text-slate-800 dark:text-slate-100">section</strong> it applies to (e.g. Work Experience, Summary)</li>
+                <li>The <strong className="text-slate-800 dark:text-slate-100">original text</strong> with the problem highlighted</li>
+                <li>The <strong className="text-slate-800 dark:text-slate-100">suggested replacement</strong></li>
+                <li>A brief <strong className="text-slate-800 dark:text-slate-100">reason</strong> explaining why the change improves your resume</li>
               </ul>
             </Step>
 
             <Step number={4} title="Accept or reject suggestions">
-              <p>Click <strong className="text-gray-800 dark:text-slate-100">Accept</strong> to apply a suggestion. The live preview on the right updates immediately.</p>
-              <p>Click <strong className="text-gray-800 dark:text-slate-100">Reject</strong> to dismiss a suggestion you disagree with. You can always re-run to get a fresh set.</p>
+              <p>Click <strong className="text-slate-800 dark:text-slate-100">Accept</strong> to apply a suggestion. The live preview on the right updates immediately.</p>
+              <p>Click <strong className="text-slate-800 dark:text-slate-100">Reject</strong> to dismiss a suggestion you disagree with. You can always re-run to get a fresh set.</p>
               <Callout type="tip">Accept suggestions one at a time and watch the preview update. This helps you understand the impact of each change before committing.</Callout>
             </Step>
 
             <Step number={5} title="Undo a change">
-              <p>Changed your mind? Click the <strong className="text-gray-800 dark:text-slate-100">Undo</strong> button in the top-right of the Analyze page to revert the last accepted suggestion.</p>
+              <p>Changed your mind? Click the <strong className="text-slate-800 dark:text-slate-100">Undo</strong> button in the top-right of the Analyze page to revert the last accepted suggestion.</p>
             </Step>
 
           </DocSection>
@@ -402,16 +402,16 @@ export default function HowToPage() {
           {/* ENHANCE */}
           <DocSection id="enhance" badge="Analyze" title="Enhance your resume" subtitle="Strengthen weak bullet points and your summary with stronger language - no job description required.">
 
-            <p className="text-sm text-gray-600 dark:text-slate-300 mb-8">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">
               The Enhance tool is different from Suggestions. Instead of pointing out problems it rewrites your existing content with stronger action verbs, more specific language, and a more professional tone while keeping your facts intact.
             </p>
 
             <Step number={1} title="Open the Enhance tab">
-              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-slate-100">Enhance</strong> tab.</p>
+              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-slate-800 dark:text-slate-100">Enhance</strong> tab.</p>
             </Step>
 
             <Step number={2} title="Click Enhance Resume">
-              <p>Click the orange <strong className="text-gray-800 dark:text-slate-100">Enhance Resume</strong> button. The AI rewrites your bullet points and summary in 5-20 seconds.</p>
+              <p>Click the orange <strong className="text-slate-800 dark:text-slate-100">Enhance Resume</strong> button. The AI rewrites your bullet points and summary in 5-20 seconds.</p>
             </Step>
 
             <Step number={3} title="Review the enhanced content">
@@ -419,7 +419,7 @@ export default function HowToPage() {
             </Step>
 
             <Step number={4} title="Accept the enhancements you like">
-              <p>Accept individual enhancements or use <strong className="text-gray-800 dark:text-slate-100">Accept all</strong> to apply everything at once. The resume preview updates in real time.</p>
+              <p>Accept individual enhancements or use <strong className="text-slate-800 dark:text-slate-100">Accept all</strong> to apply everything at once. The resume preview updates in real time.</p>
               <Callout type="warning">Always read enhanced bullet points carefully. The AI preserves your facts but may occasionally rephrase something that does not match your voice. Reject anything that does not feel right.</Callout>
             </Step>
 
@@ -429,12 +429,12 @@ export default function HowToPage() {
           {/* JD RELEVANCE */}
           <DocSection id="jd-relevance" badge="Analyze" title="Job description relevance check" subtitle="Paste any job description and instantly see how well your resume matches - with missing keywords highlighted.">
 
-            <p className="text-sm text-gray-600 dark:text-slate-300 mb-8">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">
               Recruiters spend an average of 7 seconds on a resume. If your skills and experience do not mirror the language in the job posting you are invisible. The JD Match tool scores your resume against a specific job description and tells you exactly what is missing.
             </p>
 
             <Step number={1} title="Open the JD Match tab">
-              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-slate-100">JD Match</strong> tab.</p>
+              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-slate-800 dark:text-slate-100">JD Match</strong> tab.</p>
             </Step>
 
             <Step number={2} title="Paste the job description">
@@ -443,15 +443,15 @@ export default function HowToPage() {
             </Step>
 
             <Step number={3} title="Click Analyze Relevance">
-              <p>Click the indigo <strong className="text-gray-800 dark:text-slate-100">Analyze Relevance</strong> button. The analysis takes 5-15 seconds.</p>
+              <p>Click the indigo <strong className="text-slate-800 dark:text-slate-100">Analyze Relevance</strong> button. The analysis takes 5-15 seconds.</p>
             </Step>
 
             <Step number={4} title="Read your relevance score">
               <p>You will see a relevance score out of 100 along with:</p>
               <ul className="list-disc list-inside space-y-1 mt-2">
-                <li><strong className="text-gray-800 dark:text-slate-100">Missing keywords</strong> - specific words from the JD that do not appear in your resume</li>
-                <li><strong className="text-gray-800 dark:text-slate-100">Missing skills</strong> - technical or soft skills the employer wants that you have not mentioned</li>
-                <li><strong className="text-gray-800 dark:text-slate-100">Recommendations</strong> - specific sections where you should add the missing content</li>
+                <li><strong className="text-slate-800 dark:text-slate-100">Missing keywords</strong> - specific words from the JD that do not appear in your resume</li>
+                <li><strong className="text-slate-800 dark:text-slate-100">Missing skills</strong> - technical or soft skills the employer wants that you have not mentioned</li>
+                <li><strong className="text-slate-800 dark:text-slate-100">Recommendations</strong> - specific sections where you should add the missing content</li>
               </ul>
             </Step>
 
@@ -462,7 +462,7 @@ export default function HowToPage() {
             </Step>
 
             <Step number={6} title="Go to Tailor for a deeper rewrite">
-              <p>If your score is below 60 or you want a more thorough rewrite, click <strong className="text-gray-800 dark:text-slate-100">Tailor resume</strong> to use the dedicated Tailor tool which rewrites your entire resume for the specific job.</p>
+              <p>If your score is below 60 or you want a more thorough rewrite, click <strong className="text-slate-800 dark:text-slate-100">Tailor resume</strong> to use the dedicated Tailor tool which rewrites your entire resume for the specific job.</p>
             </Step>
 
           </DocSection>
@@ -471,12 +471,12 @@ export default function HowToPage() {
           {/* TAILOR */}
           <DocSection id="tailor" badge="Tailor" title="Tailor your resume to a job" subtitle="Automatically rewrite your resume to match a specific job description - keywords, tone, and structure all optimised.">
 
-            <p className="text-sm text-gray-600 dark:text-slate-300 mb-8">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">
               The Tailor tool goes further than the JD relevance check. Instead of just telling you what is missing it rewrites your resume to incorporate the right keywords and reframe your experience in the language the employer is looking for.
             </p>
 
             <Step number={1} title="Open the Tailor page">
-              <p>Click <strong className="text-gray-800 dark:text-slate-100">Tailor</strong> in the top navigation, or click <strong className="text-gray-800">Tailor resume</strong> from the JD Match results.</p>
+              <p>Click <strong className="text-slate-800 dark:text-slate-100">Tailor</strong> in the top navigation, or click <strong className="text-slate-800">Tailor resume</strong> from the JD Match results.</p>
             </Step>
 
             <Step number={2} title="Paste the job description">
@@ -484,7 +484,7 @@ export default function HowToPage() {
             </Step>
 
             <Step number={3} title="Click Tailor Resume">
-              <p>Click the blue <strong className="text-gray-800 dark:text-slate-100">Tailor Resume</strong> button. This costs 2 credits because the AI rewrites multiple sections simultaneously. The process takes 10-30 seconds.</p>
+              <p>Click the blue <strong className="text-slate-800 dark:text-slate-100">Tailor Resume</strong> button. This costs 2 credits because the AI rewrites multiple sections simultaneously. The process takes 10-30 seconds.</p>
               <Callout type="note">Tailoring rewrites your resume in memory. Your original is preserved and you can undo any changes using the Undo button.</Callout>
             </Step>
 
@@ -502,7 +502,7 @@ export default function HowToPage() {
             </Step>
 
             <Step number={6} title="Download the tailored resume">
-              <p>Once you are happy with the changes click <strong className="text-gray-800 dark:text-slate-100">Download PDF</strong> in the top-right. Create a separate tailored version for each job you apply to.</p>
+              <p>Once you are happy with the changes click <strong className="text-slate-800 dark:text-slate-100">Download PDF</strong> in the top-right. Create a separate tailored version for each job you apply to.</p>
               <Callout type="tip">A resume tailored to a specific job description consistently outperforms a generic one. It takes 30 seconds and costs 2 credits.</Callout>
             </Step>
 
@@ -513,7 +513,7 @@ export default function HowToPage() {
           <DocSection id="themes" badge="Download" title="Themes and downloading your PDF" subtitle="Pick a visual style and download a polished, ATS-safe PDF resume in one click.">
 
             <Step number={1} title="Open the Theme tab">
-              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-gray-800 dark:text-slate-100">Theme</strong> tab. You can also access the theme picker from the Chat page by clicking <strong className="text-gray-800">Change theme</strong> above the preview.</p>
+              <p>On the <Link href="/analyze" className="text-brand-600 hover:underline">Analyze page</Link>, click the <strong className="text-slate-800 dark:text-slate-100">Theme</strong> tab. You can also access the theme picker from the Chat page by clicking <strong className="text-slate-800">Change theme</strong> above the preview.</p>
             </Step>
 
             <Step number={2} title="Choose a theme">
@@ -529,12 +529,12 @@ export default function HowToPage() {
                   { name: "Sharp",     desc: "Geometric, high contrast" },
                   { name: "Terra",     desc: "Warm earth tones" },
                 ].map((t) => (
-                  <div key={t.name} className="rounded-xl border border-gray-200 dark:border-slate-700 p-3 text-center">
-                    <div className="w-full h-16 rounded-lg bg-gray-100 dark:bg-slate-800 mb-2 flex items-center justify-center">
-                      <span className="text-xs font-semibold text-gray-500 dark:text-slate-300">{t.name}</span>
+                  <div key={t.name} className="rounded-xl border border-slate-200 dark:border-slate-700 p-3 text-center">
+                    <div className="w-full h-16 rounded-lg bg-slate-100 dark:bg-slate-800 mb-2 flex items-center justify-center">
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-300">{t.name}</span>
                     </div>
-                    <p className="text-xs font-semibold text-gray-800 dark:text-slate-100">{t.name}</p>
-                    <p className="text-[10px] text-gray-500 dark:text-slate-300 mt-0.5">{t.desc}</p>
+                    <p className="text-xs font-semibold text-slate-800 dark:text-slate-100">{t.name}</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-300 mt-0.5">{t.desc}</p>
                   </div>
                 ))}
               </div>
@@ -546,8 +546,8 @@ export default function HowToPage() {
             </Step>
 
             <Step number={4} title="Download your PDF">
-              <p>Click the <strong className="text-gray-800 dark:text-slate-100">Download PDF</strong> button in the top-right of the Analyze or Tailor page. The PDF is generated server-side and downloads automatically.</p>
-              <p>PDF downloads are <strong className="text-gray-800 dark:text-slate-100">free</strong> - they do not consume credits.</p>
+              <p>Click the <strong className="text-slate-800 dark:text-slate-100">Download PDF</strong> button in the top-right of the Analyze or Tailor page. The PDF is generated server-side and downloads automatically.</p>
+              <p>PDF downloads are <strong className="text-slate-800 dark:text-slate-100">free</strong> - they do not consume credits.</p>
               <Callout type="note">The downloaded PDF is a pixel-perfect render of the theme preview, optimised for both ATS parsing and human readability.</Callout>
             </Step>
 
@@ -586,9 +586,9 @@ export default function HowToPage() {
                 { q: "Can I create multiple versions of my resume?", a: "Yes - use the Tailor tool to create a job-specific version for each application. Each tailored version can be downloaded as a separate PDF." },
                 { q: "How do I contact support?", a: "Email us at support@rawcv.com. We typically respond within 24 hours on business days." },
               ].map((faq) => (
-                <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="border-b border-gray-100 dark:border-slate-800 pb-6 last:border-0">
-                  <dt className="font-semibold text-gray-900 dark:text-white mb-2" itemProp="name">{faq.q}</dt>
-                  <dd className="text-sm text-gray-500 dark:text-slate-300 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+                <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="border-b border-slate-100 dark:border-slate-800 pb-6 last:border-0">
+                  <dt className="font-semibold text-slate-900 dark:text-white mb-2" itemProp="name">{faq.q}</dt>
+                  <dd className="text-sm text-slate-500 dark:text-slate-300 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                     <span itemProp="text">{faq.a}</span>
                   </dd>
                 </div>

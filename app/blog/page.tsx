@@ -164,7 +164,7 @@ const POSTS = [
 
 export default function BlogPage() {
   return (
-    <main className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white py-16 px-6">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white py-16 px-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center mb-16">
@@ -172,10 +172,10 @@ export default function BlogPage() {
             <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 dark:text-brand-300 uppercase">
               rawcv Blog
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-white">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white">
               Guides &amp; Resume Strategy
             </h1>
-            <p className="text-lg text-gray-500 dark:text-slate-300 max-w-xl mx-auto md:mx-0">
+            <p className="text-lg text-slate-500 dark:text-slate-300 max-w-xl mx-auto md:mx-0">
               Practical advice to help you craft compelling resumes, beat applicant filters, and stand out in the modern job market.
             </p>
           </div>
@@ -196,7 +196,7 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group block relative bg-white dark:bg-slate-900 rounded-3xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
+              className="group block relative bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
             >
               {/* Card visual banner */}
               <div className={`w-full aspect-[16/10] rounded-2xl bg-gradient-to-br ${post.gradient} mb-5 flex items-center justify-center relative overflow-hidden shadow-inner`}>
@@ -227,16 +227,16 @@ export default function BlogPage() {
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300">
                   {post.category}
                 </span>
-                <span className="text-xs text-gray-400 dark:text-slate-500">
+                <span className="text-xs text-slate-400 dark:text-slate-500">
                   {post.date}
                 </span>
               </div>
 
-              <h2 className="text-lg font-bold mb-2 text-gray-900 dark:text-white group-hover:text-brand-600 transition-colors line-clamp-2">
+              <h2 className="text-lg font-bold mb-2 text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors line-clamp-2">
                 {post.title}
               </h2>
               
-              <p className="text-xs text-gray-500 dark:text-slate-300 leading-relaxed line-clamp-3 mb-4">
+              <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed line-clamp-3 mb-4">
                 {post.description}
               </p>
 
@@ -249,12 +249,12 @@ export default function BlogPage() {
         </div>
 
         {/* Footer Links */}
-        <div className="pt-8 border-t border-gray-100 dark:border-slate-800 text-sm text-gray-400 dark:text-slate-500 flex flex-wrap gap-4 justify-center">
-          <Link href="/" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Home</Link>
-          <Link href="/build" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Free Builder</Link>
-          <Link href="/about" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">About</Link>
-          <Link href="/contact" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Contact</Link>
-          <Link href="/privacy" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Privacy</Link>
+        <div className="pt-8 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-400 dark:text-slate-500 flex flex-wrap gap-4 justify-center">
+          <Link href="/" className="hover:text-slate-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Home</Link>
+          <Link href="/build" className="hover:text-slate-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Free Builder</Link>
+          <Link href="/about" className="hover:text-slate-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">About</Link>
+          <Link href="/contact" className="hover:text-slate-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Contact</Link>
+          <Link href="/privacy" className="hover:text-slate-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Privacy</Link>
         </div>
       </div>
     </main>

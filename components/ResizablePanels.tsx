@@ -62,14 +62,14 @@ export default function ResizablePanels({
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
       {/* Mobile tab switcher — always visible, never scrolls */}
-      <div className="flex md:hidden flex-shrink-0 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 z-10">
+      <div className="flex md:hidden flex-shrink-0 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 z-10">
         <button
           type="button"
           onClick={() => setMobileTab("left")}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             mobileTab === "left"
               ? "border-b-2 border-brand-600 text-brand-600"
-              : "text-gray-500 dark:text-slate-400"
+              : "text-slate-500 dark:text-slate-400"
           }`}
         >
           {leftLabel}
@@ -80,7 +80,7 @@ export default function ResizablePanels({
           className={`flex-1 py-3 text-sm font-medium transition-colors rounded ${
             mobileTab === "right"
               ? "border-b-2 border-brand-600 text-brand-600"
-              : "text-gray-500 dark:text-slate-400"
+              : "text-slate-500 dark:text-slate-400"
           } ${highlightRight ? "animate-tab-blink" : ""}`}
         >
           {rightLabel}
@@ -92,21 +92,21 @@ export default function ResizablePanels({
         <div className={`flex-1 overflow-hidden bg-white dark:bg-slate-900 ${mobileTab === "left" ? "flex flex-col" : "hidden"}`}>
           {left}
         </div>
-        <div className={`flex-1 overflow-y-auto overflow-x-auto bg-gray-100 dark:bg-slate-800 ${mobileTab === "right" ? "block" : "hidden"}`}>
+        <div className={`flex-1 overflow-y-auto overflow-x-auto bg-slate-100 dark:bg-slate-800 ${mobileTab === "right" ? "block" : "hidden"}`}>
           {right}
         </div>
       </div>
 
       {/* Desktop: resizable side-by-side */}
       <div ref={containerRef} className="hidden md:flex flex-1 min-h-0 overflow-hidden">
-        <div style={{ width: leftWidth, flexShrink: 0 }} className="flex flex-col h-full overflow-hidden border-r border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+        <div style={{ width: leftWidth, flexShrink: 0 }} className="flex flex-col h-full overflow-hidden border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
           {left}
         </div>
 
         {/* Drag handle */}
         <div
           onMouseDown={onMouseDown}
-          className="w-1 flex-shrink-0 cursor-col-resize bg-gray-200 dark:bg-slate-700 hover:bg-brand-400 transition-colors active:bg-brand-500 group relative"
+          className="w-1 flex-shrink-0 cursor-col-resize bg-slate-200 dark:bg-slate-700 hover:bg-brand-400 transition-colors active:bg-brand-500 group relative"
           title="Drag to resize"
         >
           <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -116,7 +116,7 @@ export default function ResizablePanels({
           </div>
         </div>
 
-        <div className="flex-1 min-w-0 overflow-y-auto bg-gray-100 dark:bg-slate-800">
+        <div className="flex-1 min-w-0 overflow-y-auto bg-slate-100 dark:bg-slate-800">
           {right}
         </div>
       </div>

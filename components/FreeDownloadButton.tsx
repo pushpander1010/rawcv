@@ -65,17 +65,17 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
         Save PDF (Instant Browser)
       </button>
       {error && <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800"><p className="text-sm text-red-700 dark:text-red-300">{error}</p></div>}
-      <p className="text-xs text-gray-500 dark:text-slate-300 text-center">100% Free — No account required!</p>
+      <p className="text-xs text-slate-500 dark:text-slate-300 text-center">100% Free — No account required!</p>
       {showSuccessModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-100 dark:border-slate-800 transform animate-in zoom-in-95 duration-200">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform animate-in zoom-in-95 duration-200">
             <div className="text-center space-y-4">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 text-2xl font-bold">✓</div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Resume Generated!</h3>
-              <p className="text-sm text-gray-500 dark:text-slate-300">Your ATS-safe PDF is ready. Want to optimize your bullet points and match your resume to specific job descriptions with AI?</p>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Resume Generated!</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-300">Your ATS-safe PDF is ready. Want to optimize your bullet points and match your resume to specific job descriptions with AI?</p>
               <div className="flex flex-col gap-2 pt-2">
                 <a href="/analyze" className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md text-center">Analyze Your Resume with AI</a>
-                <button type="button" onClick={() => setShowSuccessModal(false)} className="w-full py-2.5 px-4 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 font-semibold text-sm">Maybe Later</button>
+                <button type="button" onClick={() => setShowSuccessModal(false)} className="w-full py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 dark:bg-slate-800 font-semibold text-sm">Maybe Later</button>
               </div>
             </div>
           </div>
