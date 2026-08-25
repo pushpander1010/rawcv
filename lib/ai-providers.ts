@@ -62,14 +62,16 @@ async function callOpenRouter<T>(
 
   return withRetry(async () => {
     const controller = new AbortController();
-    const timeoutMs = options?.timeoutMs ?? (model === MODEL_ANALYSIS ? 120000 : 60000);
+    const timeoutMs = options?.timeoutMs ?? (model.includes("muse-spark") ? 90000 : model === MODEL_ANALYSIS ? 120000 : 60000);
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
+      const isMuse = model.includes("muse-spark");
       const body: Record<string, unknown> = {
             model,
             max_tokens: options?.maxTokens ?? 2500,
             temperature: options?.temperature ?? 0.1,
             ...(model.startsWith("xiaomi/") ? { reasoning: { exclude: true } } : {}),
+            ...(isMuse ? { reasoning: { effort: "low" }, include_reasoning: false } : {}),
         messages: [
           { role: "system", content: fullSystem },
           { role: "user",   content: prompt },

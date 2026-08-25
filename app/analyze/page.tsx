@@ -87,7 +87,7 @@ export default function AnalyzePage() {
   async function runATS() {
     setAtsLoading(true); setAtsError(null);
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 30000);
+    const timer = setTimeout(() => ctrl.abort(), 60000);
     try {
       const res = await fetch("/api/ats", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, raw: state.raw }) });
       const data = await res.json();
@@ -102,7 +102,7 @@ export default function AnalyzePage() {
     setRelevanceLoading(true); setRelevanceError(null);
     setState((prev) => ({ ...prev, jd: jdInput }));
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 30000);
+    const timer = setTimeout(() => ctrl.abort(), 60000);
     try {
       const res = await fetch("/api/relevance", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed, jd: jdInput }) });
       const data = await res.json();
@@ -115,7 +115,7 @@ export default function AnalyzePage() {
   async function runSuggestions() {
     setSuggestionsLoading(true); setSuggestionsError(null);
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 30000);
+    const timer = setTimeout(() => ctrl.abort(), 60000);
     try {
       const res = await fetch("/api/suggestions", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed }) });
       const data = await res.json();
@@ -128,7 +128,7 @@ export default function AnalyzePage() {
   async function runEnhancement() {
     setEnhancementLoading(true); setEnhancementError(null);
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 30000);
+    const timer = setTimeout(() => ctrl.abort(), 90000);
     try {
       const res = await fetch("/api/enhance", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ parsed: state.parsed }) });
       const data = await res.json();
