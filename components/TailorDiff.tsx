@@ -8,17 +8,17 @@ import AILoader from "@/components/AILoader";
 // ─── Section badge ────────────────────────────────────────────────────────────
 
 const SECTION_COLORS: Record<string, string> = {
-  experience: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
-  summary: "bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300",
-  skills: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
-  projects: "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300",
-  certifications: "bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300",
+  experience: "bg-blue-100 text-blue-700",
+  summary: "bg-brand-100 text-brand-700",
+  skills: "bg-amber-100 text-amber-700",
+  projects: "bg-teal-100 text-teal-700",
+  certifications: "bg-pink-100 text-pink-700",
 };
 
 function SectionBadge({ section }: { section: string }) {
   const style =
     SECTION_COLORS[section.toLowerCase()] ??
-    "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400";
+    "bg-gray-100 text-gray-600";
   return (
     <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full capitalize ${style}`}>
       {section}
@@ -47,12 +47,12 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
   const isDecided = change.accepted !== false || change.accepted === false;
 
   return (
-    <li className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden">
+    <li className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+      <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-gray-100">
         <div className="flex items-center gap-2">
           <SectionBadge section={change.section} />
-          <span className="text-xs text-gray-400 dark:text-gray-500 font-mono truncate max-w-[200px]">
+          <span className="text-xs text-gray-400 font-mono truncate max-w-[200px]">
             {change.field}
           </span>
         </div>
@@ -60,7 +60,7 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
         {/* Status / action buttons */}
         <div className="flex items-center gap-2 shrink-0">
           {change.accepted ? (
-            <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+            <span className="text-xs font-medium text-emerald-600 flex items-center gap-1">
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
               </svg>
@@ -78,7 +78,7 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
               <button
                 type="button"
                 onClick={() => onReject(change.id)}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
               >
                 Reject
               </button>
@@ -86,7 +86,7 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
                 <button
                   type="button"
                   onClick={() => { setEditValue(change.tailored); setEditing(true); }}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   Edit
                 </button>
@@ -99,16 +99,16 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
       {/* Diff body */}
       <div className="px-4 py-3 space-y-3">
         <div>
-          <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
             Original
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-lg px-3 py-2 leading-relaxed">
+          <p className="text-sm text-gray-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 leading-relaxed">
             {change.original}
           </p>
         </div>
 
         <div>
-          <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
             Tailored
           </p>
           {editing ? (
@@ -117,7 +117,7 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
                 value={editValue}
                 onChange={(e) => setEditValue(e.target.value)}
                 rows={3}
-                className="w-full rounded-lg border border-blue-300 dark:border-blue-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 aria-label="Edit tailored text"
               />
               <div className="flex gap-2">
@@ -131,14 +131,14 @@ function ChangeCard({ change, onAccept, onReject, onEdit }: ChangeCardProps) {
                 <button
                   type="button"
                   onClick={() => setEditing(false)}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
               </div>
             </div>
           ) : (
-            <p className="text-sm text-gray-700 dark:text-gray-200 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 rounded-lg px-3 py-2 leading-relaxed">
+            <p className="text-sm text-gray-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 leading-relaxed">
               {change.tailored}
             </p>
           )}
@@ -244,7 +244,7 @@ export default function TailorDiff({ changes, loading = false }: TailorDiffProps
 
   if (showLoader) {
     return (
-      <section aria-label="Tailored changes" className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+      <section aria-label="Tailored changes" className="rounded-2xl border border-gray-200 bg-white">
         <AILoader type="tailor" />
       </section>
     );
@@ -253,7 +253,7 @@ export default function TailorDiff({ changes, loading = false }: TailorDiffProps
   if (changes.length === 0) {
     return (
       <section aria-label="Tailored changes">
-        <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-6">
+        <p className="text-sm text-gray-500 text-center py-6">
           No tailored changes available. Run tailoring to generate suggestions.
         </p>
       </section>
@@ -265,14 +265,14 @@ export default function TailorDiff({ changes, loading = false }: TailorDiffProps
   return (
     <section aria-label="JD-Tailored Changes">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">
+        <h2 className="text-base font-semibold text-gray-800">
           Tailored Changes
           <span className="ml-2 text-sm font-normal text-gray-400">
             ({changes.length})
           </span>
         </h2>
         {acceptedCount > 0 && (
-          <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+          <span className="text-xs text-emerald-600 font-medium">
             {acceptedCount} accepted
           </span>
         )}

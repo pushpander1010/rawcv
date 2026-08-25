@@ -9,16 +9,16 @@ import { findIndex } from "@/lib/fuzzy-match";
 // ─── Section badge ────────────────────────────────────────────────────────────
 
 const SECTION_COLORS: Record<string, string> = {
-  experience: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
-  summary:    "bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300",
-  skills:     "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
-  education:  "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+  experience: "bg-blue-100 text-blue-700",
+  summary:    "bg-brand-100 text-brand-700",
+  skills:     "bg-emerald-100 text-emerald-700",
+  education:  "bg-amber-100 text-amber-700",
 };
 
 function SectionBadge({ section }: { section: string }) {
   const style =
     SECTION_COLORS[section.toLowerCase()] ??
-    "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400";
+    "bg-gray-100 text-gray-600";
   return (
     <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full capitalize ${style}`}>
       {section}
@@ -39,16 +39,16 @@ interface EnhancementCardProps {
 
 function EnhancementCard({ suggestion, status, onAccept, onReject }: EnhancementCardProps) {
   return (
-    <li className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden">
+    <li className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-2 min-w-0">
           <SectionBadge section={suggestion.section} />
-          <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{suggestion.reason}</p>
+          <p className="text-sm text-gray-600 truncate">{suggestion.reason}</p>
         </div>
 
         {status === "accepted" && (
-          <span className="shrink-0 text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+          <span className="shrink-0 text-xs font-medium text-emerald-600 flex items-center gap-1">
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
@@ -57,7 +57,7 @@ function EnhancementCard({ suggestion, status, onAccept, onReject }: Enhancement
         )}
 
         {status === "rejected" && (
-          <span className="shrink-0 text-xs font-medium text-gray-400 dark:text-gray-500 flex items-center gap-1">
+          <span className="shrink-0 text-xs font-medium text-gray-400 flex items-center gap-1">
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -77,7 +77,7 @@ function EnhancementCard({ suggestion, status, onAccept, onReject }: Enhancement
             <button
               type="button"
               onClick={() => onReject(suggestion.id)}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
             >
               Reject
             </button>
@@ -86,20 +86,20 @@ function EnhancementCard({ suggestion, status, onAccept, onReject }: Enhancement
       </div>
 
       {/* Diff view — always visible */}
-      <div className="border-t border-gray-100 dark:border-gray-800 px-4 py-3 space-y-3">
+      <div className="border-t border-gray-100 px-4 py-3 space-y-3">
         <div>
-          <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
             Original
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-lg px-3 py-2 leading-relaxed">
+          <p className="text-sm text-gray-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 leading-relaxed">
             {suggestion.original}
           </p>
         </div>
         <div>
-          <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
             Enhanced
           </p>
-          <p className="text-sm text-gray-700 dark:text-gray-200 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 rounded-lg px-3 py-2 leading-relaxed">
+          <p className="text-sm text-gray-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 leading-relaxed">
             {suggestion.improved}
           </p>
         </div>
@@ -162,7 +162,7 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
 
   if (showLoader) {
     return (
-      <section aria-label="Resume Enhancements" className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+      <section aria-label="Resume Enhancements" className="rounded-2xl border border-gray-200 bg-white">
         <AILoader type="enhancements" />
       </section>
     );
@@ -171,7 +171,7 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
   if (enhancements.length === 0) {
     return (
       <section aria-label="Resume Enhancements">
-        <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-6">
+        <p className="text-sm text-gray-500 text-center py-6">
           No enhancements available. Run enhancement to improve your resume.
         </p>
       </section>
@@ -184,7 +184,7 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
   return (
     <section aria-label="Resume Enhancement Suggestions">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">
+        <h2 className="text-base font-semibold text-gray-800">
           Enhancements
           <span className="ml-2 text-sm font-normal text-gray-400">
             ({enhancements.length})
@@ -192,7 +192,7 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
         </h2>
         <div className="flex items-center gap-3 text-xs font-medium">
           {acceptedCount > 0 && (
-            <span className="text-emerald-600 dark:text-emerald-400">{acceptedCount} accepted</span>
+            <span className="text-emerald-600">{acceptedCount} accepted</span>
           )}
           {pendingCount > 0 && (
             <span className="text-gray-400">{pendingCount} pending</span>

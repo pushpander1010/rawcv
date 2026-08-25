@@ -34,19 +34,19 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <nav aria-label="Breadcrumb" className="mb-6">
-        <ol className="flex items-center flex-wrap gap-1 text-sm text-gray-500 dark:text-gray-400">
+        <ol className="flex items-center flex-wrap gap-1 text-sm text-gray-500">
           {items.map((item, index) => {
             const isLast = index === items.length - 1;
             return (
               <li key={item.href} className="flex items-center gap-1">
                 {index > 0 && (
-                  <span aria-hidden="true" className="text-gray-300 dark:text-gray-600 select-none">
+                  <span aria-hidden="true" className="text-gray-300 select-none">
                     ›
                   </span>
                 )}
                 {isLast ? (
                   <span
-                    className="text-gray-700 dark:text-gray-300 font-medium"
+                    className="text-gray-700 font-medium"
                     aria-current="page"
                   >
                     {item.label}
@@ -54,7 +54,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
                 ) : (
                   <Link
                     href={item.href}
-                    className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                    className="hover:text-brand-600 transition-colors"
                   >
                     {item.label}
                   </Link>

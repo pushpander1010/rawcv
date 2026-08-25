@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 px-6 py-16">
-      <div className="max-w-2xl mx-auto prose prose-gray dark:prose-invert prose-sm sm:prose-base">
+    <div className="min-h-screen bg-white px-6 py-16">
+      <div className="max-w-2xl mx-auto prose prose-gray prose-sm sm:prose-base">
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Privacy Policy", href: "/privacy" }]} />
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Privacy Policy</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
         <p className="text-sm text-gray-400 mb-10">Last updated: April 14, 2026</p>
 
         <Section title="1. Who we are">
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
           <p>Questions about this policy? Email us at <a href="mailto:privacy@rawcv.com" className="text-brand-600 hover:underline">privacy@rawcv.com</a>.</p>
         </Section>
 
-        <div className="mt-12 pt-6 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-400">
+        <div className="mt-12 pt-6 border-t border-gray-100 text-sm text-gray-400">
           <Link href="/" className="text-brand-600 hover:underline">← Back to rawcv</Link>
           {" · "}
           <Link href="/terms" className="text-brand-600 hover:underline">Terms of Service</Link>
@@ -87,8 +87,8 @@ export default function PrivacyPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{title}</h2>
-      <div className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed space-y-2">{children}</div>
+      <h2 className="text-lg font-semibold text-gray-900 mb-3">{title}</h2>
+      <div className="text-sm text-gray-600 leading-relaxed space-y-2">{children}</div>
     </section>
   );
 }

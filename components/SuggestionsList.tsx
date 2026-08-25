@@ -9,16 +9,16 @@ import { findIndex, normalise } from "@/lib/fuzzy-match";
 // ─── Section badge ────────────────────────────────────────────────────────────
 
 const SECTION_COLORS: Record<string, string> = {
-  experience: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
-  summary:    "bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300",
-  skills:     "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
-  education:  "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+  experience: "bg-blue-100 text-blue-700",
+  summary:    "bg-brand-100 text-brand-700",
+  skills:     "bg-emerald-100 text-emerald-700",
+  education:  "bg-amber-100 text-amber-700",
 };
 
 function SectionBadge({ section }: { section: string }) {
   const style =
     SECTION_COLORS[section.toLowerCase()] ??
-    "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400";
+    "bg-gray-100 text-gray-600";
   return (
     <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full capitalize ${style}`}>
       {section}
@@ -38,18 +38,18 @@ function SuggestionCard({ suggestion, applied, onApply }: SuggestionCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <li className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden">
+    <li className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
       {/* Header row */}
       <div className="flex items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-2 min-w-0">
           <SectionBadge section={suggestion.section} />
-          <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+          <p className="text-sm text-gray-600 truncate">
             {suggestion.reason}
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {applied ? (
-            <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+            <span className="text-xs font-medium text-emerald-600 flex items-center gap-1">
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
               </svg>
@@ -69,7 +69,7 @@ function SuggestionCard({ suggestion, applied, onApply }: SuggestionCardProps) {
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
             aria-label="Toggle suggestion details"
-            className="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <svg
               className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`}
@@ -83,20 +83,20 @@ function SuggestionCard({ suggestion, applied, onApply }: SuggestionCardProps) {
 
       {/* Expanded diff view */}
       {expanded && (
-        <div className="border-t border-gray-100 dark:border-gray-800 px-4 py-3 space-y-3">
+        <div className="border-t border-gray-100 px-4 py-3 space-y-3">
           <div>
-            <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
               Original
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-lg px-3 py-2 leading-relaxed">
+            <p className="text-sm text-gray-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 leading-relaxed">
               {suggestion.original}
             </p>
           </div>
           <div>
-            <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
               Improved
             </p>
-            <p className="text-sm text-gray-700 dark:text-gray-200 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 rounded-lg px-3 py-2 leading-relaxed">
+            <p className="text-sm text-gray-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 leading-relaxed">
               {suggestion.improved}
             </p>
           </div>
@@ -170,7 +170,7 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
 
   if (showLoader) {
     return (
-      <section aria-label="AI Suggestions" className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+      <section aria-label="AI Suggestions" className="rounded-2xl border border-gray-200 bg-white">
         <AILoader type="suggestions" />
       </section>
     );
@@ -179,7 +179,7 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
   if (suggestions.length === 0) {
     return (
       <section aria-label="AI Suggestions">
-        <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-6">
+        <p className="text-sm text-gray-500 text-center py-6">
           No suggestions available. Run the analysis to generate improvements.
         </p>
       </section>
@@ -191,14 +191,14 @@ export default function SuggestionsList({ suggestions, loading = false }: Sugges
   return (
     <section aria-label="AI Improvement Suggestions">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">
+        <h2 className="text-base font-semibold text-gray-800">
           AI Suggestions
           <span className="ml-2 text-sm font-normal text-gray-400">
             ({suggestions.length})
           </span>
         </h2>
         {appliedCount > 0 && (
-          <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+          <span className="text-xs text-emerald-600 font-medium">
             {appliedCount} applied
           </span>
         )}

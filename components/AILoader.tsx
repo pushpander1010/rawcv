@@ -154,7 +154,7 @@ export default function AILoader({
 
       {/* Step text */}
       <p
-        className="text-sm font-medium text-gray-600 dark:text-gray-300 text-center transition-opacity duration-150"
+        className="text-sm font-medium text-gray-600 text-center transition-opacity duration-150"
         style={{ opacity: visible ? 1 : 0 }}
         aria-live="polite"
         aria-atomic="true"
@@ -163,7 +163,7 @@ export default function AILoader({
       </p>
 
       {/* Progress bar */}
-      <div className="w-48 h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+      <div className="w-48 h-1.5 rounded-full bg-gray-100 overflow-hidden">
         <div
           className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-500 transition-[width] duration-500 ease-out"
           style={{ width: `${progress}%` }}
@@ -174,7 +174,7 @@ export default function AILoader({
         />
       </div>
 
-      <p className="text-xs text-gray-400 dark:text-gray-500 tabular-nums">
+      <p className="text-xs text-gray-400 tabular-nums">
         {stepIdx + 1} / {steps.length}
       </p>
     </div>

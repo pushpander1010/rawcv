@@ -31,12 +31,12 @@ export default function ChatLayout({
   return (
     <>
       {/* ── Compact hero ── */}
-      <section className="bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
+      <section className="bg-white border-b border-gray-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
             AI Resume Chat Builder
           </h1>
-          <p className="mt-2 text-gray-500 dark:text-gray-400 max-w-2xl text-sm sm:text-base">
+          <p className="mt-2 text-gray-500 max-w-2xl text-sm sm:text-base">
             Build or customize your resume conversationally — tell the AI about your background and
             watch it take shape in real time.
           </p>
@@ -47,13 +47,13 @@ export default function ChatLayout({
       {children}
 
       {/* ── Learn more (SEO) ── */}
-      <section className="bg-gray-50 dark:bg-gray-900/40 border-t border-gray-200 dark:border-gray-800">
+      <section className="bg-gray-50 border-t border-gray-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
           <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
               How the AI Resume Chat Builder works
             </h2>
-            <p className="mt-4 text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="mt-4 text-base text-gray-600 leading-relaxed">
               Writing a resume from a blank page is one of the hardest parts of any job search. Where
               do you start? What format works best? How do you phrase your experience to stand out?
               Rawcv&apos;s AI Resume Chat Builder removes the friction entirely — instead of wrestling
@@ -64,8 +64,8 @@ export default function ChatLayout({
             <div className="mt-12 space-y-10">
               {sections.map((s) => (
                 <div key={s.title}>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{s.title}</h3>
-                  <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">{s.body}</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{s.title}</h3>
+                  <p className="text-base text-gray-600 leading-relaxed">{s.body}</p>
                 </div>
               ))}
             </div>

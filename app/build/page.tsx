@@ -27,27 +27,27 @@ export const metadata: Metadata = {
 
 export default function BuildPage() {
   return (
-    <main id="main" className="min-h-screen bg-white dark:bg-gray-950">
+    <main id="main" className="min-h-screen bg-white">
 <HowToSchema name="How to build a resume" description="Create a professional resume in four steps." steps={[{ name: "Choose a theme", text: "Pick from 9 professional ATS-friendly visual themes." }, { name: "Enter your details", text: "Fill in your contact info, experience, skills, and education." }, { name: "Preview live", text: "See your resume update in real time as you type." }, { name: "Download", text: "Download your resume as a polished PDF, free and without a watermark." }]} />
       {/* Header */}
-      <div className="relative overflow-hidden border-b border-gray-200 dark:border-gray-800 bg-gradient-to-br from-brand-50/50 via-white to-gray-50 dark:from-gray-900/50 dark:via-gray-950 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="relative overflow-hidden border-b border-gray-200 bg-gradient-to-br from-brand-50/50 via-white to-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-left">
-            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 uppercase">
+            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 uppercase">
               100% Free · No Watermarks
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-4">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
               Build Your{" "}
-              <span className="text-brand-600 dark:text-brand-400">
+              <span className="text-brand-600">
                 Professional Resume
               </span>
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
+            <p className="text-lg text-gray-600 max-w-2xl">
               Create and download a polished resume in minutes. Choose from 9 ATS-friendly visual themes, preview in real time, and download completely free without any signup.
             </p>
           </div>
           <div className="md:col-span-4 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-900/40 bg-white dark:bg-gray-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/builder_illustration.jpg" 
                 alt="rawcv Resume Builder Illustration" 
@@ -66,13 +66,13 @@ export default function BuildPage() {
       </div>
 
       {/* Footer CTA */}
-      <div className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 mt-12">
+      <div className="border-t border-gray-200 bg-gray-50 mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">
               Make Your Resume AI-Ready
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-gray-600 mb-6">
               Unlock premium AI features to optimize your resume for ATS systems, match job descriptions, and get personalized suggestions.
             </p>
             <a

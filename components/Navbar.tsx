@@ -16,44 +16,44 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm border-b border-gray-200/80 dark:border-gray-800">
+    <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center shadow-sm group-hover:shadow-brand transition-shadow">
+        <div className="h-[64px] flex items-center justify-between gap-4">
+          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
               <span className="text-white font-bold text-sm leading-none">R</span>
             </div>
-            <span className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-              raw<span className="text-brand-600">cv</span>
+            <span className="text-[18px] font-bold tracking-tight text-slate-900">
+              raw<span className="text-blue-600">cv</span>
             </span>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-0.5">
+          <div className="hidden lg:flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100/70 dark:hover:bg-gray-800/60 transition-colors"
+                className="px-3 py-2 text-[14px] font-medium text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors"
               >
                 {item.label}
               </Link>
             ))}
-            <span className="w-px h-5 bg-gray-200 dark:bg-gray-800 mx-2" />
-            <Link href="/about" className="px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100/70 dark:hover:bg-gray-800/60 transition-colors">About</Link>
-            <Link href="/contact" className="px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100/70 dark:hover:bg-gray-800/60 transition-colors">Contact</Link>
+            <span className="w-px h-5 bg-slate-200 mx-2" />
+            <Link href="/about" className="px-3 py-2 text-[14px] font-medium text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors">About</Link>
+            <Link href="/contact" className="px-3 py-2 text-[14px] font-medium text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors">Contact</Link>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <Link
               href="/analyze"
-              className="hidden sm:inline-flex items-center px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-sm hover:shadow-brand transition-all"
+              className="hidden sm:inline-flex items-center px-5 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-[14px] font-semibold transition-colors"
             >
               Start Free
             </Link>
 
             <button
               onClick={() => setOpen(!open)}
-              className="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+              className="lg:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
               aria-label="Menu"
               aria-expanded={open}
             >
@@ -65,19 +65,19 @@ export default function Navbar() {
         </div>
 
         {open && (
-          <div className="lg:hidden pb-5 space-y-1 border-t border-gray-100 dark:border-gray-800 pt-3">
+          <div className="lg:hidden pb-5 border-t border-slate-100 pt-3 space-y-1">
             {NAV_ITEMS.map((item) => (
               <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
-                className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
+                className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-700 hover:bg-slate-50 transition-colors">
                 {item.label}
               </Link>
             ))}
-            <div className="border-t border-gray-100 dark:border-gray-800 my-2 pt-2">
-              <Link href="/about" onClick={() => setOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-900">About</Link>
-              <Link href="/contact" onClick={() => setOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-900">Contact</Link>
+            <div className="border-t border-slate-100 my-2 pt-2 space-y-1">
+              <Link href="/about" onClick={() => setOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-500 hover:bg-slate-50">About</Link>
+              <Link href="/contact" onClick={() => setOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-slate-500 hover:bg-slate-50">Contact</Link>
             </div>
             <div className="px-3 pt-2">
-              <Link href="/analyze" onClick={() => setOpen(false)} className="block w-full text-center px-4 py-3 rounded-lg bg-brand-600 text-white font-semibold text-sm hover:bg-brand-700 transition-colors">
+              <Link href="/analyze" onClick={() => setOpen(false)} className="block w-full text-center px-4 py-3 rounded-full bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors">
                 Start Free
               </Link>
             </div>

@@ -50,33 +50,21 @@ export default function AnalyzePage() {
 
   if (!state.parsed) {
     return (
-      <main className="min-h-[80vh] flex items-center justify-center px-6 py-16">
-        <div className="relative max-w-2xl w-full bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-200/60 dark:border-gray-800/60 p-12 text-center overflow-hidden">
-          
-          <div className="relative">
-            <img
-              src="/upload_illustration.jpg"
-              alt="Upload your resume"
-              className="w-48 sm:w-56 mx-auto mb-6 rounded-xl border border-gray-100 dark:border-gray-800"
-              width={256}
-              height={140}
-            />
-            
-            <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">
-              Upload your resume to get started
-            </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
-              PDF, DOCX, or TXT · max 5 MB
-            </p>
-            
+      <main className="bg-slate-50 px-4 sm:px-6 py-10 sm:py-14">
+        <div className="max-w-[560px] mx-auto">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10 text-center">
+            <div className="w-14 h-14 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-5 text-blue-600">
+              <Icon name="upload" size={22} />
+            </div>
+            <h2 className="text-[18px] font-bold text-slate-900">Upload your resume to get started</h2>
+            <p className="text-[13.5px] text-slate-500 mt-1.5 mb-6">PDF, DOCX, or TXT · max 5 MB</p>
             <ResumeUploader />
-
-            <div className="mt-6 flex items-center gap-4 justify-center">
-              <span className="h-px w-12 bg-gray-200 dark:bg-gray-700" />
-              <Link href="/chat" className="text-sm text-brand-600 dark:text-brand-400 font-medium hover:underline">
+            <div className="mt-6 flex items-center gap-3 justify-center">
+              <span className="h-px w-10 bg-slate-200" />
+              <Link href="/chat" className="text-[13.5px] text-blue-600 font-medium hover:underline">
                 Or build from scratch with AI →
               </Link>
-              <span className="h-px w-12 bg-gray-200 dark:bg-gray-700" />
+              <span className="h-px w-10 bg-slate-200" />
             </div>
           </div>
         </div>
@@ -139,24 +127,25 @@ export default function AnalyzePage() {
   }
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-950" style={{ height: "100dvh" }}>
+    <main className="flex flex-col overflow-hidden bg-slate-50" style={{ height: "calc(100dvh - 64px)" }}>
       {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
-        <div className="px-6 py-3 flex items-center justify-between gap-4">
+      <div className="bg-white border-b border-slate-200 flex-shrink-0">
+        <div className="px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-white">
                 <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
               </svg>
             </div>
             <div className="min-w-0">
-              <h1 className="text-sm font-bold truncate text-gray-900 dark:text-gray-100">
+              <h2 className="text-[14px] font-semibold truncate text-slate-900">
                 {state.parsed.contact.name || "Resume Analysis"}
-              </h1>
+              </h2>
+              <p className="text-[12px] text-slate-500 truncate hidden sm:block">ATS &amp; job match tools</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-1.5 flex-shrink-0">
             <UndoButton />
             <ResetButton />
             <DownloadButton />
@@ -164,14 +153,14 @@ export default function AnalyzePage() {
         </div>
 
         {/* Tab bar */}
-        <nav className="flex gap-1 px-4 py-2 overflow-x-auto scrollbar-hide border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900" aria-label="Analysis tools" role="tablist">
+        <nav className="flex gap-1.5 px-3 sm:px-4 py-2.5 overflow-x-auto scrollbar-hide border-t border-slate-100 bg-slate-50" aria-label="Analysis tools" role="tablist">
           {TABS.map((tab) => (
             <button key={tab.id} role="tab" aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium whitespace-nowrap rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500 ${
+              className={`flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium whitespace-nowrap rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 activeTab === tab.id
-                  ? "bg-brand-600 text-white"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-white border border-transparent hover:border-slate-200"
               }`}>
               <Icon name={tab.icon} size={14} />
               {tab.label}
@@ -186,31 +175,31 @@ export default function AnalyzePage() {
         leftLabel="Analysis"
         rightLabel="Resume Preview"
         left={
-                  <div className={activeTab === "chat" ? "flex flex-col h-full overflow-hidden" : "p-6 overflow-y-auto flex-1"}>
+                  <div className={activeTab === "chat" ? "flex flex-col h-full overflow-hidden bg-white" : "p-4 sm:p-6 overflow-y-auto flex-1 bg-white"}>
           {/* ATS */}
           {activeTab === "ats" && (
-            <div className="space-y-6">
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-9 h-9 rounded-lg bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center text-brand-600 dark:text-brand-400"><Icon name="score" size={18} /></div>
-                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">ATS Score</h2>
+            <div className="space-y-5">
+              <div>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600"><Icon name="score" size={16} /></div>
+                  <h2 className="text-[15px] font-semibold text-slate-900">ATS Score</h2>
                 </div>
                 {!state.atsResult && !atsLoading && (
-                  <button type="button" onClick={runATS} className="w-full px-5 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg shadow-brand-500/25 hover:shadow-brand-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                  <button type="button" onClick={runATS} className="w-full px-5 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[14px] transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Run ATS Analysis
                   </button>
                 )}
               </div>
               {atsError && (
-                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-5 py-4 text-sm text-red-700 dark:text-red-300">
-                  <span className="shrink-0 text-lg">⚠</span>
+                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-[13.5px] text-red-700">
+                  <span className="shrink-0">⚠</span>
                   <span className="flex-1">{atsError}</span>
                   <button onClick={runATS} className="shrink-0 text-xs font-medium underline hover:no-underline">Retry</button>
                 </div>
               )}
               {(state.atsResult || atsLoading) && <ATSScoreCard result={state.atsResult ?? { score: 0, issues: [] }} loading={atsLoading} />}
               {state.atsResult && (
-                <button type="button" onClick={runATS} className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200">
+                <button type="button" onClick={runATS} className="w-full px-4 py-2.5 rounded-full border border-slate-200 bg-white text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
                   Re-run analysis
                 </button>
               )}
@@ -219,26 +208,26 @@ export default function AnalyzePage() {
 
           {/* JD Relevance */}
           {activeTab === "relevance" && (
-            <div className="space-y-6">
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400"><Icon name="target" size={18} /></div>
-                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Job Match</h2>
+            <div className="space-y-5">
+              <div>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600"><Icon name="target" size={16} /></div>
+                  <h2 className="text-[15px] font-semibold text-slate-900">Job Match</h2>
                 </div>
                 <textarea value={jdInput} onChange={(e) => setJdInput(e.target.value)}
                   placeholder="Paste the job description here…" rows={6}
-                  className="w-full rounded-xl border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-900 px-4 py-3 text-sm placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 resize-none mb-4"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-[14px] placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all resize-none mb-3"
                   aria-label="Job description input" />
                 {!state.relevanceResult && !relevanceLoading && (
                   <button type="button" onClick={runRelevance} disabled={!jdInput.trim()}
-                    className="w-full px-5 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    className="w-full px-5 py-3 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-[14px] transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Analyze Relevance
                   </button>
                 )}
               </div>
               {relevanceError && (
-                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-5 py-4 text-sm text-red-700 dark:text-red-300">
-                  <span className="shrink-0 text-lg">⚠</span>
+                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-[13.5px] text-red-700">
+                  <span className="shrink-0">⚠</span>
                   <span className="flex-1">{relevanceError}</span>
                   <button onClick={runRelevance} className="shrink-0 text-xs font-medium underline hover:no-underline">Retry</button>
                 </div>
@@ -247,9 +236,9 @@ export default function AnalyzePage() {
                 <RelevanceScoreCard result={state.relevanceResult ?? { score: 0, missingKeywords: [], missingSkills: [], recommendations: [] }} loading={relevanceLoading} />
               )}
               {state.relevanceResult && (
-                <div className="flex gap-3">
-                  <button type="button" onClick={runRelevance} className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200">Re-run</button>
-                  <Link href="/tailor" className="flex-1 text-center px-4 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-lg shadow-brand-500/25 hover:shadow-brand-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500">Tailor resume →</Link>
+                <div className="flex gap-2">
+                  <button type="button" onClick={runRelevance} className="flex-1 px-4 py-2.5 rounded-full border border-slate-200 bg-white text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">Re-run</button>
+                  <Link href="/tailor" className="flex-1 text-center px-4 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-[13.5px] font-semibold transition-colors">Tailor resume →</Link>
                 </div>
               )}
             </div>
@@ -257,28 +246,28 @@ export default function AnalyzePage() {
 
           {/* Suggestions */}
           {activeTab === "suggestions" && (
-            <div className="space-y-6">
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-amber-600 dark:text-amber-400"><Icon name="sparkles" size={18} /></div>
-                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Suggestions</h2>
+            <div className="space-y-5">
+              <div>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600"><Icon name="sparkles" size={16} /></div>
+                  <h2 className="text-[15px] font-semibold text-slate-900">Suggestions</h2>
                 </div>
                 {!state.suggestions.length && !suggestionsLoading && (
-                  <button type="button" onClick={runSuggestions} className="w-full px-5 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm shadow-lg shadow-amber-500/25 hover:shadow-amber-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                  <button type="button" onClick={runSuggestions} className="w-full px-5 py-3 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-[14px] transition-colors focus:outline-none focus:ring-2 focus:ring-slate-900">
                     Get AI Suggestions
                   </button>
                 )}
               </div>
               {suggestionsError && (
-                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-5 py-4 text-sm text-red-700 dark:text-red-300">
-                  <span className="shrink-0 text-lg">⚠</span>
+                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-[13.5px] text-red-700">
+                  <span className="shrink-0">⚠</span>
                   <span className="flex-1">{suggestionsError}</span>
                   <button onClick={runSuggestions} className="shrink-0 text-xs font-medium underline hover:no-underline">Retry</button>
                 </div>
               )}
               {(state.suggestions.length > 0 || suggestionsLoading) && <SuggestionsList suggestions={state.suggestions} loading={suggestionsLoading} />}
               {state.suggestions.length > 0 && (
-                <button type="button" onClick={runSuggestions} className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200">
+                <button type="button" onClick={runSuggestions} className="w-full px-4 py-2.5 rounded-full border border-slate-200 bg-white text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
                   Re-run suggestions
                 </button>
               )}
@@ -287,28 +276,28 @@ export default function AnalyzePage() {
 
           {/* Enhance */}
           {activeTab === "enhance" && (
-            <div className="space-y-6">
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400"><Icon name="trend" size={18} /></div>
-                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Enhance</h2>
+            <div className="space-y-5">
+              <div>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600"><Icon name="trend" size={16} /></div>
+                  <h2 className="text-[15px] font-semibold text-slate-900">Enhance</h2>
                 </div>
                 {!state.enhancements.length && !enhancementLoading && (
-                  <button type="button" onClick={runEnhancement} className="w-full px-5 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <button type="button" onClick={runEnhancement} className="w-full px-5 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[14px] transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     Enhance Resume
                   </button>
                 )}
               </div>
               {enhancementError && (
-                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-5 py-4 text-sm text-red-700 dark:text-red-300">
-                  <span className="shrink-0 text-lg">⚠</span>
+                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-[13.5px] text-red-700">
+                  <span className="shrink-0">⚠</span>
                   <span className="flex-1">{enhancementError}</span>
                   <button onClick={runEnhancement} className="shrink-0 text-xs font-medium underline hover:no-underline">Retry</button>
                 </div>
               )}
               {(state.enhancements.length > 0 || enhancementLoading) && <EnhancementList enhancements={state.enhancements} loading={enhancementLoading} />}
               {state.enhancements.length > 0 && (
-                <button type="button" onClick={runEnhancement} className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200">
+                <button type="button" onClick={runEnhancement} className="w-full px-4 py-2.5 rounded-full border border-slate-200 bg-white text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
                   Re-run enhancement
                 </button>
               )}
@@ -317,12 +306,10 @@ export default function AnalyzePage() {
 
           {/* Theme */}
           {activeTab === "theme" && (
-            <div className="space-y-6">
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center text-pink-600 dark:text-pink-400"><Icon name="layers" size={18} /></div>
-                  <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Theme</h2>
-                </div>
+            <div className="space-y-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"><Icon name="layers" size={16} /></div>
+                <h2 className="text-[15px] font-semibold text-slate-900">Theme</h2>
               </div>
               <ThemePicker />
             </div>
@@ -338,12 +325,11 @@ export default function AnalyzePage() {
           </div>
         }
         right={
-          <div className="p-6">
+          <div className="p-4 sm:p-6 bg-slate-50">
             <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
           </div>
         }
       />
-
     </main>
   );
 }

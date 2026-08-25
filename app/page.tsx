@@ -33,7 +33,7 @@ const faqs = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <Script
         id="json-ld"
         type="application/ld+json"
@@ -61,31 +61,30 @@ export default function LandingPage() {
           }),
         }}
       />
-
 <HowToSchema name="How to use rawcv" description="Build, analyze, and optimize your resume in four steps." steps={[{ name: "Upload your resume", text: "Upload your resume as a PDF, DOCX, or TXT file — no signup required." }, { name: "Get your ATS score", text: "Get an instant ATS score out of 100 with specific fixes to pass applicant tracking systems." }, { name: "Match a job description", text: "Paste any job description to see exactly which keywords and skills are missing." }, { name: "Download a polished PDF", text: "Apply AI suggestions, choose a theme, and download a polished ATS-safe PDF." }]} />
       {/* ═══════════════ HERO ═══════════════ */}
-      <section className="pt-20 sm:pt-28 pb-16 px-6">
+      <section className="pt-16 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/50 border border-brand-100 dark:border-brand-900 mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-500" />
-            <span className="text-xs font-semibold text-brand-700 dark:text-brand-300">100% Free — No Signup Required</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+            <span className="text-xs font-semibold text-blue-700">100% Free — No Signup Required</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] text-gray-900 dark:text-white mb-6">
+          <h1 className="text-[32px] sm:text-[48px] lg:text-[52px] font-extrabold tracking-tight leading-[1.05] text-slate-900 mb-4">
             Build a resume that
             <br />
-            <span className="text-brand-600 dark:text-brand-400">actually gets interviews</span>
+            <span className="text-blue-600">actually gets interviews</span>
           </h1>
 
-          <p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-[16px] sm:text-[18px] text-slate-500 max-w-2xl mx-auto mb-8 leading-relaxed">
             Upload your CV, get an instant ATS score, match it to any job description,
             enhance it with AI, and download a polished PDF — all in minutes.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-14">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
             <Link
               href="/analyze"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-base font-semibold shadow-brand hover:shadow-brand-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-[15px] font-semibold transition-colors"
             >
               Upload & Analyze Free
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -94,22 +93,22 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/build"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
             >
               Build from Scratch
             </Link>
           </div>
 
           {/* Stats */}
-          <div className="flex items-center justify-center gap-8 sm:gap-14 text-center">
+          <div className="flex items-center justify-center gap-8 sm:gap-12 text-center">
             {[
               { value: "100+", label: "ATS Checks" },
               { value: "14", label: "Themes" },
               { value: "0$", label: "Forever Free" },
             ].map((stat) => (
               <div key={stat.label}>
-                <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">{stat.value}</div>
-                <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">{stat.label}</div>
+                <div className="text-[22px] sm:text-[26px] font-bold text-slate-900 leading-none">{stat.value}</div>
+                <div className="text-[12.5px] text-slate-500 mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -117,12 +116,12 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ HERO IMAGE ═══════════════ */}
-      <section className="px-6 pb-20">
+      <section className="px-4 sm:px-6 pb-12 sm:pb-16">
         <div className="max-w-5xl mx-auto">
           <img
             src="/hero_illustration.jpg"
             alt="AI resume builder and ATS analyzer illustration"
-            className="w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-card"
+            className="w-full rounded-2xl border border-slate-200"
             width={1400}
             height={763}
           />
@@ -130,45 +129,45 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ APP MOCKUP ═══════════════ */}
-      <section className="px-6 pb-20">
+      <section className="px-4 sm:px-6 pb-16 sm:pb-20">
         <div className="max-w-5xl mx-auto">
-          <div className="relative rounded-2xl overflow-hidden shadow-card border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-            <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+          <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-white">
+            <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 border-b border-slate-200">
               <span className="w-3 h-3 rounded-full bg-red-400" />
               <span className="w-3 h-3 rounded-full bg-yellow-400" />
               <span className="w-3 h-3 rounded-full bg-green-400" />
-              <div className="flex-1 mx-4 h-7 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center px-4">
-                <span className="text-xs text-gray-500">rawcv.com/analyze</span>
+              <div className="flex-1 mx-4 h-7 rounded-lg bg-white border border-slate-200 flex items-center px-4">
+                <span className="text-xs text-slate-500">rawcv.com/analyze</span>
               </div>
             </div>
             <div className="flex h-64 sm:h-80 overflow-hidden">
-              <div className="w-56 sm:w-72 border-r border-gray-200 dark:border-gray-800 p-4 flex flex-col gap-3 bg-white dark:bg-gray-900">
-                <div className="h-7 w-28 rounded-lg bg-brand-100 dark:bg-brand-900/40" />
-                <div className="h-4 w-full rounded bg-gray-100 dark:bg-gray-800" />
-                <div className="h-4 w-5/6 rounded bg-gray-100 dark:bg-gray-800" />
-                <div className="h-4 w-4/6 rounded bg-gray-100 dark:bg-gray-800" />
-                <div className="mt-2 h-11 w-full rounded-xl bg-brand-600 opacity-90" />
-                <div className="mt-auto p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
-                  <div className="text-xs font-bold text-emerald-600">ATS Score: 92/100</div>
+              <div className="w-56 sm:w-72 border-r border-slate-200 p-4 flex flex-col gap-3 bg-white">
+                <div className="h-7 w-28 rounded-lg bg-blue-50 border border-blue-100" />
+                <div className="h-3.5 w-full rounded bg-slate-100" />
+                <div className="h-3.5 w-5/6 rounded bg-slate-100" />
+                <div className="h-3.5 w-4/6 rounded bg-slate-100" />
+                <div className="mt-2 h-10 w-full rounded-full bg-blue-600 opacity-90" />
+                <div className="mt-auto p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                  <div className="text-xs font-bold text-emerald-700">ATS Score: 92/100</div>
                 </div>
               </div>
-              <div className="flex-1 p-5 bg-gray-50 dark:bg-gray-950">
-                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-5 h-full">
-                  <div className="border-b-2 border-gray-800 dark:border-gray-200 pb-3 mb-3">
-                    <div className="h-5 w-40 rounded bg-gray-800 dark:bg-gray-200 mb-2" />
+              <div className="flex-1 p-5 bg-slate-50">
+                <div className="bg-white rounded-xl border border-slate-200 p-5 h-full">
+                  <div className="border-b-2 border-slate-900 pb-3 mb-3">
+                    <div className="h-4 w-36 rounded bg-slate-900 mb-2" />
                     <div className="flex gap-3">
-                      <div className="h-3 w-24 rounded bg-gray-300 dark:bg-gray-600" />
-                      <div className="h-3 w-20 rounded bg-gray-300 dark:bg-gray-600" />
+                      <div className="h-3 w-24 rounded bg-slate-300" />
+                      <div className="h-3 w-20 rounded bg-slate-300" />
                     </div>
                   </div>
                   <div className="mb-3">
-                    <div className="h-3 w-20 rounded bg-gray-400 dark:bg-gray-500 mb-2" />
-                    <div className="h-3 w-full rounded bg-gray-200 dark:bg-gray-700 mb-1" />
-                    <div className="h-3 w-5/6 rounded bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-3 w-20 rounded bg-slate-400 mb-2" />
+                    <div className="h-3 w-full rounded bg-slate-200 mb-1.5" />
+                    <div className="h-3 w-5/6 rounded bg-slate-200" />
                   </div>
                   <div className="flex gap-2 flex-wrap">
                     {["React", "TypeScript", "Node.js", "Python"].map((s) => (
-                      <span key={s} className="px-2.5 py-1 rounded-full text-xs bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 font-medium">{s}</span>
+                      <span key={s} className="px-2.5 py-1 rounded-full text-xs bg-blue-50 border border-blue-100 text-blue-700 font-medium">{s}</span>
                     ))}
                   </div>
                 </div>
@@ -179,22 +178,22 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ FEATURES ═══════════════ */}
-      <section className="py-24 px-6" id="features">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 border-y border-slate-200" id="features">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-white">Everything you need to get hired</h2>
-            <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-slate-900">Everything you need to get hired</h2>
+            <p className="text-[14.5px] text-slate-500 max-w-xl mx-auto mt-2">
               Professional-grade resume tools powered by AI — completely free.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
-              <div key={f.title} className="group p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200">
-                <div className="w-11 h-11 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center mb-4">
-                  <Icon name={f.icon} size={20} />
+              <div key={f.title} className="p-6 rounded-2xl border border-slate-200 bg-white">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center mb-4">
+                  <Icon name={f.icon} size={18} />
                 </div>
-                <h3 className="font-semibold text-sm mb-1.5 text-gray-900 dark:text-gray-100">{f.title}</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{f.desc}</p>
+                <h3 className="font-semibold text-[14px] mb-1 text-slate-900">{f.title}</h3>
+                <p className="text-[13px] text-slate-500 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -202,30 +201,31 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ HOW IT WORKS ═══════════════ */}
-      <section className="py-24 px-6 bg-gray-50 dark:bg-gray-900/40 border-y border-gray-100 dark:border-gray-800">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-center mb-16 text-gray-900 dark:text-white">Three steps to a better resume</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-center text-slate-900">Three steps to a better resume</h2>
+          <p className="text-center text-[14.5px] text-slate-500 mt-2 mb-10">From upload to download in under 5 minutes.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { step: "01", title: "Upload", desc: "Drag and drop your PDF, DOCX, or TXT file. We parse it in seconds." },
               { step: "02", title: "Analyze", desc: "Run ATS scoring, paste a job description, and get AI-powered suggestions." },
               { step: "03", title: "Download", desc: "Pick a theme, apply changes, and download a polished ATS-safe PDF." },
             ].map((item) => (
-              <div key={item.step} className="relative">
-                <div className="w-12 h-12 rounded-xl bg-brand-600 flex items-center justify-center text-white font-extrabold text-lg shadow-brand mb-4">
+              <div key={item.step} className="p-6 rounded-2xl border border-slate-200 bg-slate-50">
+                <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold text-sm mb-4">
                   {item.step}
                 </div>
-                <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-gray-100">{item.title}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{item.desc}</p>
+                <h3 className="font-semibold text-[15px] mb-1.5 text-slate-900">{item.title}</h3>
+                <p className="text-[13.5px] text-slate-500 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-12">
+          <div className="mt-10">
             <img
               src="/success_illustration.jpg"
               alt="Job offer and hiring success illustration"
-              className="w-full max-w-3xl mx-auto rounded-2xl border border-gray-200 dark:border-gray-800 shadow-card"
+              className="w-full max-w-3xl mx-auto rounded-2xl border border-slate-200"
               width={1280}
               height={698}
             />
@@ -234,14 +234,14 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ CTA ═══════════════ */}
-      <section className="py-24 px-6">
+      <section className="py-16 sm:py-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="p-12 rounded-3xl bg-brand-600">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Ready to land more interviews?</h2>
-            <p className="text-brand-100 mb-8 max-w-md mx-auto">Upload your resume and get instant AI-powered analysis — completely free, no account needed.</p>
-            <Link href="/analyze" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-brand-700 font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200">
+          <div className="p-8 sm:p-12 rounded-3xl bg-slate-900">
+            <h2 className="text-[24px] sm:text-[30px] font-bold text-white leading-tight">Ready to land more interviews?</h2>
+            <p className="text-[14.5px] text-slate-300 mt-2 mb-7 max-w-md mx-auto">Upload your resume and get instant AI-powered analysis — completely free, no account needed.</p>
+            <Link href="/analyze" className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-slate-900 font-semibold text-[14px] hover:bg-slate-100 transition-colors">
               Get Started Free
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
@@ -250,14 +250,14 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════ FAQ ═══════════════ */}
-      <section className="py-24 px-6 bg-gray-50 dark:bg-gray-900/40 border-t border-gray-100 dark:border-gray-800" id="faq">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 border-t border-slate-200" id="faq">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-extrabold tracking-tight text-center mb-12 text-gray-900 dark:text-white">Frequently asked questions</h2>
-          <dl className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
+          <h2 className="text-[22px] sm:text-[26px] font-bold tracking-tight text-center mb-8 text-slate-900">Frequently asked questions</h2>
+          <dl className="space-y-3" itemScope itemType="https://schema.org/FAQPage">
             {faqs.map((faq) => (
-              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-card">
-                <dt className="font-semibold text-gray-900 dark:text-gray-100 mb-2" itemProp="name">{faq.q}</dt>
-                <dd className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200">
+                <dt className="font-semibold text-[14.5px] text-slate-900 mb-1.5" itemProp="name">{faq.q}</dt>
+                <dd className="text-[13.5px] text-slate-500 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                   <span itemProp="text">{faq.a}</span>
                 </dd>
               </div>

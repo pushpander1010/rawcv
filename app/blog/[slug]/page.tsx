@@ -1177,13 +1177,13 @@ export default async function ArticlePage({ params }: PageProps) {
   };
 
   return (
-    <main className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 py-16 px-6">
+    <main className="min-h-screen bg-white text-gray-900 py-16 px-6">
       <Script id="article-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <article className="max-w-2xl mx-auto">
         {/* Navigation back */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-1 text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline mb-8"
+          className="inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline mb-8"
         >
           ← Back to Blog
         </Link>
@@ -1191,10 +1191,10 @@ export default async function ArticlePage({ params }: PageProps) {
         {/* Article Header */}
         <header className="mb-10">
           <div className="flex items-center gap-3 mb-4">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-400">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-700">
               {article.category}
             </span>
-            <span className="text-xs text-gray-400 dark:text-gray-500">
+            <span className="text-xs text-gray-400">
               {article.date} · {article.readTime}
             </span>
           </div>
@@ -1202,12 +1202,12 @@ export default async function ArticlePage({ params }: PageProps) {
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 leading-tight">
             {article.title}
           </h1>
-          <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed mb-8">
+          <p className="text-lg text-gray-500 leading-relaxed mb-8">
             {article.description}
           </p>
 
           {/* Article Cover Image */}
-          <div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden border border-brand-100 dark:border-brand-900/40 shadow-lg bg-gradient-to-br from-brand-100 via-brand-50 to-blue-50 dark:from-brand-950/20 dark:via-brand-950/10 dark:to-blue-950/10 flex items-center justify-center p-6">
+          <div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden border border-brand-100 shadow-lg bg-gradient-to-br from-brand-100 via-brand-50 to-blue-50 flex items-center justify-center p-6">
             <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:20px_20px]" />
             <img 
               src="/blog_illustration.jpg" 
@@ -1218,16 +1218,16 @@ export default async function ArticlePage({ params }: PageProps) {
         </header>
 
         {/* Article Body */}
-        <div className="font-serif prose prose-gray dark:prose-invert max-w-none text-base leading-relaxed space-y-6 text-gray-755 dark:text-gray-300">
+        <div className="font-serif prose prose-gray max-w-none text-base leading-relaxed space-y-6 text-gray-755">
           {article.content}
         </div>
 
         {/* Call to action footer */}
-        <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-brand-50 to-brand-50 dark:from-brand-900/10 dark:to-brand-900/10 border border-brand-100 dark:border-brand-800 text-center">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+        <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-brand-50 to-brand-50 border border-brand-100 text-center">
+          <h3 className="text-xl font-bold text-gray-900 mb-2">
             Put these tips into action
           </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
+          <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">
             Use rawcv to build a clean, single-column resume, check its ATS score, and match it against any job description for free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -1239,7 +1239,7 @@ export default async function ArticlePage({ params }: PageProps) {
             </Link>
             <Link
               href="/"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
             >
               Upload &amp; Analyze
             </Link>

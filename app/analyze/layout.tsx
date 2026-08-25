@@ -31,17 +31,16 @@ export default function AnalyzeLayout({
   return (
     <>
       <AnalyzeSeoBanner />
-<HowToSchema name="How to analyze your resume" description="Check your ATS score and job match in four steps." steps={[{ name: "Upload your resume", text: "Upload your resume as a PDF, DOCX, or TXT file." }, { name: "Run ATS analysis", text: "Run the ATS checker for a score out of 100 with a section-by-section breakdown." }, { name: "Match a job description", text: "Paste the job description to get a match percentage and missing keywords." }, { name: "Apply AI suggestions", text: "Apply AI-powered suggestions, then re-run to watch your score climb." }]} />
+      <HowToSchema name="How to analyze your resume" description="Check your ATS score and job match in four steps." steps={[{ name: "Upload your resume", text: "Upload your resume as a PDF, DOCX, or TXT file." }, { name: "Run ATS analysis", text: "Run the ATS checker for a score out of 100 with a section-by-section breakdown." }, { name: "Match a job description", text: "Paste the job description to get a match percentage and missing keywords." }, { name: "Apply AI suggestions", text: "Apply AI-powered suggestions, then re-run to watch your score climb." }]} />
       {children}
-
       {/* ── Learn more (SEO) ── */}
-      <section className="bg-gray-50 dark:bg-gray-900/40 border-t border-gray-200 dark:border-gray-800">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <section className="bg-white border-t border-slate-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
           <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <h2 className="text-[22px] sm:text-[26px] font-bold tracking-tight text-slate-900 leading-tight">
               How the resume analyzer helps you get hired
             </h2>
-            <p className="mt-4 text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="mt-4 text-[15px] text-slate-600 leading-relaxed">
               Your resume gets fewer than seven seconds of a recruiter&apos;s attention before it&apos;s
               tossed into the yes or no pile. Most of those decisions are now made by Applicant
               Tracking Systems (ATS) — the software that parses, scores, and ranks your resume before
@@ -50,11 +49,11 @@ export default function AnalyzeLayout({
               exactly where your resume stands and what needs to change.
             </p>
 
-            <div className="mt-12 space-y-10">
+            <div className="mt-10 space-y-8">
               {sections.map((s) => (
                 <div key={s.title}>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{s.title}</h3>
-                  <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">{s.body}</p>
+                  <h3 className="text-[16px] font-semibold text-slate-900 mb-2">{s.title}</h3>
+                  <p className="text-[14.5px] text-slate-600 leading-relaxed">{s.body}</p>
                 </div>
               ))}
             </div>

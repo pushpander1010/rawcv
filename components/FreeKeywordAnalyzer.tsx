@@ -132,26 +132,26 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
         <div className="space-y-4">
           {/* Stats */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-xl bg-brand-50 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-800">
-              <p className="text-xs text-brand-600 dark:text-brand-400 mb-1">Total Words</p>
-              <p className="text-2xl font-bold text-brand-700 dark:text-brand-300">{stats.total}</p>
+            <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
+              <p className="text-xs text-brand-600 mb-1">Total Words</p>
+              <p className="text-2xl font-bold text-brand-700">{stats.total}</p>
             </div>
-            <div className="p-3 rounded-xl bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800">
-              <p className="text-xs text-brand-600 dark:text-brand-400 mb-1">Unique Keywords</p>
-              <p className="text-2xl font-bold text-brand-700 dark:text-brand-300">{stats.unique}</p>
+            <div className="p-3 rounded-xl bg-brand-50 border border-brand-200">
+              <p className="text-xs text-brand-600 mb-1">Unique Keywords</p>
+              <p className="text-2xl font-bold text-brand-700">{stats.unique}</p>
             </div>
           </div>
 
           {/* Top Keywords */}
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 text-sm">
+            <h3 className="font-semibold text-gray-900 mb-2 text-sm">
               Top Keywords
             </h3>
             <div className="flex flex-wrap gap-2">
               {stats.topKeywords.map((kw, idx) => (
                 <span
                   key={idx}
-                  className="px-3 py-1 rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 text-xs font-medium border border-brand-200/30"
+                  className="px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-medium border border-brand-200/30"
                 >
                   {kw.word} <span className="opacity-70">({kw.count})</span>
                 </span>
@@ -161,15 +161,15 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
 
           {/* Missing Keywords */}
           {stats.missingCommon.length > 0 && (
-            <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
-              <p className="text-xs font-medium text-amber-700 dark:text-amber-300 mb-2">
+            <div className="p-3 rounded-lg bg-amber-50 border border-amber-200">
+              <p className="text-xs font-medium text-amber-700 mb-2">
                 💡 Consider adding these common keywords:
               </p>
               <div className="flex flex-wrap gap-2">
                 {stats.missingCommon.map((kw, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-1 rounded text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300"
+                    className="px-2 py-1 rounded text-xs bg-amber-100 text-amber-700"
                   >
                     {kw}
                   </span>
@@ -179,19 +179,19 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
           )}
 
           {/* Upgrade CTA */}
-          <div className="p-4 rounded-lg bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800">
-            <p className="text-xs text-brand-700 dark:text-brand-300 mb-2">
+          <div className="p-4 rounded-lg bg-brand-50 border border-brand-200">
+            <p className="text-xs text-brand-700 mb-2">
               <strong>✅ This analysis is free and doesn&apos;t use any credits</strong>
             </p>
-            <p className="text-xs text-brand-700 dark:text-brand-300 mb-2">
+            <p className="text-xs text-brand-700 mb-2">
               <strong>Get AI-powered keyword suggestions</strong>
             </p>
-            <p className="text-xs text-brand-600 dark:text-brand-400 mb-3">
+            <p className="text-xs text-brand-600 mb-3">
               Sign up to get personalized keyword recommendations based on your target job descriptions.
             </p>
             <a
               href="/analyze"
-              className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
+              className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
             >
               Explore Premium Features →
             </a>

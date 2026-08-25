@@ -285,7 +285,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             <img
               src={preview}
               alt="Profile photo"
-              className="w-24 h-24 rounded-2xl object-cover border-2 border-brand-200 dark:border-brand-800 shadow-md"
+              className="w-24 h-24 rounded-2xl object-cover border-2 border-brand-200 shadow-md"
             />
             <button
               type="button"
@@ -297,14 +297,14 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             </button>
           </div>
           <div>
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">Profile photo</p>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-0.5">
+            <p className="text-sm font-semibold text-gray-700">Profile photo</p>
+            <p className="text-xs text-gray-500 mt-0.5">
               This photo will be used in resume themes that support photos.
             </p>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="mt-2 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline"
+              className="mt-2 text-xs font-bold text-brand-600 hover:underline"
             >
               Replace photo
             </button>
@@ -321,22 +321,22 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
           onClick={() => fileInputRef.current?.click()}
           className={`relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-200
             ${isDragging
-              ? "border-brand-500 bg-brand-50 dark:bg-brand-950/20"
-              : "border-gray-250 dark:border-gray-700 hover:border-brand-400 dark:hover:border-brand-600 hover:bg-brand-50/50 dark:hover:bg-brand-950/10"
+              ? "border-brand-500 bg-brand-50"
+              : "border-gray-250 hover:border-brand-400 hover:bg-brand-50/50"
             }`}
         >
           <div className="flex flex-col items-center gap-3">
-            <div className="w-16 h-16 rounded-2xl bg-brand-50 dark:bg-brand-950/30 flex items-center justify-center text-3xl border border-brand-100/50 dark:border-brand-900/20">
+            <div className="w-16 h-16 rounded-2xl bg-brand-50 flex items-center justify-center text-3xl border border-brand-100/50">
               📷
             </div>
             <div>
-              <p className="text-sm font-bold text-gray-700 dark:text-gray-300">
+              <p className="text-sm font-bold text-gray-700">
                 Upload your photo
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 mt-1">
                 Drag & drop or click to browse. JPG/PNG, max 5 MB.
               </p>
-              <p className="text-xs text-brand-500 dark:text-brand-400 font-semibold mt-2">
+              <p className="text-xs text-brand-500 font-semibold mt-2">
                 This photo will be used in resumes with photo support
               </p>
             </div>
@@ -360,11 +360,11 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
       {/* Crop/Edit Modal */}
       {showCropModal && originalImage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             {/* Header */}
-            <div className="p-5 border-b border-gray-100 dark:border-gray-800">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Edit Photo</h3>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+            <div className="p-5 border-b border-gray-100">
+              <h3 className="text-lg font-bold text-gray-900">Edit Photo</h3>
+              <p className="text-xs text-gray-500 mt-1">
                 Drag the crop box to move it. Drag corners/edges to resize.
               </p>
             </div>
@@ -372,7 +372,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             {/* Image preview with crop overlay — percentage-based, no CSS zoom */}
             <div className="p-5">
               <div
-                className="relative rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 select-none"
+                className="relative rounded-2xl overflow-hidden bg-gray-100 select-none"
                 style={{ maxHeight: "50vh" }}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
@@ -468,11 +468,11 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             </div>
 
             {/* Action buttons */}
-            <div className="p-5 border-t border-gray-100 dark:border-gray-800 flex gap-3">
+            <div className="p-5 border-t border-gray-100 flex gap-3">
               <button
                 type="button"
                 onClick={cancelCrop}
-                className="flex-1 py-2.5 rounded-xl text-sm font-bold border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
@@ -509,7 +509,7 @@ function Slider({ label, value, min, max, step, displayValue, onChange }: {
 }) {
   return (
     <div>
-      <div className="flex justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">
+      <div className="flex justify-between text-xs font-semibold text-gray-500 mb-1">
         <span>{label}</span>
         <span>{displayValue}</span>
       </div>
@@ -520,7 +520,7 @@ function Slider({ label, value, min, max, step, displayValue, onChange }: {
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-1.5 rounded-full appearance-none bg-gray-200 dark:bg-gray-700 accent-brand-600 cursor-pointer"
+        className="w-full h-1.5 rounded-full appearance-none bg-gray-200 accent-brand-600 cursor-pointer"
       />
     </div>
   );

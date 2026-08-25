@@ -188,21 +188,21 @@ export default function FreeFormattingChecker({ resume }: Props) {
   };
 
   const getScoreColor = (s: number) => {
-    if (s >= 80) return "text-emerald-600 dark:text-emerald-400";
-    if (s >= 60) return "text-amber-600 dark:text-amber-400";
-    return "text-red-600 dark:text-red-400";
+    if (s >= 80) return "text-emerald-600";
+    if (s >= 60) return "text-amber-600";
+    return "text-red-600";
   };
 
   const getScoreBg = (s: number) => {
-    if (s >= 80) return "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800";
-    if (s >= 60) return "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800";
-    return "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800";
+    if (s >= 80) return "bg-emerald-50 border-emerald-200";
+    if (s >= 60) return "bg-amber-50 border-amber-200";
+    return "bg-red-50 border-red-200";
   };
 
   const getSeverityColor = (severity: string) => {
-    if (severity === "high") return "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200";
-    if (severity === "medium") return "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200";
-    return "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200";
+    if (severity === "high") return "bg-red-100 text-red-800";
+    if (severity === "medium") return "bg-amber-100 text-amber-800";
+    return "bg-blue-100 text-blue-800";
   };
 
   return (
@@ -219,22 +219,22 @@ export default function FreeFormattingChecker({ resume }: Props) {
       {score !== null && (
         <div className={`p-4 rounded-lg border ${getScoreBg(score)}`}>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Formatting Score</h3>
+            <h3 className="font-semibold text-gray-900">Formatting Score</h3>
             <div className={`text-3xl font-bold ${getScoreColor(score)}`}>{score}</div>
           </div>
 
           {score >= 80 && (
-            <p className="text-sm text-emerald-700 dark:text-emerald-300">
+            <p className="text-sm text-emerald-700">
               ✅ Your resume formatting looks great!
             </p>
           )}
           {score >= 60 && score < 80 && (
-            <p className="text-sm text-amber-700 dark:text-amber-300">
+            <p className="text-sm text-amber-700">
               ⚠️ Some formatting improvements recommended.
             </p>
           )}
           {score < 60 && (
-            <p className="text-sm text-red-700 dark:text-red-300">
+            <p className="text-sm text-red-700">
               ❌ Several formatting issues found. See details below.
             </p>
           )}
@@ -243,24 +243,24 @@ export default function FreeFormattingChecker({ resume }: Props) {
 
       {issues.length > 0 && (
         <div className="space-y-3">
-          <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Issues Found</h3>
+          <h3 className="font-semibold text-gray-900 text-sm">Issues Found</h3>
           {issues.map((issue, idx) => (
             <div
               key={idx}
-              className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 space-y-2"
+              className="p-3 rounded-lg border border-gray-200 bg-gray-50 space-y-2"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                  <p className="font-medium text-gray-900 text-sm">
                     {issue.issue}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{issue.category}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{issue.category}</p>
                 </div>
                 <span className={`px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${getSeverityColor(issue.severity)}`}>
                   {issue.severity.toUpperCase()}
                 </span>
               </div>
-              <p className="text-xs text-gray-600 dark:text-gray-400">
+              <p className="text-xs text-gray-600">
                 💡 {issue.suggestion}
               </p>
             </div>
@@ -269,11 +269,11 @@ export default function FreeFormattingChecker({ resume }: Props) {
       )}
 
       {score !== null && issues.length === 0 && (
-        <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
-          <p className="text-sm text-emerald-700 dark:text-emerald-300">
+        <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200">
+          <p className="text-sm text-emerald-700">
             ✅ No formatting issues found! Your resume is well-formatted.
           </p>
-          <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">
+          <p className="text-xs text-emerald-600 mt-2">
             This analysis is free and doesn&apos;t use any credits
           </p>
         </div>
