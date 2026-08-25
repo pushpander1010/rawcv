@@ -3,10 +3,11 @@ import { z } from "zod";
 const DefaultSchema = z.any();
 
 // ─── Models ───────────────────────────────────────────────────────────────────
-const MODEL_PARSE    = "google/gemini-2.5-flash-lite"; // resume parsing — fast & cheap
-const MODEL_CHAT     = "xiaomi/mimo-v2.5";            // chat / build / customize
-const MODEL_ANALYSIS = "xiaomi/mimo-v2.5";             // ATS, JD relevance, suggestions, enhance
-const MODEL_FAST     = "google/gemini-2.5-flash-lite"; // fast generation (cover letters, etc.)
+const MODEL_PARSE    = "google/gemini-2.5-flash-lite";       // resume parsing — fast & cheap (keep)
+const MODEL_CHAT     = "meta/muse-spark-1.2-contributor"; // chat / build / customize — Muse (fallback mimo)
+const MODEL_ANALYSIS = "meta/muse-spark-1.2-contributor";   // ATS, JD relevance, suggestions, enhance — Muse (fallback mimo)
+const MODEL_FAST     = "meta/muse-spark-1.2-contributor";   // fast generation (cover letters, etc.) — Muse (fallback mimo)
+const FALLBACK_MIMO  = "xiaomi/mimo-v2.5";                   // fallback for Muse contributor (privacy / rate-limit)
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -65,11 +66,15 @@ async function callOpenRouter<T>(
     const timeoutMs = options?.timeoutMs ?? (model === MODEL_ANALYSIS ? 120000 : 60000);
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
+      const isMuse = model.includes("muse-spark");
+      const isXiaomi = model.startsWith("xiaomi/");
       const body: Record<string, unknown> = {
             model,
             max_tokens: options?.maxTokens ?? 2500,
             temperature: options?.temperature ?? 0.1,
-            ...(model.startsWith("xiaomi/") ? { reasoning: { exclude: true } } : {}),
+            ...(isXiaomi ? { reasoning: { exclude: true } } : {}),
+            // Muse contributor is mandatory reasoning — use low for chat/fast, medium for analysis
+            ...(isMuse ? { reasoning: { effort: model === MODEL_ANALYSIS ? "medium" : "low" }, include_reasoning: false } : {}),
         messages: [
           { role: "system", content: fullSystem },
           { role: "user",   content: prompt },
@@ -116,29 +121,44 @@ export async function complete<T = any>(
   return callOpenRouter(MODEL_PARSE, prompt, systemPrompt, options);
 }
 
-/** Chat (build / customize) — xiaomi/mimo-v2.5 */
+/** Chat (build / customize) — muse-spark contributor (fallback mimo) */
 export async function completeChat<T = any>(
   prompt: string,
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  return callOpenRouter(MODEL_CHAT, prompt, systemPrompt, options);
+  try {
+    return await callOpenRouter(MODEL_CHAT, prompt, systemPrompt, options);
+  } catch (e) {
+    console.warn(`⚠️ Muse Chat failed, fallback to ${FALLBACK_MIMO}:`, e instanceof Error ? e.message : String(e));
+    return callOpenRouter(FALLBACK_MIMO, prompt, systemPrompt, options);
+  }
 }
 
-/** ATS, JD relevance, suggestions, enhancements — xiaomi/mimo-v2.5 */
+/** ATS, JD relevance, suggestions, enhancements — muse-spark contributor (fallback mimo) */
 export async function completeAnalysis<T = any>(
   prompt: string,
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  return callOpenRouter(MODEL_ANALYSIS, prompt, systemPrompt, options);
+  try {
+    return await callOpenRouter(MODEL_ANALYSIS, prompt, systemPrompt, options);
+  } catch (e) {
+    console.warn(`⚠️ Muse Analysis failed, fallback to ${FALLBACK_MIMO}:`, e instanceof Error ? e.message : String(e));
+    return callOpenRouter(FALLBACK_MIMO, prompt, systemPrompt, options);
+  }
 }
 
-/** Fast generation (cover letters, etc.) — google/gemini-2.5-flash-lite */
+/** Fast generation (cover letters, etc.) — muse-spark contributor (fallback mimo) */
 export async function completeFast<T = any>(
   prompt: string,
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  return callOpenRouter(MODEL_FAST, prompt, systemPrompt, { ...options, timeoutMs: 30000 });
+  try {
+    return await callOpenRouter(MODEL_FAST, prompt, systemPrompt, { ...options, timeoutMs: 30000 });
+  } catch (e) {
+    console.warn(`⚠️ Muse Fast failed, fallback to ${FALLBACK_MIMO}:`, e instanceof Error ? e.message : String(e));
+    return callOpenRouter(FALLBACK_MIMO, prompt, systemPrompt, { ...options, timeoutMs: 30000 });
+  }
 }
