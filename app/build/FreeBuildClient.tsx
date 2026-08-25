@@ -1,8 +1,9 @@
 "use client";
 /* eslint-disable react-hooks/set-state-in-effect */
 
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import type { ParsedResume, ThemeId } from "@/types";
+import { useResume } from "@/context/ResumeContext";
 import FreeResumeForm from "@/components/FreeResumeForm";
 import ResumePreview from "@/components/ResumePreview";
 import ThemePicker from "@/components/ThemePicker";
@@ -11,60 +12,23 @@ import FreeATSChecker from "@/components/FreeATSChecker";
 import FreeKeywordAnalyzer from "@/components/FreeKeywordAnalyzer";
 import FreeFormattingChecker from "@/components/FreeFormattingChecker";
 
-const STORAGE_KEY = "free_resume_draft";
-const THEME_STORAGE_KEY = "free_resume_theme";
-
 export default function FreeBuildClient() {
-  const [resume, setResume] = useState<ParsedResume | null>(null);
-  const [selectedTheme, setSelectedTheme] = useState<ThemeId>("classic");
+  const { state, setState, isHydrated } = useResume();
+  const resume = state.parsed;
+  const selectedTheme = state.selectedTheme;
   const [showThemePicker, setShowThemePicker] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [isHydrated, setIsHydrated] = useState(false);
   const [activeTab, setActiveTab] = useState<"preview" | "ats" | "keywords" | "formatting">("preview");
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    try {
-      const savedResume = localStorage.getItem(STORAGE_KEY);
-      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-
-      if (savedResume) {
-        setResume(JSON.parse(savedResume));
-      }
-
-      if (savedTheme) {
-        setSelectedTheme(savedTheme as ThemeId);
-      }
-    } catch (err) {
-      console.error("Failed to load from localStorage:", err);
-    }
-
-    setIsHydrated(true);
-  }, []);
-
-  // Save resume to localStorage
-  useEffect(() => {
-    if (resume && isHydrated) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(resume));
-    }
-  }, [resume, isHydrated]);
-
-  // Save theme to localStorage
-  useEffect(() => {
-    if (isHydrated) {
-      localStorage.setItem(THEME_STORAGE_KEY, selectedTheme);
-    }
-  }, [selectedTheme, isHydrated]);
-
-  const handleResumeChange = (newResume: ParsedResume) => {
-    setResume(newResume);
+  const handleResumeChange = useCallback((newResume: ParsedResume) => {
+    setState((prev) => ({ ...prev, parsed: newResume }));
     setValidationError(null);
-  };
+  }, [setState]);
 
-  const handleThemeSelect = (themeId: ThemeId) => {
-    setSelectedTheme(themeId);
+  const handleThemeSelect = useCallback((themeId: ThemeId) => {
+    setState((prev) => ({ ...prev, selectedTheme: themeId }));
     setShowThemePicker(false);
-  };
+  }, [setState]);
 
   if (!isHydrated) {
     return (

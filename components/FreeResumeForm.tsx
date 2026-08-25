@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import type { ParsedResume, WorkExperience, Education, Project } from "@/types";
 
 interface Props {
   onResumeChange: (resume: ParsedResume) => void;
   initialResume?: ParsedResume;
 }
-
-const STORAGE_KEY = "free_resume_draft";
 
 export default function FreeResumeForm({ onResumeChange, initialResume }: Props) {
   const [resume, setResume] = useState<ParsedResume>(
@@ -26,16 +24,14 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  // Auto-save to localStorage
+  // Skip the initial mount notification so we don't clobber a resume already
+  // loaded in the global context (e.g. from AI chat or upload) with an empty draft.
+  const didMount = useRef(false);
   useEffect(() => {
-    const timer = setTimeout(() => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(resume));
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [resume]);
-
-  // Notify parent of changes
-  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
     onResumeChange(resume);
   }, [resume, onResumeChange]);
 
@@ -184,7 +180,6 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
         certifications: [],
         projects: [],
       });
-      localStorage.removeItem(STORAGE_KEY);
       setErrors({});
       setTouched({});
     }
