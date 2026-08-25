@@ -104,7 +104,7 @@ export default function ContactPage() {
             </div>
 
             <div className="p-6 rounded-2xl bg-gradient-to-br from-brand-50 dark:from-slate-900/50 to-slate-50/50 border border-brand-100 dark:border-brand-800/80 shadow-inner">
-              <h3 className="font-bold text-slate-950 mb-2 text-sm flex items-center gap-1.5">
+              <h3 className="font-bold text-slate-950 dark:text-white mb-2 text-sm flex items-center gap-1.5">
                 <span className="text-sm">💡</span> Quick Tip
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed">
@@ -210,7 +210,7 @@ export default function ContactPage() {
                   </div>
 
                   {status === "error" && (
-                    <p className="text-sm text-red-600 bg-red-50 dark:bg-red-950/30 border border-red-100 rounded-xl px-4 py-3">
+                    <p className="text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-950/30 border border-red-100 rounded-xl px-4 py-3">
                       ⚠️ {errorMsg}
                     </p>
                   )}

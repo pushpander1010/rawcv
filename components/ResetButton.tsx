@@ -17,7 +17,7 @@ export default function ResetButton() {
         <button
           type="button"
           onClick={() => { reset(); setConfirming(false); }}
-          className="px-2.5 py-1.5 rounded-lg bg-red-50 dark:bg-red-950/300 hover:bg-red-600 text-white text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="px-2.5 py-1.5 rounded-lg bg-red-50 dark:bg-red-950/30 hover:bg-red-600 text-white text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
         >
           Yes, reset
         </button>

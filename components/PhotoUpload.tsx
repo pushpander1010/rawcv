@@ -290,7 +290,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             <button
               type="button"
               onClick={removePhoto}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-50 dark:bg-red-950/300 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+              className="absolute -top-2 -right-2 w-6 h-6 bg-red-50 dark:bg-red-950/30 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
               aria-label="Remove photo"
             >
               ×

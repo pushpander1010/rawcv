@@ -121,7 +121,7 @@ export default function ChatPage() {
     <span className="flex items-center gap-1.5">
       Resume Preview
       {previewUpdated && (
-        <span className="inline-block w-2 h-2 rounded-full bg-emerald-50 dark:bg-emerald-950/300 animate-pulse" aria-label="Preview updated" />
+        <span className="inline-block w-2 h-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 animate-pulse" aria-label="Preview updated" />
       )}
     </span>
   );

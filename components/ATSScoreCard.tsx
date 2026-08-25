@@ -73,7 +73,7 @@ export default function ATSScoreCard({ result, loading = false }: ATSScoreCardPr
   const { score, issues = [] } = result;
   const showIssues = issues.length > 0;
   const label = score >= 80 ? "Great ATS compatibility" : score >= 60 ? "Moderate ATS compatibility" : "Poor ATS compatibility";
-  const color = score >= 80 ? "text-emerald-600" : score >= 60 ? "text-amber-600" : "text-red-600";
+  const color = score >= 80 ? "text-emerald-600" : score >= 60 ? "text-amber-600" : "text-red-600 dark:text-red-300";
 
   return (
     <section aria-label="ATS Score" className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">

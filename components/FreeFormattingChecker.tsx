@@ -190,7 +190,7 @@ export default function FreeFormattingChecker({ resume }: Props) {
   const getScoreColor = (s: number) => {
     if (s >= 80) return "text-emerald-600";
     if (s >= 60) return "text-amber-600";
-    return "text-red-600";
+    return "text-red-600 dark:text-red-300";
   };
 
   const getScoreBg = (s: number) => {
@@ -200,9 +200,9 @@ export default function FreeFormattingChecker({ resume }: Props) {
   };
 
   const getSeverityColor = (severity: string) => {
-    if (severity === "high") return "bg-red-100 text-red-800";
-    if (severity === "medium") return "bg-amber-100 text-amber-800";
-    return "bg-blue-100 text-blue-800";
+    if (severity === "high") return "bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-300 dark:text-red-300";
+    if (severity === "medium") return "bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 dark:text-amber-300";
+    return "bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 dark:text-blue-300";
   };
 
   return (

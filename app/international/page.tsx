@@ -35,7 +35,7 @@ const FORMAT_META: Record<ResumeFormat, {
 }> = {
   general: {
     icon: "🌍",
-    color: "from-brand-50 dark:from-slate-9000 to-brand-500",
+    color: "from-brand-50 dark:from-slate-900 to-brand-500",
     highlights: ["✅ Standard for most countries", "✅ Photo optional", "✅ Up to 2 pages", "✅ Personal details included"],
     tips: [
       "Use reverse-chronological order (most recent first)",
@@ -273,14 +273,14 @@ export default function InternationalPage() {
                   aria-pressed={isSelected}
                 >
                   {/* Color bar */}
-                  <div className="h-1.5 bg-brand-50 dark:bg-brand-950/300" />
+                  <div className="h-1.5 bg-brand-50 dark:bg-brand-950/30" />
 
                   {/* Content */}
                   <div className="p-5 space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-3xl">{m.icon}</span>
                       {isSelected && (
-                        <span className="w-6 h-6 bg-brand-50 dark:bg-brand-950/300 rounded-full flex items-center justify-center">
+                        <span className="w-6 h-6 bg-brand-500 rounded-full flex items-center justify-center">
                           <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                           </svg>
@@ -329,7 +329,7 @@ export default function InternationalPage() {
 
         {/* ── Learn more about each format ──────────────────────────── */}
         <section className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
-          <h3 className="text-sm font-bold text-slate-950 uppercase tracking-widest mb-3">
+          <h3 className="text-sm font-bold text-slate-950 dark:text-white uppercase tracking-widest mb-3">
             Detailed Format Guides
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -418,7 +418,7 @@ export default function InternationalPage() {
             {conversionResult && (
               <div className="mt-4 space-y-3">
                 <div className="rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/30 p-4">
-                  <p className="text-xs font-bold text-emerald-800 mb-2">
+                  <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300 mb-2">
                     ✅ Conversion applied successfully!
                   </p>
                   {conversionResult.summaryRewrite && (
@@ -467,7 +467,7 @@ export default function InternationalPage() {
             <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md hover:border-brand-300 transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-950 uppercase tracking-widest">
+                  <h3 className="text-sm font-bold text-slate-950 dark:text-white uppercase tracking-widest">
                     Profile Photo
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">
@@ -490,7 +490,7 @@ export default function InternationalPage() {
               <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md hover:border-brand-300 transition-all duration-300">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="text-sm font-bold text-slate-950 uppercase tracking-widest">
+                    <h3 className="text-sm font-bold text-slate-950 dark:text-white uppercase tracking-widest">
                       Languages
                     </h3>
                     <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">
@@ -540,7 +540,7 @@ export default function InternationalPage() {
                         <button
                           type="button"
                           onClick={() => removeLanguage(i)}
-                          className="p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 transition-colors"
+                          className="p-2 rounded-lg text-red-400 hover:text-red-600 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 transition-colors"
                           aria-label="Remove language"
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -559,7 +559,7 @@ export default function InternationalPage() {
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">{meta.icon}</span>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-950 uppercase tracking-widest">
+                  <h3 className="text-sm font-bold text-slate-950 dark:text-white uppercase tracking-widest">
                     {info.label} Format Details
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
@@ -592,7 +592,7 @@ export default function InternationalPage() {
               <div className="flex items-center gap-3 mb-5">
                 <span className="text-2xl">💡</span>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-950 uppercase tracking-widest">
+                  <h3 className="text-sm font-bold text-slate-950 dark:text-white uppercase tracking-widest">
                     {info.label} Resume Tips
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
@@ -635,7 +635,7 @@ export default function InternationalPage() {
 
               {/* Don'ts */}
               <div>
-                <p className="text-xs font-bold text-red-600 uppercase tracking-wide mb-2">
+                <p className="text-xs font-bold text-red-600 dark:text-red-300 uppercase tracking-wide mb-2">
                   ❌ Don&apos;t
                 </p>
                 <ul className="space-y-1.5">
@@ -655,7 +655,7 @@ export default function InternationalPage() {
 
             {/* Quick actions */}
             <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
-              <h3 className="text-sm font-bold text-slate-950 uppercase tracking-widest mb-4">
+              <h3 className="text-sm font-bold text-slate-950 dark:text-white uppercase tracking-widest mb-4">
                 Quick Actions
               </h3>
               <div className="space-y-3">
@@ -718,7 +718,7 @@ export default function InternationalPage() {
             {/* Cover letters for this format */}
             <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-md">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-bold text-slate-950 uppercase tracking-widest">
+                <h3 className="text-sm font-bold text-slate-950 dark:text-white uppercase tracking-widest">
                   Cover Letters
                 </h3>
                 <Link
@@ -765,7 +765,7 @@ export default function InternationalPage() {
                       <button
                         type="button"
                         onClick={() => deleteCoverLetter(cl.id)}
-                        className="shrink-0 p-1.5 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 transition-colors opacity-0 group-hover:opacity-100"
+                        className="shrink-0 p-1.5 rounded-lg text-red-400 hover:text-red-600 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 transition-colors opacity-0 group-hover:opacity-100"
                         aria-label="Delete cover letter"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

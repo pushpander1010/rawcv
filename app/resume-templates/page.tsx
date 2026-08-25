@@ -242,7 +242,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
               key={f}
               className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-300"
             >
-              <span className="w-1 h-1 rounded-full bg-brand-50 dark:bg-brand-950/300 flex-shrink-0" />
+              <span className="w-1 h-1 rounded-full bg-brand-50 dark:bg-brand-950/30 flex-shrink-0" />
               {f}
             </li>
           ))}

@@ -25,9 +25,9 @@ function Step({ number, title, children }: { number: number; title: string; chil
 
 function Callout({ type = "tip", children }: { type?: "tip" | "note" | "warning"; children: React.ReactNode }) {
   const styles = {
-    tip:     "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800 text-emerald-800",
-    note:    "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800 text-blue-800",
-    warning: "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800 text-amber-800",
+    tip:     "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300",
+    note:    "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-300",
+    warning: "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300",
   };
   const icons = { tip: "Tip", note: "Note", warning: "Warning" };
   return (
@@ -344,7 +344,7 @@ export default function HowToPage() {
             <Step number={3} title="Read your score and issues">
               <p>You will see a score out of 100 with a colour-coded breakdown. Issues are grouped into categories:</p>
               <ul className="list-disc list-inside space-y-1 mt-2">
-                <li><strong className="text-red-600">Critical</strong> - missing sections (contact info, work experience, education)</li>
+                <li><strong className="text-red-600 dark:text-red-300">Critical</strong> - missing sections (contact info, work experience, education)</li>
                 <li><strong className="text-amber-600">Warnings</strong> - weak formatting, missing dates, vague bullet points</li>
                 <li><strong className="text-blue-600">Suggestions</strong> - keyword density, action verb usage, quantified achievements</li>
               </ul>

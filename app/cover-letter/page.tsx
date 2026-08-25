@@ -767,7 +767,7 @@ export default function CoverLetterPage() {
                         <button
                           type="button"
                           onClick={() => removeParagraph(idx)}
-                          className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 p-1 rounded-full bg-red-50 dark:bg-red-950/300 text-white shadow transition-opacity"
+                          className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 p-1 rounded-full bg-red-50 dark:bg-red-950/30 text-white shadow transition-opacity"
                           aria-label="Remove paragraph"
                         >
                           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>

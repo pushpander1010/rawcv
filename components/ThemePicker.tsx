@@ -220,7 +220,7 @@ export default function ThemePicker({ onSelect }: Props) {
                     <div className="h-1 bg-white dark:bg-slate-900 rounded w-2/3" />
                   </div>
                   {isSelected && (
-                    <span className="absolute top-2 right-2 w-5 h-5 bg-brand-50 dark:bg-brand-950/300 rounded-full flex items-center justify-center">
+                    <span className="absolute top-2 right-2 w-5 h-5 bg-brand-500 rounded-full flex items-center justify-center">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>

@@ -376,7 +376,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       {error && (
         <div
           role="alert"
-          className="px-4 py-2 flex items-center gap-2 text-xs text-red-600 bg-red-50 dark:bg-red-950/30 border-t border-red-100"
+          className="px-4 py-2 flex items-center gap-2 text-xs text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-950/30 border-t border-red-100"
         >
           <span>⚠</span>
           <span className="flex-1">{error}</span>

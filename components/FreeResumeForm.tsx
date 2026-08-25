@@ -205,7 +205,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
               className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
             />
             {touched.name && errors.name && (
-              <p className="mt-1.5 text-xs text-red-600 font-medium">{errors.name}</p>
+              <p className="mt-1.5 text-xs text-red-600 dark:text-red-300 font-medium">{errors.name}</p>
             )}
           </div>
 
@@ -221,7 +221,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
               className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
             />
             {touched.email && errors.email && (
-              <p className="mt-1.5 text-xs text-red-600 font-medium">{errors.email}</p>
+              <p className="mt-1.5 text-xs text-red-600 dark:text-red-300 font-medium">{errors.email}</p>
             )}
           </div>
 
@@ -370,7 +370,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 <button
                   type="button"
                   onClick={() => removeExperience(idx)}
-                  className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
+                  className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl text-red-600 dark:text-red-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -443,7 +443,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 <button
                   type="button"
                   onClick={() => removeEducation(idx)}
-                  className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
+                  className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl text-red-600 dark:text-red-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -513,7 +513,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
               <button
                 type="button"
                 onClick={() => removeCertification(idx)}
-                className="inline-flex items-center gap-1 text-xs font-bold px-3 py-2.5 rounded-xl text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
+                className="inline-flex items-center gap-1 text-xs font-bold px-3 py-2.5 rounded-xl text-red-600 dark:text-red-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -580,7 +580,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 <button
                   type="button"
                   onClick={() => removeProject(idx)}
-                  className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
+                  className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl text-red-600 dark:text-red-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -608,7 +608,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
         <button
           type="button"
           onClick={handleClear}
-          className="px-5 py-2.5 rounded-xl border border-red-200 dark:border-red-800 text-red-600 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-sm font-semibold flex items-center gap-1.5"
+          className="px-5 py-2.5 rounded-xl border border-red-200 dark:border-red-800 text-red-600 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-sm font-semibold flex items-center gap-1.5"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

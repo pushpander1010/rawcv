@@ -153,7 +153,7 @@ export default function CanadaFormatPage() {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-bold text-red-600 uppercase tracking-wide mb-2">❌ Don&apos;t</p>
+              <p className="text-xs font-bold text-red-600 dark:text-red-300 uppercase tracking-wide mb-2">❌ Don&apos;t</p>
               <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
                 <li>• Never include a photo</li>
                 <li>• Don&apos;t include age, DOB, or nationality</li>
@@ -189,7 +189,7 @@ export default function CanadaFormatPage() {
         <section className="rounded-3xl bg-gradient-to-r from-red-500 to-orange-500 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">Build your Canadian resume</h2>
           <p className="text-sm text-red-100 mb-6 max-w-lg mx-auto">Convert your resume to Canadian format with AI. We remove photos, strip personal details, and restructure for maximum impact.</p>
-          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-red-600 text-sm font-bold hover:bg-red-50 dark:hover:bg-red-500/20 transition-colors shadow-lg">
+          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-red-600 dark:text-red-300 text-sm font-bold hover:bg-red-50 dark:hover:bg-red-500/20 transition-colors shadow-lg">
             Convert to Canadian Format →
           </Link>
         </section>

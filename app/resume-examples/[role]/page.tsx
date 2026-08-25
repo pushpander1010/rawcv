@@ -848,7 +848,7 @@ export default function ResumeExamplePage({ params }: Props) {
             <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 dark:text-brand-300 uppercase">
               Resume Examples &amp; Guides
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-950 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-tight">
               {role.title} Resume Guide &amp; Example
             </h1>
             <p className="text-lg text-slate-500 dark:text-slate-300 max-w-2xl mx-auto md:mx-0">

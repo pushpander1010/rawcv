@@ -164,7 +164,7 @@ export default function EUFormatPage() {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-bold text-red-600 uppercase tracking-wide mb-2">❌ Don&apos;t</p>
+              <p className="text-xs font-bold text-red-600 dark:text-red-300 uppercase tracking-wide mb-2">❌ Don&apos;t</p>
               <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
                 <li>• Don&apos;t use US-style ultra-concise bullets</li>
                 <li>• Don&apos;t skip the languages section</li>
