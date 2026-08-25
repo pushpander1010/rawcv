@@ -70,8 +70,8 @@ export default function FreeBuildClient() {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600 mb-4" />
-          <p className="text-gray-600 dark:text-slate-300">Loading your resume...</p>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4" />
+          <p className="text-sm text-slate-600 dark:text-slate-300">Loading your resume...</p>
         </div>
       </div>
     );
@@ -88,54 +88,29 @@ export default function FreeBuildClient() {
 
       {/* Preview Column */}
       <div className="lg:col-span-2 order-1 lg:order-2">
-        <div className="sticky top-24 space-y-6">
+        <div className="sticky top-24 space-y-5">
           {/* Tab Navigation */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-4">
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              <button
-                type="button"
-                onClick={() => setActiveTab("preview")}
-                className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
-                  activeTab === "preview"
-                    ? "bg-brand-600 text-white shadow-md shadow-brand-500/20"
-                    : "bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-100"
-                }`}
-              >
-                Preview
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("ats")}
-                className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
-                  activeTab === "ats"
-                    ? "bg-brand-600 text-white shadow-md shadow-brand-500/20"
-                    : "bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-100"
-                }`}
-              >
-                ATS Check
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("keywords")}
-                className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
-                  activeTab === "keywords"
-                    ? "bg-brand-600 text-white shadow-md shadow-brand-500/20"
-                    : "bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-100"
-                }`}
-              >
-                Keywords
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("formatting")}
-                className={`px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
-                  activeTab === "formatting"
-                    ? "bg-brand-600 text-white shadow-md shadow-brand-500/20"
-                    : "bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-100"
-                }`}
-              >
-                Format
-              </button>
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-1.5">
+            <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
+              {[
+                { id: "preview", label: "Preview" },
+                { id: "ats", label: "ATS Check" },
+                { id: "keywords", label: "Keywords" },
+                { id: "formatting", label: "Format" },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setActiveTab(t.id as typeof activeTab)}
+                  className={`px-4 py-2 rounded-full font-medium text-[13.5px] whitespace-nowrap transition-colors ${
+                    activeTab === t.id
+                      ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
+                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -143,45 +118,45 @@ export default function FreeBuildClient() {
           {activeTab === "preview" && (
             <>
               {/* Theme Selector */}
-              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">
                     Theme
                   </h2>
                   <button
                     type="button"
                     onClick={() => setShowThemePicker(!showThemePicker)}
-                    className="text-sm px-3.5 py-1.5 rounded-xl bg-brand-100 text-brand-700 hover:bg-brand-200 hover:scale-[1.02] active:scale-[0.98] font-semibold transition-all duration-200 shadow-sm"
+                    className="text-[13px] px-3.5 py-1.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 font-medium transition-colors"
                   >
                     {showThemePicker ? "Hide" : "Change"}
                   </button>
                 </div>
 
                 {showThemePicker && (
-                  <div className="mb-6 pb-6 border-b border-gray-200 dark:border-slate-700">
+                  <div className="mb-5 pb-5 border-b border-slate-200 dark:border-slate-800">
                     <ThemePicker onSelect={handleThemeSelect} />
                   </div>
                 )}
 
-                <div className="text-sm text-gray-600 dark:text-slate-300">
-                  Current: <span className="font-semibold text-gray-900 dark:text-white capitalize">{selectedTheme}</span>
+                <div className="text-[13.5px] text-slate-600 dark:text-slate-300">
+                  Current: <span className="font-semibold text-slate-900 dark:text-white capitalize">{selectedTheme}</span>
                 </div>
               </div>
 
               {/* Preview */}
-              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+                <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
                   Preview
                 </h2>
 
                 {resume ? (
-                  <div className="overflow-auto max-h-96 border border-gray-200 dark:border-slate-700 rounded-lg">
+                  <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
                     <ResumePreview resume={resume} theme={selectedTheme} />
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-slate-800 rounded-lg border-2 border-dashed border-gray-300">
+                  <div className="flex items-center justify-center h-56 bg-slate-50 dark:bg-slate-800 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
                     <div className="text-center">
-                      <p className="text-gray-500 dark:text-slate-300">
+                      <p className="text-[13.5px] text-slate-500 dark:text-slate-300">
                         Start filling out the form to see your resume preview
                       </p>
                     </div>
@@ -190,8 +165,8 @@ export default function FreeBuildClient() {
               </div>
 
               {/* Download Section */}
-              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+                <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
                   Download
                 </h2>
 
@@ -202,14 +177,14 @@ export default function FreeBuildClient() {
                 />
 
                 {validationError && (
-                  <div className="mt-4 p-3 rounded-lg bg-amber-50 border border-amber-200">
-                    <p className="text-sm text-amber-700">{validationError}</p>
+                  <div className="mt-3 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
+                    <p className="text-[13.5px] text-amber-700 dark:text-amber-300">{validationError}</p>
                   </div>
                 )}
 
-                <div className="mt-4 p-4 rounded-lg bg-emerald-50 border border-emerald-200">
-                  <p className="text-sm text-emerald-700">
-                    <strong>Completely free</strong> — no watermark, no hidden charges
+                <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <p className="text-[13px] text-slate-600 dark:text-slate-300">
+                    <strong className="text-slate-900 dark:text-white">Completely free</strong> — no watermark, no hidden charges
                   </p>
                 </div>
               </div>
@@ -218,8 +193,8 @@ export default function FreeBuildClient() {
 
           {/* ATS Check Tab */}
           {activeTab === "ats" && (
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+              <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
                 ATS Compatibility Check
               </h2>
               <FreeATSChecker resume={resume} />
@@ -228,8 +203,8 @@ export default function FreeBuildClient() {
 
           {/* Keywords Tab */}
           {activeTab === "keywords" && (
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+              <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
                 Keyword Analysis
               </h2>
               <FreeKeywordAnalyzer resume={resume} />
@@ -238,8 +213,8 @@ export default function FreeBuildClient() {
 
           {/* Formatting Tab */}
           {activeTab === "formatting" && (
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+              <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
                 Formatting Check
               </h2>
               <FreeFormattingChecker resume={resume} />
@@ -247,32 +222,20 @@ export default function FreeBuildClient() {
           )}
 
           {/* AI Features CTA */}
-          <div className="bg-gradient-to-br from-brand-50 dark:from-slate-900 to-brand-50 rounded-xl border border-brand-200 p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-              Upgrade Your Resume with AI
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-5">
+            <h3 className="text-[14.5px] font-semibold text-slate-900 dark:text-white mb-1.5">
+              Upgrade with AI
             </h3>
-            <p className="text-sm text-gray-600 dark:text-slate-300 mb-4">
-              Get AI-powered suggestions, JD matching, ATS optimization, and more advanced analysis.
+            <p className="text-[13.5px] text-slate-600 dark:text-slate-300 mb-3 leading-relaxed">
+              Get an ATS score, job-description match, and AI bullet enhancements — without leaving the builder.
             </p>
             <a
               href="/analyze"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 w-full"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 text-[13.5px] font-semibold transition-colors w-full"
             >
-              Explore Premium Features
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
+              Explore AI features
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </a>
           </div>
