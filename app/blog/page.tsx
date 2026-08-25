@@ -14,7 +14,7 @@ const POSTS = [
     category: "ATS Optimization",
     date: "May 20, 2026",
     readTime: "5 min read",
-    gradient: "from-brand-500 to-brand-500",
+    gradient: "from-brand-50 dark:from-slate-9000 to-brand-500",
   },
   {
     slug: "quantifying-achievements-resume-examples",
@@ -59,7 +59,7 @@ const POSTS = [
     category: "Career Advice",
     date: "May 24, 2026",
     readTime: "6 min read",
-    gradient: "from-brand-500 to-blue-500",
+    gradient: "from-brand-50 dark:from-slate-9000 to-blue-500",
   },
   {
     slug: "resume-skills-section-guide",

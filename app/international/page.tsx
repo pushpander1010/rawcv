@@ -35,7 +35,7 @@ const FORMAT_META: Record<ResumeFormat, {
 }> = {
   general: {
     icon: "🌍",
-    color: "from-brand-500 to-brand-500",
+    color: "from-brand-50 dark:from-slate-9000 to-brand-500",
     highlights: ["✅ Standard for most countries", "✅ Photo optional", "✅ Up to 2 pages", "✅ Personal details included"],
     tips: [
       "Use reverse-chronological order (most recent first)",
@@ -364,7 +364,7 @@ export default function InternationalPage() {
 
         {/* ── Convert Resume CTA ─────────────────────────────────────── */}
         {hasResume && (
-          <section className="rounded-3xl border border-brand-200 bg-gradient-to-r from-brand-50 to-brand-50 p-6 shadow-md">
+          <section className="rounded-3xl border border-brand-200 bg-gradient-to-r from-brand-50 dark:from-slate-900 to-brand-50 p-6 shadow-md">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">

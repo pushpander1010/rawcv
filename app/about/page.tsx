@@ -100,7 +100,7 @@ export default function AboutPage() {
       </div>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50 to-white border-b border-gray-100 px-6 py-16">
+      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50 dark:from-slate-900 to-white dark:to-slate-900 border-b border-gray-100 dark:border-slate-800 px-6 py-16">
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left">
             <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 uppercase">

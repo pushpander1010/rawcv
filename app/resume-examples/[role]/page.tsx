@@ -869,7 +869,7 @@ export default function ResumeExamplePage({ params }: Props) {
 
       {/* Relevant to You - SEO Content Section */}
       <section className="max-w-5xl mx-auto px-6 py-12">
-        <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-50/80 to-white border border-brand-100 shadow-sm">
+        <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-50 dark:from-slate-900/80 to-white dark:to-slate-900 border border-brand-100 shadow-sm">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <span className="text-brand-600">✦</span> Relevant to you: {role.title} Career Guide for Indian Professionals
           </h2>

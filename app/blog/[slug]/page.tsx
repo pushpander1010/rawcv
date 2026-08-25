@@ -1223,7 +1223,7 @@ export default async function ArticlePage({ params }: PageProps) {
         </div>
 
         {/* Call to action footer */}
-        <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-brand-50 to-brand-50 border border-brand-100 text-center">
+        <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-brand-50 dark:from-slate-900 to-brand-50 border border-brand-100 text-center">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
             Put these tips into action
           </h3>

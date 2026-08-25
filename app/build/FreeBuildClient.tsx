@@ -247,7 +247,7 @@ export default function FreeBuildClient() {
           )}
 
           {/* AI Features CTA */}
-          <div className="bg-gradient-to-br from-brand-50 to-brand-50 rounded-xl border border-brand-200 p-6">
+          <div className="bg-gradient-to-br from-brand-50 dark:from-slate-900 to-brand-50 rounded-xl border border-brand-200 p-6">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
               Upgrade Your Resume with AI
             </h3>

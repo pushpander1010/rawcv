@@ -146,7 +146,7 @@ export default function HowToPage() {
       </div>
 
       {/* Hero */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-brand-50 to-white border-b border-gray-100 px-6 py-16">
+      <div className="relative overflow-hidden bg-gradient-to-b from-brand-50 dark:from-slate-900 to-white dark:to-slate-900 border-b border-gray-100 dark:border-slate-800 px-6 py-16">
         <div className="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left space-y-4">
             <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 uppercase tracking-wide">
@@ -239,7 +239,7 @@ export default function HowToPage() {
                       ["Chat message (build/edit)", "0.5 - 1"],
                       ["PDF download",              "Free"],
                     ].map(([action, cost]) => (
-                      <tr key={action} className="border-b border-gray-100">
+                      <tr key={action} className="border-b border-gray-100 dark:border-slate-800">
                         <td className="px-4 py-2 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300">{action}</td>
                         <td className="px-4 py-2 border border-gray-200 dark:border-slate-700 font-medium text-brand-600">{cost}</td>
                       </tr>
@@ -586,7 +586,7 @@ export default function HowToPage() {
                 { q: "Can I create multiple versions of my resume?", a: "Yes - use the Tailor tool to create a job-specific version for each application. Each tailored version can be downloaded as a separate PDF." },
                 { q: "How do I contact support?", a: "Email us at support@rawcv.com. We typically respond within 24 hours on business days." },
               ].map((faq) => (
-                <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="border-b border-gray-100 pb-6 last:border-0">
+                <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="border-b border-gray-100 dark:border-slate-800 pb-6 last:border-0">
                   <dt className="font-semibold text-gray-900 dark:text-white mb-2" itemProp="name">{faq.q}</dt>
                   <dd className="text-sm text-gray-500 dark:text-slate-300 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                     <span itemProp="text">{faq.a}</span>

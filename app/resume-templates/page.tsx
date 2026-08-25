@@ -370,7 +370,7 @@ export default function ResumeTemplatesPage() {
 
       <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white pb-20">
         {/* ── Hero ── */}
-        <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 bg-gray-50 dark:bg-slate-800">
+        <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800">
           <div className="relative max-w-4xl mx-auto">
             <Breadcrumb
               items={[

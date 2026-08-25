@@ -51,7 +51,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white pb-20">
       {/* Hero section */}
-      <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 bg-gray-50 dark:bg-slate-800">
+      <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800">
         <div className="relative max-w-3xl mx-auto text-center">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Contact", href: "/contact" }]} />
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-brand-600">
@@ -103,7 +103,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-brand-50/50 to-gray-50/50 border border-brand-100/80 shadow-inner">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-brand-50 dark:from-slate-900/50 to-gray-50/50 border border-brand-100/80 shadow-inner">
               <h3 className="font-bold text-gray-950 mb-2 text-sm flex items-center gap-1.5">
                 <span className="text-sm">💡</span> Quick Tip
               </h3>
