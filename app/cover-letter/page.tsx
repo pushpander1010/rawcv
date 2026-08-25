@@ -450,7 +450,7 @@ export default function CoverLetterPage() {
               type="button"
               onClick={() => router.back()}
               aria-label="Go back"
-              className="text-gray-500 hover:text-gray-600 dark:text-slate-300 transition-colors"
+              className="text-gray-500 hover:text-gray-600 dark:hover:text-slate-300 dark:text-slate-300 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -477,7 +477,7 @@ export default function CoverLetterPage() {
               <button
                 type="button"
                 onClick={resetEditor}
-                className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                className="px-4 py-2 rounded-xl border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-slate-200 text-sm font-semibold hover:bg-gray-100 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors"
               >
                 New
               </button>
@@ -506,8 +506,8 @@ export default function CoverLetterPage() {
                       onClick={() => setFormat(key)}
                       className={`relative flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-xs font-medium transition-all duration-200 ${
                         selected
-                          ? "border-brand-500 bg-brand-50 text-brand-700 shadow-sm"
-                          : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                          ? "border-brand-500 bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300 shadow-sm"
+                          : "border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-600 dark:text-slate-300 hover:border-gray-300 dark:hover:border-slate-600"
                       }`}
                     >
                       <span className="text-lg">{f.icon}</span>
@@ -537,7 +537,7 @@ export default function CoverLetterPage() {
                     value={recipientName}
                     onChange={(e) => setRecipientName(e.target.value)}
                     placeholder="e.g. Jane Smith"
-                    className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
                 <div>
@@ -550,7 +550,7 @@ export default function CoverLetterPage() {
                     value={recipientCompany}
                     onChange={(e) => setRecipientCompany(e.target.value)}
                     placeholder="e.g. Acme Corp"
-                    className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -563,7 +563,7 @@ export default function CoverLetterPage() {
                     value={recipientTitle}
                     onChange={(e) => setRecipientTitle(e.target.value)}
                     placeholder="e.g. HR Manager, Engineering Director"
-                    className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
               </div>
@@ -579,7 +579,7 @@ export default function CoverLetterPage() {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the full job description here. Our AI will use your resume data + this JD to craft a tailored cover letter..."
-                  className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-y"
+                  className="w-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-y"
                 />
               </div>
 
@@ -609,7 +609,7 @@ export default function CoverLetterPage() {
               </button>
 
               {genError && (
-                <div role="alert" className="flex items-start gap-2 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                <div role="alert" className="flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
                   <span className="shrink-0 mt-0.5">⚠</span>
                   <span className="flex-1">{genError}</span>
                 </div>
@@ -635,15 +635,15 @@ export default function CoverLetterPage() {
                         key={letter.id}
                         className={`rounded-xl border p-3 transition-all duration-200 cursor-pointer ${
                           isActive
-                            ? "border-brand-300 bg-brand-50"
-                            : "border-gray-200 bg-white hover:border-gray-300"
+                            ? "border-brand-300 bg-brand-50 dark:bg-brand-950/30"
+                            : "border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-gray-300 dark:hover:border-slate-600"
                         }`}
                         onClick={() => loadLetter(letter)}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-1.5 mb-1">
-                              <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 dark:text-slate-300">
+                              <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300">
                                 {FORMAT_TEMPLATES[letter.format]?.label ?? letter.format}
                               </span>
                               {letter.recipientCompany && (
@@ -665,7 +665,7 @@ export default function CoverLetterPage() {
                               e.stopPropagation();
                               deleteLetter(letter.id);
                             }}
-                            className="shrink-0 p-1 rounded-lg text-gray-500 dark:text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                            className="shrink-0 p-1 rounded-lg text-gray-500 dark:text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 transition-colors"
                             aria-label={`Delete cover letter for ${letter.recipientCompany || "unknown"}`}
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -732,7 +732,7 @@ export default function CoverLetterPage() {
 
                 {/* Recipient Block */}
                 {(recipientName || recipientCompany || recipientTitle) && (
-                  <div className="mb-5 text-sm text-gray-700">
+                  <div className="mb-5 text-sm text-gray-700 dark:text-slate-200">
                     {recipientName && <div className="font-medium">{recipientName}</div>}
                     {recipientTitle && <div className="text-gray-500 dark:text-slate-300 text-xs">{recipientTitle}</div>}
                     {recipientCompany && <div className="text-gray-500 dark:text-slate-300 text-xs">{recipientCompany}</div>}
@@ -748,7 +748,7 @@ export default function CoverLetterPage() {
                     value={opening}
                     onChange={(e) => setOpening(e.target.value)}
                     placeholder={formatInfo.openingHint}
-                    className="w-full text-sm font-medium text-gray-800 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500"
+                    className="w-full text-sm font-medium text-gray-800 dark:text-slate-100 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500 dark:placeholder-slate-400"
                   />
                 </div>
 
@@ -761,13 +761,13 @@ export default function CoverLetterPage() {
                         onChange={(e) => updateBody(idx, e.target.value)}
                         rows={3}
                         placeholder={`Paragraph ${idx + 1} — Write your cover letter content here...`}
-                        className="w-full text-sm text-gray-700 bg-transparent border border-transparent focus:border-brand-300 rounded-lg p-2 resize-y leading-relaxed focus:outline-none focus:bg-white dark:bg-slate-900 transition-colors placeholder-gray-500"
+                        className="w-full text-sm text-gray-700 dark:text-slate-200 bg-transparent border border-transparent focus:border-brand-300 rounded-lg p-2 resize-y leading-relaxed focus:outline-none focus:bg-white dark:bg-slate-900 transition-colors placeholder-gray-500 dark:placeholder-slate-400"
                       />
                       {bodyParagraphs.length > 1 && (
                         <button
                           type="button"
                           onClick={() => removeParagraph(idx)}
-                          className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 p-1 rounded-full bg-red-500 text-white shadow transition-opacity"
+                          className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 p-1 rounded-full bg-red-50 dark:bg-red-950/300 text-white shadow transition-opacity"
                           aria-label="Remove paragraph"
                         >
                           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -780,7 +780,7 @@ export default function CoverLetterPage() {
                   <button
                     type="button"
                     onClick={addParagraph}
-                    className="flex items-center gap-1 text-xs text-brand-600 hover:text-brand-700 font-medium transition-colors"
+                    className="flex items-center gap-1 text-xs text-brand-600 hover:text-brand-700 dark:text-brand-300 font-medium transition-colors"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -790,7 +790,7 @@ export default function CoverLetterPage() {
                 </div>
 
                 {/* Editable Closing */}
-                <div className="mt-6 pt-4 border-t border-gray-100">
+                <div className="mt-6 pt-4 border-t border-gray-100 dark:border-slate-800">
                   <div className="mb-3">
                     <label className="sr-only" htmlFor="editor-closing">Closing</label>
                     <input
@@ -799,7 +799,7 @@ export default function CoverLetterPage() {
                       value={closing}
                       onChange={(e) => setClosing(e.target.value)}
                       placeholder={formatInfo.closingHint}
-                      className="w-full text-sm text-gray-700 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500"
+                      className="w-full text-sm text-gray-700 dark:text-slate-200 bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500 dark:placeholder-slate-400"
                     />
                   </div>
                   <div>
@@ -810,7 +810,7 @@ export default function CoverLetterPage() {
                       value={signature}
                       onChange={(e) => setSignature(e.target.value)}
                       placeholder={userName || "Your Name"}
-                      className="w-full text-base font-bold text-gray-900 dark:text-white bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500"
+                      className="w-full text-base font-bold text-gray-900 dark:text-white bg-transparent border-none focus:outline-none focus:ring-0 p-0 placeholder-gray-500 dark:placeholder-slate-400"
                     />
                   </div>
                 </div>

@@ -196,17 +196,17 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
             <div className="w-4 h-4 rounded-full bg-black/10" />
             <div className="h-2 w-16 rounded bg-gray-300" />
           </div>
-          <div className="h-1.5 w-3/4 rounded bg-gray-200" />
-          <div className="h-1.5 w-1/2 rounded bg-gray-200" />
+          <div className="h-1.5 w-3/4 rounded bg-gray-200 dark:bg-slate-700" />
+          <div className="h-1.5 w-1/2 rounded bg-gray-200 dark:bg-slate-700" />
           <div className="mt-1 border-t border-gray-200 dark:border-slate-700 pt-1 space-y-1">
             <div className="flex gap-2">
               <div className="w-6 h-1 rounded bg-gray-300" />
               <div className="flex-1 space-y-0.5">
-                <div className="h-1 rounded bg-gray-200" />
-                <div className="h-1 rounded bg-gray-200" />
+                <div className="h-1 rounded bg-gray-200 dark:bg-slate-700" />
+                <div className="h-1 rounded bg-gray-200 dark:bg-slate-700" />
               </div>
             </div>
-            <div className="h-1 w-2/3 rounded bg-gray-200" />
+            <div className="h-1 w-2/3 rounded bg-gray-200 dark:bg-slate-700" />
           </div>
         </div>
         {/* Theme name badge */}
@@ -226,7 +226,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
               {theme.tagline}
             </p>
           </div>
-          <span className="inline-block px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+          <span className="inline-block px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">
             FREE
           </span>
         </div>
@@ -242,7 +242,7 @@ function TemplateCard({ theme }: { theme: ThemeInfo }) {
               key={f}
               className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-slate-300"
             >
-              <span className="w-1 h-1 rounded-full bg-brand-500 flex-shrink-0" />
+              <span className="w-1 h-1 rounded-full bg-brand-50 dark:bg-brand-950/300 flex-shrink-0" />
               {f}
             </li>
           ))}
@@ -379,7 +379,7 @@ export default function ResumeTemplatesPage() {
               ]}
             />
             <div className="text-center mb-6">
-              <span className="inline-block px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wide mb-4">
+              <span className="inline-block px-3 py-1 rounded-full bg-brand-100 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wide mb-4">
                 Resume Templates
               </span>
               <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-brand-600">
@@ -420,7 +420,7 @@ export default function ResumeTemplatesPage() {
         </section>
 
         {/* ── SEO Content Section ── */}
-        <section className="border-t border-gray-100 bg-gray-50 dark:bg-slate-800/50">
+        <section className="border-t border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800/50">
           <div className="max-w-4xl mx-auto px-6 py-16 space-y-8 text-sm text-gray-600 dark:text-slate-300 leading-relaxed">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               Why the Right Resume Template Matters
@@ -549,7 +549,7 @@ export default function ResumeTemplatesPage() {
             </p>
             <Link
               href="/build"
-              className="inline-flex items-center justify-center px-8 py-3 text-sm font-bold rounded-xl bg-white dark:bg-slate-900 text-brand-700 hover:bg-brand-50 transition-colors shadow-lg"
+              className="inline-flex items-center justify-center px-8 py-3 text-sm font-bold rounded-xl bg-white dark:bg-slate-900 text-brand-700 dark:text-brand-300 hover:bg-brand-50 transition-colors shadow-lg"
             >
               Build Your Resume Now
             </Link>

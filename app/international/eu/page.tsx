@@ -84,7 +84,7 @@ export default function EUFormatPage() {
             <Link href="/international" className="px-5 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20">
               Convert Your Resume →
             </Link>
-            <Link href="/how-to" className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-700 text-sm font-bold hover:bg-gray-100 transition-colors">
+            <Link href="/how-to" className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-200 text-sm font-bold hover:bg-gray-100 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors">
               How to Use rawcv
             </Link>
           </div>
@@ -115,7 +115,7 @@ export default function EUFormatPage() {
           <div className="space-y-4">
             {SECTION_ORDER.map((section) => (
               <div key={section.num} className="flex gap-4 rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
-                <div className="shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-700 text-sm font-bold flex items-center justify-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-700 dark:text-blue-300 text-sm font-bold flex items-center justify-center">
                   {section.num}
                 </div>
                 <div>
@@ -137,7 +137,7 @@ export default function EUFormatPage() {
               { level: "C1-C2", label: "Advanced", desc: "Can use language flexibly for social, academic, and professional purposes. C2 is near-native proficiency." },
             ].map((item) => (
               <div key={item.level} className="flex gap-3 rounded-xl bg-gray-50 dark:bg-slate-800 p-4">
-                <span className="shrink-0 px-3 py-1 rounded-lg bg-blue-100 text-blue-700 text-xs font-bold self-start">
+                <span className="shrink-0 px-3 py-1 rounded-lg bg-blue-100 text-blue-700 dark:text-blue-300 text-xs font-bold self-start">
                   {item.level}
                 </span>
                 <div>
@@ -154,7 +154,7 @@ export default function EUFormatPage() {
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">💡 EU Resume Tips</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-2">✅ Do</p>
+              <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wide mb-2">✅ Do</p>
               <ul className="space-y-2 text-xs text-gray-600 dark:text-slate-300">
                 <li>• Include a professional photo with neutral background</li>
                 <li>• List languages with CEFR levels</li>
@@ -182,9 +182,9 @@ export default function EUFormatPage() {
           <div className="space-y-4">
             {FAQ_ITEMS.map((item, i) => (
               <details key={i} className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden group">
-                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
+                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
                   {item.q}
-                  <svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-gray-400 dark:text-slate-500 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
@@ -200,7 +200,7 @@ export default function EUFormatPage() {
         <section className="rounded-3xl bg-brand-600 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">Ready to build your EU resume?</h2>
           <p className="text-sm text-brand-100 mb-6 max-w-lg mx-auto">Upload your resume and convert it to EU format with AI. Your content stays intact — only structure and conventions change.</p>
-          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-brand-700 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
+          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-brand-700 dark:text-brand-300 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
             Convert to EU Format →
           </Link>
         </section>

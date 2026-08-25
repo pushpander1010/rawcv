@@ -285,19 +285,19 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             <img
               src={preview}
               alt="Profile photo"
-              className="w-24 h-24 rounded-2xl object-cover border-2 border-brand-200 shadow-md"
+              className="w-24 h-24 rounded-2xl object-cover border-2 border-brand-200 dark:border-brand-800 shadow-md"
             />
             <button
               type="button"
               onClick={removePhoto}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+              className="absolute -top-2 -right-2 w-6 h-6 bg-red-50 dark:bg-red-950/300 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
               aria-label="Remove photo"
             >
               ×
             </button>
           </div>
           <div>
-            <p className="text-sm font-semibold text-gray-700">Profile photo</p>
+            <p className="text-sm font-semibold text-gray-700 dark:text-slate-200">Profile photo</p>
             <p className="text-xs text-gray-500 dark:text-slate-300 mt-0.5">
               This photo will be used in resume themes that support photos.
             </p>
@@ -321,16 +321,16 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
           onClick={() => fileInputRef.current?.click()}
           className={`relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-200
             ${isDragging
-              ? "border-brand-500 bg-brand-50"
-              : "border-gray-250 hover:border-brand-400 hover:bg-brand-50/50"
+              ? "border-brand-500 bg-brand-50 dark:bg-brand-950/30"
+              : "border-gray-250 hover:border-brand-400 hover:bg-brand-50 dark:bg-brand-950/30/50"
             }`}
         >
           <div className="flex flex-col items-center gap-3">
-            <div className="w-16 h-16 rounded-2xl bg-brand-50 flex items-center justify-center text-3xl border border-brand-100/50">
+            <div className="w-16 h-16 rounded-2xl bg-brand-50 dark:bg-brand-950/30 flex items-center justify-center text-3xl border border-brand-100 dark:border-brand-800/50">
               📷
             </div>
             <div>
-              <p className="text-sm font-bold text-gray-700">
+              <p className="text-sm font-bold text-gray-700 dark:text-slate-200">
                 Upload your photo
               </p>
               <p className="text-xs text-gray-500 dark:text-slate-300 mt-1">
@@ -362,7 +362,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             {/* Header */}
-            <div className="p-5 border-b border-gray-100">
+            <div className="p-5 border-b border-gray-100 dark:border-slate-800">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Edit Photo</h3>
               <p className="text-xs text-gray-500 dark:text-slate-300 mt-1">
                 Drag the crop box to move it. Drag corners/edges to resize.
@@ -372,7 +372,7 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             {/* Image preview with crop overlay — percentage-based, no CSS zoom */}
             <div className="p-5">
               <div
-                className="relative rounded-2xl overflow-hidden bg-gray-100 select-none"
+                className="relative rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-800 select-none"
                 style={{ maxHeight: "50vh" }}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
@@ -468,11 +468,11 @@ export default function PhotoUpload({ onPhotoChange }: Props) {
             </div>
 
             {/* Action buttons */}
-            <div className="p-5 border-t border-gray-100 flex gap-3">
+            <div className="p-5 border-t border-gray-100 dark:border-slate-800 flex gap-3">
               <button
                 type="button"
                 onClick={cancelCrop}
-                className="flex-1 py-2.5 rounded-xl text-sm font-bold border border-gray-200 dark:border-slate-700 text-gray-700 hover:bg-gray-50 dark:bg-slate-800 transition-colors"
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors"
               >
                 Cancel
               </button>
@@ -520,7 +520,7 @@ function Slider({ label, value, min, max, step, displayValue, onChange }: {
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-1.5 rounded-full appearance-none bg-gray-200 accent-brand-600 cursor-pointer"
+        className="w-full h-1.5 rounded-full appearance-none bg-gray-200 dark:bg-slate-700 accent-brand-600 cursor-pointer"
       />
     </div>
   );

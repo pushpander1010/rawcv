@@ -14,7 +14,7 @@ export default function TermsPage() {
       <div className="max-w-2xl mx-auto">
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Terms of Service", href: "/terms" }]} />
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Terms of Service</h1>
-        <p className="text-sm text-gray-400 mb-10">Last updated: April 14, 2026</p>
+        <p className="text-sm text-gray-400 dark:text-slate-500 mb-10">Last updated: April 14, 2026</p>
 
         <Section title="1. Acceptance">
           <p>By accessing or using rawcv (&quot;the Service&quot;) you agree to be bound by these Terms. If you do not agree, do not use the Service.</p>
@@ -78,7 +78,7 @@ export default function TermsPage() {
           <p>Questions? Email us at <a href="mailto:support@rawcv.com" className="text-brand-600 hover:underline">support@rawcv.com</a>.</p>
         </Section>
 
-        <div className="mt-12 pt-6 border-t border-gray-100 text-sm text-gray-400">
+        <div className="mt-12 pt-6 border-t border-gray-100 dark:border-slate-800 text-sm text-gray-400 dark:text-slate-500">
           <Link href="/" className="text-brand-600 hover:underline">← Back to rawcv</Link>
           {" · "}
           <Link href="/privacy" className="text-brand-600 hover:underline">Privacy Policy</Link>

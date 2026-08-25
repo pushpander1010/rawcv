@@ -77,7 +77,7 @@ export default function ContactPage() {
 
             <div className="space-y-6">
               <div className="flex gap-4">
-                <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-brand-50 text-brand-600 text-lg">
+                <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/30 text-brand-600 text-lg">
                   ✉️
                 </span>
                 <div>
@@ -90,20 +90,20 @@ export default function ContactPage() {
               </div>
 
               <div className="flex gap-4">
-                <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-brand-50 text-brand-600 text-lg">
+                <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/30 text-brand-600 text-lg">
                   🕒
                 </span>
                 <div>
                   <h3 className="font-semibold text-sm text-gray-900 dark:text-white">Operating Hours</h3>
                   <p className="text-xs text-gray-500 dark:text-slate-300 mt-0.5">Our support team is available during</p>
-                  <p className="text-sm font-medium text-gray-700 mt-1">
+                  <p className="text-sm font-medium text-gray-700 dark:text-slate-200 mt-1">
                     Mon – Fri, 9:00 AM – 6:00 PM IST
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-brand-50 dark:from-slate-900/50 to-gray-50/50 border border-brand-100/80 shadow-inner">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-brand-50 dark:from-slate-900/50 to-gray-50/50 border border-brand-100 dark:border-brand-800/80 shadow-inner">
               <h3 className="font-bold text-gray-950 mb-2 text-sm flex items-center gap-1.5">
                 <span className="text-sm">💡</span> Quick Tip
               </h3>
@@ -113,7 +113,7 @@ export default function ContactPage() {
             </div>
 
             {/* Illustration Frame */}
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white dark:bg-slate-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-800 bg-white dark:bg-slate-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img
                 src="/contact_illustration.jpg"
                 alt="rawcv Help &amp; Support Illustration"
@@ -124,7 +124,7 @@ export default function ContactPage() {
 
           {/* Form Column */}
           <div className="lg:col-span-7">
-            <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-gray-100 shadow-xl">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-gray-100 dark:border-slate-800 shadow-xl">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send us a Message</h2>
 
               {status === "success" ? (
@@ -137,7 +137,7 @@ export default function ContactPage() {
                   <button
                     type="button"
                     onClick={() => setStatus("idle")}
-                    className="mt-4 px-6 py-2.5 rounded-xl border border-brand-200 text-sm font-semibold text-brand-600 hover:bg-brand-50 transition-colors"
+                    className="mt-4 px-6 py-2.5 rounded-xl border border-brand-200 dark:border-brand-800 text-sm font-semibold text-brand-600 hover:bg-brand-50 dark:bg-brand-950/30 transition-colors"
                   >
                     Send another message
                   </button>
@@ -157,7 +157,7 @@ export default function ContactPage() {
                         value={form.name}
                         onChange={handleChange}
                         placeholder="Jane Doe"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
                       />
                     </div>
                     <div>
@@ -172,7 +172,7 @@ export default function ContactPage() {
                         value={form.email}
                         onChange={handleChange}
                         placeholder="jane@example.com"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
                       />
                     </div>
                   </div>
@@ -189,7 +189,7 @@ export default function ContactPage() {
                       value={form.subject}
                       onChange={handleChange}
                       placeholder="How can we help you?"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
                     />
                   </div>
 
@@ -205,12 +205,12 @@ export default function ContactPage() {
                       value={form.message}
                       onChange={handleChange}
                       placeholder="Enter details here..."
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-sm"
                     />
                   </div>
 
                   {status === "error" && (
-                    <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                    <p className="text-sm text-red-600 bg-red-50 dark:bg-red-950/30 border border-red-100 rounded-xl px-4 py-3">
                       ⚠️ {errorMsg}
                     </p>
                   )}

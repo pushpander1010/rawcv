@@ -189,7 +189,7 @@ export default function ResumeFormatsPage() {
               </thead>
               <tbody>
                 {FORMATS.map((format) => (
-                  <tr key={format.country} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 dark:bg-slate-800 transition-colors">
+                  <tr key={format.country} className="border-b border-gray-100 dark:border-slate-800 last:border-0 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">{format.flag}</span>
@@ -219,7 +219,7 @@ export default function ResumeFormatsPage() {
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">{format.country}</h3>
                   </div>
                   {format.supported && (
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold uppercase">
                       AI Conversion
                     </span>
                   )}
@@ -255,7 +255,7 @@ export default function ResumeFormatsPage() {
                     Convert to {format.country} Format →
                   </Link>
                 ) : (
-                  <Link href="/international" className="inline-block px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 text-xs font-bold hover:bg-gray-50 dark:bg-slate-800 transition-colors">
+                  <Link href="/international" className="inline-block px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 text-xs font-bold hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors">
                     General Conversion →
                   </Link>
                 )}
@@ -275,9 +275,9 @@ export default function ResumeFormatsPage() {
               { q: "How long should a resume be?", a: "US: 1 page. Canada: 1-2 pages. UK: 2 pages. EU: up to 3 pages. India: 2-3 pages. Australia: 2-3 pages. The length depends on your experience level and the country's conventions." },
             ].map((item, i) => (
               <details key={i} className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden group">
-                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
+                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
                   {item.q}
-                  <svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-gray-400 dark:text-slate-500 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
@@ -293,7 +293,7 @@ export default function ResumeFormatsPage() {
         <section className="rounded-3xl bg-brand-600 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">Ready to convert your resume?</h2>
           <p className="text-sm text-brand-100 mb-6 max-w-lg mx-auto">Upload your resume and let AI adapt it to your target country&apos;s format. Your content stays the same — only structure changes.</p>
-          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-brand-700 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
+          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-brand-700 dark:text-brand-300 text-sm font-bold hover:bg-brand-50 transition-colors shadow-lg">
             Start Converting →
           </Link>
         </section>

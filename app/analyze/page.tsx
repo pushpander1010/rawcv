@@ -53,7 +53,7 @@ export default function AnalyzePage() {
       <main className="bg-slate-50 dark:bg-slate-950 px-4 sm:px-6 py-10 sm:py-14">
         <div className="max-w-[560px] mx-auto">
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-10 text-center">
-            <div className="w-14 h-14 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-5 text-blue-600">
+            <div className="w-14 h-14 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 flex items-center justify-center mx-auto mb-5 text-blue-600">
               <Icon name="upload" size={22} />
             </div>
             <h2 className="text-[18px] font-bold text-slate-900 dark:text-white">Upload your resume to get started</h2>
@@ -181,7 +181,7 @@ export default function AnalyzePage() {
             <div className="space-y-5">
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600"><Icon name="score" size={16} /></div>
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-100 flex items-center justify-center text-blue-600"><Icon name="score" size={16} /></div>
                   <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">ATS Score</h2>
                 </div>
                 {!state.atsResult && !atsLoading && (
@@ -191,7 +191,7 @@ export default function AnalyzePage() {
                 )}
               </div>
               {atsError && (
-                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-[13.5px] text-red-700">
+                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 px-4 py-3 text-[13.5px] text-red-700 dark:text-red-300">
                   <span className="shrink-0">⚠</span>
                   <span className="flex-1">{atsError}</span>
                   <button onClick={runATS} className="shrink-0 text-xs font-medium underline hover:no-underline">Retry</button>
@@ -199,7 +199,7 @@ export default function AnalyzePage() {
               )}
               {(state.atsResult || atsLoading) && <ATSScoreCard result={state.atsResult ?? { score: 0, issues: [] }} loading={atsLoading} />}
               {state.atsResult && (
-                <button type="button" onClick={runATS} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+                <button type="button" onClick={runATS} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                   Re-run analysis
                 </button>
               )}
@@ -211,7 +211,7 @@ export default function AnalyzePage() {
             <div className="space-y-5">
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600"><Icon name="target" size={16} /></div>
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-100 flex items-center justify-center text-blue-600"><Icon name="target" size={16} /></div>
                   <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Job Match</h2>
                 </div>
                 <textarea value={jdInput} onChange={(e) => setJdInput(e.target.value)}
@@ -226,7 +226,7 @@ export default function AnalyzePage() {
                 )}
               </div>
               {relevanceError && (
-                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-[13.5px] text-red-700">
+                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 px-4 py-3 text-[13.5px] text-red-700 dark:text-red-300">
                   <span className="shrink-0">⚠</span>
                   <span className="flex-1">{relevanceError}</span>
                   <button onClick={runRelevance} className="shrink-0 text-xs font-medium underline hover:no-underline">Retry</button>
@@ -237,7 +237,7 @@ export default function AnalyzePage() {
               )}
               {state.relevanceResult && (
                 <div className="flex gap-2">
-                  <button type="button" onClick={runRelevance} className="flex-1 px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">Re-run</button>
+                  <button type="button" onClick={runRelevance} className="flex-1 px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Re-run</button>
                   <Link href="/tailor" className="flex-1 text-center px-4 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-[13.5px] font-semibold transition-colors">Tailor resume →</Link>
                 </div>
               )}
@@ -249,7 +249,7 @@ export default function AnalyzePage() {
             <div className="space-y-5">
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600"><Icon name="sparkles" size={16} /></div>
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-100 flex items-center justify-center text-amber-600"><Icon name="sparkles" size={16} /></div>
                   <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Suggestions</h2>
                 </div>
                 {!state.suggestions.length && !suggestionsLoading && (
@@ -259,7 +259,7 @@ export default function AnalyzePage() {
                 )}
               </div>
               {suggestionsError && (
-                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-[13.5px] text-red-700">
+                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 px-4 py-3 text-[13.5px] text-red-700 dark:text-red-300">
                   <span className="shrink-0">⚠</span>
                   <span className="flex-1">{suggestionsError}</span>
                   <button onClick={runSuggestions} className="shrink-0 text-xs font-medium underline hover:no-underline">Retry</button>
@@ -267,7 +267,7 @@ export default function AnalyzePage() {
               )}
               {(state.suggestions.length > 0 || suggestionsLoading) && <SuggestionsList suggestions={state.suggestions} loading={suggestionsLoading} />}
               {state.suggestions.length > 0 && (
-                <button type="button" onClick={runSuggestions} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+                <button type="button" onClick={runSuggestions} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                   Re-run suggestions
                 </button>
               )}
@@ -279,7 +279,7 @@ export default function AnalyzePage() {
             <div className="space-y-5">
               <div>
                 <div className="flex items-center gap-2.5 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600"><Icon name="trend" size={16} /></div>
+                  <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 flex items-center justify-center text-emerald-600"><Icon name="trend" size={16} /></div>
                   <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Enhance</h2>
                 </div>
                 {!state.enhancements.length && !enhancementLoading && (
@@ -289,7 +289,7 @@ export default function AnalyzePage() {
                 )}
               </div>
               {enhancementError && (
-                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-[13.5px] text-red-700">
+                <div role="alert" className="flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 px-4 py-3 text-[13.5px] text-red-700 dark:text-red-300">
                   <span className="shrink-0">⚠</span>
                   <span className="flex-1">{enhancementError}</span>
                   <button onClick={runEnhancement} className="shrink-0 text-xs font-medium underline hover:no-underline">Retry</button>
@@ -297,7 +297,7 @@ export default function AnalyzePage() {
               )}
               {(state.enhancements.length > 0 || enhancementLoading) && <EnhancementList enhancements={state.enhancements} loading={enhancementLoading} />}
               {state.enhancements.length > 0 && (
-                <button type="button" onClick={runEnhancement} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+                <button type="button" onClick={runEnhancement} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                   Re-run enhancement
                 </button>
               )}

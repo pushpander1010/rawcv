@@ -121,7 +121,7 @@ export default function ChatPage() {
     <span className="flex items-center gap-1.5">
       Resume Preview
       {previewUpdated && (
-        <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-label="Preview updated" />
+        <span className="inline-block w-2 h-2 rounded-full bg-emerald-50 dark:bg-emerald-950/300 animate-pulse" aria-label="Preview updated" />
       )}
     </span>
   );
@@ -129,13 +129,13 @@ export default function ChatPage() {
   return (
     <main ref={chatWindowRef} className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-slate-800 scroll-mt-16" style={{ height: "100dvh" }}>
       {/* Header */}
-      <header className="bg-white dark:bg-slate-900 border-b border-gray-100 px-6 py-3 flex items-center justify-between gap-4 flex-shrink-0">
+      <header className="bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 px-6 py-3 flex items-center justify-between gap-4 flex-shrink-0">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => router.back()}
             aria-label="Go back"
-            className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:text-slate-300 hover:bg-gray-100 transition-all"
+            className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 dark:bg-slate-800 transition-all"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -180,7 +180,7 @@ export default function ChatPage() {
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
               <h2 className="text-sm font-medium text-gray-600 dark:text-slate-300">Live Preview</h2>
               <button type="button" onClick={() => setShowThemePicker((v) => !v)}
-                className="text-xs font-semibold text-brand-600 hover:text-brand-700 transition-colors focus:outline-none">
+                className="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-300 transition-colors focus:outline-none">
                 {showThemePicker ? "Hide themes" : "Change theme"}
               </button>
             </div>

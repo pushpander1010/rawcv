@@ -9,16 +9,16 @@ import { findIndex } from "@/lib/fuzzy-match";
 // ─── Section badge ────────────────────────────────────────────────────────────
 
 const SECTION_COLORS: Record<string, string> = {
-  experience: "bg-blue-100 text-blue-700",
-  summary:    "bg-brand-100 text-brand-700",
-  skills:     "bg-emerald-100 text-emerald-700",
-  education:  "bg-amber-100 text-amber-700",
+  experience: "bg-blue-100 text-blue-700 dark:text-blue-300",
+  summary:    "bg-brand-100 text-brand-700 dark:text-brand-300",
+  skills:     "bg-emerald-100 text-emerald-700 dark:text-emerald-300",
+  education:  "bg-amber-100 text-amber-700 dark:text-amber-300",
 };
 
 function SectionBadge({ section }: { section: string }) {
   const style =
     SECTION_COLORS[section.toLowerCase()] ??
-    "bg-gray-100 text-gray-600";
+    "bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300";
   return (
     <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full capitalize ${style}`}>
       {section}
@@ -57,7 +57,7 @@ function EnhancementCard({ suggestion, status, onAccept, onReject }: Enhancement
         )}
 
         {status === "rejected" && (
-          <span className="shrink-0 text-xs font-medium text-gray-400 flex items-center gap-1">
+          <span className="shrink-0 text-xs font-medium text-gray-400 dark:text-slate-500 flex items-center gap-1">
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -77,7 +77,7 @@ function EnhancementCard({ suggestion, status, onAccept, onReject }: Enhancement
             <button
               type="button"
               onClick={() => onReject(suggestion.id)}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
             >
               Reject
             </button>
@@ -86,20 +86,20 @@ function EnhancementCard({ suggestion, status, onAccept, onReject }: Enhancement
       </div>
 
       {/* Diff view — always visible */}
-      <div className="border-t border-gray-100 px-4 py-3 space-y-3">
+      <div className="border-t border-gray-100 dark:border-slate-800 px-4 py-3 space-y-3">
         <div>
-          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
+          <p className="text-xs font-medium text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-1">
             Original
           </p>
-          <p className="text-sm text-gray-600 dark:text-slate-300 bg-red-50 border border-red-100 rounded-lg px-3 py-2 leading-relaxed">
+          <p className="text-sm text-gray-600 dark:text-slate-300 bg-red-50 dark:bg-red-950/30 border border-red-100 rounded-lg px-3 py-2 leading-relaxed">
             {suggestion.original}
           </p>
         </div>
         <div>
-          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
+          <p className="text-xs font-medium text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-1">
             Enhanced
           </p>
-          <p className="text-sm text-gray-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 leading-relaxed">
+          <p className="text-sm text-gray-700 dark:text-slate-200 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 rounded-lg px-3 py-2 leading-relaxed">
             {suggestion.improved}
           </p>
         </div>
@@ -184,9 +184,9 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
   return (
     <section aria-label="Resume Enhancement Suggestions">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold text-gray-800">
+        <h2 className="text-base font-semibold text-gray-800 dark:text-slate-100">
           Enhancements
-          <span className="ml-2 text-sm font-normal text-gray-400">
+          <span className="ml-2 text-sm font-normal text-gray-400 dark:text-slate-500">
             ({enhancements.length})
           </span>
         </h2>
@@ -195,7 +195,7 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
             <span className="text-emerald-600">{acceptedCount} accepted</span>
           )}
           {pendingCount > 0 && (
-            <span className="text-gray-400">{pendingCount} pending</span>
+            <span className="text-gray-400 dark:text-slate-500">{pendingCount} pending</span>
           )}
         </div>
       </div>

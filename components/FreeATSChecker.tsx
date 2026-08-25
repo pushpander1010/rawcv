@@ -143,9 +143,9 @@ export default function FreeATSChecker({ resume }: Props) {
   };
 
   const getScoreBg = (s: number) => {
-    if (s >= 80) return "bg-emerald-50 border-emerald-200";
-    if (s >= 60) return "bg-amber-50 border-amber-200";
-    return "bg-red-50 border-red-200";
+    if (s >= 80) return "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800";
+    if (s >= 60) return "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800";
+    return "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800";
   };
 
   const getImpactColor = (impact: string) => {
@@ -173,17 +173,17 @@ export default function FreeATSChecker({ resume }: Props) {
           </div>
 
           {score >= 80 && (
-            <p className="text-sm text-emerald-700">
+            <p className="text-sm text-emerald-700 dark:text-emerald-300">
               ✅ Your resume is well-optimized for ATS systems!
             </p>
           )}
           {score >= 60 && score < 80 && (
-            <p className="text-sm text-amber-700">
+            <p className="text-sm text-amber-700 dark:text-amber-300">
               ⚠️ Your resume has some ATS issues. See suggestions below.
             </p>
           )}
           {score < 60 && (
-            <p className="text-sm text-red-700">
+            <p className="text-sm text-red-700 dark:text-red-300">
               ❌ Your resume needs improvements for ATS compatibility.
             </p>
           )}
@@ -223,16 +223,16 @@ export default function FreeATSChecker({ resume }: Props) {
       )}
 
       {score !== null && issues.length === 0 && (
-        <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200">
-          <p className="text-sm text-emerald-700">
+        <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
+          <p className="text-sm text-emerald-700 dark:text-emerald-300">
             ✅ No ATS issues found! Your resume looks great.
           </p>
         </div>
       )}
 
       {score !== null && (
-        <div className="p-4 rounded-lg bg-brand-50 border border-brand-200">
-          <p className="text-xs text-brand-700 mb-2">
+        <div className="p-4 rounded-lg bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-800">
+          <p className="text-xs text-brand-700 dark:text-brand-300 mb-2">
             <strong>Want more detailed analysis?</strong>
           </p>
           <p className="text-xs text-brand-600 mb-3">
@@ -240,7 +240,7 @@ export default function FreeATSChecker({ resume }: Props) {
           </p>
           <a
             href="/analyze"
-            className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
+            className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700 dark:text-brand-300"
           >
             Explore Premium Features →
           </a>

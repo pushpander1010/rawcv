@@ -87,7 +87,7 @@ export default function USFormatPage() {
             <Link href="/international" className="px-5 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20">
               Convert Your Resume →
             </Link>
-            <Link href="/cover-letter" className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-700 text-sm font-bold hover:bg-gray-100 transition-colors">
+            <Link href="/cover-letter" className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-200 text-sm font-bold hover:bg-gray-100 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors">
               Build Cover Letter →
             </Link>
           </div>
@@ -118,7 +118,7 @@ export default function USFormatPage() {
           <div className="space-y-4">
             {SECTION_ORDER.map((section) => (
               <div key={section.num} className="flex gap-4 rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
-                <div className="shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-700 text-sm font-bold flex items-center justify-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-700 dark:text-blue-300 text-sm font-bold flex items-center justify-center">
                   {section.num}
                 </div>
                 <div>
@@ -137,12 +137,12 @@ export default function USFormatPage() {
           <div className="space-y-3">
             {ACTION_VERBS.map((group) => (
               <div key={group.category} className="flex items-start gap-3">
-                <span className="shrink-0 px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-[10px] font-bold uppercase mt-0.5">
+                <span className="shrink-0 px-2 py-0.5 rounded bg-blue-100 text-blue-700 dark:text-blue-300 text-[10px] font-bold uppercase mt-0.5">
                   {group.category}
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {group.verbs.map((verb) => (
-                    <span key={verb} className="px-2 py-0.5 rounded bg-gray-100 text-xs text-gray-700">
+                    <span key={verb} className="px-2 py-0.5 rounded bg-gray-100 dark:bg-slate-800 text-xs text-gray-700 dark:text-slate-200">
                       {verb}
                     </span>
                   ))}
@@ -182,7 +182,7 @@ export default function USFormatPage() {
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">💡 US Resume Tips</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-2">✅ Do</p>
+              <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wide mb-2">✅ Do</p>
               <ul className="space-y-2 text-xs text-gray-600 dark:text-slate-300">
                 <li>• Keep it to 1 page (early-mid career)</li>
                 <li>• Start every bullet with a strong action verb</li>
@@ -210,9 +210,9 @@ export default function USFormatPage() {
           <div className="space-y-4">
             {FAQ_ITEMS.map((item, i) => (
               <details key={i} className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden group">
-                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
+                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
                   {item.q}
-                  <svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-gray-400 dark:text-slate-500 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
@@ -228,7 +228,7 @@ export default function USFormatPage() {
         <section className="rounded-3xl bg-gradient-to-r from-blue-500 to-cyan-500 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">Build your US resume</h2>
           <p className="text-sm text-blue-100 mb-6 max-w-lg mx-auto">Convert your resume to US format with AI. We trim to 1 page, remove personal details, and rewrite bullets for maximum impact.</p>
-          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-blue-600 text-sm font-bold hover:bg-blue-50 transition-colors shadow-lg">
+          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-blue-600 text-sm font-bold hover:bg-blue-50 dark:hover:bg-blue-500/20 transition-colors shadow-lg">
             Convert to US Format →
           </Link>
         </section>

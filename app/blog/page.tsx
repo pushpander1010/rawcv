@@ -169,7 +169,7 @@ export default function BlogPage() {
         {/* Header */}
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center mb-16">
           <div className="md:col-span-7 text-center md:text-left">
-            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 uppercase">
+            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 dark:text-brand-300 uppercase">
               rawcv Blog
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-white">
@@ -180,7 +180,7 @@ export default function BlogPage() {
             </p>
           </div>
           <div className="md:col-span-5 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white dark:bg-slate-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-800 bg-white dark:bg-slate-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/blog_illustration.jpg" 
                 alt="rawcv Blog & Resume Strategy Illustration" 
@@ -196,7 +196,7 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group block relative bg-white dark:bg-slate-900 rounded-3xl p-5 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
+              className="group block relative bg-white dark:bg-slate-900 rounded-3xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
             >
               {/* Card visual banner */}
               <div className={`w-full aspect-[16/10] rounded-2xl bg-gradient-to-br ${post.gradient} mb-5 flex items-center justify-center relative overflow-hidden shadow-inner`}>
@@ -224,10 +224,10 @@ export default function BlogPage() {
               </div>
               
               <div className="flex items-center gap-3 mb-3">
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-700">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300">
                   {post.category}
                 </span>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-gray-400 dark:text-slate-500">
                   {post.date}
                 </span>
               </div>
@@ -249,12 +249,12 @@ export default function BlogPage() {
         </div>
 
         {/* Footer Links */}
-        <div className="pt-8 border-t border-gray-100 text-sm text-gray-400 flex flex-wrap gap-4 justify-center">
-          <Link href="/" className="hover:text-gray-700 transition-colors">Home</Link>
-          <Link href="/build" className="hover:text-gray-700 transition-colors">Free Builder</Link>
-          <Link href="/about" className="hover:text-gray-700 transition-colors">About</Link>
-          <Link href="/contact" className="hover:text-gray-700 transition-colors">Contact</Link>
-          <Link href="/privacy" className="hover:text-gray-700 transition-colors">Privacy</Link>
+        <div className="pt-8 border-t border-gray-100 dark:border-slate-800 text-sm text-gray-400 dark:text-slate-500 flex flex-wrap gap-4 justify-center">
+          <Link href="/" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Home</Link>
+          <Link href="/build" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Free Builder</Link>
+          <Link href="/about" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">About</Link>
+          <Link href="/contact" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Contact</Link>
+          <Link href="/privacy" className="hover:text-gray-700 dark:hover:text-slate-200 dark:text-slate-200 transition-colors">Privacy</Link>
         </div>
       </div>
     </main>

@@ -48,7 +48,7 @@ function Chip({ label, variant }: { label: string; variant: "keyword" | "skill" 
   const styles =
     variant === "keyword"
       ? "bg-orange-50 text-orange-700 border border-orange-200"
-      : "bg-blue-50 text-blue-700 border border-blue-200";
+      : "bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800";
   return (
     <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${styles}`}>
       {label}
@@ -137,7 +137,7 @@ export default function RelevanceScoreCard({ result, loading = false }: Relevanc
             {recommendations.map((rec, idx) => (
               <li
                 key={idx}
-                className="flex gap-3 rounded-xl bg-blue-50 border border-blue-100 px-4 py-3 text-[13.5px] text-slate-700 leading-relaxed"
+                className="flex gap-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 px-4 py-3 text-[13.5px] text-slate-700 leading-relaxed"
               >
                 <span className="shrink-0 font-semibold text-blue-600">{idx + 1}.</span>
                 <span>{rec}</span>

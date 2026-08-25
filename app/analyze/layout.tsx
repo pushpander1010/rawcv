@@ -82,7 +82,7 @@ export default function AnalyzeLayout({
               <div key={s.title} className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-7 flex flex-col">
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <IconBadge name={s.icon} />
-                  <span className="text-[11px] font-bold tracking-widest text-slate-400 dark:text-slate-500 dark:text-slate-300 mt-2">0{i + 1}</span>
+                  <span className="text-[11px] font-bold tracking-widest text-slate-400 dark:text-slate-500 mt-2">0{i + 1}</span>
                 </div>
                 <h3 className="text-[15px] font-semibold text-slate-900 dark:text-white leading-snug mb-2.5">{s.title}</h3>
                 <p className="text-[13.5px] leading-relaxed text-slate-600 dark:text-slate-300">{s.body}</p>

@@ -65,9 +65,9 @@ export default function LandingPage() {
       {/* ═══════════════ HERO ═══════════════ */}
       <section className="pt-16 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/30 border border-blue-100 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-            <span className="text-xs font-semibold text-blue-700">100% Free — No Signup Required</span>
+            <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">100% Free — No Signup Required</span>
           </div>
 
           <h1 className="text-[32px] sm:text-[48px] lg:text-[52px] font-extrabold tracking-tight leading-[1.05] text-slate-900 dark:text-white mb-4">
@@ -93,7 +93,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/build"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             >
               Build from Scratch
             </Link>
@@ -142,13 +142,13 @@ export default function LandingPage() {
             </div>
             <div className="flex h-64 sm:h-80 overflow-hidden">
               <div className="w-56 sm:w-72 border-r border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-3 bg-white dark:bg-slate-900">
-                <div className="h-7 w-28 rounded-lg bg-blue-50 border border-blue-100" />
+                <div className="h-7 w-28 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-100" />
                 <div className="h-3.5 w-full rounded bg-slate-100" />
                 <div className="h-3.5 w-5/6 rounded bg-slate-100" />
                 <div className="h-3.5 w-4/6 rounded bg-slate-100" />
                 <div className="mt-2 h-10 w-full rounded-full bg-blue-600 opacity-90" />
-                <div className="mt-auto p-3 rounded-xl bg-emerald-50 border border-emerald-200">
-                  <div className="text-xs font-bold text-emerald-700">ATS Score: 92/100</div>
+                <div className="mt-auto p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
+                  <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300">ATS Score: 92/100</div>
                 </div>
               </div>
               <div className="flex-1 p-5 bg-slate-50 dark:bg-slate-950">
@@ -167,7 +167,7 @@ export default function LandingPage() {
                   </div>
                   <div className="flex gap-2 flex-wrap">
                     {["React", "TypeScript", "Node.js", "Python"].map((s) => (
-                      <span key={s} className="px-2.5 py-1 rounded-full text-xs bg-blue-50 border border-blue-100 text-blue-700 font-medium">{s}</span>
+                      <span key={s} className="px-2.5 py-1 rounded-full text-xs bg-blue-50 dark:bg-blue-950/30 border border-blue-100 text-blue-700 dark:text-blue-300 font-medium">{s}</span>
                     ))}
                   </div>
                 </div>
@@ -189,7 +189,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
               <div key={f.title} className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center mb-4">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 text-blue-600 flex items-center justify-center mb-4">
                   <Icon name={f.icon} size={18} />
                 </div>
                 <h3 className="font-semibold text-[14px] mb-1 text-slate-900 dark:text-white">{f.title}</h3>
@@ -239,7 +239,7 @@ export default function LandingPage() {
           <div className="p-8 sm:p-12 rounded-3xl bg-slate-900">
             <h2 className="text-[24px] sm:text-[30px] font-bold text-white leading-tight">Ready to land more interviews?</h2>
             <p className="text-[14.5px] text-slate-300 mt-2 mb-7 max-w-md mx-auto">Upload your resume and get instant AI-powered analysis — completely free, no account needed.</p>
-            <Link href="/analyze" className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold text-[14px] hover:bg-slate-100 transition-colors">
+            <Link href="/analyze" className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold text-[14px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
               Get Started Free
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />

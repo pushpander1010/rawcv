@@ -79,7 +79,7 @@ export default function CanadaFormatPage() {
             <Link href="/international" className="px-5 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20">
               Convert Your Resume →
             </Link>
-            <Link href="/cover-letter" className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-700 text-sm font-bold hover:bg-gray-100 transition-colors">
+            <Link href="/cover-letter" className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-200 text-sm font-bold hover:bg-gray-100 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors">
               Build Cover Letter →
             </Link>
           </div>
@@ -110,7 +110,7 @@ export default function CanadaFormatPage() {
           <div className="space-y-4">
             {SECTION_ORDER.map((section) => (
               <div key={section.num} className="flex gap-4 rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
-                <div className="shrink-0 w-8 h-8 rounded-full bg-red-100 text-red-700 text-sm font-bold flex items-center justify-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-red-100 text-red-700 dark:text-red-300 text-sm font-bold flex items-center justify-center">
                   {section.num}
                 </div>
                 <div>
@@ -123,7 +123,7 @@ export default function CanadaFormatPage() {
         </section>
 
         {/* Anti-Discrimination */}
-        <section className="rounded-3xl border border-red-200 bg-red-50/50 p-6">
+        <section className="rounded-3xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/30/50 p-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">⚖️ Canadian Anti-Discrimination Rules</h2>
           <p className="text-xs text-gray-600 dark:text-slate-300 mb-4 leading-relaxed">
             Canada has strict employment equity laws. Your resume must not include information that could lead to discrimination based on protected grounds.
@@ -132,7 +132,7 @@ export default function CanadaFormatPage() {
             {["Photo", "Date of Birth", "Marital Status", "Nationality", "Religion", "Disability Status", "Full Address", "Gender"].map((item) => (
               <div key={item} className="flex items-center gap-2 rounded-xl bg-white dark:bg-slate-900 p-3 text-xs">
                 <span className="text-red-500">✗</span>
-                <span className="text-gray-700 font-medium">Do not include: {item}</span>
+                <span className="text-gray-700 dark:text-slate-200 font-medium">Do not include: {item}</span>
               </div>
             ))}
           </div>
@@ -143,7 +143,7 @@ export default function CanadaFormatPage() {
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">💡 Canadian Resume Tips</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-2">✅ Do</p>
+              <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wide mb-2">✅ Do</p>
               <ul className="space-y-2 text-xs text-gray-600 dark:text-slate-300">
                 <li>• Quantify every bullet point with numbers</li>
                 <li>• Mention bilingual (English/French) skills</li>
@@ -171,9 +171,9 @@ export default function CanadaFormatPage() {
           <div className="space-y-4">
             {FAQ_ITEMS.map((item, i) => (
               <details key={i} className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden group">
-                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
+                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors list-none flex items-center justify-between">
                   {item.q}
-                  <svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-gray-400 dark:text-slate-500 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
@@ -189,7 +189,7 @@ export default function CanadaFormatPage() {
         <section className="rounded-3xl bg-gradient-to-r from-red-500 to-orange-500 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">Build your Canadian resume</h2>
           <p className="text-sm text-red-100 mb-6 max-w-lg mx-auto">Convert your resume to Canadian format with AI. We remove photos, strip personal details, and restructure for maximum impact.</p>
-          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-red-600 text-sm font-bold hover:bg-red-50 transition-colors shadow-lg">
+          <Link href="/international" className="inline-block px-6 py-3 rounded-xl bg-white dark:bg-slate-900 text-red-600 text-sm font-bold hover:bg-red-50 dark:hover:bg-red-500/20 transition-colors shadow-lg">
             Convert to Canadian Format →
           </Link>
         </section>

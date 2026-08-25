@@ -25,8 +25,8 @@ function CircularGauge({ score }: { score: number }) {
 // ─── Impact badge ─────────────────────────────────────────────────────────────
 
 const IMPACT_STYLES: Record<ATSIssue["impact"], string> = {
-  high:   "bg-red-50 text-red-700 border border-red-200",
-  medium: "bg-amber-50 text-amber-700 border border-amber-200",
+  high:   "bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800",
+  medium: "bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800",
   low:    "bg-slate-100 text-slate-600 border border-slate-200",
 };
 

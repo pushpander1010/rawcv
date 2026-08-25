@@ -35,7 +35,7 @@ const THEMES: ThemeMeta[] = [
     name: "Minimal",
     category: "Minimal",
     description: "Generous whitespace, light typography, no visual noise",
-    accent: "bg-gray-200",
+    accent: "bg-gray-200 dark:bg-slate-700",
     preview: "Light · Airy",
   },
   {
@@ -166,7 +166,7 @@ export default function ThemePicker({ onSelect }: Props) {
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search themes…"
           aria-label="Search themes"
-          className="flex-1 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+          className="flex-1 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
         />
         <div className="flex gap-1.5 flex-wrap" role="group" aria-label="Filter by category">
           {CATEGORIES.map((cat) => (
@@ -178,7 +178,7 @@ export default function ThemePicker({ onSelect }: Props) {
               className={`px-3.5 py-2 rounded-xl text-xs font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-brand-500/10 ${
                 activeCategory === cat
                   ? "bg-brand-600 text-white shadow-md shadow-brand-500/10"
-                  : "bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100"
+                  : "bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-800"
               }`}
             >
               {cat}
@@ -208,7 +208,7 @@ export default function ThemePicker({ onSelect }: Props) {
                 className={`group rounded-2xl border-2 overflow-hidden text-left hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-brand-500/10 ${
                   isSelected
                     ? "border-brand-600 shadow-lg shadow-brand-500/10"
-                    : "border-gray-200 hover:border-brand-400 hover:shadow-md"
+                    : "border-gray-200 dark:border-slate-700 hover:border-brand-400 hover:shadow-md"
                 }`}
               >
                 {/* Thumbnail */}
@@ -220,7 +220,7 @@ export default function ThemePicker({ onSelect }: Props) {
                     <div className="h-1 bg-white dark:bg-slate-900 rounded w-2/3" />
                   </div>
                   {isSelected && (
-                    <span className="absolute top-2 right-2 w-5 h-5 bg-brand-500 rounded-full flex items-center justify-center">
+                    <span className="absolute top-2 right-2 w-5 h-5 bg-brand-50 dark:bg-brand-950/300 rounded-full flex items-center justify-center">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>

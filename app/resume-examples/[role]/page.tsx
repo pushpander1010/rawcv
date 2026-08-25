@@ -842,10 +842,10 @@ export default function ResumeExamplePage({ params }: Props) {
     <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white pb-20">
 <HowToSchema name="How to use this resume example" description="Use this resume example to build your own in four steps." steps={[{ name: "Review the example", text: "Study the sample resume format for this role." }, { name: "Copy the structure", text: "Use the same sections and formatting for your own resume." }, { name: "Add your details", text: "Replace the sample content with your own experience and achievements." }, { name: "Tailor and download", text: "Tailor it to the job and download as a PDF." }]} />
       {/* Hero Header */}
-      <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 bg-gray-50 dark:bg-slate-800">
+      <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800">
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left space-y-4">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 uppercase">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 dark:text-brand-300 uppercase">
               Resume Examples &amp; Guides
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-950 leading-tight">
@@ -856,7 +856,7 @@ export default function ResumeExamplePage({ params }: Props) {
             </p>
           </div>
           <div className="md:col-span-4 hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 bg-white dark:bg-slate-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-800 bg-white dark:bg-slate-900 p-1.5 transform hover:scale-[1.02] transition-transform duration-300">
               <img 
                 src="/resume_guide_illustration.jpg" 
                 alt={`${role.title} Guide Illustration`} 
@@ -869,7 +869,7 @@ export default function ResumeExamplePage({ params }: Props) {
 
       {/* Relevant to You - SEO Content Section */}
       <section className="max-w-5xl mx-auto px-6 py-12">
-        <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-50 dark:from-slate-900/80 to-white dark:to-slate-900 border border-brand-100 shadow-sm">
+        <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-50 dark:from-slate-900/80 to-white dark:to-slate-900 border border-brand-100 dark:border-brand-800 shadow-sm">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <span className="text-brand-600">✦</span> Relevant to you: {role.title} Career Guide for Indian Professionals
           </h2>
@@ -924,7 +924,7 @@ export default function ResumeExamplePage({ params }: Props) {
             </div>
 
             {/* Interactive Builder Call-To-Action */}
-            <div className="p-6 rounded-3xl bg-brand-50 border border-brand-100 space-y-4">
+            <div className="p-6 rounded-3xl bg-brand-50 dark:bg-brand-950/30 border border-brand-100 dark:border-brand-800 space-y-4">
               <h3 className="font-bold text-gray-900 dark:text-white text-base">Customize this resume with AI</h3>
               <p className="text-xs text-gray-500 dark:text-slate-300 leading-relaxed">
                 Open rawcv&apos;s free resume builder, choose your favorite layout, paste your details, and export a perfectly formatted PDF.
@@ -940,14 +940,14 @@ export default function ResumeExamplePage({ params }: Props) {
 
           {/* Right Column: Visual Interactive Resume Template Example */}
           <div className="lg:col-span-5">
-            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-brand-200 shadow-xl space-y-6 relative overflow-hidden">
-              <div className="absolute top-3 right-3 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-brand-200 dark:border-brand-800 shadow-xl space-y-6 relative overflow-hidden">
+              <div className="absolute top-3 right-3 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                 Score: 98% ATS-Friendly ✅
               </div>
 
               <div className="border-b border-gray-200 dark:border-slate-700 pb-4">
                 <div className="font-bold text-lg text-gray-900 dark:text-white">JANE SMITH</div>
-                <div className="text-xs text-gray-400 mt-1">jane.smith@example.com · (555) 123-4567 · San Francisco, CA</div>
+                <div className="text-xs text-gray-400 dark:text-slate-500 mt-1">jane.smith@example.com · (555) 123-4567 · San Francisco, CA</div>
               </div>
 
               {/* Summary section */}
@@ -961,7 +961,7 @@ export default function ResumeExamplePage({ params }: Props) {
                 <h4 className="text-xs font-bold text-brand-600 tracking-wider uppercase">Skills</h4>
                 <div className="flex flex-wrap gap-1">
                   {role.skills.map((skill) => (
-                    <span key={skill} className="px-2 py-0.5 rounded bg-gray-100 text-[10px] text-gray-700">
+                    <span key={skill} className="px-2 py-0.5 rounded bg-gray-100 dark:bg-slate-800 text-[10px] text-gray-700 dark:text-slate-200">
                       {skill}
                     </span>
                   ))}
@@ -975,7 +975,7 @@ export default function ResumeExamplePage({ params }: Props) {
                   <div key={index} className="space-y-1">
                     <div className="flex justify-between text-xs font-semibold text-gray-900 dark:text-white">
                       <span>{exp.company} — {exp.title}</span>
-                      <span className="text-gray-400">{exp.dates}</span>
+                      <span className="text-gray-400 dark:text-slate-500">{exp.dates}</span>
                     </div>
                     <ul className="list-disc pl-4 space-y-0.5">
                       {exp.bullets.map((bullet, bulletIdx) => (
@@ -993,7 +993,7 @@ export default function ResumeExamplePage({ params }: Props) {
       </section>
 
       {/* Role Navigation */}
-      <section className="max-w-4xl mx-auto px-6 pt-12 border-t border-gray-100">
+      <section className="max-w-4xl mx-auto px-6 pt-12 border-t border-gray-100 dark:border-slate-800">
         <h3 className="text-center text-gray-500 dark:text-slate-300 font-semibold mb-6">Other Resume Examples</h3>
         <div className="flex justify-center flex-wrap gap-4">
           {Object.keys(roleData).map((r) => {
@@ -1002,7 +1002,7 @@ export default function ResumeExamplePage({ params }: Props) {
               <Link
                 key={r}
                 href={`/resume-examples/${r}`}
-                className="px-4 py-2 rounded-xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 border border-gray-200 dark:border-slate-700 text-sm transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 text-brand-600 font-semibold shadow-sm"
+                className="px-4 py-2 rounded-xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-800 border border-gray-200 dark:border-slate-700 text-sm transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 text-brand-600 font-semibold shadow-sm"
               >
                 {roleData[r].title} Example
               </Link>

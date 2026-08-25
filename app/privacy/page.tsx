@@ -14,7 +14,7 @@ export default function PrivacyPage() {
       <div className="max-w-2xl mx-auto prose prose-gray prose-sm sm:prose-base">
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Privacy Policy", href: "/privacy" }]} />
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Privacy Policy</h1>
-        <p className="text-sm text-gray-400 mb-10">Last updated: April 14, 2026</p>
+        <p className="text-sm text-gray-400 dark:text-slate-500 mb-10">Last updated: April 14, 2026</p>
 
         <Section title="1. Who we are">
           <p>rawcv (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) operates the website at <strong>rawcv.com</strong>. This policy explains what personal data we collect, why we collect it, and how we protect it.</p>
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
           <p>Questions about this policy? Email us at <a href="mailto:privacy@rawcv.com" className="text-brand-600 hover:underline">privacy@rawcv.com</a>.</p>
         </Section>
 
-        <div className="mt-12 pt-6 border-t border-gray-100 text-sm text-gray-400">
+        <div className="mt-12 pt-6 border-t border-gray-100 dark:border-slate-800 text-sm text-gray-400 dark:text-slate-500">
           <Link href="/" className="text-brand-600 hover:underline">← Back to rawcv</Link>
           {" · "}
           <Link href="/terms" className="text-brand-600 hover:underline">Terms of Service</Link>

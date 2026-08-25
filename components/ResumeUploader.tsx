@@ -129,7 +129,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
         relative flex flex-col items-center justify-center gap-4
         border-2 border-dashed rounded-3xl p-12 cursor-pointer
         transition-all duration-200 select-none
-        ${dragging ? "border-brand-500 bg-brand-50 shadow-inner" : "border-gray-300 hover:border-brand-500 hover:bg-brand-50/30"}
+        ${dragging ? "border-brand-500 bg-brand-50 dark:bg-brand-950/30 shadow-inner" : "border-gray-300 dark:border-slate-700 hover:border-brand-500 hover:bg-brand-50/30"}
         ${loading ? "pointer-events-none opacity-60" : ""}
       `}
     >
@@ -158,7 +158,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
         </>
       ) : (
         <>
-          <div className="p-3 bg-brand-50 rounded-2xl text-brand-600 shadow-sm border border-brand-100/50">
+          <div className="p-3 bg-brand-50 dark:bg-brand-950/30 rounded-2xl text-brand-600 shadow-sm border border-brand-100 dark:border-brand-800/50">
             <svg
               className="h-8 w-8"
               xmlns="http://www.w3.org/2000/svg"
@@ -176,7 +176,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
             </svg>
           </div>
           <div className="text-center">
-            <p className="text-base font-semibold text-gray-800">
+            <p className="text-base font-semibold text-gray-800 dark:text-slate-100">
               Drag &amp; drop your resume here
             </p>
             <p className="text-sm text-gray-500 dark:text-slate-300 mt-1.5">
@@ -197,7 +197,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
             Replace current resume?
           </h2>
           <p className="text-sm text-gray-500 dark:text-slate-300 mb-5">
-            You have a resume loaded with edits. Uploading <span className="font-medium text-gray-700">{pendingFile.name}</span> will replace it. Your current version will be saved to undo history.
+            You have a resume loaded with edits. Uploading <span className="font-medium text-gray-700 dark:text-slate-200">{pendingFile.name}</span> will replace it. Your current version will be saved to undo history.
           </p>
           <div className="flex gap-3">
             <button
@@ -210,7 +210,7 @@ export default function ResumeUploader(_props: ResumeUploaderProps) {
             <button
               type="button"
               onClick={() => setPendingFile(null)}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-sm text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 text-sm text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
             >
               Cancel
             </button>

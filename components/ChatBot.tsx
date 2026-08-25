@@ -343,7 +343,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
               className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
                 msg.role === "user"
                   ? "bg-brand-600 text-white rounded-br-sm shadow-sm shadow-brand-500/10"
-                  : "bg-gray-100 text-gray-800 rounded-bl-sm"
+                  : "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-100 rounded-bl-sm"
               }`}
             >
               {msg.content}
@@ -353,7 +353,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
         {loading && (
           <div className="flex justify-start w-full">
-            <div className="bg-gray-100 rounded-2xl rounded-bl-sm px-4 py-2 w-full max-w-xs">
+            <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl rounded-bl-sm px-4 py-2 w-full max-w-xs">
               <AILoader type="chat" interval={1400} />
             </div>
           </div>
@@ -361,7 +361,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
 
         {isComplete && (
           <div className="flex justify-center">
-            <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 text-sm text-emerald-700 text-center">
+            <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-xl px-4 py-3 text-sm text-emerald-700 dark:text-emerald-300 text-center">
               ✅ {mode === "build"
                 ? "Resume complete! Check the preview on the right."
                 : "All done! Your resume has been updated."}
@@ -376,7 +376,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
       {error && (
         <div
           role="alert"
-          className="px-4 py-2 flex items-center gap-2 text-xs text-red-600 bg-red-50 border-t border-red-100"
+          className="px-4 py-2 flex items-center gap-2 text-xs text-red-600 bg-red-50 dark:bg-red-950/30 border-t border-red-100"
         >
           <span>⚠</span>
           <span className="flex-1">{error}</span>
@@ -402,7 +402,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             rows={2}
             disabled={loading || isComplete}
             aria-label="Chat message input"
-            className="flex-1 resize-none rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 disabled:opacity-50"
+            className="flex-1 resize-none rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 disabled:opacity-50"
           />
           <button
             type="button"
@@ -428,7 +428,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
                 disabled={loading}
                 aria-label="Clear chat history"
                 title="Clear chat history (resume data is kept)"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-xs text-gray-500 dark:text-slate-300 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-40"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-xs text-gray-500 dark:text-slate-300 hover:bg-amber-50 dark:bg-amber-950/30 hover:text-amber-600 hover:border-amber-200 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-40"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -441,7 +441,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             <button
               type="button"
               onClick={onEnd}
-              className="ml-auto px-4 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-xs text-gray-500 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-800 hover:text-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="ml-auto px-4 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 text-xs text-gray-500 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 hover:text-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
             >
               End Chat
             </button>

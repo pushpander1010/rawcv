@@ -1,7 +1,5 @@
 // ─── Theme IDs ───────────────────────────────────────────────────────────────
 
-export type ModelId = string; // kept for backwards compat
-
 export type ThemeId =
   | "classic"
   | "modern"

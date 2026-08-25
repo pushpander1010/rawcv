@@ -15,7 +15,7 @@ export default function ThemeToggle({ compact = false }: { compact?: boolean }) 
       } ${
         isDark
           ? "bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700"
-          : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+          : "bg-white dark:bg-slate-900 border-slate-200 text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800"
       }`}
     >
       {isDark ? (

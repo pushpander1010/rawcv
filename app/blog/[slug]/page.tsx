@@ -1021,7 +1021,7 @@ const ARTICLES: Record<
 
         <h2>Run Your Resume Through an Analyzer Before You Apply</h2>
         <p>
-          The fastest way to improve is to test before you submit. Paste your resume and the job description into a free resume analyzer to get an instant ATS score, keyword gap report, and specific suggestions. You can do exactly that with the free <Link href="/analyze" className="text-brand-600 hover:text-brand-700 font-medium underline underline-offset-2">resume analysis tool on rawcv</Link> — it scores your resume against any job description and tells you which keywords to add.
+          The fastest way to improve is to test before you submit. Paste your resume and the job description into a free resume analyzer to get an instant ATS score, keyword gap report, and specific suggestions. You can do exactly that with the free <Link href="/analyze" className="text-brand-600 hover:text-brand-700 dark:text-brand-300 font-medium underline underline-offset-2">resume analysis tool on rawcv</Link> — it scores your resume against any job description and tells you which keywords to add.
         </p>
       </>
     ),
@@ -1068,7 +1068,7 @@ const ARTICLES: Record<
 
         <h2>Build the Right Document the Easy Way</h2>
         <p>
-          Whether you need a resume or a CV, the core principles are the same: clear headings, quantified achievements, and relevant keywords. Use the free <Link href="/build" className="text-brand-600 hover:text-brand-700 font-medium underline underline-offset-2">resume builder on rawcv</Link> to create a clean, ATS-friendly resume in minutes — no signup required.
+          Whether you need a resume or a CV, the core principles are the same: clear headings, quantified achievements, and relevant keywords. Use the free <Link href="/build" className="text-brand-600 hover:text-brand-700 dark:text-brand-300 font-medium underline underline-offset-2">resume builder on rawcv</Link> to create a clean, ATS-friendly resume in minutes — no signup required.
         </p>
       </>
     ),
@@ -1116,7 +1116,7 @@ const ARTICLES: Record<
 
         <h2>Try It Free — No Signup Needed</h2>
         <p>
-          You can experience all of this right now. The free <Link href="/build" className="text-brand-600 hover:text-brand-700 font-medium underline underline-offset-2">AI resume builder on rawcv</Link> drafts and formats your resume, and the <Link href="/analyze" className="text-brand-600 hover:text-brand-700 font-medium underline underline-offset-2">ATS analyzer</Link> scores it against any job description — no account required.
+          You can experience all of this right now. The free <Link href="/build" className="text-brand-600 hover:text-brand-700 dark:text-brand-300 font-medium underline underline-offset-2">AI resume builder on rawcv</Link> drafts and formats your resume, and the <Link href="/analyze" className="text-brand-600 hover:text-brand-700 font-medium underline underline-offset-2">ATS analyzer</Link> scores it against any job description — no account required.
         </p>
       </>
     ),
@@ -1191,10 +1191,10 @@ export default async function ArticlePage({ params }: PageProps) {
         {/* Article Header */}
         <header className="mb-10">
           <div className="flex items-center gap-3 mb-4">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-700">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300">
               {article.category}
             </span>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-400 dark:text-slate-500">
               {article.date} · {article.readTime}
             </span>
           </div>
@@ -1207,7 +1207,7 @@ export default async function ArticlePage({ params }: PageProps) {
           </p>
 
           {/* Article Cover Image */}
-          <div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden border border-brand-100 shadow-lg bg-gradient-to-br from-brand-100 via-brand-50 to-blue-50 flex items-center justify-center p-6">
+          <div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden border border-brand-100 dark:border-brand-800 shadow-lg bg-gradient-to-br from-brand-100 via-brand-50 to-blue-50 flex items-center justify-center p-6">
             <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:20px_20px]" />
             <img 
               src="/blog_illustration.jpg" 
@@ -1223,7 +1223,7 @@ export default async function ArticlePage({ params }: PageProps) {
         </div>
 
         {/* Call to action footer */}
-        <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-brand-50 dark:from-slate-900 to-brand-50 border border-brand-100 text-center">
+        <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-brand-50 dark:from-slate-900 to-brand-50 border border-brand-100 dark:border-brand-800 text-center">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
             Put these tips into action
           </h3>
@@ -1239,7 +1239,7 @@ export default async function ArticlePage({ params }: PageProps) {
             </Link>
             <Link
               href="/"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 dark:border-slate-700 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:bg-slate-800 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-200 dark:border-slate-700 text-sm font-semibold text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
             >
               Upload &amp; Analyze
             </Link>

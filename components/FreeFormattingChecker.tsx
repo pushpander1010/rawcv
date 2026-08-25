@@ -194,9 +194,9 @@ export default function FreeFormattingChecker({ resume }: Props) {
   };
 
   const getScoreBg = (s: number) => {
-    if (s >= 80) return "bg-emerald-50 border-emerald-200";
-    if (s >= 60) return "bg-amber-50 border-amber-200";
-    return "bg-red-50 border-red-200";
+    if (s >= 80) return "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800";
+    if (s >= 60) return "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800";
+    return "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800";
   };
 
   const getSeverityColor = (severity: string) => {
@@ -224,17 +224,17 @@ export default function FreeFormattingChecker({ resume }: Props) {
           </div>
 
           {score >= 80 && (
-            <p className="text-sm text-emerald-700">
+            <p className="text-sm text-emerald-700 dark:text-emerald-300">
               ✅ Your resume formatting looks great!
             </p>
           )}
           {score >= 60 && score < 80 && (
-            <p className="text-sm text-amber-700">
+            <p className="text-sm text-amber-700 dark:text-amber-300">
               ⚠️ Some formatting improvements recommended.
             </p>
           )}
           {score < 60 && (
-            <p className="text-sm text-red-700">
+            <p className="text-sm text-red-700 dark:text-red-300">
               ❌ Several formatting issues found. See details below.
             </p>
           )}
@@ -269,8 +269,8 @@ export default function FreeFormattingChecker({ resume }: Props) {
       )}
 
       {score !== null && issues.length === 0 && (
-        <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200">
-          <p className="text-sm text-emerald-700">
+        <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
+          <p className="text-sm text-emerald-700 dark:text-emerald-300">
             ✅ No formatting issues found! Your resume is well-formatted.
           </p>
           <p className="text-xs text-emerald-600 mt-2">
