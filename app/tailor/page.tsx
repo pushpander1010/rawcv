@@ -49,7 +49,7 @@ export default function TailorPage() {
     setError(null);
     setState((prev) => ({ ...prev, jd: jdInput }));
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 30000);
+    const timer = setTimeout(() => ctrl.abort(), 90000);
     try {
       const res = await fetch("/api/tailor", {
         method: "POST",
