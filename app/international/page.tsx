@@ -609,7 +609,7 @@ export default function InternationalPage() {
                 <div className="flex flex-wrap gap-2">
                   {meta.sectionOrder.map((section, i) => (
                     <div key={i} className="flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-full bg-brand-100 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">
+                      <span className="w-5 h-5 rounded-full bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">
                         {i + 1}
                       </span>
                       <span className="text-xs text-slate-700 dark:text-slate-200">{section}</span>

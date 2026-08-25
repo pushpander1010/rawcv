@@ -8,11 +8,11 @@ import AILoader from "@/components/AILoader";
 // ─── Section badge ────────────────────────────────────────────────────────────
 
 const SECTION_COLORS: Record<string, string> = {
-  experience: "bg-blue-100 text-blue-700 dark:text-blue-300",
-  summary: "bg-brand-100 text-brand-700 dark:text-brand-300",
-  skills: "bg-amber-100 text-amber-700 dark:text-amber-300",
-  projects: "bg-teal-100 text-teal-700",
-  certifications: "bg-pink-100 text-pink-700",
+  experience: "bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300",
+  summary: "bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300",
+  skills: "bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300",
+  projects: "bg-teal-100 dark:bg-teal-500/20 text-teal-700 dark:text-teal-300",
+  certifications: "bg-pink-100 dark:bg-pink-500/20 text-pink-700 dark:text-pink-300",
 };
 
 function SectionBadge({ section }: { section: string }) {

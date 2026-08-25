@@ -27,7 +27,7 @@ function CircularGauge({ score }: { score: number }) {
 const IMPACT_STYLES: Record<ATSIssue["impact"], string> = {
   high:   "bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800",
   medium: "bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800",
-  low:    "bg-slate-100 text-slate-600 border border-slate-200",
+  low:    "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700",
 };
 
 function ImpactBadge({ impact }: { impact: ATSIssue["impact"] }) {
@@ -41,7 +41,7 @@ function IssueRow({ issue }: { issue: ATSIssue }) {
   return (
     <li className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 overflow-hidden">
       <button type="button" onClick={() => setExpanded((v) => !v)} className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-expanded={expanded}>
-        <span className="text-[13.5px] font-medium text-slate-800 truncate">{issue.type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</span>
+        <span className="text-[13.5px] font-medium text-slate-800 dark:text-slate-100 truncate">{issue.type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</span>
         <span className="flex items-center gap-2 shrink-0">
           <ImpactBadge impact={issue.impact} />
           <svg className={`h-4 w-4 text-slate-400 transition-transform ${expanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -73,14 +73,14 @@ export default function ATSScoreCard({ result, loading = false }: ATSScoreCardPr
   const { score, issues = [] } = result;
   const showIssues = issues.length > 0;
   const label = score >= 80 ? "Great ATS compatibility" : score >= 60 ? "Moderate ATS compatibility" : "Poor ATS compatibility";
-  const color = score >= 80 ? "text-emerald-600" : score >= 60 ? "text-amber-600" : "text-red-600 dark:text-red-300";
+  const color = score >= 80 ? "text-emerald-600 dark:text-emerald-300" : score >= 60 ? "text-amber-600 dark:text-amber-300" : "text-red-600 dark:text-red-300";
 
   return (
     <section aria-label="ATS Score" className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
       <div className="flex flex-col items-center gap-1.5 mb-6">
         <CircularGauge score={score} />
         <p className={`text-[13.5px] font-semibold ${color}`}>{label}</p>
-        <p className="text-xs text-slate-400">Score: {score}/100</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500">Score: {score}/100</p>
       </div>
       {showIssues && (
         <div>

@@ -52,7 +52,7 @@ export default function BuildPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-slate-50/40 dark:bg-slate-900/20">
-        <Suspense fallback={<div className="text-center py-12 text-slate-500">Loading...</div>}>
+        <Suspense fallback={<div className="text-center py-12 text-slate-500 dark:text-slate-300">Loading...</div>}>
           <FreeBuildClient />
         </Suspense>
       </div>

@@ -199,7 +199,7 @@ export default function AnalyzePage() {
               )}
               {(state.atsResult || atsLoading) && <ATSScoreCard result={state.atsResult ?? { score: 0, issues: [] }} loading={atsLoading} />}
               {state.atsResult && (
-                <button type="button" onClick={runATS} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <button type="button" onClick={runATS} className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[13.5px] text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                   Re-run analysis
                 </button>
               )}
@@ -308,7 +308,7 @@ export default function AnalyzePage() {
           {activeTab === "theme" && (
             <div className="space-y-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700"><Icon name="layers" size={16} /></div>
+                <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200"><Icon name="layers" size={16} /></div>
                 <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Theme</h2>
               </div>
               <ThemePicker />

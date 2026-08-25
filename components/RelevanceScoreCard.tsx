@@ -137,7 +137,7 @@ export default function RelevanceScoreCard({ result, loading = false }: Relevanc
             {recommendations.map((rec, idx) => (
               <li
                 key={idx}
-                className="flex gap-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 px-4 py-3 text-[13.5px] text-slate-700 leading-relaxed"
+                className="flex gap-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 px-4 py-3 text-[13.5px] text-slate-700 dark:text-slate-200 leading-relaxed"
               >
                 <span className="shrink-0 font-semibold text-blue-600">{idx + 1}.</span>
                 <span>{rec}</span>
