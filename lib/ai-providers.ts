@@ -4,10 +4,9 @@ const DefaultSchema = z.any();
 
 // ─── Models ───────────────────────────────────────────────────────────────────
 const MODEL_PARSE    = "google/gemini-2.5-flash-lite";       // resume parsing — fast & cheap (keep)
-const MODEL_CHAT     = "meta/muse-spark-1.2-contributor"; // chat / build / customize — Muse (fallback mimo)
-const MODEL_ANALYSIS = "meta/muse-spark-1.2-contributor";   // ATS, JD relevance, suggestions, enhance — Muse (fallback mimo)
-const MODEL_FAST     = "meta/muse-spark-1.2-contributor";   // fast generation (cover letters, etc.) — Muse (fallback mimo)
-const FALLBACK_MIMO  = "xiaomi/mimo-v2.5";                   // fallback for Muse contributor (privacy / rate-limit)
+const MODEL_CHAT     = "meta/muse-spark-1.2-contributor"; // chat / build / customize — Muse
+const MODEL_ANALYSIS = "meta/muse-spark-1.2-contributor";   // ATS, JD relevance, suggestions, enhance — Muse
+const MODEL_FAST     = "meta/muse-spark-1.2-contributor";   // fast generation (cover letters, etc.) — Muse
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -121,44 +120,29 @@ export async function complete<T = any>(
   return callOpenRouter(MODEL_PARSE, prompt, systemPrompt, options);
 }
 
-/** Chat (build / customize) — muse-spark contributor (fallback mimo) */
+/** Chat (build / customize) — muse-spark contributor */
 export async function completeChat<T = any>(
   prompt: string,
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  try {
-    return await callOpenRouter(MODEL_CHAT, prompt, systemPrompt, options);
-  } catch (e) {
-    console.warn(`⚠️ Muse Chat failed, fallback to ${FALLBACK_MIMO}:`, e instanceof Error ? e.message : String(e));
-    return callOpenRouter(FALLBACK_MIMO, prompt, systemPrompt, options);
-  }
+  return callOpenRouter(MODEL_CHAT, prompt, systemPrompt, options);
 }
 
-/** ATS, JD relevance, suggestions, enhancements — muse-spark contributor (fallback mimo) */
+/** ATS, JD relevance, suggestions, enhancements — muse-spark contributor */
 export async function completeAnalysis<T = any>(
   prompt: string,
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  try {
-    return await callOpenRouter(MODEL_ANALYSIS, prompt, systemPrompt, options);
-  } catch (e) {
-    console.warn(`⚠️ Muse Analysis failed, fallback to ${FALLBACK_MIMO}:`, e instanceof Error ? e.message : String(e));
-    return callOpenRouter(FALLBACK_MIMO, prompt, systemPrompt, options);
-  }
+  return callOpenRouter(MODEL_ANALYSIS, prompt, systemPrompt, options);
 }
 
-/** Fast generation (cover letters, etc.) — muse-spark contributor (fallback mimo) */
+/** Fast generation (cover letters, etc.) — muse-spark contributor */
 export async function completeFast<T = any>(
   prompt: string,
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  try {
-    return await callOpenRouter(MODEL_FAST, prompt, systemPrompt, { ...options, timeoutMs: 30000 });
-  } catch (e) {
-    console.warn(`⚠️ Muse Fast failed, fallback to ${FALLBACK_MIMO}:`, e instanceof Error ? e.message : String(e));
-    return callOpenRouter(FALLBACK_MIMO, prompt, systemPrompt, { ...options, timeoutMs: 30000 });
-  }
+  return callOpenRouter(MODEL_FAST, prompt, systemPrompt, { ...options, timeoutMs: 30000 });
 }
