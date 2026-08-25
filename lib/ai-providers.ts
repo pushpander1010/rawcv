@@ -48,7 +48,7 @@ async function callOpenRouter<T>(
   model: string,
   prompt: string,
   systemPrompt: string,
-  options?: { maxTokens?: number; schema?: z.ZodSchema<T>; jsonMode?: boolean; temperature?: number; timeoutMs?: number }
+  options?: { maxTokens?: number; schema?: z.ZodSchema<T>; jsonMode?: boolean; temperature?: number; timeoutMs?: number; reasoningEffort?: string }
 ): Promise<T> {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error("OPENROUTER_API_KEY not set");
@@ -67,13 +67,14 @@ async function callOpenRouter<T>(
     try {
       const isMuse = model.includes("muse-spark");
       const isXiaomi = model.startsWith("xiaomi/");
+      const effort = options?.reasoningEffort ?? (isMuse ? "low" : undefined);
       const body: Record<string, unknown> = {
             model,
             max_tokens: options?.maxTokens ?? 2500,
             temperature: options?.temperature ?? 0.1,
             ...(isXiaomi ? { reasoning: { exclude: true } } : {}),
-            // Muse contributor is mandatory reasoning — use low for chat/fast, medium for analysis
-            ...(isMuse ? { reasoning: { effort: model === MODEL_ANALYSIS ? "medium" : "low" }, include_reasoning: false } : {}),
+            // Muse contributor is mandatory reasoning — use reasoningEffort (low/medium)
+            ...(isMuse && effort ? { reasoning: { effort }, include_reasoning: false } : {}),
         messages: [
           { role: "system", content: fullSystem },
           { role: "user",   content: prompt },
@@ -126,7 +127,7 @@ export async function completeChat<T = any>(
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  return callOpenRouter(MODEL_CHAT, prompt, systemPrompt, options);
+  return callOpenRouter(MODEL_CHAT, prompt, systemPrompt, { ...options, reasoningEffort: "low" });
 }
 
 /** ATS, JD relevance, suggestions, enhancements — muse-spark contributor */
@@ -135,7 +136,7 @@ export async function completeAnalysis<T = any>(
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  return callOpenRouter(MODEL_ANALYSIS, prompt, systemPrompt, options);
+  return callOpenRouter(MODEL_ANALYSIS, prompt, systemPrompt, { ...options, reasoningEffort: "medium" });
 }
 
 /** Fast generation (cover letters, etc.) — muse-spark contributor */
@@ -144,5 +145,5 @@ export async function completeFast<T = any>(
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  return callOpenRouter(MODEL_FAST, prompt, systemPrompt, { ...options, timeoutMs: 30000 });
+  return callOpenRouter(MODEL_FAST, prompt, systemPrompt, { ...options, timeoutMs: 30000, reasoningEffort: "low" });
 }
