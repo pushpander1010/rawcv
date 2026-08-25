@@ -4,9 +4,10 @@ const DefaultSchema = z.any();
 
 // ─── Models ───────────────────────────────────────────────────────────────────
 const MODEL_PARSE    = "google/gemini-2.5-flash-lite";       // resume parsing — gemini light (fast)
-const MODEL_CHAT     = "meta/muse-spark-1.2-contributor"; // chat / build / customize — Muse contrib
-const MODEL_ANALYSIS = "meta/muse-spark-1.2-contributor";   // ATS, JD, suggestions — Muse contrib
-const MODEL_FAST     = "meta/muse-spark-1.2-contributor";   // cover letters — Muse contrib
+const MODEL_CHAT     = "meta/muse-spark-1.2-contributor";    // chat / build / customize — Muse contrib
+const MODEL_ANALYSIS = "meta/muse-spark-1.2-contributor";    // ATS, JD, suggestions — Muse contrib
+const MODEL_FAST     = "meta/muse-spark-1.2-contributor";    // cover letters — Muse contrib
+const MODEL_FALLBACK = "xiaomi/mimo-v2.5";                   // fast, reliable fallback (no mandatory reasoning)
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -36,7 +37,7 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 2): Promise<T> {
     try { return await fn(); } catch (e) {
       lastErr = e;
       console.warn(`⚠️ AI Request Retry ${i + 1} failed:`, e instanceof Error ? e.message : String(e));
-      if (i < retries) await new Promise((r) => setTimeout(r, 1500));
+      if (i < retries) await new Promise((r) => setTimeout(r, 1000));
     }
   }
   throw lastErr;
@@ -44,11 +45,21 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 2): Promise<T> {
 
 // ─── Core fetch ───────────────────────────────────────────────────────────────
 
+interface CallOptions<T> {
+  maxTokens?: number;
+  schema?: z.ZodSchema<T>;
+  jsonMode?: boolean;
+  temperature?: number;
+  timeoutMs?: number;
+  /** Secondary model to try if the primary fails or times out. */
+  fallbackModel?: string;
+}
+
 async function callOpenRouter<T>(
   model: string,
   prompt: string,
   systemPrompt: string,
-  options?: { maxTokens?: number; schema?: z.ZodSchema<T>; jsonMode?: boolean; temperature?: number; timeoutMs?: number }
+  options?: CallOptions<T>
 ): Promise<T> {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error("OPENROUTER_API_KEY not set");
@@ -60,18 +71,20 @@ async function callOpenRouter<T>(
     ? `${systemPrompt}\n\nSTRICT RULES:\n- Return ONLY valid JSON\n- No markdown wrappers\n- No explanation or conversational text\n- Must match the requested schema strictly`
     : systemPrompt;
 
-  return withRetry(async () => {
+  const callOnce = async (m: string): Promise<T> => {
     const controller = new AbortController();
-    const timeoutMs = options?.timeoutMs ?? (model.includes("muse-spark") ? 90000 : model === MODEL_ANALYSIS ? 120000 : 60000);
+    // Muse is slow + reasoning-heavy; give it a bounded window so the fallback
+    // model has time to run inside the route's maxDuration budget.
+    const timeoutMs = options?.timeoutMs ?? (m.includes("muse-spark") ? 45000 : 60000);
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const isMuse = model.includes("muse-spark");
+      const isMuse = m.includes("muse-spark");
       const body: Record<string, unknown> = {
-            model,
-            max_tokens: options?.maxTokens ?? 2500,
-            temperature: options?.temperature ?? 0.1,
-            ...(model.startsWith("xiaomi/") ? { reasoning: { exclude: true } } : {}),
-            ...(isMuse ? { reasoning: { effort: "low" }, include_reasoning: false } : {}),
+        model: m,
+        max_tokens: options?.maxTokens ?? 2500,
+        temperature: options?.temperature ?? 0.1,
+        ...(m.startsWith("xiaomi/") ? { reasoning: { exclude: true } } : {}),
+        ...(isMuse ? { reasoning: { effort: "low" }, include_reasoning: false } : {}),
         messages: [
           { role: "system", content: fullSystem },
           { role: "user",   content: prompt },
@@ -104,12 +117,28 @@ async function callOpenRouter<T>(
     } finally {
       clearTimeout(timeout);
     }
-  });
+  };
+
+  // Muse is slow + occasionally flaky. Give it a single shot, then fall back to
+  // the fast deterministic model rather than burning the route's time budget on retries.
+  const primaryRetries = model.includes("muse-spark") ? 0 : 2;
+  try {
+    return await withRetry(() => callOnce(model), primaryRetries);
+  } catch (primaryErr) {
+    if (options?.fallbackModel && options.fallbackModel !== model) {
+      console.warn(
+        `⚠️ ${model} failed — falling back to ${options.fallbackModel}:`,
+        primaryErr instanceof Error ? primaryErr.message : String(primaryErr)
+      );
+      return await withRetry(() => callOnce(options.fallbackModel!), 0);
+    }
+    throw primaryErr;
+  }
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-/** Resume parsing — xiaomi/mimo-v2.5 */
+/** Resume parsing — gemini-lite */
 export async function complete<T = any>(
   prompt: string,
   systemPrompt: string,
@@ -118,29 +147,29 @@ export async function complete<T = any>(
   return callOpenRouter(MODEL_PARSE, prompt, systemPrompt, options);
 }
 
-/** Chat (build / customize) — xiaomi/mimo-v2.5 */
+/** Chat (build / customize) — muse with mimo fallback */
 export async function completeChat<T = any>(
   prompt: string,
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  return callOpenRouter(MODEL_CHAT, prompt, systemPrompt, options);
+  return callOpenRouter(MODEL_CHAT, prompt, systemPrompt, { ...options, fallbackModel: MODEL_FALLBACK });
 }
 
-/** ATS, JD relevance, suggestions, enhancements — xiaomi/mimo-v2.5 */
+/** ATS, JD relevance, suggestions, enhancements, tailor — muse with mimo fallback */
 export async function completeAnalysis<T = any>(
   prompt: string,
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  return callOpenRouter(MODEL_ANALYSIS, prompt, systemPrompt, options);
+  return callOpenRouter(MODEL_ANALYSIS, prompt, systemPrompt, { ...options, fallbackModel: MODEL_FALLBACK });
 }
 
-/** Fast generation (cover letters, etc.) — google/gemini-2.5-flash-lite */
+/** Fast generation (cover letters, etc.) — muse with mimo fallback */
 export async function completeFast<T = any>(
   prompt: string,
   systemPrompt: string,
   options?: { maxTokens?: number; schema?: z.ZodSchema<T> }
 ): Promise<T> {
-  return callOpenRouter(MODEL_FAST, prompt, systemPrompt, { ...options, timeoutMs: 30000 });
+  return callOpenRouter(MODEL_FAST, prompt, systemPrompt, { ...options, timeoutMs: 30000, fallbackModel: MODEL_FALLBACK });
 }

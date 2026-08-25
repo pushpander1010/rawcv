@@ -94,7 +94,7 @@ export default function TailorPage() {
         </div>
 
         {/* JD input */}
-        <div className="mb-8 max-w-2xl">
+        <div className="mb-8">
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
             <label htmlFor="jd-input" className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-3">
               Paste Job Description

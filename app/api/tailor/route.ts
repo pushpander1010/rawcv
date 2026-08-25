@@ -84,7 +84,9 @@ export async function POST(req: NextRequest) {
     const tailoredResume: TailoredResume = { changes, finalResume };
     // Charge only after successful AI response
     return NextResponse.json(tailoredResume);
-  } catch {
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Tailoring failed. Please try again.";
+    console.error("tailor route error:", msg);
     return NextResponse.json(
       { error: "ai_unavailable", message: "Tailoring failed. Please try again." },
       { status: 502 }
