@@ -137,11 +137,15 @@ export default function TailorPage() {
           )}
 
           {/* Live resume preview — always shown once a resume is loaded */}
-          <div className="flex-1 min-w-0 overflow-auto">
+          <div className="flex-1 min-w-0 xl:sticky xl:top-6 xl:self-start">
             <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wide mb-3">
               Live Preview
             </h2>
-            <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
+            <ResumePreview
+              resume={state.parsed}
+              theme={state.selectedTheme}
+              maxHeight="calc(100vh - 8rem)"
+            />
           </div>
         </div>
       </div>

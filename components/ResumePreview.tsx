@@ -23,6 +23,7 @@ interface Props {
   resume: ParsedResume;
   theme: ThemeId;
   bare?: boolean; // skip card wrapper (used for PDF capture)
+  maxHeight?: string; // cap the scroll area so the resume stays in view (sticky previews)
 }
 
 const THEME_MAP: Record<ThemeId, React.ComponentType<{ resume: ParsedResume }>> = {
@@ -42,7 +43,7 @@ const THEME_MAP: Record<ThemeId, React.ComponentType<{ resume: ParsedResume }>> 
   resumeio: ResumeioTheme,
 };
 
-export default function ResumePreview({ resume, theme, bare = false }: Props) {
+export default function ResumePreview({ resume, theme, bare = false, maxHeight }: Props) {
   const ThemeComponent = THEME_MAP[theme] ?? ClassicTheme;
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollPct, setScrollPct] = useState(0);
@@ -92,6 +93,7 @@ export default function ResumePreview({ resume, theme, bare = false }: Props) {
         ref={scrollRef}
         onScroll={onScroll}
         className="overflow-y-auto overflow-x-auto md:overflow-x-hidden"
+        style={maxHeight ? { maxHeight } : undefined}
       >
         <div className="min-w-[640px] md:min-w-0">
           <ThemeComponent resume={safe} />
