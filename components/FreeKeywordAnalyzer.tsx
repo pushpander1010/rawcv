@@ -151,7 +151,7 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
               {stats.topKeywords.map((kw, idx) => (
                 <span
                   key={idx}
-                  className="px-3 py-1 rounded-full bg-brand-100 text-brand-700 dark:text-brand-300 text-xs font-medium border border-brand-200 dark:border-brand-800/30"
+                  className="px-3 py-1 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-200 text-xs font-medium border border-brand-200 dark:border-brand-700/40"
                 >
                   {kw.word} <span className="opacity-70">({kw.count})</span>
                 </span>
@@ -169,7 +169,7 @@ export default function FreeKeywordAnalyzer({ resume }: Props) {
                 {stats.missingCommon.map((kw, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-1 rounded text-xs bg-amber-100 text-amber-700 dark:text-amber-300"
+                    className="px-2 py-1 rounded text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-200"
                   >
                     {kw}
                   </span>
