@@ -233,12 +233,10 @@ export default function InternationalPage() {
       <section className="relative overflow-hidden bg-gradient-to-br from-brand-600/10 via-brand-600/5 to-transparent px-6 py-14 sm:py-20">
 
         <div className="max-w-5xl mx-auto relative">
-          <div className="flex items-center gap-3 mb-4">
-            <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "International", href: "/international" }]} />
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-              International Resume
-            </h1>
-          </div>
+          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "International", href: "/international" }]} />
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-4">
+            International Resume
+          </h1>
           <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
             Choose the format that matches your target region. Each format adjusts
             page length, photo requirements, personal details, and language sections
