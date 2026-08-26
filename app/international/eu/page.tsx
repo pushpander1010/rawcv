@@ -115,7 +115,7 @@ export default function EUFormatPage() {
           <div className="space-y-4">
             {SECTION_ORDER.map((section) => (
               <div key={section.num} className="flex gap-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
-                <div className="shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-700 dark:text-blue-300 text-sm font-bold flex items-center justify-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 text-sm font-bold flex items-center justify-center">
                   {section.num}
                 </div>
                 <div>
@@ -137,7 +137,7 @@ export default function EUFormatPage() {
               { level: "C1-C2", label: "Advanced", desc: "Can use language flexibly for social, academic, and professional purposes. C2 is near-native proficiency." },
             ].map((item) => (
               <div key={item.level} className="flex gap-3 rounded-xl bg-slate-50 dark:bg-slate-800 p-4">
-                <span className="shrink-0 px-3 py-1 rounded-lg bg-blue-100 text-blue-700 dark:text-blue-300 text-xs font-bold self-start">
+                <span className="shrink-0 px-3 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 text-xs font-bold self-start">
                   {item.level}
                 </span>
                 <div>

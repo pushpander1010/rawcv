@@ -845,7 +845,7 @@ export default function ResumeExamplePage({ params }: Props) {
       <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800">
         <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left space-y-4">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 text-brand-700 dark:text-brand-300 uppercase">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-200 uppercase">
               Resume Examples &amp; Guides
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-tight">
@@ -941,7 +941,7 @@ export default function ResumeExamplePage({ params }: Props) {
           {/* Right Column: Visual Interactive Resume Template Example */}
           <div className="lg:col-span-5">
             <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-brand-200 dark:border-brand-800 shadow-xl space-y-6 relative overflow-hidden">
-              <div className="absolute top-3 right-3 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+              <div className="absolute top-3 right-3 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800">
                 Score: 98% ATS-Friendly ✅
               </div>
 

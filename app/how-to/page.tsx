@@ -44,7 +44,7 @@ function DocSection({ id, badge, title, subtitle, children }: {
   return (
     <section id={id} className="scroll-mt-20 mb-20">
       <div className="flex items-center gap-3 mb-2">
-        <span className="inline-block px-2.5 py-1 rounded-lg bg-brand-100 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wide">
+        <span className="inline-block px-2.5 py-1 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-200 text-xs font-bold uppercase tracking-wide">
           {badge}
         </span>
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{title}</h2>
@@ -149,7 +149,7 @@ export default function HowToPage() {
       <div className="relative overflow-hidden bg-gradient-to-b from-brand-50 dark:from-slate-900 to-white dark:to-slate-900 border-b border-slate-100 dark:border-slate-800 px-6 py-16">
         <div className="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 text-center md:text-left space-y-4">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 dark:text-brand-300 uppercase tracking-wide">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-200 uppercase tracking-wide">
               Documentation
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">How to use rawcv</h1>

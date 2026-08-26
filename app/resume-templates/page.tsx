@@ -379,7 +379,7 @@ export default function ResumeTemplatesPage() {
               ]}
             />
             <div className="text-center mb-6">
-              <span className="inline-block px-3 py-1 rounded-full bg-brand-100 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wide mb-4">
+              <span className="inline-block px-3 py-1 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-200 text-xs font-bold uppercase tracking-wide mb-4">
                 Resume Templates
               </span>
               <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-brand-600">

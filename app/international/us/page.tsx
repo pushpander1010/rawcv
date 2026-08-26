@@ -118,7 +118,7 @@ export default function USFormatPage() {
           <div className="space-y-4">
             {SECTION_ORDER.map((section) => (
               <div key={section.num} className="flex gap-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
-                <div className="shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-700 dark:text-blue-300 text-sm font-bold flex items-center justify-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 text-sm font-bold flex items-center justify-center">
                   {section.num}
                 </div>
                 <div>
@@ -137,7 +137,7 @@ export default function USFormatPage() {
           <div className="space-y-3">
             {ACTION_VERBS.map((group) => (
               <div key={group.category} className="flex items-start gap-3">
-                <span className="shrink-0 px-2 py-0.5 rounded bg-blue-100 text-blue-700 dark:text-blue-300 text-[10px] font-bold uppercase mt-0.5">
+                <span className="shrink-0 px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 text-[10px] font-bold uppercase mt-0.5">
                   {group.category}
                 </span>
                 <div className="flex flex-wrap gap-1.5">
