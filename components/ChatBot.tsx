@@ -185,7 +185,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
           sectionHistory: {},
           isGreeting: true,
         }),
-      });
+      }, 1, 90000);
 
       if (!res.ok) {
         setMessages([{ role: "assistant", content: buildFallback(parsed) }]);
@@ -238,7 +238,7 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             mode,
             sectionHistory,
           }),
-        });
+        }, 1, 90000);
 
         const data = await safeJsonParse<ChatResponse>(res).catch((err) => {
           // Roll back the user message so they can retry
@@ -476,6 +476,22 @@ function toFullResume(partial: Partial<ParsedResume>): ParsedResume {
 }
 
 /** Deep-merge a resumeUpdate patch onto the current resume state */
+function isSameEntry(key: string, item: any, candidate: any): boolean {
+  if (key === "experience" && typeof candidate === "object" && candidate !== null) {
+    const exp = candidate as WorkExperience;
+    return item.company === exp.company && item.title === exp.title && item.startDate === exp.startDate;
+  }
+  if (key === "education" && typeof candidate === "object" && candidate !== null) {
+    const edu = candidate as Education;
+    return item.institution === edu.institution && item.degree === edu.degree;
+  }
+  if (key === "projects" && typeof candidate === "object" && candidate !== null) {
+    return item.name === (candidate as Project).name;
+  }
+  if (typeof candidate === "string") return item === candidate;
+  return false;
+}
+
 function mergeResumeUpdate(
   current: Partial<ParsedResume>,
   update: Partial<ParsedResume>
@@ -511,39 +527,19 @@ function mergeResumeUpdate(
         if (val.length === 1 && currentArray.length > 0) {
           // Check if this item already exists (by comparing key fields)
           const newItem = val[0];
-          let isDuplicate = false;
-          
-          if (key === "experience" && typeof newItem === "object" && newItem !== null) {
-            const exp = newItem as WorkExperience;
-            isDuplicate = currentArray.some((item: any) => 
-              item.company === exp.company && 
-              item.title === exp.title && 
-              item.startDate === exp.startDate
-            );
-          } else if (key === "education" && typeof newItem === "object" && newItem !== null) {
-            const edu = newItem as Education;
-            isDuplicate = currentArray.some((item: any) => 
-              item.institution === edu.institution && 
-              item.degree === edu.degree
-            );
-          } else if (key === "projects" && typeof newItem === "object" && newItem !== null) {
-            const proj = newItem as Project;
-            isDuplicate = currentArray.some((item: any) => 
-              item.name === proj.name
-            );
-          } else if (typeof newItem === "string") {
-            // For string arrays (skills, certifications), check exact match
-            isDuplicate = currentArray.includes(newItem);
-          }
-          
+          const isDuplicate = currentArray.some((item: any) => isSameEntry(key, item, newItem));
+
           if (!isDuplicate) {
             // Append the new item to existing array
             (merged as Record<string, unknown>)[key] = [...currentArray, newItem].filter(
               (item) => item !== null && item !== undefined
             );
           } else {
-            // Item already exists, keep current array
-            (merged as Record<string, unknown>)[key] = currentArray;
+            // Same entry (matched by key fields) but with edited content
+            // (e.g. AI-enhanced bullets) — replace it instead of discarding.
+            (merged as Record<string, unknown>)[key] = currentArray.map((item: any) =>
+              isSameEntry(key, item, newItem) ? newItem : item
+            );
           }
         } else {
           // Multiple items in update - treat as complete replacement

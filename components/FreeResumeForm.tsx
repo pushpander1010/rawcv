@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import type { ParsedResume, WorkExperience, Education, Project } from "@/types";
+import FieldAIButton from "@/components/FieldAIButton";
 
 interface Props {
   onResumeChange: (resume: ParsedResume) => void;
@@ -34,6 +35,21 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
     }
     onResumeChange(resume);
   }, [resume, onResumeChange]);
+
+  // Sync when the resume changes externally (AI chat, quick-edit panel,
+  // undo, upload). Use a signature so typing in the form (which also flips
+  // initialResume via context echo) doesn't reset the cursor.
+  const lastExternalSig = useRef<string>("");
+  useEffect(() => {
+    if (!didMount.current) return;
+    if (!initialResume) return;
+    const sig = JSON.stringify(initialResume);
+    if (sig !== lastExternalSig.current && sig !== JSON.stringify(resume)) {
+      lastExternalSig.current = sig;
+      setResume(initialResume);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialResume]);
 
   const validate = useCallback(() => {
     const newErrors: Record<string, string> = {};
@@ -281,9 +297,17 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
 
       {/* Professional Summary */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-2">
-          Professional Summary
-        </h2>
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+            Professional Summary
+          </h2>
+          <FieldAIButton
+            section="summary"
+            value={resume.summary || ""}
+            context={`Role: ${resume.experience[0]?.title ?? ""} at ${resume.experience[0]?.company ?? ""}. Skills: ${resume.skills.slice(0, 8).join(", ")}`}
+            onApply={handleSummaryChange}
+          />
+        </div>
         <textarea
           value={resume.summary || ""}
           onChange={(e) => handleSummaryChange(e.target.value)}
@@ -352,6 +376,20 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 </div>
               </div>
 
+              <div className="flex items-center justify-between gap-2">
+                <p className="block text-xs font-semibold text-slate-500 dark:text-slate-300">
+                  Bullet points (one per line)
+                </p>
+                <FieldAIButton
+                  section="bullets"
+                  value={exp.bullets.join("\n")}
+                  context={`${exp.title} at ${exp.company}`}
+                  label="Improve bullets"
+                  onApply={(improved) =>
+                    updateExperience(idx, "bullets", improved.split("\n").map((b) => b.trim()).filter(Boolean))
+                  }
+                />
+              </div>
               <textarea
                 value={exp.bullets.join("\n")}
                 onChange={(e) =>
@@ -458,9 +496,17 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
 
       {/* Skills */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-2">
-          Skills
-        </h2>
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+            Skills
+          </h2>
+          <FieldAIButton
+            section="skills"
+            value={resume.skills.join(", ")}
+            context={`Roles: ${resume.experience.map((e) => `${e.title} at ${e.company}`).join("; ")}`}
+            onApply={(improved) => handleSkillsChange(improved)}
+          />
+        </div>
         <textarea
           value={resume.skills.join(", ")}
           onChange={(e) => handleSkillsChange(e.target.value)}
@@ -554,6 +600,18 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
               />
 
+              <div className="flex items-center justify-between gap-2">
+                <p className="block text-xs font-semibold text-slate-500 dark:text-slate-300">
+                  Description
+                </p>
+                <FieldAIButton
+                  section="project"
+                  value={proj.description}
+                  context={`${proj.name}. Tech: ${proj.technologies.join(", ")}`}
+                  label="Improve"
+                  onApply={(improved) => updateProject(idx, "description", improved)}
+                />
+              </div>
               <textarea
                 value={proj.description}
                 onChange={(e) => updateProject(idx, "description", e.target.value)}

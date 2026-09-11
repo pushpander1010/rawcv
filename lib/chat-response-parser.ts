@@ -12,7 +12,7 @@ const ContactSchema = z.object({
   location: z.string().optional().nullable(),
   linkedin: z.string().optional().nullable(),
   website: z.string().optional().nullable(),
-}).strict().partial();
+}).partial();
 
 const WorkExperienceSchema = z.object({
   company: z.string().optional().nullable(),
@@ -20,20 +20,20 @@ const WorkExperienceSchema = z.object({
   startDate: z.string().optional().nullable(),
   endDate: z.string().optional().nullable(),
   bullets: z.array(z.string()).optional().nullable(),
-}).strict().partial();
+}).partial();
 
 const EducationSchema = z.object({
   institution: z.string().optional().nullable(),
   degree: z.string().optional().nullable(),
   field: z.string().optional().nullable(),
   graduationYear: z.string().optional().nullable(),
-}).strict().partial();
+}).partial();
 
 const ProjectSchema = z.object({
   name: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   technologies: z.array(z.string()).optional().nullable(),
-}).strict().partial();
+}).partial();
 
 const ResumeUpdateSchema = z.object({
   contact: ContactSchema.optional().nullable(),
@@ -43,21 +43,21 @@ const ResumeUpdateSchema = z.object({
   skills: z.array(z.string()).optional().nullable(),
   certifications: z.array(z.string()).optional().nullable(),
   projects: z.array(ProjectSchema).optional().nullable(),
-}).strict().partial();
+}).partial();
 
 const BuildResponseSchema = z.object({
   message: z.string().optional().nullable(),
   resumeUpdate: ResumeUpdateSchema.optional().nullable(),
   isComplete: z.boolean().optional().nullable(),
   nextStep: z.number().optional().nullable(),
-}).strict().partial();
+}).partial();
 
 const CustomizeResponseSchema = z.object({
   message: z.string().optional().nullable(),
   resumeUpdate: ResumeUpdateSchema.optional().nullable(),
   undoSection: z.string().optional().nullable(),
   isComplete: z.boolean().optional().nullable(),
-}).strict().partial();
+}).partial();
 
 /**
  * Parse and validate a Build mode response from the AI

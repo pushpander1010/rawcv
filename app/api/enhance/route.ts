@@ -63,13 +63,13 @@ export async function POST(req: NextRequest) {
   try {
     
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}`;
-    const result = await complete(prompt, SYSTEM_PROMPT) as { suggestions: Array<{ section: string; original: string; improved: string; reason: string }> };
+    const result = await complete(prompt, SYSTEM_PROMPT, { maxTokens: 8000 }) as { suggestions: Array<{ section: string; original: string; improved: string; reason: string }> };
     const raw = Array.isArray(result.suggestions) ? result.suggestions : [];
     const suggestions: Suggestion[] = raw.slice(0, 15).map((s) => ({
       id: randomUUID(), section: s.section ?? "general", original: s.original ?? "", improved: s.improved ?? "", reason: s.reason ?? "",
     }));
-    if (suggestions.length < 3) {
-      return NextResponse.json({ error: "ai_unavailable", message: "Could not generate enough enhancements. Please try again." }, { status: 502 });
+    if (suggestions.length < 1) {
+      return NextResponse.json({ error: "ai_unavailable", message: "Could not generate enhancements. Please try again." }, { status: 502 });
     }
     // Charge only after successful AI response
     return NextResponse.json(suggestions);

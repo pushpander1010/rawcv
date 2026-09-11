@@ -1,5 +1,5 @@
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume } from "@/types";
@@ -295,7 +295,7 @@ const ALLOWED_KEYS: Array<keyof ParsedResume> = [
 ];
 
 function sanitizeResumeState(rawState: Record<string, unknown>): Partial<ParsedResume> {
-  const MAX_STR = 500;
+  const MAX_STR = 2000;
   const resumeState: Partial<ParsedResume> = {};
   for (const key of ALLOWED_KEYS) {
     const val = rawState[key];
@@ -414,7 +414,7 @@ export async function POST(req: NextRequest) {
 
     const prompt = contextLines.filter(l => l !== undefined).join("\n");
 
-    const aiResult = await complete(prompt, systemPrompt);
+    const aiResult = await complete(prompt, systemPrompt, { maxTokens: 8000 });
 
     // Charge 1 credit per chat message (cheaper than other AI operations)
 

@@ -49,6 +49,10 @@ function getRedis(): Redis | null {
   const url   = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return null;
+  if (!url.startsWith("https://")) {
+    console.warn("[rate-limit] Invalid UPSTASH_REDIS_REST_URL — using in-memory limiter");
+    return null;
+  }
   redis = new Redis({ url, token });
   return redis;
 }

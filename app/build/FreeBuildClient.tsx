@@ -6,6 +6,8 @@ import type { ParsedResume, ThemeId } from "@/types";
 import { useResume } from "@/context/ResumeContext";
 import FreeResumeForm from "@/components/FreeResumeForm";
 import ResumePreview from "@/components/ResumePreview";
+import PreviewQuickEdit from "@/components/PreviewQuickEdit";
+import UndoButton from "@/components/UndoButton";
 import ThemePicker from "@/components/ThemePicker";
 import FreeDownloadButton from "@/components/FreeDownloadButton";
 import FreeATSChecker from "@/components/FreeATSChecker";
@@ -109,9 +111,12 @@ export default function FreeBuildClient() {
 
               {/* Preview */}
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
-                <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
-                  Preview
-                </h2>
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">
+                    Preview
+                  </h2>
+                  {resume && <UndoButton />}
+                </div>
 
                 {resume ? (
                   <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
@@ -127,6 +132,19 @@ export default function FreeBuildClient() {
                   </div>
                 )}
               </div>
+
+              {/* Quick Edit */}
+              {resume && (
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-1">
+                    Quick Edit
+                  </h2>
+                  <p className="text-[13px] text-slate-500 dark:text-slate-400 mb-4">
+                    Edit or delete any line directly — every change can be undone.
+                  </p>
+                  <PreviewQuickEdit />
+                </div>
+              )}
 
               {/* Download Section */}
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
