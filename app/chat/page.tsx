@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useResume } from "@/context/ResumeContext";
 import ChatBot from "@/components/ChatBot";
 import ResumePreview from "@/components/ResumePreview";
+import PreviewQuickEdit from "@/components/PreviewQuickEdit";
 import ThemePicker from "@/components/ThemePicker";
 import ResizablePanels from "@/components/ResizablePanels";
 import UndoButton from "@/components/UndoButton";
@@ -189,9 +190,20 @@ export default function ChatPage() {
                 <ThemePicker />
               </div>
             )}
-            <div className="flex-1 overflow-auto p-4">
+            <div className="flex-1 overflow-auto p-4 space-y-4">
               {state.parsed ? (
-                <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
+                <>
+                  <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
+                  <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                    <h3 className="text-[13px] font-semibold text-slate-900 dark:text-white mb-1">
+                      Quick Edit
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">
+                      Fix any line yourself — no need to ask the AI.
+                    </p>
+                    <PreviewQuickEdit />
+                  </div>
+                </>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-center text-slate-500 dark:text-slate-300 gap-3">
                   <svg className="w-12 h-12 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
