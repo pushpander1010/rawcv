@@ -54,7 +54,7 @@ export default function FreeBuildClient() {
 
       {/* Preview Column */}
       <div className="lg:col-span-2 order-1 lg:order-2">
-        <div className="sticky top-24 space-y-5">
+        <div className="space-y-5">
           {/* Tab Navigation */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-1.5">
             <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
@@ -138,7 +138,7 @@ export default function FreeBuildClient() {
 
               {/* Quick Edit */}
               {resume && (
-                <div id="quick-edit-panel" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 scroll-mt-24">
+                <div data-quick-edit-panel className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 scroll-mt-24">
                   <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-1">
                     Quick Edit
                   </h2>

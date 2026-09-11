@@ -9,18 +9,25 @@ import { useResume } from "@/context/ResumeContext";
  */
 export function QuickEditJumpBar() {
   function scrollToQuickEdit() {
-    const el = document.getElementById("quick-edit-panel");
+    // Mobile chat renders the panel twice (hidden desktop + visible mobile).
+    // Pick the VISIBLE one — query all copies via data attribute.
+    const panels = Array.from(document.querySelectorAll<HTMLElement>("[data-quick-edit-panel]"));
+    const el = panels.find((p) => p.getBoundingClientRect().height > 0) ?? panels[0];
     if (!el) return;
-    // Walk up to the nearest scrollable ancestor (the chat preview column
-    // and the build preview column are nested overflow containers — a plain
-    // window-level scrollIntoView can't reach inside them).
-    let scroller: HTMLElement | null = el.parentElement;
-    while (scroller && scroller !== document.body) {
-      const style = getComputedStyle(scroller);
-      if (/(auto|scroll)/.test(style.overflowY) && scroller.scrollHeight > scroller.clientHeight) break;
-      scroller = scroller.parentElement;
+    // Collect every scrollable ancestor of the VISIBLE panel, then pick the
+    // one where the panel actually has layout. Robust across the chat
+    // desktop/mobile panels and the build page's window scroll.
+    const scrollers: HTMLElement[] = [];
+    let s: HTMLElement | null = el.parentElement;
+    while (s && s !== document.body) {
+      const style = getComputedStyle(s);
+      if (/(auto|scroll)/.test(style.overflowY) && s.scrollHeight > s.clientHeight + 4) {
+        scrollers.push(s);
+      }
+      s = s.parentElement;
     }
-    if (scroller && scroller !== document.body && scroller !== document.documentElement) {
+    const scroller = scrollers.find((c) => c.getBoundingClientRect().height > 0) ?? scrollers[0] ?? null;
+    if (scroller) {
       const top = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop - 12;
       scroller.scrollTo({ top, behavior: "smooth" });
     } else {
