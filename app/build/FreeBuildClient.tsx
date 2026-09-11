@@ -120,7 +120,7 @@ export default function FreeBuildClient() {
 
                 {resume ? (
                   <>
-                    <QuickEditJumpBar resume={resume} />
+                    <QuickEditJumpBar />
                     <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
                       <ResumePreview resume={resume} theme={selectedTheme} />
                     </div>
@@ -138,7 +138,7 @@ export default function FreeBuildClient() {
 
               {/* Quick Edit */}
               {resume && (
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+                <div id="quick-edit-panel" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 scroll-mt-24">
                   <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-1">
                     Quick Edit
                   </h2>

@@ -193,9 +193,9 @@ export default function ChatPage() {
             <div className="flex-1 overflow-auto p-4 space-y-4">
               {state.parsed ? (
                 <>
-                  <QuickEditJumpBar resume={state.parsed} />
+                  <QuickEditJumpBar />
                   <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
-                  <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                  <div id="quick-edit-panel" className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 scroll-mt-24">
                     <h3 className="text-[13px] font-semibold text-slate-900 dark:text-white mb-1">
                       Quick Edit
                     </h3>
