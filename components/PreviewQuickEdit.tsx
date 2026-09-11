@@ -2,6 +2,52 @@
 
 import { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
+import type { ParsedResume } from "@/types";
+
+export interface QuickSection {
+  id: string;
+  label: string;
+}
+
+export function resumeSections(resume: ParsedResume): QuickSection[] {
+  const sections: QuickSection[] = [];
+  if (resume.summary?.trim()) sections.push({ id: "qe-summary", label: "Summary" });
+  if (resume.experience.length > 0) sections.push({ id: "qe-experience", label: "Experience" });
+  if (resume.skills.length > 0) sections.push({ id: "qe-skills", label: "Skills" });
+  if (resume.education.length > 0) sections.push({ id: "qe-education", label: "Education" });
+  if ((resume.projects?.length ?? 0) > 0) sections.push({ id: "qe-projects", label: "Projects" });
+  if ((resume.certifications?.length ?? 0) > 0)
+    sections.push({ id: "qe-certifications", label: "Certifications" });
+  return sections;
+}
+
+function scrollToSection(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/**
+ * Pill buttons shown on the resume preview — click one to jump
+ * to that section in Quick Edit below.
+ */
+export function QuickEditJumpBar({ resume }: { resume: ParsedResume }) {
+  const sections = resumeSections(resume);
+  if (sections.length === 0) return null;
+  return (
+    <div className="flex flex-wrap items-center gap-1.5 mb-3" aria-label="Jump to section">
+      <span className="text-xs text-slate-400 dark:text-slate-500 font-medium mr-1">Edit:</span>
+      {sections.map((s) => (
+        <button
+          key={s.id}
+          type="button"
+          onClick={() => scrollToSection(s.id)}
+          className="text-xs font-semibold px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-brand-50 dark:hover:bg-brand-500/10 hover:text-brand-700 dark:hover:text-brand-300 hover:border-brand-200 dark:hover:border-brand-800 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+        >
+          {s.label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 /**
  * Quick edit panel that sits under the resume preview.
@@ -70,7 +116,7 @@ export default function PreviewQuickEdit() {
     <div className="space-y-5">
       {/* Summary */}
       {resume.summary?.trim() ? (
-        <div>
+        <div id="qe-summary" className="scroll-mt-24">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5">
             Summary
           </p>
@@ -97,7 +143,7 @@ export default function PreviewQuickEdit() {
 
       {/* Experience */}
       {resume.experience.length > 0 && (
-        <div>
+        <div id="qe-experience" className="scroll-mt-24">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5">
             Experience
           </p>
@@ -213,7 +259,7 @@ export default function PreviewQuickEdit() {
 
       {/* Skills */}
       {resume.skills.length > 0 && (
-        <div>
+        <div id="qe-skills" className="scroll-mt-24">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5">
             Skills
           </p>
@@ -269,7 +315,7 @@ export default function PreviewQuickEdit() {
 
       {/* Education */}
       {resume.education.length > 0 && (
-        <div>
+        <div id="qe-education" className="scroll-mt-24">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5">
             Education
           </p>
@@ -357,7 +403,7 @@ export default function PreviewQuickEdit() {
 
       {/* Projects */}
       {(resume.projects?.length ?? 0) > 0 && (
-        <div>
+        <div id="qe-projects" className="scroll-mt-24">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5">
             Projects
           </p>
@@ -410,7 +456,7 @@ export default function PreviewQuickEdit() {
 
       {/* Certifications */}
       {(resume.certifications?.length ?? 0) > 0 && (
-        <div>
+        <div id="qe-certifications" className="scroll-mt-24">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5">
             Certifications
           </p>

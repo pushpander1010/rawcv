@@ -6,7 +6,7 @@ import type { ParsedResume, ThemeId } from "@/types";
 import { useResume } from "@/context/ResumeContext";
 import FreeResumeForm from "@/components/FreeResumeForm";
 import ResumePreview from "@/components/ResumePreview";
-import PreviewQuickEdit from "@/components/PreviewQuickEdit";
+import PreviewQuickEdit, { QuickEditJumpBar } from "@/components/PreviewQuickEdit";
 import UndoButton from "@/components/UndoButton";
 import ThemePicker from "@/components/ThemePicker";
 import FreeDownloadButton from "@/components/FreeDownloadButton";
@@ -119,9 +119,12 @@ export default function FreeBuildClient() {
                 </div>
 
                 {resume ? (
-                  <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
-                    <ResumePreview resume={resume} theme={selectedTheme} />
-                  </div>
+                  <>
+                    <QuickEditJumpBar resume={resume} />
+                    <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
+                      <ResumePreview resume={resume} theme={selectedTheme} />
+                    </div>
+                  </>
                 ) : (
                   <div className="flex items-center justify-center h-56 bg-slate-50 dark:bg-slate-800 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
                     <div className="text-center">

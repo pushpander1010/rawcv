@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useResume } from "@/context/ResumeContext";
 import ChatBot from "@/components/ChatBot";
 import ResumePreview from "@/components/ResumePreview";
-import PreviewQuickEdit from "@/components/PreviewQuickEdit";
+import PreviewQuickEdit, { QuickEditJumpBar } from "@/components/PreviewQuickEdit";
 import ThemePicker from "@/components/ThemePicker";
 import ResizablePanels from "@/components/ResizablePanels";
 import UndoButton from "@/components/UndoButton";
@@ -193,6 +193,7 @@ export default function ChatPage() {
             <div className="flex-1 overflow-auto p-4 space-y-4">
               {state.parsed ? (
                 <>
+                  <QuickEditJumpBar resume={state.parsed} />
                   <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
                   <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
                     <h3 className="text-[13px] font-semibold text-slate-900 dark:text-white mb-1">
