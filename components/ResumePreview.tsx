@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import type { ParsedResume, ThemeId } from "@/types";
+import type { ParsedResume, ThemeId, ResumeTypography } from "@/types";
+import { DEFAULT_TYPOGRAPHY, RESUME_SIZE_ZOOM } from "@/types";
+import { useResume } from "@/context/ResumeContext";
 import {
   ClassicTheme,
   ModernTheme,
@@ -24,6 +26,10 @@ interface Props {
   theme: ThemeId;
   bare?: boolean; // skip card wrapper (used for PDF capture)
   maxHeight?: string; // cap the scroll area so the resume stays in view (sticky previews)
+  /** Override typography for print/PDF rendering. Screen preview reads from ResumeContext when omitted. */
+  typography?: ResumeTypography;
+  /** Render an A4 sheet (210mm wide, paged shadow) so users see the real page shape */
+  a4?: boolean;
 }
 
 const THEME_MAP: Record<ThemeId, React.ComponentType<{ resume: ParsedResume }>> = {
@@ -43,11 +49,18 @@ const THEME_MAP: Record<ThemeId, React.ComponentType<{ resume: ParsedResume }>> 
   resumeio: ResumeioTheme,
 };
 
-export default function ResumePreview({ resume, theme, bare = false, maxHeight }: Props) {
+export default function ResumePreview({ resume, theme, bare = false, maxHeight, typography: typoProp, a4 = false }: Props) {
   const ThemeComponent = THEME_MAP[theme] ?? ClassicTheme;
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollPct, setScrollPct] = useState(0);
   const [needsScroll, setNeedsScroll] = useState(false);
+  const ctxTypo = useResume().state.typography;
+  const typo = typoProp ?? ctxTypo ?? DEFAULT_TYPOGRAPHY;
+  const zoom = RESUME_SIZE_ZOOM[typo.size] ?? 1;
+  const typoClass = [
+    typo.font !== "default" ? `resume-font-${typo.font}` : "",
+    `resume-spacing-${typo.spacing}`,
+  ].filter(Boolean).join(" ");
 
   const safe: ParsedResume = {
     ...resume,
@@ -92,10 +105,13 @@ export default function ResumePreview({ resume, theme, bare = false, maxHeight }
       <div
         ref={scrollRef}
         onScroll={onScroll}
-        className="overflow-y-auto overflow-x-auto md:overflow-x-hidden"
+        className={`overflow-y-auto overflow-x-auto md:overflow-x-hidden ${a4 ? "bg-slate-100 dark:bg-slate-950 p-4" : ""}`}
         style={maxHeight ? { maxHeight } : undefined}
       >
-        <div className="min-w-[640px] md:min-w-0">
+        <div
+          className={`${a4 ? "mx-auto bg-white shadow-md" : "min-w-[640px] md:min-w-0"} ${typoClass}`}
+          style={a4 ? { width: "210mm", maxWidth: "100%", zoom } : { zoom }}
+        >
           <ThemeComponent resume={safe} />
         </div>
       </div>

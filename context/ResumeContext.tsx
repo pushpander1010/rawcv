@@ -11,7 +11,9 @@ import type {
   ThemeId,
   CoverLetter,
   ResumeFormat,
+  ResumeTypography,
 } from "@/types";
+import { DEFAULT_TYPOGRAPHY } from "@/types";
 import { sanitizeResume } from "@/lib/sanitize-resume";
 
 export interface ResumeState {
@@ -24,6 +26,7 @@ export interface ResumeState {
   tailoredResume: TailoredResume | null;
   selectedTheme: ThemeId;
   selectedFormat: ResumeFormat;
+  typography: ResumeTypography;
   jd: string;
   lastOperationCost: number | null;
   chatResetSignal: number;
@@ -54,6 +57,7 @@ const defaultState: ResumeState = {
   tailoredResume: null,
   selectedTheme: "classic",
   selectedFormat: "general",
+  typography: DEFAULT_TYPOGRAPHY,
   jd: "",
   lastOperationCost: null,
   chatResetSignal: 0,
@@ -68,7 +72,7 @@ const STORAGE_KEY = "rawcv_resume_state";
 
 const PERSIST_KEYS: (keyof ResumeState)[] = [
   "raw", "parsed", "atsResult", "relevanceResult",
-  "suggestions", "enhancements", "tailoredResume", "selectedTheme", "selectedFormat", "jd",
+  "suggestions", "enhancements", "tailoredResume", "selectedTheme", "selectedFormat", "typography", "jd",
   "chatMessages", "coverLetters", "userPhoto",
 ];
 
@@ -82,6 +86,9 @@ function loadPersistedState(): Partial<ResumeState> {
     }
     if (parsed.tailoredResume?.finalResume) {
       parsed.tailoredResume.finalResume = sanitizeResume(parsed.tailoredResume.finalResume);
+    }
+    if (!parsed.typography) {
+      parsed.typography = DEFAULT_TYPOGRAPHY;
     }
     return parsed;
   } catch {

@@ -1,19 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import type { ParsedResume } from "@/types";
+import type { ParsedResume, ResumeTypography } from "@/types";
+import { DEFAULT_TYPOGRAPHY } from "@/types";
 import { validateResume, safeName, downloadViaApi, openPrintWindow, downloadBlob, browserPrint } from "@/lib/download-helpers";
+import { resumeToPlainText, downloadTextFile } from "@/lib/resume-text";
+import { buildDocxBlob, downloadDocxFile } from "@/lib/resume-docx";
 
 interface Props {
   resume: ParsedResume | null;
   theme: string;
+  typography?: ResumeTypography;
   onValidationError?: (error: string) => void;
 }
 
-export default function FreeDownloadButton({ resume, theme, onValidationError }: Props) {
+export default function FreeDownloadButton({ resume, theme, typography, onValidationError }: Props) {
   const [loading, setLoading] = useState(false);
+  const [docLoading, setDocLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const typo = typography ?? DEFAULT_TYPOGRAPHY;
 
   const doValidate = (): boolean => {
     const msg = validateResume(resume);
@@ -27,7 +33,7 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
     setLoading(true);
     try {
       const sName = safeName(resume.contact.name);
-      const result = await downloadViaApi(resume, theme, "/api/export-free");
+      const result = await downloadViaApi(resume, theme, "/api/export-free", typo);
       if (result.fallbackHtml) { openPrintWindow(result.fallbackHtml, sName); setShowSuccessModal(true); return; }
       if (result.error) throw new Error(result.error);
       if (result.blob) { downloadBlob(result.blob, sName); setShowSuccessModal(true); }
@@ -44,14 +50,40 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
     if (!doValidate() || !resume) return;
     try {
       const sName = safeName(resume.contact.name);
-      const html = browserPrint(resume, theme);
+      const html = browserPrint(resume, theme, typo);
       const win = openPrintWindow(html, sName);
       if (!win) { setError("Pop-up blocked. Please allow pop-ups and try again."); return; }
       setShowSuccessModal(true);
     } catch { setError("Failed to initialize browser print dialog."); }
   };
 
-  const isDisabled = loading || !resume;
+  const handleDocx = async () => {
+    setError(null);
+    if (!doValidate() || !resume) return;
+    setDocLoading(true);
+    try {
+      const blob = await buildDocxBlob(resume, typo);
+      downloadDocxFile(`${safeName(resume.contact.name)}-resume.docx`, blob);
+      setShowSuccessModal(true);
+    } catch {
+      setError("Could not generate Word file. Please try again.");
+    } finally {
+      setDocLoading(false);
+    }
+  };
+
+  const handleTxt = () => {
+    setError(null);
+    if (!doValidate() || !resume) return;
+    try {
+      downloadTextFile(`${safeName(resume.contact.name)}-resume.txt`, resumeToPlainText(resume));
+      setShowSuccessModal(true);
+    } catch {
+      setError("Could not generate TXT file. Please try again.");
+    }
+  };
+
+  const isDisabled = loading || docLoading || !resume;
 
   return (
     <div className="space-y-3">
@@ -64,6 +96,16 @@ export default function FreeDownloadButton({ resume, theme, onValidationError }:
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
         Save PDF (Instant Browser)
       </button>
+      <div className="grid grid-cols-2 gap-2.5">
+        <button type="button" onClick={handleDocx} disabled={isDisabled} aria-label="Download resume as Word document"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm transition-colors focus:outline-none">
+          {docLoading ? "Making Word…" : "Download Word"}
+        </button>
+        <button type="button" onClick={handleTxt} disabled={isDisabled} aria-label="Download resume as plain text"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm transition-colors focus:outline-none">
+          Download TXT
+        </button>
+      </div>
       {error && <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800"><p className="text-sm text-red-700 dark:text-red-300">{error}</p></div>}
       <p className="text-xs text-slate-500 dark:text-slate-300 text-center">100% Free — No account required!</p>
       {showSuccessModal && (

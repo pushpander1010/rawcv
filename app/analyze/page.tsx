@@ -9,6 +9,7 @@ import RelevanceScoreCard from "@/components/RelevanceScoreCard";
 import SuggestionsList from "@/components/SuggestionsList";
 import EnhancementList from "@/components/EnhancementList";
 import ThemePicker from "@/components/ThemePicker";
+import TypographyControls from "@/components/TypographyControls";
 import ResumePreview from "@/components/ResumePreview";
 import DownloadButton from "@/components/DownloadButton";
 import ChatBot from "@/components/ChatBot";import type { ATSResult, RelevanceResult, Suggestion } from "@/types";
@@ -312,6 +313,13 @@ export default function AnalyzePage() {
                 <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Theme</h2>
               </div>
               <ThemePicker />
+              <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200"><Icon name="document" size={16} /></div>
+                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Text style</h2>
+                </div>
+                <TypographyControls />
+              </div>
             </div>
           )}
 

@@ -123,6 +123,46 @@ export interface ParsedResume {
   format?: ResumeFormat;
 }
 
+// ─── Resume Typography ─────────────────────────────────────────────────────
+
+export type ResumeFont = "default" | "arial" | "calibri" | "georgia" | "times";
+export type ResumeFontSize = "small" | "medium" | "large";
+export type ResumeSpacing = "compact" | "comfortable" | "spacious";
+
+export interface ResumeTypography {
+  font: ResumeFont;
+  size: ResumeFontSize;
+  spacing: ResumeSpacing;
+}
+
+export const DEFAULT_TYPOGRAPHY: ResumeTypography = {
+  font: "default",
+  size: "medium",
+  spacing: "comfortable",
+};
+
+/** CSS font stacks shared by preview overrides and PDF export */
+export const RESUME_FONT_STACKS: Record<Exclude<ResumeFont, "default">, string> = {
+  arial: "Arial, Helvetica, sans-serif",
+  calibri: "Calibri, Carlito, 'Segoe UI', sans-serif",
+  georgia: "Georgia, 'Times New Roman', serif",
+  times: "'Times New Roman', Times, serif",
+};
+
+/** Preview/PDF zoom factor per size preset */
+export const RESUME_SIZE_ZOOM: Record<ResumeFontSize, number> = {
+  small: 0.9,
+  medium: 1,
+  large: 1.08,
+};
+
+/** Base line-height per spacing preset */
+export const RESUME_LINE_HEIGHT: Record<ResumeSpacing, number> = {
+  compact: 1.35,
+  comfortable: 1.6,
+  spacious: 1.9,
+};
+
 // ─── Cover Letter ─────────────────────────────────────────────────────────
 
 export interface CoverLetter {

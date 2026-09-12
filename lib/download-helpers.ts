@@ -3,7 +3,8 @@
 
 import { fetchWithRetry, safeJsonParse } from "@/lib/fetch-retry";
 import { renderThemeHtml } from "@/lib/theme-renderer";
-import type { ParsedResume, ThemeId } from "@/types";
+import type { ParsedResume, ThemeId, ResumeTypography } from "@/types";
+import { DEFAULT_TYPOGRAPHY } from "@/types";
 
 export function validateResume(resume: ParsedResume | null | undefined): string | null {
   if (!resume) return "Resume data is missing";
@@ -21,12 +22,12 @@ export function safeName(name: string | undefined): string {
   return (name || "resume").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "resume";
 }
 
-export async function downloadViaApi(resume: ParsedResume, theme: string, endpoint: string): Promise<{ blob?: Blob; fallbackHtml?: string; error?: string }> {
+export async function downloadViaApi(resume: ParsedResume, theme: string, endpoint: string, typography?: ResumeTypography): Promise<{ blob?: Blob; fallbackHtml?: string; error?: string }> {
   const sName = safeName(resume.contact?.name);
   const res = await fetchWithRetry(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ parsed: resume, theme }),
+    body: JSON.stringify({ parsed: resume, theme, typography: typography ?? DEFAULT_TYPOGRAPHY }),
   }, 1, 90000);
 
   if (!res.ok) {
@@ -61,6 +62,6 @@ export function downloadBlob(blob: Blob, sName: string) {
   URL.revokeObjectURL(url);
 }
 
-export function browserPrint(resume: ParsedResume, theme: string): string {
-  return renderThemeHtml(resume, theme as ThemeId);
+export function browserPrint(resume: ParsedResume, theme: string, typography?: ResumeTypography): string {
+  return renderThemeHtml(resume, theme as ThemeId, typography ?? DEFAULT_TYPOGRAPHY);
 }

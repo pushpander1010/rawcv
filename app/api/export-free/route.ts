@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ParsedResume, ThemeId } from "@/types";
+import type { ParsedResume, ThemeId, ResumeTypography } from "@/types";
 import { renderThemeHtml } from "@/lib/theme-renderer";
 import { generatePdf, safeFileName } from "@/lib/pdf-export";
 
@@ -8,21 +8,21 @@ export const maxDuration = 60;
 
 /** Free export — no auth, no tailor changes. Used by /build. */
 export async function POST(req: NextRequest) {
-  let body: { parsed: ParsedResume; theme: ThemeId };
+  let body: { parsed: ParsedResume; theme: ThemeId; typography?: ResumeTypography };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_request", message: "Expected JSON body" }, { status: 400 });
   }
 
-  const { parsed, theme } = body;
+  const { parsed, theme, typography } = body;
   if (!parsed || !theme) {
     return NextResponse.json({ error: "missing_fields", message: "parsed and theme are required" }, { status: 400 });
   }
 
   let html: string;
   try {
-    html = renderThemeHtml(parsed, theme);
+    html = renderThemeHtml(parsed, theme, typography);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: "render_failed", message: `Failed to render resume: ${message}` }, { status: 500 });

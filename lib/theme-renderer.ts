@@ -1,4 +1,5 @@
-import type { ParsedResume, ThemeId, TailorChange, LanguageProficiency } from "@/types";
+import type { ParsedResume, ThemeId, TailorChange, LanguageProficiency, ResumeTypography } from "@/types";
+import { DEFAULT_TYPOGRAPHY, RESUME_FONT_STACKS, RESUME_LINE_HEIGHT, RESUME_SIZE_ZOOM } from "@/types";
 import { sanitizeResume as sanitizeResumeUtil } from "@/lib/sanitize-resume";
 
 /** Merge accepted TailorChanges into a ParsedResume copy */
@@ -577,8 +578,10 @@ function sanitiseResume(resume: ParsedResume): ParsedResume {
   return sanitizeResumeUtil(resume);
 }
 
-/** Render a ParsedResume to a full self-contained HTML document */
-export function renderThemeHtml(resume: ParsedResume, theme: ThemeId): string {
+/** Render a ParsedResume to a full self-contained HTML document.
+ *  Optional typography overrides the theme's font/line-height so PDF/print
+ *  output matches the on-screen preview exactly. */
+export function renderThemeHtml(resume: ParsedResume, theme: ThemeId, typography?: ResumeTypography): string {
   try {
     const safe = sanitiseResume(resume);
     const renderer = RENDERERS[theme];
@@ -589,7 +592,12 @@ export function renderThemeHtml(resume: ParsedResume, theme: ThemeId): string {
     }
     
     const body = renderer(safe);
-    
+    const typo = typography ?? DEFAULT_TYPOGRAPHY;
+    const typoCss =
+      typo.font !== "default"
+        ? `#resume-root, #resume-root * { font-family: ${RESUME_FONT_STACKS[typo.font]} !important; }\n    #resume-root, #resume-root * { line-height: ${RESUME_LINE_HEIGHT[typo.spacing]} !important; font-size-adjust: none; }\n    #resume-root { zoom: ${RESUME_SIZE_ZOOM[typo.size]}; }`
+        : `#resume-root, #resume-root * { line-height: ${RESUME_LINE_HEIGHT[typo.spacing]} !important; }\n    #resume-root { zoom: ${RESUME_SIZE_ZOOM[typo.size]}; }`;
+
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -606,12 +614,13 @@ export function renderThemeHtml(resume: ParsedResume, theme: ThemeId): string {
     ul { padding-left: 18px; }
     li { margin-bottom: 2px; }
     p { margin: 0; }
+    ${typoCss}
     @media print {
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
   </style>
 </head>
-<body>${body}</body>
+<body><div id="resume-root">${body}</div></body>
 </html>`;
   } catch (err) {
     console.error("[theme-renderer] Error rendering theme HTML:", err);

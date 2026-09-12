@@ -7,6 +7,7 @@ import ResumeUploader from "@/components/ResumeUploader";
 import TailorDiff from "@/components/TailorDiff";
 import ResumePreview from "@/components/ResumePreview";
 import DownloadButton from "@/components/DownloadButton";
+import TypographyControls from "@/components/TypographyControls";
 import UndoButton from "@/components/UndoButton";
 import ResetButton from "@/components/ResetButton";
 
@@ -141,6 +142,14 @@ export default function TailorPage() {
             <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wide mb-3">
               Live Preview
             </h2>
+            <details className="mb-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3">
+              <summary className="cursor-pointer text-[13px] font-semibold text-slate-700 dark:text-slate-200 list-none">
+                Text style & page options
+              </summary>
+              <div className="pt-3">
+                <TypographyControls />
+              </div>
+            </details>
             <ResumePreview
               resume={state.parsed}
               theme={state.selectedTheme}

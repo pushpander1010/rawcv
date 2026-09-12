@@ -7,6 +7,7 @@ import ChatBot from "@/components/ChatBot";
 import ResumePreview from "@/components/ResumePreview";
 import PreviewQuickEdit, { QuickEditJumpBar } from "@/components/PreviewQuickEdit";
 import ThemePicker from "@/components/ThemePicker";
+import TypographyControls from "@/components/TypographyControls";
 import ResizablePanels from "@/components/ResizablePanels";
 import UndoButton from "@/components/UndoButton";
 import ResetButton from "@/components/ResetButton";
@@ -188,6 +189,9 @@ export default function ChatPage() {
             {showThemePicker && (
               <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
                 <ThemePicker />
+                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                  <TypographyControls collapsible />
+                </div>
               </div>
             )}
             <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-4">

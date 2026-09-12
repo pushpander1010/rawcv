@@ -9,6 +9,7 @@ import ResumePreview from "@/components/ResumePreview";
 import PreviewQuickEdit, { QuickEditJumpBar } from "@/components/PreviewQuickEdit";
 import UndoButton from "@/components/UndoButton";
 import ThemePicker from "@/components/ThemePicker";
+import TypographyControls from "@/components/TypographyControls";
 import FreeDownloadButton from "@/components/FreeDownloadButton";
 import FreeATSChecker from "@/components/FreeATSChecker";
 import FreeKeywordAnalyzer from "@/components/FreeKeywordAnalyzer";
@@ -19,6 +20,7 @@ export default function FreeBuildClient() {
   const resume = state.parsed;
   const selectedTheme = state.selectedTheme;
   const [showThemePicker, setShowThemePicker] = useState(false);
+  const [a4Preview, setA4Preview] = useState(true);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"preview" | "ats" | "keywords" | "formatting">("preview");
 
@@ -109,20 +111,39 @@ export default function FreeBuildClient() {
                 </div>
               </div>
 
+              {/* Text style — font, size, spacing */}
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+                <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
+                  Text style
+                </h2>
+                <TypographyControls />
+              </div>
+
               {/* Preview */}
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">
                     Preview
                   </h2>
-                  {resume && <UndoButton />}
+                  <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-1.5 text-[13px] text-slate-600 dark:text-slate-300 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={a4Preview}
+                        onChange={(e) => setA4Preview(e.target.checked)}
+                        className="w-4 h-4 rounded accent-slate-900 dark:accent-white"
+                      />
+                      A4 page
+                    </label>
+                    {resume && <UndoButton />}
+                  </div>
                 </div>
 
                 {resume ? (
                   <>
                     <QuickEditJumpBar />
                     <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
-                      <ResumePreview resume={resume} theme={selectedTheme} />
+                      <ResumePreview resume={resume} theme={selectedTheme} a4={a4Preview} />
                     </div>
                   </>
                 ) : (
@@ -158,6 +179,7 @@ export default function FreeBuildClient() {
                 <FreeDownloadButton
                   resume={resume}
                   theme={selectedTheme}
+                  typography={state.typography}
                   onValidationError={setValidationError}
                 />
 

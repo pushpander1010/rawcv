@@ -97,3 +97,15 @@ html.dark ::selection {
     box-shadow: 0 0 0 0 rgb(37 99 235 / 0);
   }
 }
+
+/* ─── Resume typography overrides (preview) ─────────────────────────────
+   Scoped to .resume-font-* so only the resume paper is affected, never
+   the site chrome. !important beats per-theme font utilities. */
+.resume-font-arial, .resume-font-arial * { font-family: Arial, Helvetica, sans-serif !important; }
+.resume-font-calibri, .resume-font-calibri * { font-family: Calibri, Carlito, "Segoe UI", sans-serif !important; }
+.resume-font-georgia, .resume-font-georgia * { font-family: Georgia, "Times New Roman", serif !important; }
+.resume-font-times, .resume-font-times * { font-family: "Times New Roman", Times, serif !important; }
+
+.resume-spacing-compact, .resume-spacing-compact * { line-height: 1.35 !important; }
+.resume-spacing-comfortable, .resume-spacing-comfortable * { line-height: 1.6 !important; }
+.resume-spacing-spacious, .resume-spacing-spacious * { line-height: 1.9 !important; }

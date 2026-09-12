@@ -89,8 +89,8 @@ export default function BuildPage() {
           <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-800 border-y border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
             {[
               { k: "Theme", t: "9 ATS-safe themes", d: "Single-column, zero images. Switch in one click — content reflows without retyping." },
-              { k: "Preview", t: "Live, what-you-see-is-what-ATS-sees", d: "Margins, headers, and line breaks update instantly. No export surprises." },
-              { k: "Export", t: "PDF, no watermark", d: "300 dpi, selectable text, under 200 KB. Free forever." },
+              { k: "Preview", t: "Live A4 page, what-you-see-is-what-ATS-sees", d: "Font, size, and spacing update instantly on a true A4 sheet. No export surprises." },
+              { k: "Export", t: "PDF, Word & TXT, no watermark", d: "Selectable-text PDF plus editable Word and plain-text for job portals. Free forever." },
             ].map((f) => (
               <div key={f.k} className="px-6 py-7">
                 <p className="text-[10px] font-bold tracking-widest uppercase text-slate-400 dark:text-slate-500 mb-2">{f.k}</p>
@@ -117,6 +117,8 @@ export default function BuildPage() {
                 { q: "Is it really free with no watermark?", a: "Yes. All themes, preview, and PDF export are free and watermark-free. No login, no card." },
                 { q: "Will my resume pass ATS?", a: "Themes avoid tables, text boxes, and images. PDFs are text-based and tested against major ATS." },
                 { q: "Can I import my PDF or DOCX?", a: "Upload at /analyze — we parse to editable sections, then you can switch themes in the builder." },
+                { q: "Can I change the font and spacing?", a: "Yes. Use the Text style panel to pick a font, size, and line spacing — the A4 preview updates live and PDFs match it." },
+                { q: "Can I download in Word or TXT?", a: "Yes. Below the PDF buttons you'll find Download Word (.docx) and Download TXT for job portals that need plain text." },
                 { q: "Do you store my resume?", a: "No. Drafts live in your browser (localStorage). We don’t store resume content server-side." },
               ].map((f) => (
                 <div key={f.q} className="px-6 py-5">
@@ -132,6 +134,8 @@ export default function BuildPage() {
         { "@type": "Question", name: "Is it really free with no watermark?", acceptedAnswer: { "@type": "Answer", text: "Yes. All themes, preview, and PDF export are free and watermark-free. No login, no card." } },
         { "@type": "Question", name: "Will my resume pass ATS?", acceptedAnswer: { "@type": "Answer", text: "Themes avoid tables, text boxes, and images. PDFs are text-based and tested against major ATS." } },
         { "@type": "Question", name: "Can I import my PDF or DOCX?", acceptedAnswer: { "@type": "Answer", text: "Upload at /analyze — we parse to editable sections, then you can switch themes in the builder." } },
+        { "@type": "Question", name: "Can I change the font and spacing?", acceptedAnswer: { "@type": "Answer", text: "Yes. Use the Text style panel to pick a font, size, and line spacing — the A4 preview updates live and PDFs match it." } },
+        { "@type": "Question", name: "Can I download in Word or TXT?", acceptedAnswer: { "@type": "Answer", text: "Yes. Below the PDF buttons you'll find Download Word (.docx) and Download TXT for job portals that need plain text." } },
       ] }) }} />
       <Script id="breadcrumb-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: "https://www.rawcv.com" },

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ParsedResume, ThemeId, TailorChange } from "@/types";
+import type { ParsedResume, ThemeId, TailorChange, ResumeTypography } from "@/types";
 import { applyChanges, renderThemeHtml } from "@/lib/theme-renderer";
 import { requireAuth } from "@/lib/api-guard";
 import { generatePdf, safeFileName } from "@/lib/pdf-export";
@@ -11,14 +11,14 @@ export async function POST(req: NextRequest) {
   const auth = await requireAuth(req);
   if (auth instanceof NextResponse) return auth;
 
-  let body: { parsed: ParsedResume; theme: ThemeId; changes?: TailorChange[] };
+  let body: { parsed: ParsedResume; theme: ThemeId; changes?: TailorChange[]; typography?: ResumeTypography };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_request", message: "Expected JSON body" }, { status: 400 });
   }
 
-  const { parsed, theme, changes } = body;
+  const { parsed, theme, changes, typography } = body;
   if (!parsed || !theme) {
     return NextResponse.json({ error: "missing_fields", message: "parsed and theme are required" }, { status: 400 });
   }
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   let html: string;
   try {
     const finalResume = applyChanges(parsed, changes);
-    html = renderThemeHtml(finalResume, theme);
+    html = renderThemeHtml(finalResume, theme, typography);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: "render_failed", message: `Failed to render resume: ${message}` }, { status: 500 });
