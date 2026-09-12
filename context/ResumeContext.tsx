@@ -13,7 +13,7 @@ import type {
   ResumeFormat,
   ResumeTypography,
 } from "@/types";
-import { DEFAULT_TYPOGRAPHY } from "@/types";
+import { DEFAULT_TYPOGRAPHY, normalizeTypography } from "@/types";
 import { sanitizeResume } from "@/lib/sanitize-resume";
 
 export interface ResumeState {
@@ -88,7 +88,9 @@ function loadPersistedState(): Partial<ResumeState> {
       parsed.tailoredResume.finalResume = sanitizeResume(parsed.tailoredResume.finalResume);
     }
     if (!parsed.typography) {
-      parsed.typography = DEFAULT_TYPOGRAPHY;
+      parsed.typography = { ...DEFAULT_TYPOGRAPHY };
+    } else {
+      parsed.typography = normalizeTypography(parsed.typography);
     }
     return parsed;
   } catch {

@@ -1,5 +1,5 @@
 import type { ParsedResume, ThemeId, TailorChange, LanguageProficiency, ResumeTypography } from "@/types";
-import { DEFAULT_TYPOGRAPHY, RESUME_FONT_STACKS, RESUME_LINE_HEIGHT, RESUME_SIZE_ZOOM } from "@/types";
+import { DEFAULT_TYPOGRAPHY, RESUME_FONT_STACKS, normalizeTypography, resumeZoom } from "@/types";
 import { sanitizeResume as sanitizeResumeUtil } from "@/lib/sanitize-resume";
 
 /** Merge accepted TailorChanges into a ParsedResume copy */
@@ -592,11 +592,11 @@ export function renderThemeHtml(resume: ParsedResume, theme: ThemeId, typography
     }
     
     const body = renderer(safe);
-    const typo = typography ?? DEFAULT_TYPOGRAPHY;
+    const typo = normalizeTypography(typography ?? DEFAULT_TYPOGRAPHY);
     const typoCss =
       typo.font !== "default"
-        ? `#resume-root, #resume-root * { font-family: ${RESUME_FONT_STACKS[typo.font]} !important; }\n    #resume-root, #resume-root * { line-height: ${RESUME_LINE_HEIGHT[typo.spacing]} !important; font-size-adjust: none; }\n    #resume-root { zoom: ${RESUME_SIZE_ZOOM[typo.size]}; }`
-        : `#resume-root, #resume-root * { line-height: ${RESUME_LINE_HEIGHT[typo.spacing]} !important; }\n    #resume-root { zoom: ${RESUME_SIZE_ZOOM[typo.size]}; }`;
+        ? `#resume-root, #resume-root * { font-family: ${RESUME_FONT_STACKS[typo.font]} !important; }\n    #resume-root, #resume-root * { line-height: ${typo.lineHeight} !important; }\n    #resume-root { zoom: ${resumeZoom(typo.fontSizePt)}; }`
+        : `#resume-root, #resume-root * { line-height: ${typo.lineHeight} !important; }\n    #resume-root { zoom: ${resumeZoom(typo.fontSizePt)}; }`;
 
     return `<!DOCTYPE html>
 <html lang="en">

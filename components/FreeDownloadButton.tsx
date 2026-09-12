@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { ParsedResume, ResumeTypography } from "@/types";
-import { DEFAULT_TYPOGRAPHY } from "@/types";
+import { normalizeTypography } from "@/types";
 import { validateResume, safeName, downloadViaApi, openPrintWindow, downloadBlob, browserPrint } from "@/lib/download-helpers";
 import { resumeToPlainText, downloadTextFile } from "@/lib/resume-text";
 import { buildDocxBlob, downloadDocxFile } from "@/lib/resume-docx";
@@ -19,7 +19,7 @@ export default function FreeDownloadButton({ resume, theme, typography, onValida
   const [docLoading, setDocLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const typo = typography ?? DEFAULT_TYPOGRAPHY;
+  const typo = normalizeTypography(typography);
 
   const doValidate = (): boolean => {
     const msg = validateResume(resume);

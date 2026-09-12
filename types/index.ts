@@ -126,20 +126,69 @@ export interface ParsedResume {
 // ─── Resume Typography ─────────────────────────────────────────────────────
 
 export type ResumeFont = "default" | "arial" | "calibri" | "georgia" | "times";
-export type ResumeFontSize = "small" | "medium" | "large";
-export type ResumeSpacing = "compact" | "comfortable" | "spacious";
 
 export interface ResumeTypography {
   font: ResumeFont;
-  size: ResumeFontSize;
-  spacing: ResumeSpacing;
+  /** Body font size in points — free choice, not a preset */
+  fontSizePt: number;
+  /** Line height multiplier — free choice, not a preset */
+  lineHeight: number;
 }
 
 export const DEFAULT_TYPOGRAPHY: ResumeTypography = {
   font: "default",
-  size: "medium",
-  spacing: "comfortable",
+  fontSizePt: 11,
+  lineHeight: 1.6,
 };
+
+/** Slider bounds for the Text style panel */
+export const TYPO_LIMITS = {
+  fontSizeMin: 9,
+  fontSizeMax: 14,
+  fontSizeStep: 0.5,
+  lineHeightMin: 1.0,
+  lineHeightMax: 2.5,
+  lineHeightStep: 0.05,
+} as const;
+
+/** Migrate old persisted typography ({size:"small"|"medium"|"large", spacing}) to the free numeric shape */
+export function normalizeTypography(t: unknown): ResumeTypography {
+  const fallback = { ...DEFAULT_TYPOGRAPHY };
+  if (!t || typeof t !== "object") return fallback;
+  const o = t as Record<string, unknown>;
+  const font: ResumeFont =
+    o.font === "arial" || o.font === "calibri" || o.font === "georgia" || o.font === "times"
+      ? o.font
+      : "default";
+  let fontSizePt = fallback.fontSizePt;
+  if (typeof o.fontSizePt === "number" && Number.isFinite(o.fontSizePt)) {
+    fontSizePt = o.fontSizePt;
+  } else if (o.size === "small") {
+    fontSizePt = 10;
+  } else if (o.size === "large") {
+    fontSizePt = 12;
+  } else if (typeof o.size === "number" && Number.isFinite(o.size)) {
+    fontSizePt = o.size;
+  }
+  let lineHeight = fallback.lineHeight;
+  if (typeof o.lineHeight === "number" && Number.isFinite(o.lineHeight)) {
+    lineHeight = o.lineHeight;
+  } else if (o.spacing === "compact") {
+    lineHeight = 1.35;
+  } else if (o.spacing === "spacious") {
+    lineHeight = 1.9;
+  } else if (typeof o.spacing === "number" && Number.isFinite(o.spacing)) {
+    lineHeight = o.spacing;
+  }
+  return {
+    font,
+    fontSizePt: Math.min(TYPO_LIMITS.fontSizeMax, Math.max(TYPO_LIMITS.fontSizeMin, fontSizePt)),
+    lineHeight:
+      Math.round(
+        Math.min(TYPO_LIMITS.lineHeightMax, Math.max(TYPO_LIMITS.lineHeightMin, lineHeight)) * 100
+      ) / 100,
+  };
+}
 
 /** CSS font stacks shared by preview overrides and PDF export */
 export const RESUME_FONT_STACKS: Record<Exclude<ResumeFont, "default">, string> = {
@@ -149,19 +198,10 @@ export const RESUME_FONT_STACKS: Record<Exclude<ResumeFont, "default">, string> 
   times: "'Times New Roman', Times, serif",
 };
 
-/** Preview/PDF zoom factor per size preset */
-export const RESUME_SIZE_ZOOM: Record<ResumeFontSize, number> = {
-  small: 0.9,
-  medium: 1,
-  large: 1.08,
-};
-
-/** Base line-height per spacing preset */
-export const RESUME_LINE_HEIGHT: Record<ResumeSpacing, number> = {
-  compact: 1.35,
-  comfortable: 1.6,
-  spacious: 1.9,
-};
+/** Preview zoom factor for a given body font size (11pt = theme-native 1.0) */
+export function resumeZoom(fontSizePt: number): number {
+  return (Number.isFinite(fontSizePt) ? fontSizePt : 11) / 11;
+}
 
 // ─── Cover Letter ─────────────────────────────────────────────────────────
 

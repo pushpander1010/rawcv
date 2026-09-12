@@ -3,7 +3,7 @@
 
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } from "docx";
 import type { ParsedResume, ResumeTypography } from "@/types";
-import { DEFAULT_TYPOGRAPHY } from "@/types";
+import { DEFAULT_TYPOGRAPHY, TYPO_LIMITS, normalizeTypography } from "@/types";
 
 const FONT_MAP: Record<string, string> = {
   default: "Calibri",
@@ -13,17 +13,10 @@ const FONT_MAP: Record<string, string> = {
   times: "Times New Roman",
 };
 
-const SIZE_MAP: Record<string, number> = {
-  small: 20, // half-points → 10pt
-  medium: 22, // 11pt
-  large: 24, // 12pt
-};
-
-const SPACING_MAP: Record<string, number> = {
-  compact: 240,
-  comfortable: 276,
-  spacious: 360,
-};
+/** docx spacing.line is twips-ish (240 = single). Map the 1.0–2.5 multiplier. */
+function lineSpacing(lineHeight: number): number {
+  return Math.round(lineHeight * 240);
+}
 
 function runs(text: string, opts: { bold?: boolean; size?: number; font?: string; color?: string; italic?: boolean } = {}) {
   return [new TextRun({ text, bold: opts.bold, italics: opts.italic, size: opts.size, font: opts.font, color: opts.color })];
@@ -53,10 +46,12 @@ function bullet(text: string, font: string, size: number, line: number) {
 }
 
 export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTypography): Promise<Blob> {
-  const typo = typography ?? DEFAULT_TYPOGRAPHY;
+  const typo = normalizeTypography(typography ?? DEFAULT_TYPOGRAPHY);
   const font = FONT_MAP[typo.font] ?? "Calibri";
-  const size = SIZE_MAP[typo.size] ?? 22;
-  const line = SPACING_MAP[typo.spacing] ?? 276;
+  const size = Math.round(
+    Math.min(TYPO_LIMITS.fontSizeMax, Math.max(TYPO_LIMITS.fontSizeMin, typo.fontSizePt)) * 2
+  ); // docx uses half-points
+  const line = lineSpacing(typo.lineHeight);
   const c = resume.contact;
   const children: Paragraph[] = [];
 

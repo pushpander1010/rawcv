@@ -90,6 +90,8 @@ export default function ChatPage() {
   }, [isHydrated, state.parsed, state.chatResetSignal]);
 
   const [showThemePicker, setShowThemePicker] = useState(false);
+  const [showStyle, setShowStyle] = useState(true);
+  const [a4Preview, setA4Preview] = useState(true);
 
   // Track preview updates so mobile tab can show a "updated" badge
   const [previewUpdated, setPreviewUpdated] = useState(false);
@@ -179,26 +181,44 @@ export default function ChatPage() {
         }
         right={
           <div className="flex flex-col h-full">
-            <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
+            <div className="flex items-center justify-between gap-2 px-5 py-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
               <h2 className="text-sm font-medium text-slate-600 dark:text-slate-300">Live Preview</h2>
-              <button type="button" onClick={() => setShowThemePicker((v) => !v)}
-                className="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-300 transition-colors focus:outline-none">
-                {showThemePicker ? "Hide themes" : "Change theme"}
-              </button>
+              <div className="flex items-center gap-2">
+                <label className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={a4Preview}
+                    onChange={(e) => setA4Preview(e.target.checked)}
+                    className="w-3.5 h-3.5 rounded accent-slate-900 dark:accent-white"
+                  />
+                  A4
+                </label>
+                <button type="button" onClick={() => setShowStyle((v) => !v)}
+                  aria-expanded={showStyle}
+                  className="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-300 transition-colors focus:outline-none">
+                  {showStyle ? "Hide style" : "Text style"}
+                </button>
+                <button type="button" onClick={() => setShowThemePicker((v) => !v)}
+                  className="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-300 transition-colors focus:outline-none">
+                  {showThemePicker ? "Hide themes" : "Change theme"}
+                </button>
+              </div>
             </div>
+            {showStyle && (
+              <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0 max-h-64 overflow-y-auto">
+                <TypographyControls />
+              </div>
+            )}
             {showThemePicker && (
               <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
                 <ThemePicker />
-                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                  <TypographyControls collapsible />
-                </div>
               </div>
             )}
             <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-4">
               {state.parsed ? (
                 <>
                   <QuickEditJumpBar />
-                  <ResumePreview resume={state.parsed} theme={state.selectedTheme} />
+                  <ResumePreview resume={state.parsed} theme={state.selectedTheme} a4={a4Preview} />
                   <div data-quick-edit-panel className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 scroll-mt-24">
                     <h3 className="text-[13px] font-semibold text-slate-900 dark:text-white mb-1">
                       Quick Edit
