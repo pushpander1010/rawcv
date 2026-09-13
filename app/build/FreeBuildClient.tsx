@@ -6,7 +6,6 @@ import type { ParsedResume, ThemeId } from "@/types";
 import { useResume } from "@/context/ResumeContext";
 import FreeResumeForm from "@/components/FreeResumeForm";
 import ResumePreview from "@/components/ResumePreview";
-import PreviewQuickEdit, { QuickEditJumpBar } from "@/components/PreviewQuickEdit";
 import UndoButton from "@/components/UndoButton";
 import ThemePicker from "@/components/ThemePicker";
 import TypographyControls from "@/components/TypographyControls";
@@ -140,12 +139,9 @@ export default function FreeBuildClient() {
                 </div>
 
                 {resume ? (
-                  <>
-                    <QuickEditJumpBar />
-                    <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
-                      <ResumePreview resume={resume} theme={selectedTheme} a4={a4Preview} />
-                    </div>
-                  </>
+                  <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
+                    <ResumePreview resume={resume} theme={selectedTheme} a4={a4Preview} />
+                  </div>
                 ) : (
                   <div className="flex items-center justify-center h-56 bg-slate-50 dark:bg-slate-800 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
                     <div className="text-center">
@@ -156,19 +152,6 @@ export default function FreeBuildClient() {
                   </div>
                 )}
               </div>
-
-              {/* Quick Edit */}
-              {resume && (
-                <div data-quick-edit-panel className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 scroll-mt-24">
-                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-1">
-                    Quick Edit
-                  </h2>
-                  <p className="text-[13px] text-slate-500 dark:text-slate-400 mb-4">
-                    Edit or delete any line directly — every change can be undone.
-                  </p>
-                  <PreviewQuickEdit />
-                </div>
-              )}
 
               {/* Download Section */}
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
