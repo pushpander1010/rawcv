@@ -100,6 +100,9 @@ export interface LanguageProficiency {
   level: "basic" | "elementary" | "intermediate" | "upper-intermediate" | "advanced" | "fluent" | "native" | "bilingual";
 }
 
+import type { ResumeSectionKey } from "@/lib/section-order";
+export type { ResumeSectionKey };
+
 export interface ParsedResume {
   contact: {
     name: string;
@@ -121,6 +124,7 @@ export interface ParsedResume {
   interests?: string[];
   references?: string;
   format?: ResumeFormat;
+  sectionOrder?: ResumeSectionKey[];
 }
 
 // ─── Resume Typography ─────────────────────────────────────────────────────

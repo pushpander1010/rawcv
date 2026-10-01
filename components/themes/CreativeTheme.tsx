@@ -1,5 +1,6 @@
 import type { ParsedResume } from "@/types";
 import { ContactLink } from "./ContactLink";
+import { normalizeSectionOrder } from "@/lib/section-order";
 
 interface Props {
   resume: ParsedResume;
@@ -7,6 +8,10 @@ interface Props {
 
 export default function CreativeTheme({ resume }: Props) {
   const { contact, summary, experience, education, skills, certifications, projects } = resume;
+  const order = normalizeSectionOrder(resume.sectionOrder);
+  const topSections = order.filter((k) => k === "summary" || k === "experience");
+  const leftSections = order.filter((k) => k === "education" || k === "projects");
+  const rightSections = order.filter((k) => k === "skills" || k === "certifications");
 
   return (
     <div className="font-sans text-gray-800 bg-white max-w-[800px] mx-auto text-sm leading-relaxed">
@@ -43,125 +48,142 @@ export default function CreativeTheme({ resume }: Props) {
       </div>
 
       <div className="px-10 py-8">
-        {/* Summary */}
-        {summary && (
-          <section className="mb-7">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
-              <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">About Me</h2>
-            </div>
-            <p className="text-gray-600 pl-6">{summary}</p>
-          </section>
-        )}
-
-        {/* Experience */}
-        {experience.length > 0 && (
-          <section className="mb-7">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
-              <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Experience</h2>
-            </div>
-            <div className="pl-6 border-l-2 border-brand-100 space-y-5">
-              {experience.map((job, i) => (
-                <div key={i} className="relative">
-                  <span className="absolute -left-[25px] top-1 w-3 h-3 rounded-full bg-brand-300 border-2 border-white" />
-                  <div className="flex justify-between items-baseline mb-0.5">
-                    <span className="font-bold text-gray-900">{job.title}</span>
-                    <span className="text-xs text-gray-400">{job.startDate} – {job.endDate}</span>
+        {topSections.map((key) => {
+          switch (key) {
+            case "summary":
+              return summary ? (
+                <section key="summary" className="mb-7">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                    <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">About Me</h2>
                   </div>
-                  <div className="text-brand-600 font-medium text-xs mb-2">{job.company}</div>
-                  <ul className="space-y-1">
-                    {job.bullets.map((b, j) => (
-                      <li key={j} className="text-gray-600 flex gap-2">
-                        <span className="text-brand-300 flex-shrink-0">◆</span>
-                        <span>{b}</span>
-                      </li>
+                  <p className="text-gray-600 pl-6">{summary}</p>
+                </section>
+              ) : null;
+            case "experience":
+              return experience.length > 0 ? (
+                <section key="experience" className="mb-7">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                    <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Experience</h2>
+                  </div>
+                  <div className="pl-6 border-l-2 border-brand-100 space-y-5">
+                    {experience.map((job, i) => (
+                      <div key={i} className="relative">
+                        <span className="absolute -left-[25px] top-1 w-3 h-3 rounded-full bg-brand-300 border-2 border-white" />
+                        <div className="flex justify-between items-baseline mb-0.5">
+                          <span className="font-bold text-gray-900">{job.title}</span>
+                          <span className="text-xs text-gray-400">{job.startDate} – {job.endDate}</span>
+                        </div>
+                        <div className="text-brand-600 font-medium text-xs mb-2">{job.company}</div>
+                        <ul className="space-y-1">
+                          {job.bullets.map((b, j) => (
+                            <li key={j} className="text-gray-600 flex gap-2">
+                              <span className="text-brand-300 flex-shrink-0">◆</span>
+                              <span>{b}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+                  </div>
+                </section>
+              ) : null;
+            default:
+              return null;
+          }
+        })}
 
         <div className="flex gap-8">
           <div className="flex-1">
-            {/* Education */}
-            {education.length > 0 && (
-              <section className="mb-7">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
-                  <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Education</h2>
-                </div>
-                {education.map((edu, i) => (
-                  <div key={i} className="mb-3 pl-6">
-                    <div className="font-semibold text-gray-900">{edu.degree} in {edu.field}</div>
-                    <div className="text-brand-600 text-xs">{edu.institution}</div>
-                    <div className="text-xs text-gray-400">{edu.graduationYear}</div>
-                  </div>
-                ))}
-              </section>
-            )}
-
-            {/* Projects */}
-            {projects && projects.length > 0 && (
-              <section>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
-                  <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Projects</h2>
-                </div>
-                {projects.map((proj, i) => (
-                  <div key={i} className="mb-4 pl-6">
-                    <div className="font-semibold text-gray-900">{proj.name}</div>
-                    <p className="text-gray-600 mb-1">{proj.description}</p>
-                    <div className="flex flex-wrap gap-1">
-                      {proj.technologies.map((tech, j) => (
-                        <span key={j} className="bg-brand-50 text-brand-700 text-xs px-2 py-0.5 rounded-full">
-                          {tech}
-                        </span>
+            {leftSections.map((key) => {
+              switch (key) {
+                case "education":
+                  return education.length > 0 ? (
+                    <section key="education" className="mb-7">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                        <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Education</h2>
+                      </div>
+                      {education.map((edu, i) => (
+                        <div key={i} className="mb-3 pl-6">
+                          <div className="font-semibold text-gray-900">{edu.degree} in {edu.field}</div>
+                          <div className="text-brand-600 text-xs">{edu.institution}</div>
+                          <div className="text-xs text-gray-400">{edu.graduationYear}</div>
+                        </div>
                       ))}
-                    </div>
-                  </div>
-                ))}
-              </section>
-            )}
+                    </section>
+                  ) : null;
+                case "projects":
+                  return projects && projects.length > 0 ? (
+                    <section key="projects">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                        <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Projects</h2>
+                      </div>
+                      {projects.map((proj, i) => (
+                        <div key={i} className="mb-4 pl-6">
+                          <div className="font-semibold text-gray-900">{proj.name}</div>
+                          {proj.technologies && proj.technologies.length > 0 && (
+                            <div className="flex flex-wrap gap-1 my-1">
+                              {proj.technologies.map((tech, j) => (
+                                <span key={j} className="bg-brand-50 text-brand-700 text-xs px-2 py-0.5 rounded-full">
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <p className="text-gray-600 mb-1">{proj.description}</p>
+                        </div>
+                      ))}
+                    </section>
+                  ) : null;
+                default:
+                  return null;
+              }
+            })}
           </div>
 
           <div className="w-52 flex-shrink-0">
-            {/* Skills */}
-            {skills.length > 0 && (
-              <section className="mb-7">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
-                  <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Skills</h2>
-                </div>
-                <div className="flex flex-wrap gap-1.5 pl-6">
-                  {skills.map((skill, i) => (
-                    <span
-                      key={i}
-                      className="bg-gradient-to-r from-brand-100 to-brand-100 text-brand-800 text-xs px-2.5 py-1 rounded-full"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Certifications */}
-            {certifications && certifications.length > 0 && (
-              <section>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
-                  <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Certifications</h2>
-                </div>
-                <ul className="space-y-1 pl-6">
-                  {certifications.map((cert, i) => (
-                    <li key={i} className="text-gray-600 text-xs">{cert}</li>
-                  ))}
-                </ul>
-              </section>
-            )}
+            {rightSections.map((key) => {
+              switch (key) {
+                case "skills":
+                  return skills.length > 0 ? (
+                    <section key="skills" className="mb-7">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                        <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Skills</h2>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 pl-6">
+                        {skills.map((skill, i) => (
+                          <span
+                            key={i}
+                            className="bg-gradient-to-r from-brand-100 to-brand-100 text-brand-800 text-xs px-2.5 py-1 rounded-full"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </section>
+                  ) : null;
+                case "certifications":
+                  return certifications && certifications.length > 0 ? (
+                    <section key="certifications">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0" />
+                        <h2 className="font-bold text-brand-700 uppercase tracking-widest text-xs">Certifications</h2>
+                      </div>
+                      <ul className="space-y-1 pl-6">
+                        {certifications.map((cert, i) => (
+                          <li key={i} className="text-gray-600 text-xs">{cert}</li>
+                        ))}
+                      </ul>
+                    </section>
+                  ) : null;
+                default:
+                  return null;
+              }
+            })}
           </div>
         </div>
       </div>

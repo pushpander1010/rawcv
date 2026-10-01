@@ -61,9 +61,9 @@ export default function FreeBuildClient() {
             <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
               {[
                 { id: "preview", label: "Preview" },
-                { id: "ats", label: "ATS Check" },
-                { id: "keywords", label: "Keywords" },
-                { id: "formatting", label: "Format" },
+                { id: "ats", label: "Score" },
+                { id: "keywords", label: "Job-words" },
+                { id: "formatting", label: "Design" },
               ].map((t) => (
                 <button
                   key={t.id}
@@ -79,6 +79,9 @@ export default function FreeBuildClient() {
                 </button>
               ))}
             </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 px-3 pt-2 pb-1">
+              Preview your resume, check your score, match job words, and polish your design.
+            </p>
           </div>
 
           {/* Preview Tab */}

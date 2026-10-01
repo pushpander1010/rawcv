@@ -1,5 +1,6 @@
 import type { ParsedResume, LanguageProficiency } from "@/types";
 import { ContactLink } from "./ContactLink";
+import { normalizeSectionOrder } from "@/lib/section-order";
 
 interface Props {
   resume: ParsedResume;
@@ -10,6 +11,9 @@ const PHOTO_SIZE = 100;
 
 export default function EuropassTheme({ resume }: Props) {
   const { contact, photo, summary, experience, education, skills, certifications, projects, languages, format } = resume;
+  const order = normalizeSectionOrder(resume.sectionOrder);
+  const leftSections = order.filter((k) => k === "summary" || k === "experience" || k === "education" || k === "projects");
+  const rightSections = order.filter((k) => k === "skills" || k === "certifications");
 
   const isEu = format === "eu";
 
@@ -167,155 +171,165 @@ export default function EuropassTheme({ resume }: Props) {
 
         {/* Left — Main column */}
         <div style={{ padding: "20px 28px 24px 32px", borderRight: "1px solid #e5e7eb" }}>
-
-          {/* Summary */}
-          {summary && (
-            <section style={{ marginBottom: 20 }}>
-              <SectionHeading>Professional Summary</SectionHeading>
-              <p style={{ color: "#444", lineHeight: 1.6, margin: 0 }}>{summary}</p>
-            </section>
-          )}
-
-          {/* Experience */}
-          {experience.length > 0 && (
-            <section style={{ marginBottom: 20 }}>
-              <SectionHeading>Work Experience</SectionHeading>
-              {experience.map((job, i) => (
-                <div key={i} style={{ marginBottom: 16 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                    <div>
-                      <span style={{ fontFamily: "Inter, Arial, sans-serif", fontWeight: 600, fontSize: 14, color: "#000" }}>
-                        {job.title}
-                      </span>
-                      <span style={{ color: ACCENT, fontSize: 13, marginLeft: 6 }}>— {job.company}</span>
-                    </div>
-                    <div style={{ fontSize: 11, color: "#888", whiteSpace: "nowrap" }}>
-                      {job.startDate} – {job.endDate}
-                    </div>
-                  </div>
-                  <ul style={{ margin: "4px 0 0", padding: 0, listStyle: "none" }}>
-                    {job.bullets.map((b, j) => (
-                      <li key={j} style={{ display: "flex", gap: 6, marginBottom: 3, color: "#444", fontSize: 12 }}>
-                        <span style={{ color: ACCENT, flexShrink: 0 }}>•</span>
-                        <span>{b}</span>
-                      </li>
+          {leftSections.map((key) => {
+            switch (key) {
+              case "summary":
+                return summary ? (
+                  <section key="summary" style={{ marginBottom: 20 }}>
+                    <SectionHeading>Professional Summary</SectionHeading>
+                    <p style={{ color: "#444", lineHeight: 1.6, margin: 0 }}>{summary}</p>
+                  </section>
+                ) : null;
+              case "experience":
+                return experience.length > 0 ? (
+                  <section key="experience" style={{ marginBottom: 20 }}>
+                    <SectionHeading>Work Experience</SectionHeading>
+                    {experience.map((job, i) => (
+                      <div key={i} style={{ marginBottom: 16 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                          <div>
+                            <span style={{ fontFamily: "Inter, Arial, sans-serif", fontWeight: 600, fontSize: 14, color: "#000" }}>
+                              {job.title}
+                            </span>
+                            <span style={{ color: ACCENT, fontSize: 13, marginLeft: 6 }}>— {job.company}</span>
+                          </div>
+                          <div style={{ fontSize: 11, color: "#888", whiteSpace: "nowrap" }}>
+                            {job.startDate} – {job.endDate}
+                          </div>
+                        </div>
+                        <ul style={{ margin: "4px 0 0", padding: 0, listStyle: "none" }}>
+                          {job.bullets.map((b, j) => (
+                            <li key={j} style={{ display: "flex", gap: 6, marginBottom: 3, color: "#444", fontSize: 12 }}>
+                              <span style={{ color: ACCENT, flexShrink: 0 }}>•</span>
+                              <span>{b}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ))}
-                  </ul>
-                </div>
-              ))}
-            </section>
-          )}
-
-          {/* Education */}
-          {education.length > 0 && (
-            <section style={{ marginBottom: 20 }}>
-              <SectionHeading>Education</SectionHeading>
-              {education.map((edu, i) => (
-                <div key={i} style={{ marginBottom: 12 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                    <div>
-                      <span style={{ fontFamily: "Inter, Arial, sans-serif", fontWeight: 600, fontSize: 14, color: "#000" }}>
-                        {edu.degree}{edu.field ? ` — ${edu.field}` : ""}
-                      </span>
-                      <span style={{ color: ACCENT, fontSize: 13, marginLeft: 6 }}>— {edu.institution}</span>
-                    </div>
-                    <div style={{ fontSize: 11, color: "#888", whiteSpace: "nowrap" }}>{edu.graduationYear}</div>
-                  </div>
-                </div>
-              ))}
-            </section>
-          )}
-
-          {/* Projects */}
-          {projects && projects.length > 0 && (
-            <section style={{ marginBottom: 20 }}>
-              <SectionHeading>Projects</SectionHeading>
-              {projects.map((proj, i) => (
-                <div key={i} style={{ marginBottom: 12 }}>
-                  <div style={{ fontFamily: "Inter, Arial, sans-serif", fontWeight: 600, fontSize: 14, color: "#000" }}>
-                    {proj.name}
-                  </div>
-                  <p style={{ fontSize: 12, color: "#555", margin: "2px 0 4px" }}>{proj.description}</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-                    {proj.technologies.map((tech, j) => (
-                      <span key={j} style={{ fontSize: 11, color: ACCENT, background: "#eef2f6", padding: "1px 6px", borderRadius: 3 }}>
-                        {tech}
-                      </span>
+                  </section>
+                ) : null;
+              case "education":
+                return education.length > 0 ? (
+                  <section key="education" style={{ marginBottom: 20 }}>
+                    <SectionHeading>Education</SectionHeading>
+                    {education.map((edu, i) => (
+                      <div key={i} style={{ marginBottom: 12 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                          <div>
+                            <span style={{ fontFamily: "Inter, Arial, sans-serif", fontWeight: 600, fontSize: 14, color: "#000" }}>
+                              {edu.degree}{edu.field ? ` — ${edu.field}` : ""}
+                            </span>
+                            <span style={{ color: ACCENT, fontSize: 13, marginLeft: 6 }}>— {edu.institution}</span>
+                          </div>
+                          <div style={{ fontSize: 11, color: "#888", whiteSpace: "nowrap" }}>{edu.graduationYear}</div>
+                        </div>
+                      </div>
                     ))}
-                  </div>
-                </div>
-              ))}
-            </section>
-          )}
+                  </section>
+                ) : null;
+              case "projects":
+                return projects && projects.length > 0 ? (
+                  <section key="projects" style={{ marginBottom: 20 }}>
+                    <SectionHeading>Projects</SectionHeading>
+                    {projects.map((proj, i) => (
+                      <div key={i} style={{ marginBottom: 12 }}>
+                        <div style={{ fontFamily: "Inter, Arial, sans-serif", fontWeight: 600, fontSize: 14, color: "#000" }}>
+                          {proj.name}
+                        </div>
+                        {proj.technologies && proj.technologies.length > 0 && (
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: 4, margin: "3px 0" }}>
+                            {proj.technologies.map((tech, j) => (
+                              <span key={j} style={{ fontSize: 11, color: ACCENT, background: "#eef2f6", padding: "1px 6px", borderRadius: 3 }}>
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <p style={{ fontSize: 12, color: "#555", margin: "2px 0 0" }}>{proj.description}</p>
+                      </div>
+                    ))}
+                  </section>
+                ) : null;
+              default:
+                return null;
+            }
+          })}
         </div>
 
         {/* Right — Sidebar */}
         <div style={{ padding: "20px 24px 24px 20px", background: "#fafbfc" }}>
-
-          {/* Skills */}
-          {skills.length > 0 && (
-            <section style={{ marginBottom: 20 }}>
-              <SidebarHeading>Skills</SidebarHeading>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {skills.map((skill, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      background: "#e8edf3",
-                      color: ACCENT,
-                      fontSize: 12,
-                      padding: "3px 10px",
-                      borderRadius: 3,
-                    }}
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Languages (EU-specific) */}
-          {languages && languages.length > 0 && (
-            <section style={{ marginBottom: 20 }}>
-              <SidebarHeading>Languages</SidebarHeading>
-              {languages.map((lang, i) => (
-                <div key={i} style={{ marginBottom: 8 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontWeight: 500, fontSize: 13, color: "#000" }}>{lang.language}</span>
-                    <span style={{ fontSize: 11, color: "#666" }}>{levelLabel(lang.level)}</span>
+          {rightSections.map((key) => {
+            switch (key) {
+              case "skills":
+                return (
+                  <div key="skills">
+                    {skills.length > 0 && (
+                      <section style={{ marginBottom: 20 }}>
+                        <SidebarHeading>Skills</SidebarHeading>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                          {skills.map((skill, i) => (
+                            <span
+                              key={i}
+                              style={{
+                                background: "#e8edf3",
+                                color: ACCENT,
+                                fontSize: 12,
+                                padding: "3px 10px",
+                                borderRadius: 3,
+                              }}
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+                    {languages && languages.length > 0 && (
+                      <section style={{ marginBottom: 20 }}>
+                        <SidebarHeading>Languages</SidebarHeading>
+                        {languages.map((lang, i) => (
+                          <div key={i} style={{ marginBottom: 8 }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                              <span style={{ fontWeight: 500, fontSize: 13, color: "#000" }}>{lang.language}</span>
+                              <span style={{ fontSize: 11, color: "#666" }}>{levelLabel(lang.level)}</span>
+                            </div>
+                            <div style={{ display: "flex", gap: 3, marginTop: 2 }}>
+                              {[1, 2, 3, 4, 5, 6].map((dot) => (
+                                <div
+                                  key={dot}
+                                  style={{
+                                    width: 10,
+                                    height: 10,
+                                    borderRadius: "50%",
+                                    background: dot <= levelDots(lang.level) ? ACCENT : "#ddd",
+                                  }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </section>
+                    )}
                   </div>
-                  <div style={{ display: "flex", gap: 3, marginTop: 2 }}>
-                    {[1, 2, 3, 4, 5, 6].map((dot) => (
-                      <div
-                        key={dot}
-                        style={{
-                          width: 10,
-                          height: 10,
-                          borderRadius: "50%",
-                          background: dot <= levelDots(lang.level) ? ACCENT : "#ddd",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </section>
-          )}
-
-          {/* Certifications */}
-          {certifications && certifications.length > 0 && (
-            <section style={{ marginBottom: 20 }}>
-              <SidebarHeading>Certifications</SidebarHeading>
-              <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
-                {certifications.map((cert, i) => (
-                  <li key={i} style={{ fontSize: 12, color: "#444", marginBottom: 4, display: "flex", gap: 6 }}>
-                    <span style={{ color: ACCENT }}>•</span> {cert}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
+                );
+              case "certifications":
+                return certifications && certifications.length > 0 ? (
+                  <section key="certifications" style={{ marginBottom: 20 }}>
+                    <SidebarHeading>Certifications</SidebarHeading>
+                    <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+                      {certifications.map((cert, i) => (
+                        <li key={i} style={{ fontSize: 12, color: "#444", marginBottom: 4, display: "flex", gap: 6 }}>
+                          <span style={{ color: ACCENT }}>•</span> {cert}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ) : null;
+              default:
+                return null;
+            }
+          })}
         </div>
       </div>
     </div>

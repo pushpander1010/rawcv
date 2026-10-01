@@ -5,6 +5,8 @@ import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } fro
 import type { ParsedResume, ResumeTypography } from "@/types";
 import { DEFAULT_TYPOGRAPHY, TYPO_LIMITS, normalizeTypography } from "@/types";
 
+import { normalizeSectionOrder } from "@/lib/section-order";
+
 const FONT_MAP: Record<string, string> = {
   default: "Calibri",
   arial: "Arial",
@@ -76,78 +78,71 @@ export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTyp
     );
   }
 
-  if (resume.summary?.trim()) {
-    children.push(heading("Professional Summary", font, size));
-    children.push(body(resume.summary.trim(), font, size, line));
-  }
-
-  if (resume.experience?.length) {
-    children.push(heading("Experience", font, size));
-    for (const job of resume.experience) {
-      const dates = [job.startDate, job.endDate].filter(Boolean).join(" - ");
-      children.push(
-        new Paragraph({
-          spacing: { before: 120, after: 20, line },
-          children: runs(`${job.title}${job.company ? ` — ${job.company}` : ""}`, { bold: true, size, font }),
-        })
-      );
-      if (dates) {
+  const order = normalizeSectionOrder(resume.sectionOrder);
+  for (const key of order) {
+    if (key === "summary" && resume.summary?.trim()) {
+      children.push(heading("Professional Summary", font, size));
+      children.push(body(resume.summary.trim(), font, size, line));
+    } else if (key === "experience" && resume.experience?.length) {
+      children.push(heading("Experience", font, size));
+      for (const job of resume.experience) {
+        const dates = [job.startDate, job.endDate].filter(Boolean).join(" - ");
         children.push(
           new Paragraph({
-            spacing: { after: 60, line },
-            children: runs(dates, { italic: true, size: size - 2, font, color: "6B7280" }),
+            spacing: { before: 120, after: 20, line },
+            children: runs(`${job.title}${job.company ? ` — ${job.company}` : ""}`, { bold: true, size, font }),
           })
         );
+        if (dates) {
+          children.push(
+            new Paragraph({
+              spacing: { after: 60, line },
+              children: runs(dates, { italic: true, size: size - 2, font, color: "6B7280" }),
+            })
+          );
+        }
+        for (const b of job.bullets || []) {
+          if (b?.trim()) children.push(bullet(b.trim(), font, size, line));
+        }
       }
-      for (const b of job.bullets || []) {
-        if (b?.trim()) children.push(bullet(b.trim(), font, size, line));
-      }
-    }
-  }
-
-  if (resume.education?.length) {
-    children.push(heading("Education", font, size));
-    for (const edu of resume.education) {
-      const degree = [edu.degree, edu.field].filter(Boolean).join(" in ");
-      children.push(
-        new Paragraph({
-          spacing: { before: 80, after: 20, line },
-          children: runs(`${degree}${edu.graduationYear ? ` (${edu.graduationYear})` : ""}`, { bold: true, size, font }),
-        })
-      );
-      if (edu.institution) children.push(body(edu.institution, font, size, line));
-    }
-  }
-
-  if (resume.skills?.length) {
-    children.push(heading("Skills", font, size));
-    children.push(body(resume.skills.join(", "), font, size, line));
-  }
-
-  if (resume.projects?.length) {
-    children.push(heading("Projects", font, size));
-    for (const p of resume.projects) {
-      children.push(
-        new Paragraph({
-          spacing: { before: 80, after: 20, line },
-          children: runs(p.name, { bold: true, size, font }),
-        })
-      );
-      if (p.description) children.push(body(p.description, font, size, line));
-      if (p.technologies?.length) {
+    } else if (key === "education" && resume.education?.length) {
+      children.push(heading("Education", font, size));
+      for (const edu of resume.education) {
+        const degree = [edu.degree, edu.field].filter(Boolean).join(" in ");
         children.push(
           new Paragraph({
-            spacing: { after: 80, line },
-            children: runs(`Tech: ${p.technologies.join(", ")}`, { italic: true, size: size - 2, font, color: "4B5563" }),
+            spacing: { before: 80, after: 20, line },
+            children: runs(`${degree}${edu.graduationYear ? ` (${edu.graduationYear})` : ""}`, { bold: true, size, font }),
           })
         );
+        if (edu.institution) children.push(body(edu.institution, font, size, line));
       }
+    } else if (key === "skills" && resume.skills?.length) {
+      children.push(heading("Skills", font, size));
+      children.push(body(resume.skills.join(", "), font, size, line));
+    } else if (key === "projects" && resume.projects?.length) {
+      children.push(heading("Projects", font, size));
+      for (const p of resume.projects) {
+        children.push(
+          new Paragraph({
+            spacing: { before: 80, after: 20, line },
+            children: runs(p.name, { bold: true, size, font }),
+          })
+        );
+        if (p.technologies?.length) {
+          children.push(
+            new Paragraph({
+              spacing: { after: p.description ? 40 : 80, line },
+              children: runs(`Tech: ${p.technologies.join(", ")}`, { italic: true, size: size - 2, font, color: "4B5563" }),
+            })
+          );
+        }
+        if (p.description) children.push(body(p.description, font, size, line));
+      }
+    } else if (key === "certifications" && resume.certifications?.length) {
+      children.push(heading("Certifications", font, size));
+      for (const cert of resume.certifications) children.push(bullet(cert, font, size, line));
     }
-  }
-
-  if (resume.certifications?.length) {
-    children.push(heading("Certifications", font, size));
-    for (const cert of resume.certifications) children.push(bullet(cert, font, size, line));
   }
 
   if (resume.languages?.length) {

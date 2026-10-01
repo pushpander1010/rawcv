@@ -1,4 +1,5 @@
 import type { ParsedResume, WorkExperience, Education, Project } from "@/types";
+import { normalizeSectionOrder } from "@/lib/section-order";
 
 /**
  * Convert any value to a string, handling null/undefined/numbers/objects
@@ -87,5 +88,6 @@ export function sanitizeResume(resume: Partial<ParsedResume> | null | undefined)
     projects: Array.isArray(resume.projects)
       ? resume.projects.map(sanitizeProject)
       : undefined,
+    sectionOrder: resume.sectionOrder ? normalizeSectionOrder(resume.sectionOrder) : undefined,
   };
 }
