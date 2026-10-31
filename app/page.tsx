@@ -3,9 +3,7 @@ import Link from "next/link";
 import Script from "next/script";
 import Icon, { type IconName } from "@/components/Icon";
 import HowToSchema from "@/components/HowToSchema";
-import { renderThemeBody } from "@/lib/theme-renderer";
-import { RESUME_CSS } from "@/lib/resume-styles";
-import type { ParsedResume } from "@/types";
+import ThemeShowcase from "@/components/ThemeShowcase";
 
 export const metadata: Metadata = {
   title: "rawcv — Free AI Resume Builder & ATS Score Checker",
@@ -19,7 +17,7 @@ const features: { icon: IconName; title: string; desc: string }[] = [
   { icon: "target", title: "Job match", desc: "Paste a job description and see which keywords and skills are missing." },
   { icon: "sparkles", title: "AI suggestions", desc: "Stronger action verbs, quantified results, and tighter section structure." },
   { icon: "trend", title: "Bullet rewrite", desc: "Turn weak duties into results-focused achievements in one click." },
-  { icon: "layers", title: "17 themes", desc: "MAANG, editorial, Swiss, classic, sidebars, and region-specific formats." },
+  { icon: "layers", title: "18 themes", desc: "MAANG, Onyx, editorial, Swiss, classic, sidebars, and regional formats." },
   { icon: "globe", title: "International", desc: "EU, Canada, US, and India formats with the right sections and conventions." },
 ];
 
@@ -32,151 +30,9 @@ const faqs = [
   { q: "Do I need to create an account?", a: "No. Open the builder or upload a resume and start — no sign-up, no credit card." },
 ];
 
-const designerSample: ParsedResume = {
-  contact: {
-    name: "Maya Chen",
-    email: "maya@mayachen.design",
-    phone: "+1 (415) 555-0198",
-    location: "San Francisco, CA",
-    linkedin: "linkedin.com/in/mayachen",
-    github: "github.com/mayachen",
-    website: "mayachen.design",
-  },
-  summary:
-    "Product designer with 7 years shaping consumer and fintech products. Built design systems used by 40+ engineers, led research that lifted activation 24%, and shipped work featured in Fast Company.",
-  experience: [
-    {
-      company: "Stripe",
-      title: "Staff Product Designer",
-      startDate: "2022-02",
-      endDate: "Present",
-      bullets: [
-        "Redesigned onboarding for 1.2M merchants, lifting completed setup by 24% in two quarters.",
-        "Built the design system foundations now used by 40+ engineers across six product teams.",
-        "Ran 60+ research sessions and turned findings into a quarterly roadmap adopted by leadership.",
-      ],
-    },
-    {
-      company: "Airbnb",
-      title: "Senior Product Designer",
-      startDate: "2018-06",
-      endDate: "2022-01",
-      bullets: [
-        "Shipped a host analytics suite that increased repeat listings by 13%.",
-        "Partnered with accessibility to bring core flows to WCAG 2.1 AA.",
-      ],
-    },
-  ],
-  education: [{ institution: "Rhode Island School of Design", degree: "BFA", field: "Graphic Design", graduationYear: "2017", gpa: "3.9/4.0", coursework: ["Typography", "Interaction Design", "Design Systems"] }],
-  skills: ["Product strategy", "Interaction design", "Design systems", "Figma", "Prototyping", "User research", "Accessibility"],
-  certifications: [],
-  projects: [{ name: "Field Notes", description: "A free interview-notes template used by 12,000 designers.", technologies: ["Figma", "Notion"], link: "github.com/mayachen/field-notes", bullets: ["Reached 12,000 active designers and 4.8/5 rating"] }],
-  awards: ["AIGA Design Scholar, 2017"],
-  sectionOrder: ["summary", "experience", "projects", "education", "skills", "awards", "certifications"],
-};
-
-const engineerSample: ParsedResume = {
-  contact: {
-    name: "Aarav Mehta",
-    email: "aarav.mehta@gmail.com",
-    phone: "+91 98765 43210",
-    location: "Bengaluru, India",
-    linkedin: "linkedin.com/in/aaravmehta",
-    github: "github.com/aaravmehta",
-    website: "aaravmehta.dev",
-  },
-  summary:
-    "Senior frontend engineer with 8 years building high-traffic consumer products. Led platform migrations for 4M+ users, cut load times 62%, and mentored teams of six.",
-  experience: [
-    {
-      company: "Razorpay",
-      title: "Senior Frontend Engineer",
-      startDate: "2021-04",
-      endDate: "Present",
-      bullets: [
-        "Led a six-person team rebuilding the merchant dashboard in Next.js, cutting p95 load time from 4.8s to 1.8s.",
-        "Designed a shared component library adopted by nine product squads, reducing UI build time 40%.",
-        "Introduced performance budgets and CI checks, preventing 30+ regressions per quarter.",
-      ],
-    },
-    {
-      company: "Swiggy",
-      title: "Frontend Engineer",
-      startDate: "2018-06",
-      endDate: "2021-03",
-      bullets: [
-        "Rewrote checkout and lifted conversion 12% across 2M weekly orders.",
-        "Built A/B testing tooling used in 140 experiments, tripling experiment velocity.",
-      ],
-    },
-  ],
-  education: [{ institution: "BITS Pilani", degree: "B.E.", field: "Computer Science", graduationYear: "2018", gpa: "8.7/10", coursework: ["Data Structures", "Operating Systems", "DBMS", "Computer Networks"] }],
-  skills: ["React", "TypeScript", "Next.js", "Node.js", "GraphQL", "PostgreSQL", "AWS", "Design systems", "Performance"],
-  certifications: ["AWS Certified Solutions Architect – Associate"],
-  projects: [{ name: "Atlas", description: "An accessible 40-component React library.", technologies: ["React", "TypeScript", "Storybook"], link: "github.com/aaravmehta/atlas", bullets: ["Reached 2.1k GitHub stars and 12k monthly installs", "Cut consumer bundle size 38% by removing the runtime CSS layer"] }],
-  awards: ["AWS Certified Solutions Architect – Associate", "Top 5% in BITS ACM coding contest (2,000+ entrants)"],
-  sectionOrder: ["summary", "experience", "projects", "education", "skills", "awards", "certifications"],
-};
-
-const managerSample: ParsedResume = {
-  contact: {
-    name: "Sofia Rossi",
-    email: "sofia.rossi@pm.me",
-    phone: "+44 7700 900123",
-    location: "London, UK",
-    linkedin: "linkedin.com/in/sofiarossi",
-    github: "github.com/sofiarossi",
-    website: "sofiarossi.co",
-  },
-  summary:
-    "Product manager with 9 years taking B2B platforms from zero to scale. Led a payments product to £18M ARR, built a 14-person org, and shipped research-led roadmaps across three markets.",
-  experience: [
-    {
-      company: "Monzo",
-      title: "Director of Product",
-      startDate: "2021-09",
-      endDate: "Present",
-      bullets: [
-        "Grew business banking from £2M to £18M ARR in 30 months with a 14-person product org.",
-        "Launched invoicing and VAT tools adopted by 38% of eligible business customers.",
-        "Introduced discovery and pricing experiments that lifted trial-to-paid conversion 19%.",
-      ],
-    },
-    {
-      company: "Revolut",
-      title: "Senior Product Manager",
-      startDate: "2017-03",
-      endDate: "2021-08",
-      bullets: [
-        "Led the cards platform across three markets, shipping eight releases per quarter.",
-        "Built the first pricing model for premium tiers, adding £4.2M annual revenue.",
-      ],
-    },
-  ],
-  education: [{ institution: "London School of Economics", degree: "MSc", field: "Management", graduationYear: "2015", gpa: "Distinction", coursework: ["Corporate Finance", "Strategy", "Econometrics"] }],
-  skills: ["Product strategy", "Pricing", "B2B SaaS", "Discovery", "Analytics", "Team leadership", "Fintech", "Roadmapping"],
-  certifications: [],
-  projects: [{ name: "Pricing Playbook", description: "An open B2B pricing teardown library.", technologies: ["Notion", "SQL"], link: "github.com/sofiarossi/pricing-playbook", bullets: ["Used by 3,000+ operators; featured in Lenny's Newsletter"] }],
-  awards: ["Monzo CEO Award for Business Banking, 2023"],
-  sectionOrder: ["summary", "experience", "projects", "education", "skills", "awards", "certifications"],
-};
-
-const maangSample: ParsedResume = {
-  ...managerSample,
-  summary: "",
-  sectionOrder: ["education", "experience", "projects", "skills", "awards", "certifications"],
-};
-
-const showcase = [
-  { theme: "editorial" as const, label: "Editorial", sample: designerSample },
-  { theme: "atlas" as const, label: "Atlas", sample: engineerSample },
-  { theme: "maang" as const, label: "MAANG", sample: maangSample },
-];
-
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950">
-      <style dangerouslySetInnerHTML={{ __html: RESUME_CSS }} />
       <Script
         id="json-ld"
         type="application/ld+json"
@@ -256,48 +112,86 @@ export default function LandingPage() {
           <div className="mt-7 flex items-center justify-center gap-6 sm:gap-10 text-[11.5px] text-slate-400 dark:text-slate-500">
             <span><strong className="text-slate-700 dark:text-slate-200 font-semibold">100+</strong> ATS checks</span>
             <span className="h-3 w-px bg-slate-200 dark:bg-slate-800" />
-            <span><strong className="text-slate-700 dark:text-slate-200 font-semibold">17</strong> themes</span>
+            <span><strong className="text-slate-700 dark:text-slate-200 font-semibold">18</strong> themes</span>
             <span className="h-3 w-px bg-slate-200 dark:bg-slate-800" />
             <span><strong className="text-slate-700 dark:text-slate-200 font-semibold">$0</strong> forever</span>
           </div>
         </div>
       </section>
 
-      {/* ═══════════ REAL RESUME SHOWCASE ═══════════ */}
-      <section className="pb-16 sm:pb-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex items-end justify-between gap-4 mb-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
-              Actual output · three of seventeen themes
-            </p>
-            <Link href="/resume-templates" className="text-[12px] font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400">
-              See all themes →
-            </Link>
-          </div>
+      <ThemeShowcase />
 
-          <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
-            <div className="flex min-w-max justify-center gap-4 sm:gap-6">
-              {showcase.map(({ theme, label, sample }, i) => (
-                <figure key={theme} className="shrink-0">
-                  <div className="rounded-lg bg-white ring-1 ring-slate-900/10 shadow-[0_18px_40px_-18px_rgba(15,23,42,0.35)] overflow-hidden transition-transform duration-300 hover:-translate-y-1">
-                    <div className="h-[392px] w-[278px] overflow-hidden">
-                      <div
-                        style={{ width: 794, height: 1123, transform: "scale(0.35)", transformOrigin: "top left" }}
-                        dangerouslySetInnerHTML={{ __html: renderThemeBody(sample, theme) }}
-                      />
-                    </div>
-                  </div>
-                  <figcaption className="mt-2.5 flex items-center justify-between text-[11.5px]">
-                    <span className="font-semibold text-slate-700 dark:text-slate-200">{label}</span>
-                    <span className="text-slate-400 dark:text-slate-500">{i === 0 ? "Warm serif" : i === 1 ? "Swiss grid" : "Jake’s-style · ATS"}</span>
-                  </figcaption>
-                </figure>
-              ))}
+      {/* ═══════════ BULLET LAB ═══════════ */}
+      <section className="border-y border-slate-200 dark:border-slate-800 bg-slate-900 text-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-center">
+            <div>
+              <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                The 7-second test
+              </p>
+              <h2 className="mt-3 text-[28px] sm:text-[36px] font-bold tracking-[-0.03em] leading-[1.05]">
+                Your resume is not average.
+                <br />
+                <span className="font-serif italic font-normal text-blue-400">Your bullets are.</span>
+              </h2>
+              <p className="mt-4 text-[14px] leading-relaxed text-slate-400 max-w-md">
+                Recruiters skim for one thing: evidence. rawcv scores every bullet for a strong
+                opener, a real metric, and clean length — then fixes the wording without inventing
+                a number you cannot defend.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-5 text-[11.5px] text-slate-400">
+                <span><strong className="text-white font-semibold">1</strong> Weak opener</span>
+                <span><strong className="text-white font-semibold">2</strong> No metric</span>
+                <span><strong className="text-white font-semibold">3</strong> Filler</span>
+                <span><strong className="text-white font-semibold">4</strong> Too long</span>
+              </div>
+              <Link
+                href="/build"
+                className="mt-7 inline-flex items-center gap-1.5 rounded-md bg-white px-4 py-2.5 text-[12.5px] font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
+              >
+                Open the bullet coach <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+
+            <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
+              <div className="flex items-center justify-between text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                <span>Before</span><span className="text-red-400">18/100</span>
+              </div>
+              <p className="mt-2 rounded-lg bg-red-950/30 border border-red-900/50 px-3 py-2.5 text-[13px] leading-relaxed text-red-100">
+                Responsible for improving website performance and working on various frontend projects.
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {["Weak opener", "No metric", "Filler", "Vague"].map((t) => (
+                  <span key={t} className="rounded border border-red-900/50 bg-red-950/30 px-1.5 py-0.5 text-[9.5px] font-semibold text-red-300">{t}</span>
+                ))}
+              </div>
+
+              <div className="my-4 flex items-center gap-3">
+                <div className="h-px flex-1 bg-white/10" />
+                <span className="rounded-full border border-emerald-800 bg-emerald-950/40 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-emerald-300">
+                  rawcv rewrite
+                </span>
+                <div className="h-px flex-1 bg-white/10" />
+              </div>
+
+              <div className="flex items-center justify-between text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                <span>After</span><span className="text-emerald-400">94/100</span>
+              </div>
+              <p className="mt-2 rounded-lg bg-emerald-950/30 border border-emerald-900/50 px-3 py-2.5 text-[13px] leading-relaxed text-emerald-50">
+                Cut p95 page load from 4.8s to 1.8s by rebuilding the dashboard in Next.js,
+                lifting activation 12% across 2M monthly users.
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {["Strong opener", "Real metric", "Scope", "Outcome"].map((t) => (
+                  <span key={t} className="rounded border border-emerald-900/50 bg-emerald-950/30 px-1.5 py-0.5 text-[9.5px] font-semibold text-emerald-300">{t}</span>
+                ))}
+              </div>
+
+              <p className="mt-3 text-[10.5px] text-slate-500">
+                Example only. rawcv never fabricates metrics — you bring the real numbers.
+              </p>
             </div>
           </div>
-          <p className="text-center text-[12px] text-slate-400 dark:text-slate-500 mt-1">
-            Typography, spacing, and page breaks are tuned to fit one clean A4 page.
-          </p>
         </div>
       </section>
 

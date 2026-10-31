@@ -394,7 +394,7 @@ export function scoreResume(resume: ParsedResume | null): ResumeScore {
     if (sw >= 30 && sw <= 90) score += 2;
     if (/\b(years?|engineer|developer|designer|manager|analyst|scientist)\b/i.test(summary)) score += 2;
     if (METRIC_RE.test(summary)) score += 1;
-    if (!GENERIC_SUMMARY.some((g) => summary.toLowerCase().includes(g))) score += 1;
+    if (summary && !GENERIC_SUMMARY.some((g) => summary.toLowerCase().includes(g))) score += 1;
     categories.push({ key: "summary", label: "Summary", score: clamp(score, 0, max), max, detail: "Role, years, strongest result, no generic adjectives" });
     if (sw > 0 && sw < 20) {
       addIssue(issues, {

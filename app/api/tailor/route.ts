@@ -6,6 +6,7 @@ import type { ParsedResume, TailoredResume, TailorChange } from "@/types";
 import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
 import { requireAuth, sanitiseJD } from "@/lib/api-guard";
+import { addsNewNumbers } from "@/lib/ai-safety";
 
 const SYSTEM_PROMPT = `You are a big-tech resume tailoring specialist. Your job is to make this resume as relevant as possible to the target job WITHOUT changing who the candidate is.
 
@@ -78,7 +79,14 @@ export async function POST(req: NextRequest) {
     const prompt = `Resume:\n${JSON.stringify(parsed, null, 2)}\n\nJob Description:\n${jd.slice(0, 6000)}`;
     const result = await complete(prompt, SYSTEM_PROMPT, { maxTokens: 8000 }) as { changes: Array<{ section: string; field: string; original: string; tailored: string }> };
     const rawChanges = Array.isArray(result.changes) ? result.changes : [];
-    const changes: TailorChange[] = rawChanges.map((c) => ({
+    const sourceAll = JSON.stringify(parsed);
+    const safeChanges = rawChanges.filter((c) => {
+      if (!c.original?.trim() || !c.tailored?.trim() || c.original === c.tailored) return false;
+      if (c.section === "experience" && /\.title$/.test(c.field)) return false;
+      const isArrayField = c.field === "skills" || c.field.endsWith(".technologies") || c.field === "certifications";
+      return !addsNewNumbers(isArrayField ? sourceAll : c.original, c.tailored);
+    });
+    const changes: TailorChange[] = safeChanges.map((c) => ({
       id: randomUUID(), section: c.section ?? "experience", field: c.field ?? "", original: c.original ?? "", tailored: c.tailored ?? "", accepted: false,
     }));
     const finalResume = applyChanges(parsed, changes);

@@ -7,7 +7,7 @@ import HowToSchema from "@/components/HowToSchema";
 export const metadata: Metadata = {
   title: "Free Resume Builder - Create & Download | rawcv",
   description:
-    "Build a polished, ATS-safe resume for free. No login required. 17 professional themes, live A4 preview, and instant PDF, Word, or text download. No watermark.",
+    "Build a polished, ATS-safe resume for free. No login required. 18 professional themes, live A4 preview, and instant PDF, Word, or text download. No watermark.",
   alternates: { canonical: "https://www.rawcv.com/build" },
   keywords: [
     "free resume builder",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Free Resume Builder - Create & Download | rawcv",
     description:
-      "Build a polished, ATS-safe resume for free. No login required. 17 professional themes and instant PDF download.",
+      "Build a polished, ATS-safe resume for free. No login required. 18 professional themes and instant PDF download.",
     type: "website",
     url: "https://www.rawcv.com/build",
   },
@@ -34,7 +34,7 @@ export default function BuildPage() {
         description="Create a professional resume in four steps."
         steps={[
           { name: "Fill in your details", text: "Add your contact info, summary, experience, education, and skills." },
-          { name: "Choose a theme", text: "Pick from 17 ATS-friendly resume designs." },
+          { name: "Choose a theme", text: "Pick from 18 ATS-friendly resume designs." },
           { name: "Preview live", text: "See your resume update in real time on a true A4 page." },
           { name: "Download", text: "Download a polished PDF, Word file, or plain text version — free, without a watermark." },
         ]}
@@ -96,7 +96,7 @@ export default function BuildPage() {
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-800 border-y border-slate-200 dark:border-slate-800">
             {[
-              { k: "Themes", t: "17 ATS-safe designs", d: "MAANG-dense, serif, Swiss, editorial, sidebars, EU formats. Switch in one click — content reflows without retyping." },
+              { k: "Themes", t: "18 ATS-safe designs", d: "MAANG-dense, Onyx premium, serif, Swiss, editorial, sidebars, EU formats. Switch in one click — content reflows without retyping." },
               { k: "Preview", t: "A true A4 page", d: "Type scale, spacing, and page breaks update live on real paper. No export surprises." },
               { k: "Export", t: "PDF, Word & text", d: "Selectable-text PDF plus editable Word and plain text for job portals. Free forever." },
             ].map((f) => (

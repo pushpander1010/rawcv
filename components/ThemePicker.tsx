@@ -14,6 +14,7 @@ export interface ThemeMeta {
 
 export const THEMES: ThemeMeta[] = [
   { id: "maang", name: "MAANG", note: "Google/Meta · dense", accent: "#000000", paper: "#ffffff", ink: "#000000" },
+  { id: "onyx", name: "Onyx", note: "Premium · serif", accent: "#8a6a3f", paper: "#fffdf9", ink: "#1c1a17" },
   { id: "classic", name: "Classic", note: "Serif · timeless", accent: "#22201d", paper: "#ffffff", ink: "#22201d" },
   { id: "minimal", name: "Minimal", note: "Airy · editorial", accent: "#334155", paper: "#ffffff", ink: "#111827" },
   { id: "modern", name: "Modern", note: "Dark sidebar", accent: "#8fb6d9", paper: "#1d2733", ink: "#ffffff" },

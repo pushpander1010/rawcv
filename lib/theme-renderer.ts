@@ -733,6 +733,28 @@ function renderMaang(r: ParsedResume): string {
   </div>`;
 }
 
+function renderOnyx(r: ParsedResume): string {
+  const order = normalizeSectionOrder(r.sectionOrder);
+  const top = pick(order, ["summary", "experience", "projects"]);
+  const rest = pick(order, ["education", "skills", "awards", "certifications"]);
+  const left = rest.filter((k) => k === "education" || k === "awards" || k === "certifications");
+  const right = rest.filter((k) => k === "skills");
+  return `<div class="rcv rcv--onyx">
+    <header class="rcv-head">
+      <div>
+        <h1 class="rcv-name">${esc(r.contact.name || "Your Name")}</h1>
+        ${roleLine(r)}
+      </div>
+      <div class="rcv-contact">${contactLine(r.contact)}</div>
+    </header>
+    ${renderOrdered(r, top, { summary: "Profile", projects: "Selected Work" })}
+    <div class="rcv-cols--wide-left">
+      <div>${renderOrdered(r, left, { awards: "Awards & Leadership" })}</div>
+      <div>${renderOrdered(r, right, { skills: "Expertise" })}${languagesSection(r)}</div>
+    </div>
+  </div>`;
+}
+
 function renderAtlas(r: ParsedResume): string {
   const order = normalizeSectionOrder(r.sectionOrder);
   return `<div class="rcv rcv--atlas">
@@ -766,6 +788,7 @@ const RENDERERS: Record<ThemeId, (r: ParsedResume) => string> = {
   editorial: renderEditorial,
   atlas: renderAtlas,
   maang: renderMaang,
+  onyx: renderOnyx,
 };
 
 export const RESUME_THEME_IDS = Object.keys(RENDERERS) as ThemeId[];

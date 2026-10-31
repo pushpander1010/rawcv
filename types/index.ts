@@ -17,7 +17,8 @@ export type ThemeId =
   | "resumeio"
   | "editorial"
   | "atlas"
-  | "maang";
+  | "maang"
+  | "onyx";
 
 // ─── Resume Format (region-specific) ────────────────────────────────────────
 
@@ -249,6 +250,8 @@ export interface ATSIssue {
 export interface ATSResult {
   score: number;
   issues: ATSIssue[];
+  /** Optional category breakdown from the deterministic reviewer. */
+  categories?: Array<{ key: string; label: string; score: number; max: number; detail?: string }>;
 }
 
 // ─── Relevance ────────────────────────────────────────────────────────────────

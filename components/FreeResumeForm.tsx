@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import type { ParsedResume, WorkExperience, Education, Project } from "@/types";
 import FieldAIButton from "@/components/FieldAIButton";
+import BulletCoach from "@/components/BulletCoach";
 import {
   normalizeSectionOrder,
   DEFAULT_SECTION_ORDER,
@@ -294,7 +295,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
         <textarea
           value={resume.summary || ""}
           onChange={(e) => setResume((prev) => ({ ...prev, summary: e.target.value }))}
-          placeholder="Senior product designer with 7 years shipping consumer apps. Led design systems used by 40+ engineers and raised activation by 24%."
+          placeholder="Senior software engineer with 8 years shipping consumer products. Led a 6-person team, cut p95 latency 62%, and mentored 4 engineers."
           rows={4}
           className={field}
         />
@@ -397,6 +398,10 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 placeholder={"Cut checkout latency 62% by rebuilding the flow in Next.js\nLed 6 engineers across two product squads"}
                 rows={3}
                 className={field}
+              />
+              <BulletCoach
+                bullets={exp.bullets}
+                onChange={(bullets) => updateExperience(idx, { bullets })}
               />
             </div>
             <div className="flex justify-end">

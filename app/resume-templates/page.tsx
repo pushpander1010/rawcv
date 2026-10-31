@@ -7,14 +7,14 @@ import { renderThemeBody } from "@/lib/theme-renderer";
 import { RESUME_CSS } from "@/lib/resume-styles";
 
 export const metadata: Metadata = {
-  title: "Resume Templates — 17 Professional, ATS-Safe Designs | rawcv",
+  title: "Resume Templates — 18 Professional, ATS-Safe Designs | rawcv",
   description:
-    "Explore 17 free resume templates — MAANG, Classic, Minimal, Modern, Executive, Atlas, Editorial, Europass, Canadian and more. ATS-safe, typeset for one clean page, and free to download.",
+    "Explore 18 free resume templates — MAANG, Onyx, Classic, Minimal, Modern, Executive, Atlas, Editorial, Europass, Canadian and more. ATS-safe, typeset for one clean page, and free to download.",
   alternates: { canonical: "https://www.rawcv.com/resume-templates" },
   openGraph: {
-    title: "Resume Templates — 17 Professional, ATS-Safe Designs | rawcv",
+    title: "Resume Templates — 18 Professional, ATS-Safe Designs | rawcv",
     description:
-      "17 free resume templates, typeset for one clean A4 page. ATS-safe, no watermark, no signup.",
+      "18 free resume templates, typeset for one clean A4 page. ATS-safe, no watermark, no signup.",
     url: "https://www.rawcv.com/resume-templates",
   },
 };
@@ -26,6 +26,7 @@ const THEMES: Array<{
   bestFor: string;
 }> = [
   { id: "maang", name: "MAANG", tagline: "Dense, plain, ATS-first", bestFor: "Google, Amazon, Meta, Apple, Netflix" },
+  { id: "onyx", name: "Onyx", tagline: "Premium serif", bestFor: "Senior ICs, managers, consulting" },
   { id: "atlas", name: "Atlas", tagline: "Swiss precision", bestFor: "Tech, product, consulting" },
   { id: "editorial", name: "Editorial", tagline: "Warm magazine", bestFor: "Design, writing, creative leads" },
   { id: "classic", name: "Classic", tagline: "Timeless serif", bestFor: "Finance, law, academia" },
@@ -130,7 +131,7 @@ export default function ResumeTemplatesPage() {
     "@type": "CollectionPage",
     name: "Resume Templates",
     description:
-      "17 free, ATS-safe resume templates. Typeset for one clean A4 page, with instant PDF download.",
+      "18 free, ATS-safe resume templates. Typeset for one clean A4 page, with instant PDF download.",
     url: "https://www.rawcv.com/resume-templates",
     numberOfItems: THEMES.length,
     itemListElement: THEMES.map((t, i) => ({
@@ -172,7 +173,7 @@ export default function ResumeTemplatesPage() {
                   The gallery
                 </p>
                 <h1 className="text-[32px] sm:text-[44px] font-bold tracking-[-0.03em] leading-[1.05]">
-                  17 templates.
+                  18 templates.
                   <br />
                   <span className="font-serif italic font-normal text-blue-600">One clean page.</span>
                 </h1>
@@ -182,7 +183,7 @@ export default function ResumeTemplatesPage() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-x-6 gap-y-2 text-[12px] text-slate-500 dark:text-slate-400 lg:pb-1">
-                <span><strong className="text-slate-900 dark:text-white font-semibold">17</strong> designs</span>
+                <span><strong className="text-slate-900 dark:text-white font-semibold">18</strong> designs</span>
                 <span><strong className="text-slate-900 dark:text-white font-semibold">100%</strong> ATS-safe</span>
                 <span><strong className="text-slate-900 dark:text-white font-semibold">$0</strong> forever</span>
               </div>

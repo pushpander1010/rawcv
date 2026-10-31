@@ -70,7 +70,7 @@ export default function ATSScoreCard({ result, loading = false }: ATSScoreCardPr
     );
   }
 
-  const { score, issues = [] } = result;
+  const { score, issues = [], categories = [] } = result;
   const showIssues = issues.length > 0;
   const label = score >= 80 ? "Great ATS compatibility" : score >= 60 ? "Moderate ATS compatibility" : "Poor ATS compatibility";
   const color = score >= 80 ? "text-emerald-600 dark:text-emerald-300" : score >= 60 ? "text-amber-600 dark:text-amber-300" : "text-red-600 dark:text-red-300";
@@ -82,6 +82,21 @@ export default function ATSScoreCard({ result, loading = false }: ATSScoreCardPr
         <p className={`text-[13.5px] font-semibold ${color}`}>{label}</p>
         <p className="text-xs text-slate-400 dark:text-slate-500">Score: {score}/100</p>
       </div>
+      {categories.length > 0 && (
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 mb-6">
+          {categories.map((cat) => (
+            <div key={cat.key}>
+              <div className="flex items-center justify-between text-[10.5px] text-slate-500 dark:text-slate-400">
+                <span className="font-medium">{cat.label}</span>
+                <span className="tabular-nums">{Math.round(cat.score)}/{cat.max}</span>
+              </div>
+              <div className="mt-1 h-1 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                <div className="h-full rounded-full bg-slate-700 dark:bg-slate-300" style={{ width: `${(cat.score / Math.max(1, cat.max)) * 100}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
       {showIssues && (
         <div>
           <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-widest mb-3">

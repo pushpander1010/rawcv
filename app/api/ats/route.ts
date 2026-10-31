@@ -69,5 +69,6 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     score: Math.round(baseScore),
     issues: [...ruleIssues, ...qualityIssues, ...aiIssues],
+    categories: quality.categories,
   } satisfies ATSResult);
 }

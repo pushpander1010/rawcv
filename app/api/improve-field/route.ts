@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { completeFast as complete } from "@/lib/ai-providers";
 import { requireAuth } from "@/lib/api-guard";
+import { addsNewNumbers, hasFirstPerson } from "@/lib/ai-safety";
 
 const BodySchema = z.object({
   section: z.string().min(1).max(40),
@@ -71,6 +72,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "ai_unavailable", message: "Could not improve this text. Please try again." },
         { status: 502 }
+      );
+    }
+    if (addsNewNumbers(value, improved) || hasFirstPerson(improved)) {
+      return NextResponse.json(
+        {
+          error: "unsafe_rewrite",
+          message: "The AI tried to add a number or first-person claim that is not in your text. Add your real metric, then try again.",
+        },
+        { status: 422 }
       );
     }
     return NextResponse.json({ improved });

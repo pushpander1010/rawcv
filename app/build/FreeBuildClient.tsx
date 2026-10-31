@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import type { ParsedResume, ThemeId } from "@/types";
 import { useResume } from "@/context/ResumeContext";
 import { RESUME_THEME_IDS } from "@/lib/theme-renderer";
+import { polishResumeBullets } from "@/lib/bullet-coach";
+import { scoreResume } from "@/lib/resume-score";
 import FreeResumeForm from "@/components/FreeResumeForm";
 import ResumePreview from "@/components/ResumePreview";
 import UndoButton from "@/components/UndoButton";
@@ -12,6 +14,7 @@ import ThemePicker, { themeName } from "@/components/ThemePicker";
 import TypographyControls from "@/components/TypographyControls";
 import FreeDownloadButton from "@/components/FreeDownloadButton";
 import FreeATSChecker from "@/components/FreeATSChecker";
+import JobMatchPanel from "@/components/JobMatchPanel";
 import FreeKeywordAnalyzer from "@/components/FreeKeywordAnalyzer";
 
 type Panel = "theme" | "text" | "download" | null;
@@ -32,15 +35,17 @@ function completeness(resume: ParsedResume | null): number {
 }
 
 export default function FreeBuildClient() {
-  const { state, setState, isHydrated } = useResume();
+  const { state, setState, pushUndo, isHydrated } = useResume();
   const resume = state.parsed;
   const selectedTheme = state.selectedTheme;
   const [panel, setPanel] = useState<Panel>(null);
   const [tab, setTab] = useState<Tab>("preview");
   const [a4Preview, setA4Preview] = useState(true);
+  const [polishNote, setPolishNote] = useState<string | null>(null);
 
   const strength = useMemo(() => completeness(resume), [resume]);
-  const strengthLabel = strength >= 85 ? "Strong" : strength >= 55 ? "Good start" : "Getting started";
+  const review = useMemo(() => scoreResume(resume), [resume]);
+  const reviewScore = review.score;
 
   // Honour /build?theme=atlas links from the template gallery.
   const searchParams = useSearchParams();
@@ -63,6 +68,24 @@ export default function FreeBuildClient() {
 
   const togglePanel = (next: Exclude<Panel, null>) =>
     setPanel((prev) => (prev === next ? null : next));
+
+  const handlePolish = () => {
+    if (!resume?.experience?.length) return;
+    let changed = 0;
+    const experience = resume.experience.map((role) => {
+      const polished = polishResumeBullets(role.bullets);
+      changed += polished.changed;
+      return { ...role, bullets: polished.bullets };
+    });
+    if (!changed) {
+      setPolishNote("No safe wording fixes found");
+      return;
+    }
+    pushUndo();
+    setState((prev) => (prev.parsed ? { ...prev, parsed: { ...prev.parsed, experience } } : prev));
+    setPolishNote(`Polished ${changed} bullet${changed === 1 ? "" : "s"}`);
+    window.setTimeout(() => setPolishNote(null), 2500);
+  };
 
   if (!isHydrated) {
     return (
@@ -94,7 +117,7 @@ export default function FreeBuildClient() {
             <div className="flex rounded-lg bg-slate-100 dark:bg-slate-800 p-0.5" role="tablist" aria-label="Preview mode">
               {([
                 { id: "preview", label: "Preview" },
-                { id: "review", label: "Review" },
+                { id: "review", label: `Review · ${reviewScore}` },
               ] as const).map((t) => (
                 <button
                   key={t.id}
@@ -125,6 +148,14 @@ export default function FreeBuildClient() {
                 }`}
               >
                 {themeName(selectedTheme)}
+              </button>
+              <button
+                type="button"
+                onClick={handlePolish}
+                title="Remove weak framing, pronouns, and filler from every bullet"
+                className="h-8 px-2.5 rounded-md border border-slate-200 dark:border-slate-700 text-[12.5px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              >
+                Polish
               </button>
               <button
                 type="button"
@@ -208,7 +239,7 @@ export default function FreeBuildClient() {
                   A4 pages
                 </label>
                 <span className="text-slate-300 dark:text-slate-700">·</span>
-                <span>ATS-safe text · no watermark</span>
+                <span>{polishNote ?? "ATS-safe text · no watermark"}</span>
                 <span className="ml-auto flex items-center gap-2">
                   {resume && <UndoButton />}
                   <span className="inline-flex items-center gap-2">
@@ -234,11 +265,13 @@ export default function FreeBuildClient() {
                   </p>
                 </div>
                 <span className="shrink-0 rounded-full border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                  {strengthLabel} · {strength}%
+                  {review.band} · {reviewScore}%
                 </span>
               </div>
 
-              <section>
+              <JobMatchPanel />
+
+              <section className="pt-5 border-t border-slate-200 dark:border-slate-800">
                 <h3 className="text-[12px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3">
                   Big-tech resume score
                 </h3>

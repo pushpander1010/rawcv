@@ -6,6 +6,7 @@ import type { ParsedResume, Suggestion } from "@/types";
 import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
 import { requireAuth } from "@/lib/api-guard";
+import { filterUnsafeSuggestions } from "@/lib/ai-safety";
 
 const SYSTEM_PROMPT = `You are an expert big-tech resume coach. Review the resume the way a Google/Meta/Amazon engineering screener would, then propose only factual improvements.
 
@@ -67,11 +68,22 @@ export async function POST(req: NextRequest) {
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}`;
     const result = await complete(prompt, SYSTEM_PROMPT, { maxTokens: 8000 }) as { suggestions: Array<{ section: string; original: string; improved: string; reason: string }> };
     const raw = Array.isArray(result.suggestions) ? result.suggestions : [];
-    const suggestions: Suggestion[] = raw.slice(0, 15).map((s) => ({
-      id: randomUUID(), section: s.section ?? "general", original: s.original ?? "", improved: s.improved ?? "", reason: s.reason ?? "",
+    const safe = filterUnsafeSuggestions(
+      raw.map((s) => ({
+        section: s.section ?? "general",
+        original: s.original ?? "",
+        improved: s.improved ?? "",
+        reason: s.reason ?? "",
+      }))
+    );
+    const suggestions: Suggestion[] = safe.slice(0, 15).map((s) => ({
+      id: randomUUID(), section: s.section, original: s.original, improved: s.improved, reason: s.reason,
     }));
     if (suggestions.length < 1) {
-      return NextResponse.json({ error: "ai_unavailable", message: "Could not generate suggestions. Please try again." }, { status: 502 });
+      return NextResponse.json(
+        { error: "unsafe_or_empty", message: "The AI could not improve this without inventing facts. Add real metrics or more detail and try again." },
+        { status: 502 }
+      );
     }
     // Charge only after successful AI response
     return NextResponse.json(suggestions);

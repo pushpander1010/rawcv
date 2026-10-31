@@ -467,6 +467,93 @@ export const RESUME_CSS = `
 .rcv--maang .rcv-cert::before { content: "•"; color: #000; }
 .rcv--maang .rcv-lang { font-size: .9em; }
 
+/* ═══════════════════════ ONYX ═══════════════════════ */
+/* A quiet, premium single-column sheet for senior ICs and managers.
+   Brass accent, serif display name, generous hierarchy, zero clutter. */
+.rcv--onyx {
+  --paper: #fffdf9;
+  --ink: #1c1a17;
+  --muted: #5e584f;
+  --faint: #8a8175;
+  --accent: #8a6a3f;
+  --rule: #e3dbcd;
+  --tint: #f8f3ea;
+  font-family: var(--rcv-font, Georgia, "Times New Roman", serif);
+}
+.rcv--onyx::before {
+  content: "";
+  display: block;
+  width: 22mm;
+  height: 2.2px;
+  margin-bottom: 6mm;
+  background: #8a6a3f;
+}
+.rcv--onyx .rcv-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10mm;
+  padding-bottom: 4.5mm;
+  border-bottom: 1px solid #d9d0c1;
+}
+.rcv--onyx .rcv-name {
+  font-size: 2.75em;
+  font-weight: 700;
+  letter-spacing: -.035em;
+  line-height: .96;
+}
+.rcv--onyx .rcv-role {
+  margin-top: 2mm;
+  color: #8a6a3f;
+  font-size: .72em;
+  letter-spacing: .24em;
+  font-weight: 600;
+}
+.rcv--onyx .rcv-contact {
+  justify-content: flex-end;
+  max-width: 76mm;
+  margin-top: 0;
+  text-align: right;
+  font-size: .75em;
+  line-height: 1.55;
+  color: #5e584f;
+}
+.rcv--onyx .rcv-sep { padding: 0 1.8mm; color: #b8ab98; }
+.rcv--onyx .rcv-section { margin-top: 5.5mm; }
+.rcv--onyx .rcv-h {
+  gap: 2.5mm;
+  font-size: .72em;
+  letter-spacing: .22em;
+  color: #8a6a3f;
+  margin-bottom: 3mm;
+}
+.rcv--onyx .rcv-h::before {
+  content: "";
+  width: 5mm;
+  height: 1px;
+  background: #8a6a3f;
+  flex-shrink: 0;
+}
+.rcv--onyx .rcv-h::after { background: #e3dbcd; }
+.rcv--onyx .rcv-job-title { font-size: 1.04em; letter-spacing: -.005em; }
+.rcv--onyx .rcv-org { color: #6b6257; font-weight: 400; font-style: italic; }
+.rcv--onyx .rcv-date { color: #8a8175; }
+.rcv--onyx .rcv-bullets li::before {
+  width: 1.1mm; height: 1.1mm; background: #8a6a3f; opacity: .85;
+  transform: rotate(45deg); border-radius: 0;
+}
+.rcv--onyx .rcv-summary { font-size: 1.08em; line-height: 1.6; color: #3c372f; }
+.rcv--onyx .rcv-tag {
+  background: #f8f3ea;
+  border-color: #e7ddcc;
+  color: #5c4a33;
+  border-radius: 0;
+}
+.rcv--onyx .rcv-degree { font-size: 1em; }
+.rcv--onyx .rcv-school { color: #6b6257; }
+.rcv--onyx .rcv-cert { font-size: .9em; }
+.rcv--onyx .rcv-cert::before { content: "—"; color: #8a6a3f; }
+
 /* ═══════════════════════ Print ═══════════════════════ */
 @media print {
   .rcv { width: 100%; min-height: 0; padding: 0; box-shadow: none; }
