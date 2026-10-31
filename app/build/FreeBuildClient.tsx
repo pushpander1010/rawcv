@@ -5,47 +5,30 @@ import { useSearchParams } from "next/navigation";
 import type { ParsedResume, ThemeId } from "@/types";
 import { useResume } from "@/context/ResumeContext";
 import { RESUME_THEME_IDS } from "@/lib/theme-renderer";
-import { polishResumeBullets } from "@/lib/bullet-coach";
 import { scoreResume } from "@/lib/resume-score";
 import { recommendedSectionOrder } from "@/lib/section-recommendation";
 import { normalizeSectionOrder } from "@/lib/section-order";
 import FreeResumeForm from "@/components/FreeResumeForm";
 import ResumePreview from "@/components/ResumePreview";
 import UndoButton from "@/components/UndoButton";
-import ThemePicker, { themeName } from "@/components/ThemePicker";
+import ThemePicker from "@/components/ThemePicker";
 import TypographyControls from "@/components/TypographyControls";
 import FreeDownloadButton from "@/components/FreeDownloadButton";
 import FreeATSChecker from "@/components/FreeATSChecker";
 import JobMatchPanel from "@/components/JobMatchPanel";
-import FreeKeywordAnalyzer from "@/components/FreeKeywordAnalyzer";
 
-type Panel = "theme" | "text" | "download" | null;
+type Panel = "design" | "download" | null;
+type DesignTab = "templates" | "type";
 type Tab = "preview" | "review";
-
-function completeness(resume: ParsedResume | null): number {
-  if (!resume) return 0;
-  let score = 0;
-  if (resume.contact.name?.trim()) score += 15;
-  if (resume.contact.email?.trim()) score += 15;
-  if ((resume.summary?.trim().length ?? 0) > 40) score += 15;
-  if (resume.experience.some((e) => e.title?.trim())) score += 20;
-  if (resume.experience.some((e) => e.bullets.filter(Boolean).length >= 2)) score += 10;
-  if (resume.education.some((e) => e.institution?.trim())) score += 10;
-  if (resume.skills.filter(Boolean).length >= 5) score += 10;
-  if ((resume.projects ?? []).some((p) => p.name?.trim())) score += 5;
-  return Math.min(100, score);
-}
 
 export default function FreeBuildClient() {
   const { state, setState, pushUndo, isHydrated } = useResume();
   const resume = state.parsed;
   const selectedTheme = state.selectedTheme;
   const [panel, setPanel] = useState<Panel>(null);
+  const [designTab, setDesignTab] = useState<DesignTab>("templates");
   const [tab, setTab] = useState<Tab>("preview");
   const [a4Preview, setA4Preview] = useState(true);
-  const [polishNote, setPolishNote] = useState<string | null>(null);
-
-  const strength = useMemo(() => completeness(resume), [resume]);
   const review = useMemo(() => scoreResume(resume), [resume]);
   const reviewScore = review.score;
 
@@ -85,24 +68,6 @@ export default function FreeBuildClient() {
   const togglePanel = (next: Exclude<Panel, null>) =>
     setPanel((prev) => (prev === next ? null : next));
 
-  const handlePolish = () => {
-    if (!resume?.experience?.length) return;
-    let changed = 0;
-    const experience = resume.experience.map((role) => {
-      const polished = polishResumeBullets(role.bullets);
-      changed += polished.changed;
-      return { ...role, bullets: polished.bullets };
-    });
-    if (!changed) {
-      setPolishNote("No safe wording fixes found");
-      return;
-    }
-    pushUndo();
-    setState((prev) => (prev.parsed ? { ...prev, parsed: { ...prev.parsed, experience } } : prev));
-    setPolishNote(`Polished ${changed} bullet${changed === 1 ? "" : "s"}`);
-    window.setTimeout(() => setPolishNote(null), 2500);
-  };
-
   if (!isHydrated) {
     return (
       <div className="flex items-center justify-center py-24">
@@ -133,7 +98,7 @@ export default function FreeBuildClient() {
             <div className="flex rounded-lg bg-slate-100 dark:bg-slate-800 p-0.5" role="tablist" aria-label="Preview mode">
               {([
                 { id: "preview", label: "Preview" },
-                { id: "review", label: `Review · ${reviewScore}` },
+                { id: "review", label: `Check · ${reviewScore}` },
               ] as const).map((t) => (
                 <button
                   key={t.id}
@@ -153,51 +118,31 @@ export default function FreeBuildClient() {
             </div>
 
             <div className="ml-auto flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => togglePanel("theme")}
-                aria-expanded={panel === "theme"}
-                className={`h-8 px-2.5 rounded-md border text-[12.5px] font-medium transition-colors ${
-                  panel === "theme"
-                    ? "border-slate-900 dark:border-white text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800"
-                    : "border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
-                }`}
-              >
-                {themeName(selectedTheme)}
-              </button>
-              <button
-                type="button"
-                onClick={handlePolish}
-                title="Remove weak framing, pronouns, and filler from every bullet"
-                className="h-8 px-2.5 rounded-md border border-slate-200 dark:border-slate-700 text-[12.5px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-              >
-                Polish
-              </button>
-              <button
-                type="button"
-                onClick={() => togglePanel("text")}
-                aria-expanded={panel === "text"}
-                className={`h-8 px-2.5 rounded-md border text-[12.5px] font-medium transition-colors ${
-                  panel === "text"
-                    ? "border-slate-900 dark:border-white text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800"
-                    : "border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
-                }`}
-              >
-                Text
-              </button>
               <a
                 href="#edit-resume"
-                className="lg:hidden h-8 px-2.5 rounded-md border border-slate-200 dark:border-slate-700 text-[12.5px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors inline-flex items-center"
+                className="lg:hidden h-8 px-2.5 rounded-md border border-slate-200 dark:border-slate-700 text-[12px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors inline-flex items-center"
               >
                 Edit
               </a>
               <button
                 type="button"
+                onClick={() => togglePanel("design")}
+                aria-expanded={panel === "design"}
+                className={`h-8 px-3 rounded-md border text-[12px] font-semibold transition-colors ${
+                  panel === "design"
+                    ? "border-slate-900 dark:border-white text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800"
+                    : "border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
+                }`}
+              >
+                Design
+              </button>
+              <button
+                type="button"
                 onClick={() => togglePanel("download")}
                 aria-expanded={panel === "download"}
-                className="h-8 px-3 rounded-md bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[12.5px] font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
+                className="h-8 px-3 rounded-md bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[12px] font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
               >
-                Export
+                Download
               </button>
             </div>
           </div>
@@ -205,14 +150,42 @@ export default function FreeBuildClient() {
           {/* Flyout panel */}
           {panel && (
             <div className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/40 p-3.5">
-              {panel === "theme" && (
-                <ThemePicker
-                  onSelect={(themeId: ThemeId) => {
-                    setState((prev) => ({ ...prev, selectedTheme: themeId }));
-                  }}
-                />
+              {panel === "design" && (
+                <div>
+                  <div className="flex gap-1 mb-3">
+                    {([
+                      { id: "templates", label: "Templates" },
+                      { id: "type", label: "Type & spacing" },
+                    ] as const).map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => setDesignTab(t.id)}
+                        className={`px-2.5 py-1 rounded-md text-[11.5px] font-semibold ${
+                          designTab === t.id
+                            ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
+                            : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                  {designTab === "templates" ? (
+                    <div className="max-h-[420px] overflow-y-auto pr-1">
+                      <ThemePicker
+                        onSelect={(themeId: ThemeId) => {
+                          setState((prev) => ({ ...prev, selectedTheme: themeId }));
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="max-w-sm">
+                      <TypographyControls />
+                    </div>
+                  )}
+                </div>
               )}
-              {panel === "text" && <TypographyControls />}
               {panel === "download" && (
                 <div className="max-w-sm">
                   <FreeDownloadButton
@@ -255,20 +228,8 @@ export default function FreeBuildClient() {
                   A4 pages
                 </label>
                 <span className="text-slate-300 dark:text-slate-700">·</span>
-                <span>{polishNote ?? "ATS-safe text · no watermark"}</span>
-                <span className="ml-auto flex items-center gap-2">
-                  {resume && <UndoButton />}
-                  <span className="inline-flex items-center gap-2">
-                    <span className="hidden sm:inline">Resume strength</span>
-                    <span className="relative h-1.5 w-24 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
-                      <span
-                        className="absolute inset-y-0 left-0 rounded-full bg-slate-900 dark:bg-white transition-all"
-                        style={{ width: `${strength}%` }}
-                      />
-                    </span>
-                    <span className="font-semibold text-slate-700 dark:text-slate-200 tabular-nums">{strength}%</span>
-                  </span>
-                </span>
+                <span>ATS-safe text</span>
+                {resume && <span className="ml-auto"><UndoButton /></span>}
               </div>
             </>
           ) : (
@@ -292,12 +253,6 @@ export default function FreeBuildClient() {
                   Big-tech resume score
                 </h3>
                 <FreeATSChecker resume={resume} />
-              </section>
-              <section className="pt-5 border-t border-slate-200 dark:border-slate-800">
-                <h3 className="text-[12px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3">
-                  Keywords
-                </h3>
-                <FreeKeywordAnalyzer resume={resume} />
               </section>
               <div className="rounded-lg bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 p-4">
                 <p className="text-[13px] font-semibold text-slate-900 dark:text-white">Want AI-level feedback?</p>

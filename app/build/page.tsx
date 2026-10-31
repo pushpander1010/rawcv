@@ -42,21 +42,21 @@ export default function BuildPage() {
 
       {/* Compact page header */}
       <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
-        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 py-7 sm:py-9">
-          <p className="text-[10.5px] font-semibold tracking-[0.18em] uppercase text-slate-400 dark:text-slate-500 mb-2">
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 py-4 sm:py-9">
+          <p className="hidden sm:block text-[10.5px] font-semibold tracking-[0.18em] uppercase text-slate-400 dark:text-slate-500 mb-2">
             Resume builder
           </p>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-2 sm:gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h1 className="text-[26px] sm:text-[32px] font-bold tracking-[-0.02em] text-slate-900 dark:text-white leading-[1.1]">
+              <h1 className="text-[21px] sm:text-[32px] font-bold tracking-[-0.02em] text-slate-900 dark:text-white leading-[1.1]">
                 Build a resume that gets read.
               </h1>
-              <p className="mt-2 text-[14px] leading-relaxed text-slate-500 dark:text-slate-400 max-w-xl">
+              <p className="hidden sm:block mt-2 text-[14px] leading-relaxed text-slate-500 dark:text-slate-400 max-w-xl">
                 Write on the left, watch the page on the right. Every design is single-pass ATS-safe
                 and exports as clean, selectable text.
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[12px] text-slate-500 dark:text-slate-400 sm:pb-1">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] sm:text-[12px] text-slate-500 dark:text-slate-400 sm:pb-1">
               <span className="inline-flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Free forever
               </span>

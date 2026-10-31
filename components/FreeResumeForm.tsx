@@ -37,45 +37,36 @@ function Section({
   title,
   hint,
   count,
-  defaultOpen,
   action,
   children,
+  active,
 }: {
   title: string;
   hint?: string;
   count?: number;
-  defaultOpen?: boolean;
   action?: React.ReactNode;
   children: React.ReactNode;
+  active: boolean;
 }) {
+  if (!active) return null;
   return (
-    <details
-      open={defaultOpen}
-      className="group rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden"
-    >
-      <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3.5 select-none [&::-webkit-details-marker]:hidden">
-        <span className="flex-1 min-w-0">
-          <span className="flex items-center gap-2">
-            <span className="text-[13.5px] font-semibold text-slate-900 dark:text-white">{title}</span>
+    <section className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+      <div className="flex items-start gap-3 px-4 py-3.5 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h2 className="text-[13.5px] font-semibold text-slate-900 dark:text-white">{title}</h2>
             {typeof count === "number" && count > 0 && (
               <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[10.5px] font-semibold text-slate-500 dark:text-slate-400 tabular-nums">
                 {count}
               </span>
             )}
-          </span>
-          {hint && <span className="mt-0.5 block text-[11.5px] text-slate-400 dark:text-slate-500">{hint}</span>}
-        </span>
-        {action && <span onClick={(e) => e.preventDefault()}>{action}</span>}
-        <svg
-          className="w-4 h-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180"
-          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
-          aria-hidden="true"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
-        </svg>
-      </summary>
-      <div className="border-t border-slate-100 dark:border-slate-800 p-4 space-y-3.5">{children}</div>
-    </details>
+          </div>
+          {hint && <p className="mt-0.5 text-[11.5px] text-slate-400 dark:text-slate-500">{hint}</p>}
+        </div>
+        {action && <div className="shrink-0">{action}</div>}
+      </div>
+      <div className="p-4 space-y-3.5">{children}</div>
+    </section>
   );
 }
 
@@ -106,6 +97,19 @@ function RemoveButton({ onClick, label: text = "Remove" }: { onClick: () => void
   );
 }
 
+type EditorTab = "details" | "summary" | "experience" | "education" | "skills" | "projects" | "awards" | "certifications";
+
+const EDITOR_TABS: Array<{ key: EditorTab; label: string }> = [
+  { key: "details", label: "Details" },
+  { key: "summary", label: "Summary" },
+  { key: "experience", label: "Experience" },
+  { key: "education", label: "Education" },
+  { key: "skills", label: "Skills" },
+  { key: "projects", label: "Projects" },
+  { key: "awards", label: "Awards" },
+  { key: "certifications", label: "Certificates" },
+];
+
 export default function FreeResumeForm({ onResumeChange, initialResume }: Props) {
   const [resume, setResume] = useState<ParsedResume>(() => {
     if (!initialResume) return emptyResume();
@@ -115,6 +119,8 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [activeSection, setActiveSection] = useState<EditorTab>("details");
+  const [showOrder, setShowOrder] = useState(false);
 
   // Skip the initial mount notification so we don't clobber a resume already
   // loaded in the global context (AI chat, upload, undo) with an empty draft.
@@ -211,11 +217,108 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
   const usingRecommended =
     !resume.sectionOrderCustomized &&
     JSON.stringify(sectionOrder) === JSON.stringify(recommended);
+  const activeIndex = EDITOR_TABS.findIndex((t) => t.key === activeSection);
+  const prevTab = EDITOR_TABS[activeIndex - 1];
+  const nextTab = EDITOR_TABS[activeIndex + 1];
+
+  const countFor = (key: EditorTab): number => {
+    if (key === "details") {
+      return [resume.contact.name, resume.contact.email, resume.contact.phone, resume.contact.location, resume.contact.linkedin, resume.contact.github, resume.contact.website].filter((v) => v?.trim()).length;
+    }
+    if (key === "summary") return resume.summary?.trim() ? 1 : 0;
+    if (key === "experience") return resume.experience.length;
+    if (key === "education") return resume.education.length;
+    if (key === "skills") return resume.skills.length;
+    if (key === "projects") return (resume.projects || []).length;
+    if (key === "awards") return (resume.awards || []).length;
+    return (resume.certifications || []).length;
+  };
 
   return (
-    <form className="space-y-2.5" onSubmit={(e) => e.preventDefault()}>
-      {/* Contact — always open */}
-      <Section title="Your details" hint="Name, email, and how employers reach you" defaultOpen>
+    <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
+      {/* Section navigation — one section at a time */}
+      <div className="space-y-2">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap gap-1 flex-1 min-w-0">
+              {EDITOR_TABS.map((tab) => {
+                const count = countFor(tab.key);
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    onClick={() => { setActiveSection(tab.key); setShowOrder(false); }}
+                    aria-current={activeSection === tab.key ? "step" : undefined}
+                    className={`shrink-0 rounded-full px-2.5 py-1.5 text-[11.5px] font-semibold transition-colors ${
+                      activeSection === tab.key
+                        ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
+                        : "border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                    }`}
+                  >
+                    {tab.label}
+                    {count > 0 && tab.key !== "details" && (
+                      <span className={`ml-1 tabular-nums ${activeSection === tab.key ? "text-white/60 dark:text-slate-900/50" : "text-slate-400"}`}>{count}</span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          <button
+            type="button"
+            onClick={() => setShowOrder((v) => !v)}
+            aria-expanded={showOrder}
+            className={`shrink-0 rounded-full border px-2.5 py-1.5 text-[11.5px] font-semibold transition-colors ${
+              showOrder
+                ? "border-slate-900 dark:border-white text-slate-900 dark:text-white"
+                : "border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+            }`}
+          >
+            Reorder
+          </button>
+        </div>
+
+        {showOrder && (
+          <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 space-y-1">
+            <div className="flex items-center justify-between gap-2 px-1 pb-1.5">
+              <span className="text-[10.5px] font-semibold uppercase tracking-[0.12em] text-slate-400 dark:text-slate-500">
+                {usingRecommended ? `Auto · ${stageLabel(stage)}` : "Custom order"}
+              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setResume((prev) => ({
+                    ...prev,
+                    sectionOrder: recommendedSectionOrder(prev),
+                    sectionOrderCustomized: false,
+                  }))}
+                  className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 underline underline-offset-2"
+                >
+                  Recommended
+                </button>
+                <button type="button" onClick={() => setShowOrder(false)} className="text-[11px] font-semibold text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
+                  Done
+                </button>
+              </div>
+            </div>
+            {sectionOrder.map((key, idx) => (
+              <div key={key} className="flex items-center justify-between gap-2 px-1 py-0.5">
+                <span className="text-[12px] font-medium text-slate-700 dark:text-slate-200">{SECTION_LABELS[key]}</span>
+                <div className="flex gap-1">
+                  <button type="button" onClick={() => moveSection(idx, "up")} disabled={idx === 0} aria-label={`Move ${SECTION_LABELS[key]} up`} className="h-6 w-6 rounded border border-slate-200 dark:border-slate-700 text-[11px] text-slate-500 disabled:opacity-30">↑</button>
+                  <button type="button" onClick={() => moveSection(idx, "down")} disabled={idx === sectionOrder.length - 1} aria-label={`Move ${SECTION_LABELS[key]} down`} className="h-6 w-6 rounded border border-slate-200 dark:border-slate-700 text-[11px] text-slate-500 disabled:opacity-30">↓</button>
+                </div>
+              </div>
+            ))}
+            <div className="flex justify-end border-t border-slate-100 dark:border-slate-800 pt-2 mt-1">
+              <button type="button" onClick={handleClear} className="text-[11px] font-medium text-slate-400 hover:text-red-600 dark:hover:text-red-400">
+                Clear all data
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Contact — active section only */}
+      <Section title="Your details" hint="Name, email, and how employers reach you" active={activeSection === "details"}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className={label}>Full name *</label>
@@ -296,7 +399,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       <Section
         title="About you"
         hint="Two or three lines on what you do best"
-        defaultOpen
+        active={activeSection === "summary"}
         action={
           <FieldAIButton
             section="summary"
@@ -323,8 +426,8 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       <Section
         title="Work history"
         count={resume.experience.length}
+        active={activeSection === "experience"}
         hint="Roles, dates, and results — newest first"
-        defaultOpen={resume.experience.length > 0}
         action={<AddButton onClick={() => setResume((prev) => ({
           ...prev,
           experience: [...prev.experience, { company: "", title: "", startDate: "", endDate: "Present", bullets: [] }],
@@ -433,8 +536,8 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       <Section
         title="Education"
         count={resume.education.length}
+        active={activeSection === "education"}
         hint="Degree, school, and graduation year"
-        defaultOpen={resume.education.length > 0}
         action={<AddButton onClick={() => setResume((prev) => ({
           ...prev,
           education: [...prev.education, { institution: "", degree: "", field: "", graduationYear: "" }],
@@ -527,6 +630,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       <Section
         title="Skills"
         count={resume.skills.length}
+        active={activeSection === "skills"}
         hint="Tools, languages, and strengths — comma separated"
         action={
           <FieldAIButton
@@ -563,8 +667,8 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       <Section
         title="Projects"
         count={(resume.projects || []).length}
+        active={activeSection === "projects"}
         hint="Optional — side projects that show your craft"
-        defaultOpen={(resume.projects || []).length > 0}
         action={<AddButton onClick={() => setResume((prev) => ({
           ...prev,
           projects: [...(prev.projects || []), { name: "", description: "", technologies: [] }],
@@ -655,8 +759,8 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       <Section
         title="Awards & leadership"
         count={(resume.awards || []).length}
+        active={activeSection === "awards"}
         hint="Honors, scholarships, hackathons, leadership"
-        defaultOpen={(resume.awards || []).length > 0}
         action={<AddButton onClick={() => setResume((prev) => ({
           ...prev,
           awards: [...(prev.awards || []), ""],
@@ -692,8 +796,8 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
       <Section
         title="Certifications"
         count={(resume.certifications || []).length}
+        active={activeSection === "certifications"}
         hint="Licenses, credentials, and courses"
-        defaultOpen={(resume.certifications || []).length > 0}
         action={<AddButton onClick={() => setResume((prev) => ({
           ...prev,
           certifications: [...(prev.certifications || []), ""],
@@ -723,73 +827,25 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
         ))}
       </Section>
 
-      {/* Section order */}
-      <details className="group rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
-        <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3 select-none [&::-webkit-details-marker]:hidden">
-          <span className="flex-1">
-            <span className="text-[13px] font-semibold text-slate-900 dark:text-white">Section order</span>
-            <span className="mt-0.5 block text-[11.5px] text-slate-400 dark:text-slate-500">
-              {usingRecommended
-                ? `Auto-arranged for ${stageLabel(stage)}. Reorder any time.`
-                : "Custom order. Move sections up or down."}
-            </span>
-          </span>
-          <svg className="w-4 h-4 text-slate-400 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
-          </svg>
-        </summary>
-        <div className="border-t border-slate-100 dark:border-slate-800 p-3 space-y-1">
-          <div className="flex items-center justify-between gap-2 px-1.5 pb-2">
-            <span className="text-[10.5px] font-semibold uppercase tracking-[0.12em] text-slate-400 dark:text-slate-500">
-              {stageLabel(stage)} layout
-            </span>
-            <button
-              type="button"
-              onClick={() => setResume((prev) => ({
-                ...prev,
-                sectionOrder: recommendedSectionOrder(prev),
-                sectionOrderCustomized: false,
-              }))}
-              className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 underline underline-offset-2 hover:text-slate-900 dark:hover:text-white"
-            >
-              Use recommended
-            </button>
-          </div>
-          {sectionOrder.map((key, idx) => (
-            <div key={key} className="flex items-center justify-between gap-2 px-1.5 py-1">
-              <span className="text-[12.5px] font-medium text-slate-700 dark:text-slate-200">{SECTION_LABELS[key]}</span>
-              <div className="flex gap-1">
-                <button
-                  type="button"
-                  onClick={() => moveSection(idx, "up")}
-                  disabled={idx === 0}
-                  aria-label={`Move ${SECTION_LABELS[key]} up`}
-                  className="h-7 w-7 rounded-md border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed text-[12px]"
-                >
-                  ↑
-                </button>
-                <button
-                  type="button"
-                  onClick={() => moveSection(idx, "down")}
-                  disabled={idx === sectionOrder.length - 1}
-                  aria-label={`Move ${SECTION_LABELS[key]} down`}
-                  className="h-7 w-7 rounded-md border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed text-[12px]"
-                >
-                  ↓
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </details>
-
-      <div className="flex justify-end pt-2">
+      <div className="flex items-center justify-between gap-3 pt-1">
         <button
           type="button"
-          onClick={handleClear}
-          className="text-[11.5px] font-medium text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+          disabled={!prevTab}
+          onClick={() => prevTab && setActiveSection(prevTab.key)}
+          className="rounded-md border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 dark:text-slate-300 disabled:opacity-30"
         >
-          Clear all data
+          ← {prevTab?.label ?? "Back"}
+        </button>
+        <span className="text-[10.5px] tabular-nums text-slate-400 dark:text-slate-500">
+          {activeIndex + 1} / {EDITOR_TABS.length}
+        </span>
+        <button
+          type="button"
+          disabled={!nextTab}
+          onClick={() => nextTab && setActiveSection(nextTab.key)}
+          className="rounded-md bg-slate-900 dark:bg-white px-3 py-1.5 text-[11.5px] font-semibold text-white dark:text-slate-900 disabled:opacity-30"
+        >
+          {nextTab ? `${nextTab.label} →` : "Done"}
         </button>
       </div>
     </form>
