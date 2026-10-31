@@ -3,6 +3,9 @@ import Link from "next/link";
 import Script from "next/script";
 import Icon, { type IconName } from "@/components/Icon";
 import HowToSchema from "@/components/HowToSchema";
+import { renderThemeBody } from "@/lib/theme-renderer";
+import { RESUME_CSS } from "@/lib/resume-styles";
+import type { ParsedResume } from "@/types";
 
 export const metadata: Metadata = {
   title: "rawcv — Free AI Resume Builder & ATS Score Checker",
@@ -12,28 +15,156 @@ export const metadata: Metadata = {
 };
 
 const features: { icon: IconName; title: string; desc: string }[] = [
-  { icon: "score", title: "ATS Score Analysis", desc: "Get a score out of 100 with specific fixes to pass Applicant Tracking Systems." },
-  { icon: "target", title: "Job Match", desc: "Paste any job description and see exactly which keywords and skills are missing." },
-  { icon: "sparkles", title: "AI Suggestions", desc: "Get targeted improvements for action verbs, quantified achievements, and completeness." },
-  { icon: "trend", title: "Bullet Enhancement", desc: "Strengthen weak bullet points with powerful, results-focused language." },
-  { icon: "chat", title: "AI Chat Builder", desc: "Build or customize your resume conversationally — just tell the AI what you want." },
-  { icon: "document", title: "Cover Letters", desc: "Generate professional cover letters tailored to your resume and job description." },
-  { icon: "layers", title: "14 Themes", desc: "Choose from professionally designed themes with live preview and instant PDF download." },
-  { icon: "globe", title: "International Formats", desc: "EU, Canada, US, and India-specific resume formats with region-appropriate sections." },
+  { icon: "score", title: "ATS score", desc: "100+ rule-based checks, a score out of 100, and the exact fixes that matter." },
+  { icon: "target", title: "Job match", desc: "Paste a job description and see which keywords and skills are missing." },
+  { icon: "sparkles", title: "AI suggestions", desc: "Stronger action verbs, quantified results, and tighter section structure." },
+  { icon: "trend", title: "Bullet rewrite", desc: "Turn weak duties into results-focused achievements in one click." },
+  { icon: "layers", title: "17 themes", desc: "MAANG, editorial, Swiss, classic, sidebars, and region-specific formats." },
+  { icon: "globe", title: "International", desc: "EU, Canada, US, and India formats with the right sections and conventions." },
 ];
 
 const faqs = [
-  { q: "Is rawcv really free?", a: "Yes — 100% free. All features including ATS scoring, JD matching, AI suggestions, cover letter builder, and PDF download are available without any account or payment." },
+  { q: "Is rawcv really free?", a: "Yes — 100% free. ATS scoring, JD matching, AI suggestions, cover letters, and PDF downloads are all available without an account or payment." },
   { q: "What file formats are supported?", a: "rawcv accepts PDF, DOCX, and TXT files up to 5 MB." },
   { q: "How does ATS scoring work?", a: "We run 100+ rule-based checks (missing sections, keyword density, date formatting) combined with AI analysis to give you a score out of 100 with specific issues to fix." },
-  { q: "Will my resume data be stored?", a: "No. Resume data is held in your browser session only. We do not permanently store your resume content on our servers." },
-  { q: "Can I use rawcv on mobile?", a: "Yes — rawcv is fully responsive. The chat, analysis, and download tools all work on mobile browsers." },
-  { q: "Do I need to create an account?", a: "No — just upload your resume and start analyzing. No sign-up, no credit card, no strings attached." },
+  { q: "Will my resume data be stored?", a: "No. Resume data stays in your browser session. We do not permanently store resume content on our servers." },
+  { q: "Can I use rawcv on mobile?", a: "Yes — the builder, chat, analysis, and downloads all work on mobile browsers." },
+  { q: "Do I need to create an account?", a: "No. Open the builder or upload a resume and start — no sign-up, no credit card." },
+];
+
+const designerSample: ParsedResume = {
+  contact: {
+    name: "Maya Chen",
+    email: "maya@mayachen.design",
+    phone: "+1 (415) 555-0198",
+    location: "San Francisco, CA",
+    linkedin: "linkedin.com/in/mayachen",
+    website: "mayachen.design",
+  },
+  summary:
+    "Product designer with 7 years shaping consumer and fintech products. Built design systems used by 40+ engineers, led research that lifted activation 24%, and shipped work featured in Fast Company.",
+  experience: [
+    {
+      company: "Stripe",
+      title: "Staff Product Designer",
+      startDate: "2022-02",
+      endDate: "Present",
+      bullets: [
+        "Redesigned onboarding for 1.2M merchants, lifting completed setup by 24% in two quarters.",
+        "Built the design system foundations now used by 40+ engineers across six product teams.",
+        "Ran 60+ research sessions and turned findings into a quarterly roadmap adopted by leadership.",
+      ],
+    },
+    {
+      company: "Airbnb",
+      title: "Senior Product Designer",
+      startDate: "2018-06",
+      endDate: "2022-01",
+      bullets: [
+        "Shipped a host analytics suite that increased repeat listings by 13%.",
+        "Partnered with accessibility to bring core flows to WCAG 2.1 AA.",
+      ],
+    },
+  ],
+  education: [{ institution: "Rhode Island School of Design", degree: "BFA", field: "Graphic Design", graduationYear: "2017" }],
+  skills: ["Product strategy", "Interaction design", "Design systems", "Figma", "Prototyping", "User research", "Accessibility"],
+  certifications: [],
+  projects: [{ name: "Field Notes", description: "A free interview-notes template used by 12,000 designers.", technologies: ["Figma", "Notion"] }],
+  sectionOrder: ["summary", "experience", "projects", "education", "skills", "certifications"],
+};
+
+const engineerSample: ParsedResume = {
+  contact: {
+    name: "Aarav Mehta",
+    email: "aarav.mehta@gmail.com",
+    phone: "+91 98765 43210",
+    location: "Bengaluru, India",
+    linkedin: "linkedin.com/in/aaravmehta",
+    website: "aaravmehta.dev",
+  },
+  summary:
+    "Senior frontend engineer with 8 years building high-traffic consumer products. Led platform migrations for 4M+ users, cut load times 62%, and mentored teams of six.",
+  experience: [
+    {
+      company: "Razorpay",
+      title: "Senior Frontend Engineer",
+      startDate: "2021-04",
+      endDate: "Present",
+      bullets: [
+        "Led a six-person team rebuilding the merchant dashboard in Next.js, cutting p95 load time from 4.8s to 1.8s.",
+        "Designed a shared component library adopted by nine product squads, reducing UI build time 40%.",
+        "Introduced performance budgets and CI checks, preventing 30+ regressions per quarter.",
+      ],
+    },
+    {
+      company: "Swiggy",
+      title: "Frontend Engineer",
+      startDate: "2018-06",
+      endDate: "2021-03",
+      bullets: [
+        "Rewrote checkout and lifted conversion 12% across 2M weekly orders.",
+        "Built A/B testing tooling used in 140 experiments, tripling experiment velocity.",
+      ],
+    },
+  ],
+  education: [{ institution: "BITS Pilani", degree: "B.E.", field: "Computer Science", graduationYear: "2018" }],
+  skills: ["React", "TypeScript", "Next.js", "Node.js", "GraphQL", "PostgreSQL", "AWS", "Design systems", "Performance"],
+  certifications: ["AWS Certified Solutions Architect – Associate"],
+  projects: [{ name: "Atlas", description: "An accessible 40-component React library with 2.1k GitHub stars.", technologies: ["React", "TypeScript", "Storybook"] }],
+  sectionOrder: ["summary", "experience", "projects", "education", "skills", "certifications"],
+};
+
+const managerSample: ParsedResume = {
+  contact: {
+    name: "Sofia Rossi",
+    email: "sofia.rossi@pm.me",
+    phone: "+44 7700 900123",
+    location: "London, UK",
+    linkedin: "linkedin.com/in/sofiarossi",
+    website: "sofiarossi.co",
+  },
+  summary:
+    "Product manager with 9 years taking B2B platforms from zero to scale. Led a payments product to £18M ARR, built a 14-person org, and shipped research-led roadmaps across three markets.",
+  experience: [
+    {
+      company: "Monzo",
+      title: "Director of Product",
+      startDate: "2021-09",
+      endDate: "Present",
+      bullets: [
+        "Grew business banking from £2M to £18M ARR in 30 months with a 14-person product org.",
+        "Launched invoicing and VAT tools adopted by 38% of eligible business customers.",
+        "Introduced discovery and pricing experiments that lifted trial-to-paid conversion 19%.",
+      ],
+    },
+    {
+      company: "Revolut",
+      title: "Senior Product Manager",
+      startDate: "2017-03",
+      endDate: "2021-08",
+      bullets: [
+        "Led the cards platform across three markets, shipping eight releases per quarter.",
+        "Built the first pricing model for premium tiers, adding £4.2M annual revenue.",
+      ],
+    },
+  ],
+  education: [{ institution: "London School of Economics", degree: "MSc", field: "Management", graduationYear: "2015" }],
+  skills: ["Product strategy", "Pricing", "B2B SaaS", "Discovery", "Analytics", "Team leadership", "Fintech", "Roadmapping"],
+  certifications: [],
+  projects: [],
+  sectionOrder: ["summary", "experience", "education", "skills", "projects", "certifications"],
+};
+
+const showcase = [
+  { theme: "editorial" as const, label: "Editorial", sample: designerSample },
+  { theme: "atlas" as const, label: "Atlas", sample: engineerSample },
+  { theme: "maang" as const, label: "MAANG", sample: managerSample },
 ];
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-white dark:bg-slate-950">
+      <style dangerouslySetInnerHTML={{ __html: RESUME_CSS }} />
       <Script
         id="json-ld"
         type="application/ld+json"
@@ -61,203 +192,197 @@ export default function LandingPage() {
           }),
         }}
       />
-<HowToSchema name="How to use rawcv" description="Build, analyze, and optimize your resume in four steps." steps={[{ name: "Upload your resume", text: "Upload your resume as a PDF, DOCX, or TXT file — no signup required." }, { name: "Get your ATS score", text: "Get an instant ATS score out of 100 with specific fixes to pass applicant tracking systems." }, { name: "Match a job description", text: "Paste any job description to see exactly which keywords and skills are missing." }, { name: "Download a polished PDF", text: "Apply AI suggestions, choose a theme, and download a polished ATS-safe PDF." }]} />
-      {/* ═══════════════ HERO ═══════════════ */}
-      <section className="pt-16 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/30 border border-blue-100 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-            <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">100% Free — No Signup Required</span>
+      <HowToSchema
+        name="How to use rawcv"
+        description="Build, analyze, and optimize your resume in four steps."
+        steps={[
+          { name: "Upload your resume", text: "Upload your resume as a PDF, DOCX, or TXT file — no signup required." },
+          { name: "Get your ATS score", text: "Get an instant ATS score out of 100 with specific fixes to pass applicant tracking systems." },
+          { name: "Match a job description", text: "Paste any job description to see exactly which keywords and skills are missing." },
+          { name: "Download a polished PDF", text: "Apply AI suggestions, choose a theme, and download a polished ATS-safe PDF." },
+        ]}
+      />
+
+      {/* ═══════════ HERO ═══════════ */}
+      <section className="relative overflow-hidden px-4 sm:px-6 pt-14 sm:pt-20 pb-10 sm:pb-14">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_100%_at_50%_0%,rgba(37,99,235,0.08),transparent_70%)] dark:bg-[radial-gradient(60%_100%_at_50%_0%,rgba(59,130,246,0.12),transparent_70%)]" />
+        <div className="relative max-w-3xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 px-3 py-1 mb-6">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span className="text-[11.5px] font-semibold text-slate-600 dark:text-slate-300">
+              Free forever · no account · no watermark
+            </span>
           </div>
 
-          <h1 className="text-[32px] sm:text-[48px] lg:text-[52px] font-extrabold tracking-tight leading-[1.05] text-slate-900 dark:text-white mb-4">
-            Build a resume that
+          <h1 className="text-[36px] sm:text-[54px] lg:text-[62px] font-bold tracking-[-0.035em] leading-[0.98] text-slate-900 dark:text-white">
+            A resume that
             <br />
-            <span className="text-blue-600">actually gets interviews</span>
+            <span className="font-serif italic font-normal text-blue-600">earns the interview.</span>
           </h1>
 
-          <p className="text-[16px] sm:text-[18px] text-slate-500 dark:text-slate-300 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Upload your CV, get an instant ATS score, match it to any job description,
-            enhance it with AI, and download a polished PDF — all in minutes.
+          <p className="mt-5 text-[15px] sm:text-[17px] text-slate-500 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
+            Build a typeset, ATS-safe resume in minutes — then score it, match it to a job,
+            and rewrite weak bullets with AI. All free.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
-            <Link
-              href="/analyze"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-[15px] font-semibold transition-colors"
-            >
-              Upload & Analyze Free
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </Link>
+          <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-2.5">
             <Link
               href="/build"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-6 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[14px] font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
             >
-              Build from Scratch
+              Build my resume
+              <span aria-hidden="true">→</span>
+            </Link>
+            <Link
+              href="/analyze"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-6 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-[14px] font-semibold hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors"
+            >
+              Check my ATS score
             </Link>
           </div>
 
-          {/* Stats */}
-          <div className="flex items-center justify-center gap-8 sm:gap-12 text-center">
-            {[
-              { value: "100+", label: "ATS Checks" },
-              { value: "14", label: "Themes" },
-              { value: "0$", label: "Forever Free" },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <div className="text-[22px] sm:text-[26px] font-bold text-slate-900 dark:text-white leading-none">{stat.value}</div>
-                <div className="text-[12.5px] text-slate-500 dark:text-slate-300 mt-1">{stat.label}</div>
-              </div>
-            ))}
+          <div className="mt-7 flex items-center justify-center gap-6 sm:gap-10 text-[11.5px] text-slate-400 dark:text-slate-500">
+            <span><strong className="text-slate-700 dark:text-slate-200 font-semibold">100+</strong> ATS checks</span>
+            <span className="h-3 w-px bg-slate-200 dark:bg-slate-800" />
+            <span><strong className="text-slate-700 dark:text-slate-200 font-semibold">17</strong> themes</span>
+            <span className="h-3 w-px bg-slate-200 dark:bg-slate-800" />
+            <span><strong className="text-slate-700 dark:text-slate-200 font-semibold">$0</strong> forever</span>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ HERO IMAGE ═══════════════ */}
-      <section className="px-4 sm:px-6 pb-12 sm:pb-16">
-        <div className="max-w-5xl mx-auto">
-          <img
-            src="/hero_illustration.jpg"
-            alt="AI resume builder and ATS analyzer illustration"
-            className="w-full rounded-2xl border border-slate-200 dark:border-slate-800"
-            width={1400}
-            height={763}
-          />
-        </div>
-      </section>
+      {/* ═══════════ REAL RESUME SHOWCASE ═══════════ */}
+      <section className="pb-16 sm:pb-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex items-end justify-between gap-4 mb-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+              Actual output · three of seventeen themes
+            </p>
+            <Link href="/resume-templates" className="text-[12px] font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400">
+              See all themes →
+            </Link>
+          </div>
 
-      {/* ═══════════════ APP MOCKUP ═══════════════ */}
-      <section className="px-4 sm:px-6 pb-16 sm:pb-20">
-        <div className="max-w-5xl mx-auto">
-          <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-            <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-              <span className="w-3 h-3 rounded-full bg-red-400" />
-              <span className="w-3 h-3 rounded-full bg-yellow-400" />
-              <span className="w-3 h-3 rounded-full bg-green-400" />
-              <div className="flex-1 mx-4 h-7 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center px-4">
-                <span className="text-xs text-slate-500 dark:text-slate-300">rawcv.com/analyze</span>
-              </div>
-            </div>
-            <div className="flex h-64 sm:h-80 overflow-hidden">
-              <div className="w-56 sm:w-72 border-r border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-3 bg-white dark:bg-slate-900">
-                <div className="h-7 w-28 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-100" />
-                <div className="h-3.5 w-full rounded bg-slate-100" />
-                <div className="h-3.5 w-5/6 rounded bg-slate-100" />
-                <div className="h-3.5 w-4/6 rounded bg-slate-100" />
-                <div className="mt-2 h-10 w-full rounded-full bg-blue-600 opacity-90" />
-                <div className="mt-auto p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
-                  <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300">ATS Score: 92/100</div>
-                </div>
-              </div>
-              <div className="flex-1 p-5 bg-slate-50 dark:bg-slate-950">
-                <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 h-full">
-                  <div className="border-b-2 border-slate-900 pb-3 mb-3">
-                    <div className="h-4 w-36 rounded bg-slate-900 mb-2" />
-                    <div className="flex gap-3">
-                      <div className="h-3 w-24 rounded bg-slate-300" />
-                      <div className="h-3 w-20 rounded bg-slate-300" />
+          <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div className="flex min-w-max justify-center gap-4 sm:gap-6">
+              {showcase.map(({ theme, label, sample }, i) => (
+                <figure key={theme} className="shrink-0">
+                  <div className="rounded-lg bg-white ring-1 ring-slate-900/10 shadow-[0_18px_40px_-18px_rgba(15,23,42,0.35)] overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+                    <div className="h-[392px] w-[278px] overflow-hidden">
+                      <div
+                        style={{ width: 794, height: 1123, transform: "scale(0.35)", transformOrigin: "top left" }}
+                        dangerouslySetInnerHTML={{ __html: renderThemeBody(sample, theme) }}
+                      />
                     </div>
                   </div>
-                  <div className="mb-3">
-                    <div className="h-3 w-20 rounded bg-slate-400 mb-2" />
-                    <div className="h-3 w-full rounded bg-slate-200 mb-1.5" />
-                    <div className="h-3 w-5/6 rounded bg-slate-200" />
-                  </div>
-                  <div className="flex gap-2 flex-wrap">
-                    {["React", "TypeScript", "Node.js", "Python"].map((s) => (
-                      <span key={s} className="px-2.5 py-1 rounded-full text-xs bg-blue-50 dark:bg-blue-950/30 border border-blue-100 text-blue-700 dark:text-blue-300 font-medium">{s}</span>
-                    ))}
-                  </div>
+                  <figcaption className="mt-2.5 flex items-center justify-between text-[11.5px]">
+                    <span className="font-semibold text-slate-700 dark:text-slate-200">{label}</span>
+                    <span className="text-slate-400 dark:text-slate-500">{i === 0 ? "Warm serif" : i === 1 ? "Swiss grid" : "Dense · ATS"}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+          <p className="text-center text-[12px] text-slate-400 dark:text-slate-500 mt-1">
+            Typography, spacing, and page breaks are tuned to fit one clean A4 page.
+          </p>
+        </div>
+      </section>
+
+      {/* ═══════════ FEATURES ═══════════ */}
+      <section className="border-y border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-16">
+          <div className="max-w-xl mb-9">
+            <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-slate-900 dark:text-white">
+              Everything you need to get hired.
+            </h2>
+            <p className="mt-2 text-[14px] text-slate-500 dark:text-slate-400">
+              Professional-grade tools, no paywall in the middle of the flow.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-7">
+            {features.map((f) => (
+              <div key={f.title} className="flex gap-3.5">
+                <div className="w-9 h-9 shrink-0 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 flex items-center justify-center">
+                  <Icon name={f.icon} size={16} />
+                </div>
+                <div>
+                  <h3 className="text-[13.5px] font-semibold text-slate-900 dark:text-white">{f.title}</h3>
+                  <p className="mt-1 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{f.desc}</p>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ HOW IT WORKS ═══════════ */}
+      <section className="px-4 sm:px-6 py-14 sm:py-20">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <div className="lg:col-span-4">
+              <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+                Three steps, one clean page.
+              </h2>
+              <p className="mt-3 text-[14px] leading-relaxed text-slate-500 dark:text-slate-400">
+                No onboarding wizard, no bloated dashboard. Write, preview, export.
+              </p>
+              <Link href="/build" className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400">
+                Open the builder <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {[
+                { step: "01", title: "Write or import", desc: "Start from a blank page or upload a PDF/DOCX at /analyze and edit the parsed sections." },
+                { step: "02", title: "Tune the page", desc: "Switch themes, adjust type size and spacing, and watch a true A4 page update live." },
+                { step: "03", title: "Export anywhere", desc: "Download a selectable-text PDF, an editable Word file, or plain text for job portals." },
+              ].map((item) => (
+                <div key={item.step} className="border-t-2 border-slate-900 dark:border-white pt-4">
+                  <span className="text-[11px] font-bold tracking-[0.16em] text-slate-400 dark:text-slate-500">{item.step}</span>
+                  <h3 className="mt-2 text-[14.5px] font-semibold text-slate-900 dark:text-white">{item.title}</h3>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ FEATURES ═══════════════ */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 dark:bg-slate-900/40 border-y border-slate-200 dark:border-slate-800" id="features">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-slate-900 dark:text-white">Everything you need to get hired</h2>
-            <p className="text-[14.5px] text-slate-500 dark:text-slate-300 max-w-xl mx-auto mt-2">
-              Professional-grade resume tools powered by AI — completely free.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {features.map((f) => (
-              <div key={f.title} className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 text-blue-600 flex items-center justify-center mb-4">
-                  <Icon name={f.icon} size={18} />
-                </div>
-                <h3 className="font-semibold text-[14px] mb-1 text-slate-900 dark:text-white">{f.title}</h3>
-                <p className="text-[13px] text-slate-500 dark:text-slate-300 leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ HOW IT WORKS ═══════════════ */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-white dark:bg-slate-950">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-[24px] sm:text-[30px] font-bold tracking-tight text-center text-slate-900 dark:text-white">Three steps to a better resume</h2>
-          <p className="text-center text-[14.5px] text-slate-500 dark:text-slate-300 mt-2 mb-10">From upload to download in under 5 minutes.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { step: "01", title: "Upload", desc: "Drag and drop your PDF, DOCX, or TXT file. We parse it in seconds." },
-              { step: "02", title: "Analyze", desc: "Run ATS scoring, paste a job description, and get AI-powered suggestions." },
-              { step: "03", title: "Download", desc: "Pick a theme, apply changes, and download a polished ATS-safe PDF." },
-            ].map((item) => (
-              <div key={item.step} className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
-                <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold text-sm mb-4">
-                  {item.step}
-                </div>
-                <h3 className="font-semibold text-[15px] mb-1.5 text-slate-900 dark:text-white">{item.title}</h3>
-                <p className="text-[13.5px] text-slate-500 dark:text-slate-300 leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10">
-            <img
-              src="/success_illustration.jpg"
-              alt="Job offer and hiring success illustration"
-              className="w-full max-w-3xl mx-auto rounded-2xl border border-slate-200 dark:border-slate-700"
-              width={1280}
-              height={698}
-            />
+      {/* ═══════════ CTA ═══════════ */}
+      <section className="px-4 sm:px-6 pb-14 sm:pb-20">
+        <div className="max-w-5xl mx-auto rounded-2xl bg-slate-900 dark:bg-slate-900 overflow-hidden">
+          <div className="px-6 sm:px-12 py-10 sm:py-14 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div>
+              <h2 className="text-[24px] sm:text-[30px] font-bold text-white leading-tight tracking-tight">
+                Ready to land more interviews?
+              </h2>
+              <p className="mt-2 text-[13.5px] text-slate-400 max-w-md">
+                Upload a resume for instant AI analysis, or build a new one from scratch. Free, no account.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+              <Link href="/build" className="inline-flex items-center justify-center gap-1.5 h-10 px-5 rounded-md bg-white text-slate-900 text-[13px] font-semibold hover:bg-slate-100 transition-colors">
+                Build resume <span aria-hidden="true">→</span>
+              </Link>
+              <Link href="/analyze" className="inline-flex items-center justify-center h-10 px-5 rounded-md border border-white/20 text-white text-[13px] font-semibold hover:bg-white/10 transition-colors">
+                Analyze a resume
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ CTA ═══════════════ */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="p-8 sm:p-12 rounded-3xl bg-slate-900">
-            <h2 className="text-[24px] sm:text-[30px] font-bold text-white leading-tight">Ready to land more interviews?</h2>
-            <p className="text-[14.5px] text-slate-300 mt-2 mb-7 max-w-md mx-auto">Upload your resume and get instant AI-powered analysis — completely free, no account needed.</p>
-            <Link href="/analyze" className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold text-[14px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-              Get Started Free
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ FAQ ═══════════════ */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 dark:bg-slate-900/40 border-t border-slate-200 dark:border-slate-800" id="faq">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-[22px] sm:text-[26px] font-bold tracking-tight text-center mb-8 text-slate-900 dark:text-white">Frequently asked questions</h2>
-          <dl className="space-y-3" itemScope itemType="https://schema.org/FAQPage">
+      {/* ═══════════ FAQ ═══════════ */}
+      <section className="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 px-4 sm:px-6 py-14 sm:py-16" id="faq">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-[22px] sm:text-[26px] font-bold tracking-tight text-slate-900 dark:text-white mb-6">
+            Frequently asked questions
+          </h2>
+          <dl className="divide-y divide-slate-200 dark:divide-slate-800 border-y border-slate-200 dark:border-slate-800" itemScope itemType="https://schema.org/FAQPage">
             {faqs.map((faq) => (
-              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-                <dt className="font-semibold text-[14.5px] text-slate-900 dark:text-white mb-1.5" itemProp="name">{faq.q}</dt>
-                <dd className="text-[13.5px] text-slate-500 dark:text-slate-300 leading-relaxed" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+              <div key={faq.q} itemProp="mainEntity" itemScope itemType="https://schema.org/Question" className="py-4">
+                <dt className="font-semibold text-[13.5px] text-slate-900 dark:text-white" itemProp="name">{faq.q}</dt>
+                <dd className="mt-1 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                   <span itemProp="text">{faq.a}</span>
                 </dd>
               </div>

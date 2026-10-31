@@ -153,6 +153,7 @@ export default function TailorPage() {
             <ResumePreview
               resume={state.parsed}
               theme={state.selectedTheme}
+              a4
               maxHeight="calc(100vh - 8rem)"
             />
           </div>

@@ -1,4 +1,11 @@
-import type { ParsedResume, WorkExperience, Education, Project } from "@/types";
+import type {
+  ParsedResume,
+  WorkExperience,
+  Education,
+  Project,
+  LanguageProficiency,
+  ResumeFormat,
+} from "@/types";
 import { normalizeSectionOrder } from "@/lib/section-order";
 
 /**
@@ -50,6 +57,26 @@ function sanitizeProject(proj: Partial<Project>): Project {
   };
 }
 
+const LANGUAGE_LEVELS = new Set<LanguageProficiency["level"]>([
+  "basic",
+  "elementary",
+  "intermediate",
+  "upper-intermediate",
+  "advanced",
+  "fluent",
+  "native",
+  "bilingual",
+]);
+
+function sanitizeLanguage(lang: Partial<LanguageProficiency>): LanguageProficiency {
+  const level = LANGUAGE_LEVELS.has(lang.level as LanguageProficiency["level"])
+    ? (lang.level as LanguageProficiency["level"])
+    : "intermediate";
+  return { language: toStr(lang.language), level };
+}
+
+const FORMATS = new Set<ResumeFormat>(["general", "eu", "canada", "us"]);
+
 /**
  * Sanitize a ParsedResume to ensure all fields are the correct types
  * This prevents errors like "e.trim is not a function" when rendering
@@ -88,6 +115,18 @@ export function sanitizeResume(resume: Partial<ParsedResume> | null | undefined)
     projects: Array.isArray(resume.projects)
       ? resume.projects.map(sanitizeProject)
       : undefined,
+    photo: resume.photo ? toStr(resume.photo) : undefined,
+    languages: Array.isArray(resume.languages)
+      ? resume.languages
+          .filter((l) => l && toStr(l.language).trim())
+          .map(sanitizeLanguage)
+      : undefined,
+    volunteerExperience: Array.isArray(resume.volunteerExperience)
+      ? resume.volunteerExperience.map(sanitizeExperience)
+      : undefined,
+    interests: Array.isArray(resume.interests) ? resume.interests.map(toStr) : undefined,
+    references: resume.references ? toStr(resume.references) : undefined,
+    format: resume.format && FORMATS.has(resume.format) ? resume.format : undefined,
     sectionOrder: resume.sectionOrder ? normalizeSectionOrder(resume.sectionOrder) : undefined,
   };
 }

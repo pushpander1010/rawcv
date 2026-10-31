@@ -1,5 +1,6 @@
 /** Shared PDF generation via Puppeteer — used by /api/export and /api/export-free */
 
+
 export async function generatePdf(html: string): Promise<Buffer> {
   const isProduction = process.env.NODE_ENV === "production";
   let browser: any;
@@ -25,31 +26,40 @@ export async function generatePdf(html: string): Promise<Buffer> {
         "--disable-gpu",
         "--disable-dev-shm-usage",
         "--disable-extensions",
-        "--single-process",
         "--font-render-hinting=none",
       ],
     });
   }
 
-  const page = await browser.newPage();
-  await page.setUserAgent(
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-  );
-  await page.setContent(html, { waitUntil: "networkidle0" });
-  await page.evaluateHandle("document.fonts.ready");
+  try {
+    const page = await browser.newPage();
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+    );
 
-  const pdfBuffer = Buffer.from(
-    await page.pdf({
-      format: "A4",
-      printBackground: true,
-      tagged: true,
-      margin: { top: "0", right: "0", bottom: "0", left: "0" },
-      preferCSSPageSize: false,
-      scale: 0.98,
-    })
-  );
-  await browser.close();
-  return pdfBuffer;
+    // The document is fully self-contained (no webfonts, no remote assets), so
+    // we only need the DOM — the old networkidle wait hung on blocked fonts.
+    await page.setContent(html, { waitUntil: "domcontentloaded" });
+
+    await Promise.race([
+      page.evaluate(() => (document as any).fonts?.ready),
+      new Promise((resolve) => setTimeout(resolve, 2500)),
+    ]);
+
+    await page.emulateMediaType("print");
+
+    const pdfBuffer = Buffer.from(
+      await page.pdf({
+        format: "A4",
+        printBackground: true,
+        tagged: true,
+        margin: { top: "14mm", right: "15mm", bottom: "14mm", left: "15mm" },
+      })
+    );
+    return pdfBuffer;
+  } finally {
+    await browser.close();
+  }
 }
 
 export function safeFileName(name: string | undefined): string {

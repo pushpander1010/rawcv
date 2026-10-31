@@ -1,237 +1,278 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
-import { useState, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type { ParsedResume, ThemeId } from "@/types";
 import { useResume } from "@/context/ResumeContext";
+import { RESUME_THEME_IDS } from "@/lib/theme-renderer";
 import FreeResumeForm from "@/components/FreeResumeForm";
 import ResumePreview from "@/components/ResumePreview";
 import UndoButton from "@/components/UndoButton";
-import ThemePicker from "@/components/ThemePicker";
+import ThemePicker, { themeName } from "@/components/ThemePicker";
 import TypographyControls from "@/components/TypographyControls";
 import FreeDownloadButton from "@/components/FreeDownloadButton";
 import FreeATSChecker from "@/components/FreeATSChecker";
 import FreeKeywordAnalyzer from "@/components/FreeKeywordAnalyzer";
 import FreeFormattingChecker from "@/components/FreeFormattingChecker";
 
+type Panel = "theme" | "text" | "download" | null;
+type Tab = "preview" | "review";
+
+function completeness(resume: ParsedResume | null): number {
+  if (!resume) return 0;
+  let score = 0;
+  if (resume.contact.name?.trim()) score += 15;
+  if (resume.contact.email?.trim()) score += 15;
+  if ((resume.summary?.trim().length ?? 0) > 40) score += 15;
+  if (resume.experience.some((e) => e.title?.trim())) score += 20;
+  if (resume.experience.some((e) => e.bullets.filter(Boolean).length >= 2)) score += 10;
+  if (resume.education.some((e) => e.institution?.trim())) score += 10;
+  if (resume.skills.filter(Boolean).length >= 5) score += 10;
+  if ((resume.projects ?? []).some((p) => p.name?.trim())) score += 5;
+  return Math.min(100, score);
+}
+
 export default function FreeBuildClient() {
   const { state, setState, isHydrated } = useResume();
   const resume = state.parsed;
   const selectedTheme = state.selectedTheme;
-  const [showThemePicker, setShowThemePicker] = useState(false);
+  const [panel, setPanel] = useState<Panel>(null);
+  const [tab, setTab] = useState<Tab>("preview");
   const [a4Preview, setA4Preview] = useState(true);
-  const [validationError, setValidationError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"preview" | "ats" | "keywords" | "formatting">("preview");
 
-  const handleResumeChange = useCallback((newResume: ParsedResume) => {
-    setState((prev) => ({ ...prev, parsed: newResume }));
-    setValidationError(null);
-  }, [setState]);
+  const strength = useMemo(() => completeness(resume), [resume]);
+  const strengthLabel = strength >= 85 ? "Strong" : strength >= 55 ? "Good start" : "Getting started";
 
-  const handleThemeSelect = useCallback((themeId: ThemeId) => {
-    setState((prev) => ({ ...prev, selectedTheme: themeId }));
-    setShowThemePicker(false);
-  }, [setState]);
+  // Honour /build?theme=atlas links from the template gallery.
+  const searchParams = useSearchParams();
+  const appliedQueryTheme = useRef(false);
+  useEffect(() => {
+    if (!isHydrated || appliedQueryTheme.current) return;
+    const requested = searchParams.get("theme") as ThemeId | null;
+    if (requested && RESUME_THEME_IDS.includes(requested)) {
+      appliedQueryTheme.current = true;
+      setState((prev) => (prev.selectedTheme === requested ? prev : { ...prev, selectedTheme: requested }));
+    }
+  }, [isHydrated, searchParams, setState]);
+
+  const handleResumeChange = useCallback(
+    (newResume: ParsedResume) => {
+      setState((prev) => ({ ...prev, parsed: newResume }));
+    },
+    [setState]
+  );
+
+  const togglePanel = (next: Exclude<Panel, null>) =>
+    setPanel((prev) => (prev === next ? null : next));
 
   if (!isHydrated) {
     return (
-      <div className="flex items-center justify-center py-12">
+      <div className="flex items-center justify-center py-24">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4" />
-          <p className="text-sm text-slate-600 dark:text-slate-300">Loading your resume...</p>
+          <div className="inline-block animate-spin rounded-full h-6 w-6 border-2 border-slate-300 border-t-slate-900 dark:border-slate-700 dark:border-t-white mb-3" />
+          <p className="text-[13px] text-slate-500 dark:text-slate-400">Opening your draft…</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      {/* Form Column */}
-      <div className="lg:col-span-1 order-2 lg:order-1">
-        <div className="sticky top-24 space-y-6">
-          <FreeResumeForm onResumeChange={handleResumeChange} initialResume={resume || undefined} />
+    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,460px)_minmax(0,1fr)] xl:grid-cols-[minmax(0,480px)_minmax(0,1fr)] gap-7 xl:gap-10 items-start">
+      {/* ── Editor ─────────────────────────────────────────────────────────── */}
+      <div id="edit-resume" className="order-2 lg:order-1 min-w-0 scroll-mt-24">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Edit your resume</h2>
+          <span className="text-[11.5px] text-slate-400 dark:text-slate-500">Saved in this browser</span>
         </div>
+        <FreeResumeForm onResumeChange={handleResumeChange} initialResume={resume || undefined} />
       </div>
 
-      {/* Preview Column */}
-      <div className="lg:col-span-2 order-1 lg:order-2">
-        <div className="space-y-5">
-          {/* Tab Navigation */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-1.5">
-            <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
-              {[
+      {/* ── Preview ────────────────────────────────────────────────────────── */}
+      <div className="order-1 lg:order-2 min-w-0 lg:sticky lg:top-[80px]">
+        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+          {/* Toolbar */}
+          <div className="flex flex-wrap items-center gap-2 px-3 py-2 border-b border-slate-200 dark:border-slate-800">
+            <div className="flex rounded-lg bg-slate-100 dark:bg-slate-800 p-0.5" role="tablist" aria-label="Preview mode">
+              {([
                 { id: "preview", label: "Preview" },
-                { id: "ats", label: "Score" },
-                { id: "keywords", label: "Job-words" },
-                { id: "formatting", label: "Design" },
-              ].map((t) => (
+                { id: "review", label: "Review" },
+              ] as const).map((t) => (
                 <button
                   key={t.id}
                   type="button"
-                  onClick={() => setActiveTab(t.id as typeof activeTab)}
-                  className={`px-4 py-2 rounded-full font-medium text-[13.5px] whitespace-nowrap transition-colors ${
-                    activeTab === t.id
-                      ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
-                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
+                  role="tab"
+                  aria-selected={tab === t.id}
+                  onClick={() => setTab(t.id)}
+                  className={`px-3 py-1.5 rounded-md text-[12.5px] font-semibold transition-colors ${
+                    tab === t.id
+                      ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
                   {t.label}
                 </button>
               ))}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 px-3 pt-2 pb-1">
-              Preview your resume, check your score, match job words, and polish your design.
-            </p>
+
+            <div className="ml-auto flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => togglePanel("theme")}
+                aria-expanded={panel === "theme"}
+                className={`h-8 px-2.5 rounded-md border text-[12.5px] font-medium transition-colors ${
+                  panel === "theme"
+                    ? "border-slate-900 dark:border-white text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800"
+                    : "border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
+                }`}
+              >
+                {themeName(selectedTheme)}
+              </button>
+              <button
+                type="button"
+                onClick={() => togglePanel("text")}
+                aria-expanded={panel === "text"}
+                className={`h-8 px-2.5 rounded-md border text-[12.5px] font-medium transition-colors ${
+                  panel === "text"
+                    ? "border-slate-900 dark:border-white text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800"
+                    : "border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
+                }`}
+              >
+                Text
+              </button>
+              <a
+                href="#edit-resume"
+                className="lg:hidden h-8 px-2.5 rounded-md border border-slate-200 dark:border-slate-700 text-[12.5px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors inline-flex items-center"
+              >
+                Edit
+              </a>
+              <button
+                type="button"
+                onClick={() => togglePanel("download")}
+                aria-expanded={panel === "download"}
+                className="h-8 px-3 rounded-md bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[12.5px] font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
+              >
+                Export
+              </button>
+            </div>
           </div>
 
-          {/* Preview Tab */}
-          {activeTab === "preview" && (
-            <>
-              {/* Theme Selector */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">
-                    Theme
-                  </h2>
-                  <button
-                    type="button"
-                    onClick={() => setShowThemePicker(!showThemePicker)}
-                    className="text-[13px] px-3.5 py-1.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 font-medium transition-colors"
-                  >
-                    {showThemePicker ? "Hide" : "Change"}
-                  </button>
-                </div>
-
-                {showThemePicker && (
-                  <div className="mb-5 pb-5 border-b border-slate-200 dark:border-slate-800">
-                    <ThemePicker onSelect={handleThemeSelect} />
-                  </div>
-                )}
-
-                <div className="text-[13.5px] text-slate-600 dark:text-slate-300">
-                  Current: <span className="font-semibold text-slate-900 dark:text-white capitalize">{selectedTheme}</span>
-                </div>
-              </div>
-
-              {/* Text style — font, size, spacing */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
-                <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
-                  Text style
-                </h2>
-                <TypographyControls />
-              </div>
-
-              {/* Preview */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">
-                    Preview
-                  </h2>
-                  <div className="flex items-center gap-3">
-                    <label className="flex items-center gap-1.5 text-[13px] text-slate-600 dark:text-slate-300 cursor-pointer select-none">
-                      <input
-                        type="checkbox"
-                        checked={a4Preview}
-                        onChange={(e) => setA4Preview(e.target.checked)}
-                        className="w-4 h-4 rounded accent-slate-900 dark:accent-white"
-                      />
-                      A4 page
-                    </label>
-                    {resume && <UndoButton />}
-                  </div>
-                </div>
-
-                {resume ? (
-                  <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
-                    <ResumePreview resume={resume} theme={selectedTheme} a4={a4Preview} />
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center h-56 bg-slate-50 dark:bg-slate-800 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
-                    <div className="text-center">
-                      <p className="text-[13.5px] text-slate-500 dark:text-slate-300">
-                        Start filling out the form to see your resume preview
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Download Section */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
-                <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
-                  Download
-                </h2>
-
-                <FreeDownloadButton
-                  resume={resume}
-                  theme={selectedTheme}
-                  typography={state.typography}
-                  onValidationError={setValidationError}
+          {/* Flyout panel */}
+          {panel && (
+            <div className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/40 p-3.5">
+              {panel === "theme" && (
+                <ThemePicker
+                  onSelect={(themeId: ThemeId) => {
+                    setState((prev) => ({ ...prev, selectedTheme: themeId }));
+                  }}
                 />
-
-                {validationError && (
-                  <div className="mt-3 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
-                    <p className="text-[13.5px] text-amber-700 dark:text-amber-300">{validationError}</p>
-                  </div>
-                )}
-
-                <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                  <p className="text-[13px] text-slate-600 dark:text-slate-300">
-                    <strong className="text-slate-900 dark:text-white">Completely free</strong> — no watermark, no hidden charges
-                  </p>
+              )}
+              {panel === "text" && <TypographyControls />}
+              {panel === "download" && (
+                <div className="max-w-sm">
+                  <FreeDownloadButton
+                    resume={resume}
+                    theme={selectedTheme}
+                    typography={state.typography}
+                  />
                 </div>
+              )}
+            </div>
+          )}
+
+          {tab === "preview" ? (
+            <>
+              <div className="bg-slate-200/70 dark:bg-slate-950 p-3 sm:p-5">
+                <div className="rounded-lg overflow-hidden ring-1 ring-black/5">
+                  <ResumePreview
+                    resume={resume ?? {
+                      contact: { name: "", email: "" },
+                      summary: "",
+                      experience: [],
+                      education: [],
+                      skills: [],
+                    }}
+                    theme={selectedTheme}
+                    a4={a4Preview}
+                    maxHeight="calc(100vh - 230px)"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-3.5 py-2.5 text-[11.5px] text-slate-500 dark:text-slate-400">
+                <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={a4Preview}
+                    onChange={(e) => setA4Preview(e.target.checked)}
+                    className="w-3.5 h-3.5 rounded accent-slate-900 dark:accent-white"
+                  />
+                  A4 pages
+                </label>
+                <span className="text-slate-300 dark:text-slate-700">·</span>
+                <span>ATS-safe text · no watermark</span>
+                <span className="ml-auto flex items-center gap-2">
+                  {resume && <UndoButton />}
+                  <span className="inline-flex items-center gap-2">
+                    <span className="hidden sm:inline">Resume strength</span>
+                    <span className="relative h-1.5 w-24 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                      <span
+                        className="absolute inset-y-0 left-0 rounded-full bg-slate-900 dark:bg-white transition-all"
+                        style={{ width: `${strength}%` }}
+                      />
+                    </span>
+                    <span className="font-semibold text-slate-700 dark:text-slate-200 tabular-nums">{strength}%</span>
+                  </span>
+                </span>
               </div>
             </>
-          )}
+          ) : (
+            <div className="p-4 sm:p-5 space-y-7 max-h-[calc(100vh-180px)] overflow-y-auto">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Resume review</h2>
+                  <p className="text-[12.5px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    Three instant checks, run locally on this draft. Nothing is uploaded.
+                  </p>
+                </div>
+                <span className="shrink-0 rounded-full border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                  {strengthLabel} · {strength}%
+                </span>
+              </div>
 
-          {/* ATS Check Tab */}
-          {activeTab === "ats" && (
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
-              <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
-                ATS Compatibility Check
-              </h2>
-              <FreeATSChecker resume={resume} />
+              <section>
+                <h3 className="text-[12px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3">
+                  ATS compatibility
+                </h3>
+                <FreeATSChecker resume={resume} />
+              </section>
+              <section className="pt-5 border-t border-slate-200 dark:border-slate-800">
+                <h3 className="text-[12px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3">
+                  Keywords
+                </h3>
+                <FreeKeywordAnalyzer resume={resume} />
+              </section>
+              <section className="pt-5 border-t border-slate-200 dark:border-slate-800">
+                <h3 className="text-[12px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3">
+                  Formatting
+                </h3>
+                <FreeFormattingChecker resume={resume} />
+              </section>
+
+              <div className="rounded-lg bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 p-4">
+                <p className="text-[13px] font-semibold text-slate-900 dark:text-white">Want AI-level feedback?</p>
+                <p className="text-[12.5px] text-slate-500 dark:text-slate-400 mt-1 mb-3">
+                  Score your resume, match it to a real job description, and rewrite weak bullets.
+                </p>
+                <a
+                  href="/analyze"
+                  className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-slate-900 dark:text-white underline underline-offset-4 decoration-slate-300 dark:decoration-slate-600"
+                >
+                  Open the analyzer
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
             </div>
           )}
-
-          {/* Keywords Tab */}
-          {activeTab === "keywords" && (
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
-              <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
-                Keyword Analysis
-              </h2>
-              <FreeKeywordAnalyzer resume={resume} />
-            </div>
-          )}
-
-          {/* Formatting Tab */}
-          {activeTab === "formatting" && (
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
-              <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white mb-3">
-                Formatting Check
-              </h2>
-              <FreeFormattingChecker resume={resume} />
-            </div>
-          )}
-
-          {/* AI Features CTA */}
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-5">
-            <h3 className="text-[14.5px] font-semibold text-slate-900 dark:text-white mb-1.5">
-              Upgrade with AI
-            </h3>
-            <p className="text-[13.5px] text-slate-600 dark:text-slate-300 mb-3 leading-relaxed">
-              Get an ATS score, job-description match, and AI bullet enhancements — without leaving the builder.
-            </p>
-            <a
-              href="/analyze"
-              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 text-[13.5px] font-semibold transition-colors w-full"
-            >
-              Explore AI features
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </a>
-          </div>
         </div>
       </div>
     </div>

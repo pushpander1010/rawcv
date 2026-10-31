@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import type { ParsedResume } from "@/types";
 
 interface ATSIssue {
@@ -14,237 +14,102 @@ interface Props {
   resume: ParsedResume | null;
 }
 
+function analyze(resume: ParsedResume | null): { score: number; issues: ATSIssue[] } {
+  if (!resume) return { score: 0, issues: [] };
+  const issues: ATSIssue[] = [];
+  let score = 100;
+
+  if (!resume.contact.name?.trim()) {
+    issues.push({ type: "name", description: "No name in the contact block", impact: "high", suggestion: "Add your full name at the top." });
+    score -= 15;
+  }
+  if (!resume.contact.email?.trim()) {
+    issues.push({ type: "email", description: "No email address", impact: "high", suggestion: "Add a professional email address." });
+    score -= 15;
+  }
+  if (!resume.experience?.length) {
+    issues.push({ type: "experience", description: "No work experience section", impact: "high", suggestion: "Add at least one role with 2–4 achievement bullets." });
+    score -= 20;
+  } else {
+    const bullets = resume.experience.flatMap((e) => e.bullets || []);
+    const weak = bullets.filter((b) => b.split(/\s+/).length < 5);
+    if (bullets.length && weak.length / bullets.length > 0.5) {
+      issues.push({ type: "bullets", description: "Most bullets are shorter than 5 words", impact: "medium", suggestion: "Expand each bullet with an action and a result." });
+      score -= 10;
+    }
+  }
+  if (!resume.education?.length) {
+    issues.push({ type: "education", description: "No education section", impact: "medium", suggestion: "Add your degree, school, and graduation year." });
+    score -= 10;
+  }
+  if (!resume.skills?.length) {
+    issues.push({ type: "skills", description: "No skills section", impact: "high", suggestion: "List 8–12 relevant tools and strengths." });
+    score -= 15;
+  } else if (resume.skills.length < 5) {
+    issues.push({ type: "skills", description: "Only a few skills listed", impact: "medium", suggestion: "Aim for 8–12 skills that match the job." });
+    score -= 5;
+  }
+  if (!resume.summary || resume.summary.trim().length < 20) {
+    issues.push({ type: "summary", description: "No summary, or it is very short", impact: "low", suggestion: "Add 2–3 lines: role, years, and one measurable result." });
+    score -= 5;
+  }
+  if (!resume.certifications?.length) {
+    issues.push({ type: "certifications", description: "No certifications listed", impact: "low", suggestion: "Add relevant credentials if you have them." });
+    score -= 3;
+  }
+
+  return { score: Math.max(0, score), issues };
+}
+
+const impactStyle: Record<ATSIssue["impact"], string> = {
+  high: "text-red-600 dark:text-red-400",
+  medium: "text-amber-600 dark:text-amber-400",
+  low: "text-slate-400 dark:text-slate-500",
+};
+
 export default function FreeATSChecker({ resume }: Props) {
-  const [issues, setIssues] = useState<ATSIssue[]>([]);
-  const [score, setScore] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { score, issues } = useMemo(() => analyze(resume), [resume]);
+  const tone = score >= 80 ? "emerald" : score >= 60 ? "amber" : "red";
 
-  const runATSCheck = () => {
-    if (!resume) return;
-
-    setLoading(true);
-    const foundIssues: ATSIssue[] = [];
-    let points = 100;
-
-    // Check for required sections
-    if (!resume.contact.name?.trim()) {
-      foundIssues.push({
-        type: "missing_name",
-        description: "No name found in contact info",
-        impact: "high",
-        suggestion: "Add your full name in the Contact section",
-      });
-      points -= 15;
-    }
-
-    if (!resume.contact.email?.trim()) {
-      foundIssues.push({
-        type: "missing_email",
-        description: "No email address found",
-        impact: "high",
-        suggestion: "Add your email address in the Contact section",
-      });
-      points -= 15;
-    }
-
-    if (!resume.experience || resume.experience.length === 0) {
-      foundIssues.push({
-        type: "missing_experience",
-        description: "No work experience section detected",
-        impact: "high",
-        suggestion: "Add at least one work experience entry",
-      });
-      points -= 20;
-    } else {
-      // Check for weak bullet points
-      const allBullets = resume.experience.flatMap((e) => e.bullets || []);
-      const weakBullets = allBullets.filter((b) => b.split(" ").length < 5);
-      if (allBullets.length > 0 && weakBullets.length / allBullets.length > 0.5) {
-        foundIssues.push({
-          type: "weak_bullets",
-          description: "Many bullet points are very short (fewer than 5 words)",
-          impact: "medium",
-          suggestion: "Expand bullet points with more detail and action verbs",
-        });
-        points -= 10;
-      }
-    }
-
-    if (!resume.education || resume.education.length === 0) {
-      foundIssues.push({
-        type: "missing_education",
-        description: "No education section detected",
-        impact: "medium",
-        suggestion: "Add your educational background",
-      });
-      points -= 10;
-    }
-
-    if (!resume.skills || resume.skills.length === 0) {
-      foundIssues.push({
-        type: "missing_skills",
-        description: "No skills section detected",
-        impact: "high",
-        suggestion: "Add a skills section with relevant technical and soft skills",
-      });
-      points -= 15;
-    } else if (resume.skills.length < 5) {
-      foundIssues.push({
-        type: "few_skills",
-        description: "Only a few skills listed",
-        impact: "medium",
-        suggestion: "Add more skills (aim for 10-15 relevant skills)",
-      });
-      points -= 5;
-    }
-
-    // Check for formatting issues
-    if (resume.contact.phone && !resume.contact.phone.match(/^\+?[\d\s\-\(\)]{10,}$/)) {
-      foundIssues.push({
-        type: "invalid_phone",
-        description: "Phone number format may not be ATS-friendly",
-        impact: "low",
-        suggestion: "Use standard format like +1 (555) 123-4567",
-      });
-      points -= 2;
-    }
-
-    // Check for summary
-    if (!resume.summary || resume.summary.trim().length < 20) {
-      foundIssues.push({
-        type: "missing_summary",
-        description: "No professional summary or very short summary",
-        impact: "low",
-        suggestion: "Add a 2-3 sentence professional summary",
-      });
-      points -= 5;
-    }
-
-    // Check for certifications
-    if (!resume.certifications || resume.certifications.length === 0) {
-      foundIssues.push({
-        type: "no_certifications",
-        description: "No certifications listed (optional but helpful)",
-        impact: "low",
-        suggestion: "Add relevant certifications if you have any",
-      });
-      points -= 3;
-    }
-
-    setIssues(foundIssues);
-    setScore(Math.max(0, points));
-    setLoading(false);
-  };
-
-  const getScoreColor = (s: number) => {
-    if (s >= 80) return "text-emerald-600";
-    if (s >= 60) return "text-amber-600";
-    return "text-red-600 dark:text-red-300";
-  };
-
-  const getScoreBg = (s: number) => {
-    if (s >= 80) return "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800";
-    if (s >= 60) return "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800";
-    return "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800";
-  };
-
-  const getImpactColor = (impact: string) => {
-    if (impact === "high") return "bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-300 dark:text-red-300";
-    if (impact === "medium") return "bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 dark:text-amber-300";
-    return "bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 dark:text-blue-300";
-  };
+  if (!resume) return <p className="text-[12.5px] text-slate-400">Add some content to run the ATS check.</p>;
 
   return (
     <div className="space-y-4">
-      <button
-        type="button"
-        onClick={runATSCheck}
-        disabled={loading || !resume}
-        className="w-full px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-sm transition-colors"
-      >
-        {loading ? "Checking..." : "📊 Check ATS Compatibility (Free)"}
-      </button>
-
-      {score !== null && (
-        <div className={`p-4 rounded-lg border ${getScoreBg(score)}`}>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-slate-900 dark:text-white">ATS Score</h3>
-            <div className={`text-3xl font-bold ${getScoreColor(score)}`}>{score}</div>
-          </div>
-
-          {score >= 80 && (
-            <p className="text-sm text-emerald-700 dark:text-emerald-300">
-              ✅ Your resume is well-optimized for ATS systems!
-            </p>
-          )}
-          {score >= 60 && score < 80 && (
-            <p className="text-sm text-amber-700 dark:text-amber-300">
-              ⚠️ Your resume has some ATS issues. See suggestions below.
-            </p>
-          )}
-          {score < 60 && (
-            <p className="text-sm text-red-700 dark:text-red-300">
-              ❌ Your resume needs improvements for ATS compatibility.
-            </p>
-          )}
-
-          <p className="text-xs text-slate-500 dark:text-slate-300 mt-3">
-            ✅ This analysis is free and doesn&apos;t use any credits
-          </p>
-        </div>
-      )}
-
-      {issues.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="font-semibold text-slate-900 dark:text-white">Issues Found</h3>
-          {issues.map((issue, idx) => (
+      <div className="flex items-center gap-4">
+        <span className={`text-[30px] font-bold leading-none tabular-nums ${
+          tone === "emerald" ? "text-emerald-600 dark:text-emerald-400" : tone === "amber" ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400"
+        }`}>
+          {score}
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
             <div
-              key={idx}
-              className="p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 space-y-2"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex-1">
-                  <p className="font-medium text-slate-900 dark:text-white text-sm">
-                    {issue.description}
-                  </p>
-                </div>
-                <span className={`px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${getImpactColor(issue.impact)}`}>
-                  {issue.impact.toUpperCase()}
-                </span>
+              className={`h-full rounded-full ${tone === "emerald" ? "bg-emerald-500" : tone === "amber" ? "bg-amber-500" : "bg-red-500"}`}
+              style={{ width: `${score}%` }}
+            />
+          </div>
+          <p className="mt-2 text-[12px] text-slate-500 dark:text-slate-400">
+            {score >= 80 ? "Strong ATS foundation — fix the details below to finish." : score >= 60 ? "Parseable, but a few sections need work." : "Several sections are missing or too thin."}
+          </p>
+        </div>
+      </div>
+
+      {issues.length > 0 ? (
+        <ul className="divide-y divide-slate-100 dark:divide-slate-800">
+          {issues.map((issue) => (
+            <li key={issue.type} className="flex items-start gap-3 py-2.5">
+              <span className={`mt-0.5 text-[9.5px] font-bold uppercase tracking-wider w-11 shrink-0 ${impactStyle[issue.impact]}`}>
+                {issue.impact}
+              </span>
+              <div className="min-w-0">
+                <p className="text-[12.5px] font-medium text-slate-800 dark:text-slate-200">{issue.description}</p>
+                {issue.suggestion && <p className="text-[11.5px] text-slate-500 dark:text-slate-400 mt-0.5">{issue.suggestion}</p>}
               </div>
-              {issue.suggestion && (
-                <p className="text-xs text-slate-600 dark:text-slate-300">
-                  💡 {issue.suggestion}
-                </p>
-              )}
-            </div>
+            </li>
           ))}
-        </div>
-      )}
-
-      {score !== null && issues.length === 0 && (
-        <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
-          <p className="text-sm text-emerald-700 dark:text-emerald-300">
-            ✅ No ATS issues found! Your resume looks great.
-          </p>
-        </div>
-      )}
-
-      {score !== null && (
-        <div className="p-4 rounded-lg bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-800">
-          <p className="text-xs text-brand-700 dark:text-brand-300 mb-2">
-            <strong>Want more detailed analysis?</strong>
-          </p>
-          <p className="text-xs text-brand-600 mb-3">
-            Sign up to get AI-powered suggestions, JD matching, and more advanced ATS analysis.
-          </p>
-          <a
-            href="/analyze"
-            className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700 dark:text-brand-300"
-          >
-            Explore Premium Features →
-          </a>
-        </div>
+        </ul>
+      ) : (
+        <p className="text-[12.5px] text-emerald-700 dark:text-emerald-400">No structural ATS issues found.</p>
       )}
     </div>
   );

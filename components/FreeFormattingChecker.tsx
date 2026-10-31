@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import type { ParsedResume } from "@/types";
 
 interface FormatIssue {
@@ -14,269 +14,120 @@ interface Props {
   resume: ParsedResume | null;
 }
 
-export default function FreeFormattingChecker({ resume }: Props) {
-  const [issues, setIssues] = useState<FormatIssue[]>([]);
-  const [score, setScore] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
+function analyze(resume: ParsedResume | null): { score: number; issues: FormatIssue[] } {
+  if (!resume) return { score: 0, issues: [] };
+  const issues: FormatIssue[] = [];
+  let points = 100;
 
-  const checkFormatting = () => {
-    if (!resume) return;
+  if (resume.contact.email && !resume.contact.email.includes("@")) {
+    issues.push({ category: "Contact", issue: "Email format looks invalid", severity: "high", suggestion: "Use a valid address like name@example.com." });
+    points -= 10;
+  }
+  if (resume.contact.phone && resume.contact.phone.replace(/\D/g, "").length < 10) {
+    issues.push({ category: "Contact", issue: "Phone number looks incomplete", severity: "medium", suggestion: "Include the full number with country or area code." });
+    points -= 5;
+  }
 
-    setLoading(true);
-    const foundIssues: FormatIssue[] = [];
-    let points = 100;
-
-    // Check contact info formatting
-    if (resume.contact.email && !resume.contact.email.includes("@")) {
-      foundIssues.push({
-        category: "Contact Info",
-        issue: "Invalid email format",
-        severity: "high",
-        suggestion: "Use a valid email address (e.g., name@example.com)",
-      });
-      points -= 10;
+  resume.experience?.forEach((exp, idx) => {
+    if (!exp.company || !exp.title) {
+      issues.push({ category: "Experience", issue: `Role ${idx + 1} is missing a title or company`, severity: "high", suggestion: "Fill in both the job title and the company." });
+      points -= 8;
     }
-
-    if (resume.contact.phone && resume.contact.phone.length < 10) {
-      foundIssues.push({
-        category: "Contact Info",
-        issue: "Phone number seems incomplete",
-        severity: "medium",
-        suggestion: "Include full phone number with area code",
-      });
+    if (!exp.startDate) {
+      issues.push({ category: "Experience", issue: `Role ${idx + 1} has no start date`, severity: "medium", suggestion: "Add the month and year you started." });
       points -= 5;
     }
-
-    // Check experience formatting
-    if (resume.experience && resume.experience.length > 0) {
-      resume.experience.forEach((exp, idx) => {
-        if (!exp.company || !exp.title) {
-          foundIssues.push({
-            category: "Experience",
-            issue: `Entry ${idx + 1}: Missing company or job title`,
-            severity: "high",
-            suggestion: "Fill in both company name and job title",
-          });
-          points -= 8;
-        }
-
-        if (!exp.startDate) {
-          foundIssues.push({
-            category: "Experience",
-            issue: `Entry ${idx + 1}: Missing start date`,
-            severity: "medium",
-            suggestion: "Add the month and year you started this position",
-          });
-          points -= 5;
-        }
-
-        if (!exp.bullets || exp.bullets.length === 0) {
-          foundIssues.push({
-            category: "Experience",
-            issue: `Entry ${idx + 1}: No bullet points`,
-            severity: "high",
-            suggestion: "Add 3-5 bullet points describing your achievements",
-          });
-          points -= 10;
-        } else if (exp.bullets.length < 3) {
-          foundIssues.push({
-            category: "Experience",
-            issue: `Entry ${idx + 1}: Only ${exp.bullets.length} bullet point(s)`,
-            severity: "medium",
-            suggestion: "Add more bullet points (aim for 3-5 per position)",
-          });
-          points -= 5;
-        }
-
-        // Check bullet point quality
-        exp.bullets.forEach((bullet, bidx) => {
-          if (bullet.length < 10) {
-            foundIssues.push({
-              category: "Experience",
-              issue: `Entry ${idx + 1}, Bullet ${bidx + 1}: Very short bullet point`,
-              severity: "low",
-              suggestion: "Expand with more detail and action verbs",
-            });
-            points -= 2;
-          }
-
-          if (!bullet.match(/^[A-Z]/)) {
-            foundIssues.push({
-              category: "Experience",
-              issue: `Entry ${idx + 1}, Bullet ${bidx + 1}: Doesn't start with capital letter`,
-              severity: "low",
-              suggestion: "Start each bullet point with a capital letter",
-            });
-            points -= 1;
-          }
-        });
-      });
+    if (!exp.bullets?.length) {
+      issues.push({ category: "Experience", issue: `Role ${idx + 1} has no achievements`, severity: "high", suggestion: "Add 2–4 bullets with results and metrics." });
+      points -= 10;
+    } else if (exp.bullets.length < 2) {
+      issues.push({ category: "Experience", issue: `Role ${idx + 1} has only one bullet`, severity: "medium", suggestion: "Add another achievement or responsibility." });
+      points -= 5;
     }
-
-    // Check education formatting
-    if (resume.education && resume.education.length > 0) {
-      resume.education.forEach((edu, idx) => {
-        if (!edu.institution || !edu.degree) {
-          foundIssues.push({
-            category: "Education",
-            issue: `Entry ${idx + 1}: Missing institution or degree`,
-            severity: "high",
-            suggestion: "Fill in school name and degree type",
-          });
-          points -= 8;
-        }
-
-        if (!edu.graduationYear) {
-          foundIssues.push({
-            category: "Education",
-            issue: `Entry ${idx + 1}: Missing graduation year`,
-            severity: "medium",
-            suggestion: "Add the year you graduated or expect to graduate",
-          });
-          points -= 5;
-        }
-      });
-    }
-
-    // Check skills formatting
-    if (resume.skills && resume.skills.length > 0) {
-      const skillsWithCommas = resume.skills.filter((s) => s.includes(","));
-      if (skillsWithCommas.length > 0) {
-        foundIssues.push({
-          category: "Skills",
-          issue: "Some skills contain commas",
-          severity: "low",
-          suggestion: "Use individual skills without commas (they're already separated)",
-        });
+    exp.bullets?.forEach((bullet, bidx) => {
+      if (bullet.length < 10) {
+        issues.push({ category: "Experience", issue: `Role ${idx + 1}, bullet ${bidx + 1} is very short`, severity: "low", suggestion: "Expand it with an action verb and a result." });
         points -= 2;
       }
+      if (!/^[A-Z]/.test(bullet)) {
+        issues.push({ category: "Experience", issue: `Role ${idx + 1}, bullet ${bidx + 1} does not start with a capital`, severity: "low", suggestion: "Start each bullet with a capital letter." });
+        points -= 1;
+      }
+    });
+  });
+
+  resume.education?.forEach((edu, idx) => {
+    if (!edu.institution || !edu.degree) {
+      issues.push({ category: "Education", issue: `Education ${idx + 1} is missing a school or degree`, severity: "high", suggestion: "Add both the institution and the degree." });
+      points -= 8;
     }
-
-    // Check for consistency
-    const allText = JSON.stringify(resume).toLowerCase();
-    const hasInconsistentDates =
-      allText.match(/\d{4}/g)?.some((year) => {
-        const y = parseInt(year);
-        return y < 1950 || y > new Date().getFullYear() + 5;
-      }) || false;
-
-    if (hasInconsistentDates) {
-      foundIssues.push({
-        category: "Dates",
-        issue: "Some dates appear to be invalid",
-        severity: "medium",
-        suggestion: "Review all dates to ensure they're realistic",
-      });
+    if (!edu.graduationYear) {
+      issues.push({ category: "Education", issue: `Education ${idx + 1} has no graduation year`, severity: "medium", suggestion: "Add the year you graduated or expect to graduate." });
       points -= 5;
     }
+  });
 
-    // Check for length
-    const totalLength = JSON.stringify(resume).length;
-    if (totalLength < 500) {
-      foundIssues.push({
-        category: "Content",
-        issue: "Resume seems quite short",
-        severity: "low",
-        suggestion: "Add more details to your experience and skills",
-      });
-      points -= 3;
-    }
+  if (resume.skills?.some((s) => s.includes(","))) {
+    issues.push({ category: "Skills", issue: "Some skills contain commas", severity: "low", suggestion: "Separate skills with commas in the field; each skill should stand alone." });
+    points -= 2;
+  }
 
-    setIssues(foundIssues);
-    setScore(Math.max(0, points));
-    setLoading(false);
-  };
+  const allText = JSON.stringify(resume);
+  if (allText.length < 500) {
+    issues.push({ category: "Content", issue: "The resume is quite short", severity: "low", suggestion: "Add more detail to experience and skills." });
+    points -= 3;
+  }
 
-  const getScoreColor = (s: number) => {
-    if (s >= 80) return "text-emerald-600";
-    if (s >= 60) return "text-amber-600";
-    return "text-red-600 dark:text-red-300";
-  };
+  return { score: Math.max(0, points), issues };
+}
 
-  const getScoreBg = (s: number) => {
-    if (s >= 80) return "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800";
-    if (s >= 60) return "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800";
-    return "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800";
-  };
+const sevStyle: Record<FormatIssue["severity"], string> = {
+  high: "text-red-600 dark:text-red-400",
+  medium: "text-amber-600 dark:text-amber-400",
+  low: "text-slate-400 dark:text-slate-500",
+};
 
-  const getSeverityColor = (severity: string) => {
-    if (severity === "high") return "bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-300 dark:text-red-300";
-    if (severity === "medium") return "bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 dark:text-amber-300";
-    return "bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 dark:text-blue-300";
-  };
+export default function FreeFormattingChecker({ resume }: Props) {
+  const { score, issues } = useMemo(() => analyze(resume), [resume]);
+  const tone = score >= 80 ? "emerald" : score >= 60 ? "amber" : "red";
+
+  if (!resume) return <p className="text-[12.5px] text-slate-400">Add some content to check formatting.</p>;
 
   return (
     <div className="space-y-4">
-      <button
-        type="button"
-        onClick={checkFormatting}
-        disabled={loading || !resume}
-        className="w-full px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-sm transition-colors"
-      >
-        {loading ? "Checking..." : "✓ Check Formatting (Free)"}
-      </button>
-
-      {score !== null && (
-        <div className={`p-4 rounded-lg border ${getScoreBg(score)}`}>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-slate-900 dark:text-white">Formatting Score</h3>
-            <div className={`text-3xl font-bold ${getScoreColor(score)}`}>{score}</div>
+      <div className="flex items-center gap-4">
+        <span className={`text-[30px] font-bold leading-none tabular-nums ${
+          tone === "emerald" ? "text-emerald-600 dark:text-emerald-400" : tone === "amber" ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400"
+        }`}>
+          {score}
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+            <div
+              className={`h-full rounded-full ${tone === "emerald" ? "bg-emerald-500" : tone === "amber" ? "bg-amber-500" : "bg-red-500"}`}
+              style={{ width: `${score}%` }}
+            />
           </div>
-
-          {score >= 80 && (
-            <p className="text-sm text-emerald-700 dark:text-emerald-300">
-              ✅ Your resume formatting looks great!
-            </p>
-          )}
-          {score >= 60 && score < 80 && (
-            <p className="text-sm text-amber-700 dark:text-amber-300">
-              ⚠️ Some formatting improvements recommended.
-            </p>
-          )}
-          {score < 60 && (
-            <p className="text-sm text-red-700 dark:text-red-300">
-              ❌ Several formatting issues found. See details below.
-            </p>
-          )}
+          <p className="mt-2 text-[12px] text-slate-500 dark:text-slate-400">
+            {issues.length === 0 ? "Dates, sections, and details are complete." : `${issues.length} thing${issues.length === 1 ? "" : "s"} to tidy up.`}
+          </p>
         </div>
-      )}
+      </div>
 
       {issues.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Issues Found</h3>
+        <ul className="divide-y divide-slate-100 dark:divide-slate-800">
           {issues.map((issue, idx) => (
-            <div
-              key={idx}
-              className="p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 space-y-2"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex-1">
-                  <p className="font-medium text-slate-900 dark:text-white text-sm">
-                    {issue.issue}
-                  </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">{issue.category}</p>
-                </div>
-                <span className={`px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${getSeverityColor(issue.severity)}`}>
-                  {issue.severity.toUpperCase()}
-                </span>
+            <li key={`${issue.category}-${idx}`} className="flex items-start gap-3 py-2.5">
+              <span className={`mt-0.5 text-[9.5px] font-bold uppercase tracking-wider w-11 shrink-0 ${sevStyle[issue.severity]}`}>
+                {issue.severity}
+              </span>
+              <div className="min-w-0">
+                <p className="text-[12.5px] font-medium text-slate-800 dark:text-slate-200">{issue.issue}</p>
+                <p className="text-[11.5px] text-slate-500 dark:text-slate-400 mt-0.5">{issue.category} · {issue.suggestion}</p>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-300">
-                💡 {issue.suggestion}
-              </p>
-            </div>
+            </li>
           ))}
-        </div>
-      )}
-
-      {score !== null && issues.length === 0 && (
-        <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
-          <p className="text-sm text-emerald-700 dark:text-emerald-300">
-            ✅ No formatting issues found! Your resume is well-formatted.
-          </p>
-          <p className="text-xs text-emerald-600 mt-2">
-            This analysis is free and doesn&apos;t use any credits
-          </p>
-        </div>
+        </ul>
       )}
     </div>
   );

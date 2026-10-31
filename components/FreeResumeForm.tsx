@@ -14,25 +14,102 @@ interface Props {
   initialResume?: ParsedResume;
 }
 
-export default function FreeResumeForm({ onResumeChange, initialResume }: Props) {
-  const [resume, setResume] = useState<ParsedResume>(
-    initialResume || {
-      contact: { name: "", email: "", phone: "", location: "", linkedin: "", website: "" },
-      summary: "",
-      experience: [],
-      education: [],
-      skills: [],
-      certifications: [],
-      projects: [],
-      sectionOrder: [...DEFAULT_SECTION_ORDER],
-    }
-  );
+const field =
+  "w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-[16px] sm:text-[13.5px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-slate-500 dark:focus:border-slate-400 focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-white/10 transition-colors";
 
+const label = "block text-[12px] font-semibold text-slate-600 dark:text-slate-300 mb-1.5";
+
+const emptyResume = (): ParsedResume => ({
+  contact: { name: "", email: "", phone: "", location: "", linkedin: "", website: "" },
+  summary: "",
+  experience: [],
+  education: [],
+  skills: [],
+  certifications: [],
+  projects: [],
+  sectionOrder: [...DEFAULT_SECTION_ORDER],
+});
+
+function Section({
+  title,
+  hint,
+  count,
+  defaultOpen,
+  action,
+  children,
+}: {
+  title: string;
+  hint?: string;
+  count?: number;
+  defaultOpen?: boolean;
+  action?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <details
+      open={defaultOpen}
+      className="group rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden"
+    >
+      <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3.5 select-none [&::-webkit-details-marker]:hidden">
+        <span className="flex-1 min-w-0">
+          <span className="flex items-center gap-2">
+            <span className="text-[13.5px] font-semibold text-slate-900 dark:text-white">{title}</span>
+            {typeof count === "number" && count > 0 && (
+              <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[10.5px] font-semibold text-slate-500 dark:text-slate-400 tabular-nums">
+                {count}
+              </span>
+            )}
+          </span>
+          {hint && <span className="mt-0.5 block text-[11.5px] text-slate-400 dark:text-slate-500">{hint}</span>}
+        </span>
+        {action && <span onClick={(e) => e.preventDefault()}>{action}</span>}
+        <svg
+          className="w-4 h-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+        </svg>
+      </summary>
+      <div className="border-t border-slate-100 dark:border-slate-800 p-4 space-y-3.5">{children}</div>
+    </details>
+  );
+}
+
+function AddButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex items-center gap-1 rounded-md border border-slate-200 dark:border-slate-700 px-2 py-1 text-[11.5px] font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+    >
+      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+        <path strokeLinecap="round" d="M12 5v14M5 12h14" />
+      </svg>
+      {children}
+    </button>
+  );
+}
+
+function RemoveButton({ onClick, label: text = "Remove" }: { onClick: () => void; label?: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="text-[11.5px] font-medium text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+    >
+      {text}
+    </button>
+  );
+}
+
+export default function FreeResumeForm({ onResumeChange, initialResume }: Props) {
+  const [resume, setResume] = useState<ParsedResume>(initialResume || emptyResume());
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   // Skip the initial mount notification so we don't clobber a resume already
-  // loaded in the global context (e.g. from AI chat or upload) with an empty draft.
+  // loaded in the global context (AI chat, upload, undo) with an empty draft.
   const didMount = useRef(false);
   useEffect(() => {
     if (!didMount.current) {
@@ -42,9 +119,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
     onResumeChange(resume);
   }, [resume, onResumeChange]);
 
-  // Sync when the resume changes externally (AI chat, quick-edit panel,
-  // undo, upload). Use a signature so typing in the form (which also flips
-  // initialResume via context echo) doesn't reset the cursor.
+  // Sync external changes (AI chat, undo, upload) without resetting the cursor.
   const lastExternalSig = useRef<string>("");
   useEffect(() => {
     if (!didMount.current) return;
@@ -57,719 +132,523 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialResume]);
 
-  const validate = useCallback(() => {
-    const newErrors: Record<string, string> = {};
+  const validateEmail = useCallback((value: string) => {
+    if (!value.trim()) return "Email is required";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Enter a valid email";
+    return "";
+  }, []);
 
-    if (!resume.contact.name.trim()) newErrors.name = "Name is required";
-    if (!resume.contact.email.trim()) newErrors.email = "Email is required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(resume.contact.email))
-      newErrors.email = "Invalid email format";
-
-    const hasExperience = resume.experience.length > 0;
-    const hasEducation = resume.education.length > 0;
-    const hasSkills = resume.skills.length > 0;
-
-    if (!hasExperience && !hasEducation && !hasSkills) {
-      newErrors.sections = "Add at least one section: experience, education, or skills";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [resume]);
-
-  const handleContactChange = (field: keyof typeof resume.contact, value: string) => {
-    setResume((prev) => ({
-      ...prev,
-      contact: { ...prev.contact, [field]: value },
-    }));
-    setTouched((prev) => ({ ...prev, [field]: true }));
-  };
-
-  const handleSummaryChange = (value: string) => {
-    setResume((prev) => ({ ...prev, summary: value }));
+  const handleContactChange = (f: keyof typeof resume.contact, value: string) => {
+    setResume((prev) => ({ ...prev, contact: { ...prev.contact, [f]: value } }));
+    setTouched((prev) => ({ ...prev, [f]: true }));
+    if (f === "name") setErrors((prev) => ({ ...prev, name: value.trim() ? "" : "Name is required" }));
+    if (f === "email") setErrors((prev) => ({ ...prev, email: validateEmail(value) }));
   };
 
   const handleSkillsChange = (value: string) => {
-    const skills = value
-      .split(",")
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
+    const skills = value.split(",").map((s) => s.trim()).filter(Boolean);
     setResume((prev) => ({ ...prev, skills }));
   };
 
-  const addExperience = () => {
-    setResume((prev) => ({
-      ...prev,
-      experience: [
-        ...prev.experience,
-        { company: "", title: "", startDate: "", endDate: "", bullets: [] },
-      ],
-    }));
-  };
-
-  const updateExperience = (index: number, field: keyof WorkExperience, value: any) => {
+  const updateExperience = (index: number, patch: Partial<WorkExperience>) => {
     setResume((prev) => {
-      const updated = [...prev.experience];
-      updated[index] = { ...updated[index], [field]: value };
-      return { ...prev, experience: updated };
+      const experience = [...prev.experience];
+      experience[index] = { ...experience[index], ...patch };
+      return { ...prev, experience };
     });
   };
 
-  const removeExperience = (index: number) => {
-    setResume((prev) => ({
-      ...prev,
-      experience: prev.experience.filter((_, i) => i !== index),
-    }));
-  };
-
-  const addEducation = () => {
-    setResume((prev) => ({
-      ...prev,
-      education: [
-        ...prev.education,
-        { institution: "", degree: "", field: "", graduationYear: "" },
-      ],
-    }));
-  };
-
-  const updateEducation = (index: number, field: keyof Education, value: string) => {
+  const updateEducation = (index: number, patch: Partial<Education>) => {
     setResume((prev) => {
-      const updated = [...prev.education];
-      updated[index] = { ...updated[index], [field]: value };
-      return { ...prev, education: updated };
+      const education = [...prev.education];
+      education[index] = { ...education[index], ...patch };
+      return { ...prev, education };
     });
   };
 
-  const removeEducation = (index: number) => {
-    setResume((prev) => ({
-      ...prev,
-      education: prev.education.filter((_, i) => i !== index),
-    }));
-  };
-
-  const addProject = () => {
-    setResume((prev) => ({
-      ...prev,
-      projects: [...(prev.projects || []), { name: "", description: "", technologies: [] }],
-    }));
-  };
-
-  const updateProject = (index: number, field: keyof Project, value: any) => {
+  const updateProject = (index: number, patch: Partial<Project>) => {
     setResume((prev) => {
-      const updated = [...(prev.projects || [])];
-      updated[index] = { ...updated[index], [field]: value };
-      return { ...prev, projects: updated };
+      const projects = [...(prev.projects || [])];
+      projects[index] = { ...projects[index], ...patch };
+      return { ...prev, projects };
     });
-  };
-
-  const removeProject = (index: number) => {
-    setResume((prev) => ({
-      ...prev,
-      projects: (prev.projects || []).filter((_, i) => i !== index),
-    }));
-  };
-
-  const addCertification = () => {
-    setResume((prev) => ({
-      ...prev,
-      certifications: [...(prev.certifications || []), ""],
-    }));
-  };
-
-  const updateCertification = (index: number, value: string) => {
-    setResume((prev) => {
-      const updated = [...(prev.certifications || [])];
-      updated[index] = value;
-      return { ...prev, certifications: updated };
-    });
-  };
-
-  const removeCertification = (index: number) => {
-    setResume((prev) => ({
-      ...prev,
-      certifications: (prev.certifications || []).filter((_, i) => i !== index),
-    }));
   };
 
   const moveSection = (index: number, direction: "up" | "down") => {
-    const currentOrder = normalizeSectionOrder(resume.sectionOrder);
-    const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= currentOrder.length) return;
-    const newOrder = [...currentOrder];
-    const [removed] = newOrder.splice(index, 1);
-    newOrder.splice(targetIndex, 0, removed);
-    setResume((prev) => ({ ...prev, sectionOrder: newOrder }));
+    const current = normalizeSectionOrder(resume.sectionOrder);
+    const target = direction === "up" ? index - 1 : index + 1;
+    if (target < 0 || target >= current.length) return;
+    const next = [...current];
+    const [removed] = next.splice(index, 1);
+    next.splice(target, 0, removed);
+    setResume((prev) => ({ ...prev, sectionOrder: next }));
   };
 
   const handleClear = () => {
-    if (confirm("Clear all data? This cannot be undone.")) {
-      setResume({
-        contact: { name: "", email: "", phone: "", location: "", linkedin: "", website: "" },
-        summary: "",
-        experience: [],
-        education: [],
-        skills: [],
-        certifications: [],
-        projects: [],
-        sectionOrder: [...DEFAULT_SECTION_ORDER],
-      });
+    if (confirm("Clear all resume data? This cannot be undone.")) {
+      setResume(emptyResume());
       setErrors({});
       setTouched({});
     }
   };
 
   const sectionOrder = normalizeSectionOrder(resume.sectionOrder);
+  const skillsValue = resume.skills.join(", ");
 
   return (
-    <form className="space-y-10">
-      {/* Arrange-sections card */}
-      <section className="p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 shadow-sm space-y-3">
-        <div>
-          <h2 className="text-base font-bold text-slate-900 dark:text-white">
-            Arrange sections
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Move sections up or down to change the order they appear on your resume.
-          </p>
-        </div>
-        <div className="space-y-2">
-          {sectionOrder.map((key, idx) => (
-            <div
-              key={key}
-              className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-xs"
-            >
-              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
-                {SECTION_LABELS[key]}
-              </span>
-              <div className="flex items-center gap-1.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => moveSection(idx, "up")}
-                  disabled={idx === 0}
-                  aria-label={`Move ${SECTION_LABELS[key]} up`}
-                  className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-brand-600 text-white hover:bg-brand-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                >
-                  Up
-                </button>
-                <button
-                  type="button"
-                  onClick={() => moveSection(idx, "down")}
-                  disabled={idx === sectionOrder.length - 1}
-                  aria-label={`Move ${SECTION_LABELS[key]} down`}
-                  className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-brand-600 text-white hover:bg-brand-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                >
-                  Down
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Your details */}
-      <section className="space-y-5">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-2">
-            Your details
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-            Add your name, email, and ways for employers to contact you.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+    <form className="space-y-2.5" onSubmit={(e) => e.preventDefault()}>
+      {/* Contact — always open */}
+      <Section title="Your details" hint="Name, email, and how employers reach you" defaultOpen>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              Full Name *
-            </label>
+            <label className={label}>Full name *</label>
             <input
               type="text"
               value={resume.contact.name}
               onChange={(e) => handleContactChange("name", e.target.value)}
-              placeholder="John Doe"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              placeholder="Aarav Mehta"
+              className={field}
             />
-            {touched.name && errors.name && (
-              <p className="mt-1.5 text-xs text-red-600 dark:text-red-300 font-medium">{errors.name}</p>
-            )}
+            {touched.name && errors.name && <p className="mt-1 text-[11.5px] text-red-600 dark:text-red-400">{errors.name}</p>}
           </div>
-
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              Email Address *
-            </label>
+            <label className={label}>Email *</label>
             <input
               type="email"
               value={resume.contact.email}
               onChange={(e) => handleContactChange("email", e.target.value)}
-              placeholder="john@example.com"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              placeholder="you@example.com"
+              className={field}
             />
-            {touched.email && errors.email && (
-              <p className="mt-1.5 text-xs text-red-600 dark:text-red-300 font-medium">{errors.email}</p>
-            )}
+            {touched.email && errors.email && <p className="mt-1 text-[11.5px] text-red-600 dark:text-red-400">{errors.email}</p>}
           </div>
-
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              Phone Number
-            </label>
+            <label className={label}>Phone</label>
             <input
               type="tel"
               value={resume.contact.phone || ""}
               onChange={(e) => handleContactChange("phone", e.target.value)}
               placeholder="+1 (555) 123-4567"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              className={field}
             />
           </div>
-
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              Location
-            </label>
+            <label className={label}>Location</label>
             <input
               type="text"
               value={resume.contact.location || ""}
               onChange={(e) => handleContactChange("location", e.target.value)}
-              placeholder="San Francisco, CA"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              placeholder="Bengaluru, India"
+              className={field}
             />
           </div>
-
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              LinkedIn URL
-            </label>
+            <label className={label}>LinkedIn</label>
             <input
               type="url"
               value={resume.contact.linkedin || ""}
               onChange={(e) => handleContactChange("linkedin", e.target.value)}
-              placeholder="linkedin.com/in/johndoe"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              placeholder="linkedin.com/in/you"
+              className={field}
             />
           </div>
-
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-              Personal Website
-            </label>
+            <label className={label}>Website / portfolio</label>
             <input
               type="url"
               value={resume.contact.website || ""}
               onChange={(e) => handleContactChange("website", e.target.value)}
-              placeholder="johndoe.com"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+              placeholder="yoursite.com"
+              className={field}
             />
           </div>
         </div>
-      </section>
+      </Section>
 
-      {/* About you */}
-      <section className="space-y-4">
-        <div>
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              About you
-            </h2>
-            <FieldAIButton
-              section="summary"
-              value={resume.summary || ""}
-              context={`Role: ${resume.experience[0]?.title ?? ""} at ${resume.experience[0]?.company ?? ""}. Skills: ${resume.skills.slice(0, 8).join(", ")}`}
-              onApply={handleSummaryChange}
-            />
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-            A short intro highlighting who you are, your strengths, and what you do best.
-          </p>
-        </div>
+      {/* Summary */}
+      <Section
+        title="About you"
+        hint="Two or three lines on what you do best"
+        defaultOpen
+        action={
+          <FieldAIButton
+            section="summary"
+            value={resume.summary || ""}
+            context={`Role: ${resume.experience[0]?.title ?? ""} at ${resume.experience[0]?.company ?? ""}. Skills: ${resume.skills.slice(0, 8).join(", ")}`}
+            onApply={(summary) => setResume((prev) => ({ ...prev, summary }))}
+            label="Improve"
+          />
+        }
+      >
         <textarea
           value={resume.summary || ""}
-          onChange={(e) => handleSummaryChange(e.target.value)}
-          placeholder="Write a brief overview of your professional background, core strengths, and career goals..."
+          onChange={(e) => setResume((prev) => ({ ...prev, summary: e.target.value }))}
+          placeholder="Senior product designer with 7 years shipping consumer apps. Led design systems used by 40+ engineers and raised activation by 24%."
           rows={4}
-          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+          className={field}
         />
-      </section>
+        <p className="text-[11.5px] text-slate-400 dark:text-slate-500">
+          Tip: lead with your role, years of experience, and one measurable result.
+        </p>
+      </Section>
 
-      {/* Work history */}
-      <section className="space-y-5">
-        <div>
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Work history
-            </h2>
-            <button
-              type="button"
-              onClick={addExperience}
-              className="text-sm px-4 py-2 rounded-xl bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-500/20 border border-brand-200 dark:border-brand-800/50 font-semibold shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Add Experience
-            </button>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-            List your previous roles, companies, dates, and what you achieved.
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          {resume.experience.map((exp, idx) => (
-            <div key={idx} className="p-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 shadow-sm hover:shadow-md transition-all duration-200 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  value={exp.company}
-                  onChange={(e) => updateExperience(idx, "company", e.target.value)}
-                  placeholder="Company name"
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
-                />
+      {/* Experience */}
+      <Section
+        title="Work history"
+        count={resume.experience.length}
+        hint="Roles, dates, and results — newest first"
+        defaultOpen={resume.experience.length > 0}
+        action={<AddButton onClick={() => setResume((prev) => ({
+          ...prev,
+          experience: [...prev.experience, { company: "", title: "", startDate: "", endDate: "Present", bullets: [] }],
+        }))}>Add role</AddButton>}
+      >
+        {resume.experience.length === 0 && (
+          <p className="text-[12.5px] text-slate-400 dark:text-slate-500">No roles yet. Add your most recent position to start.</p>
+        )}
+        {resume.experience.map((exp, idx) => (
+          <div key={idx} className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/40 p-3.5 space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className={label}>Job title</label>
                 <input
                   type="text"
                   value={exp.title}
-                  onChange={(e) => updateExperience(idx, "title", e.target.value)}
-                  placeholder="Job title"
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                  onChange={(e) => updateExperience(idx, { title: e.target.value })}
+                  placeholder="Senior Frontend Engineer"
+                  className={field}
                 />
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 dark:text-slate-300 mb-1">Start Month & Year</label>
-                  <input
-                    type="month"
-                    value={exp.startDate}
-                    onChange={(e) => updateExperience(idx, "startDate", e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 dark:text-slate-300 mb-1">End Month & Year</label>
-                  <input
-                    type="month"
-                    value={exp.endDate === "Present" ? "" : exp.endDate}
-                    onChange={(e) => updateExperience(idx, "endDate", e.target.value || "Present")}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
-                  />
-                </div>
+              <div>
+                <label className={label}>Company</label>
+                <input
+                  type="text"
+                  value={exp.company}
+                  onChange={(e) => updateExperience(idx, { company: e.target.value })}
+                  placeholder="Razorpay"
+                  className={field}
+                />
               </div>
-
-              <div className="flex items-center justify-between gap-2">
-                <p className="block text-xs font-semibold text-slate-500 dark:text-slate-300">
-                  Bullet points (one per line)
-                </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={label}>Start</label>
+                <input
+                  type="month"
+                  value={exp.startDate}
+                  onChange={(e) => updateExperience(idx, { startDate: e.target.value })}
+                  className={field}
+                />
+              </div>
+              <div>
+                <label className={label}>End</label>
+                <input
+                  type="month"
+                  value={exp.endDate === "Present" ? "" : exp.endDate}
+                  onChange={(e) => updateExperience(idx, { endDate: e.target.value || "Present" })}
+                  className={field}
+                />
+                <p className="mt-1 text-[10.5px] text-slate-400 dark:text-slate-500">Leave empty for “Present”.</p>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <label className="text-[12px] font-semibold text-slate-600 dark:text-slate-300">Achievements · one per line</label>
                 <FieldAIButton
                   section="bullets"
                   value={exp.bullets.join("\n")}
                   context={`${exp.title} at ${exp.company}`}
-                  label="Improve bullets"
+                  label="Improve"
                   onApply={(improved) =>
-                    updateExperience(idx, "bullets", improved.split("\n").map((b) => b.trim()).filter(Boolean))
+                    updateExperience(idx, {
+                      bullets: improved.split("\n").map((b) => b.trim()).filter(Boolean),
+                    })
                   }
                 />
               </div>
               <textarea
                 value={exp.bullets.join("\n")}
                 onChange={(e) =>
-                  updateExperience(
-                    idx,
-                    "bullets",
-                    e.target.value.split("\n").filter((b) => b.trim())
-                  )
+                  updateExperience(idx, {
+                    bullets: e.target.value.split("\n").filter((b) => b.trim()),
+                  })
                 }
-                placeholder="Bullet points (one per line)&#10;• Achieved X by doing Y&#10;• Led Z initiative"
+                placeholder={"Cut checkout latency 62% by rebuilding the flow in Next.js\nLed 6 engineers across two product squads"}
                 rows={3}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                className={field}
               />
-
-              <div className="flex justify-end pt-1">
-                <button
-                  type="button"
-                  onClick={() => removeExperience(idx)}
-                  className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl text-red-600 dark:text-red-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                  Remove
-                </button>
-              </div>
             </div>
-          ))}
-        </div>
-      </section>
+            <div className="flex justify-end">
+              <RemoveButton onClick={() => setResume((prev) => ({
+                ...prev,
+                experience: prev.experience.filter((_, i) => i !== idx),
+              }))} />
+            </div>
+          </div>
+        ))}
+      </Section>
 
       {/* Education */}
-      <section className="space-y-5">
-        <div>
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Education
-            </h2>
-            <button
-              type="button"
-              onClick={addEducation}
-              className="text-sm px-4 py-2 rounded-xl bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-500/20 border border-brand-200 dark:border-brand-800/50 font-semibold shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Add Education
-            </button>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-            Share where you studied, your degree or major, and graduation year.
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          {resume.education.map((edu, idx) => (
-            <div key={idx} className="p-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 shadow-sm hover:shadow-md transition-all duration-200 space-y-4">
+      <Section
+        title="Education"
+        count={resume.education.length}
+        hint="Degree, school, and graduation year"
+        defaultOpen={resume.education.length > 0}
+        action={<AddButton onClick={() => setResume((prev) => ({
+          ...prev,
+          education: [...prev.education, { institution: "", degree: "", field: "", graduationYear: "" }],
+        }))}>Add school</AddButton>}
+      >
+        {resume.education.length === 0 && (
+          <p className="text-[12.5px] text-slate-400 dark:text-slate-500">No education yet.</p>
+        )}
+        {resume.education.map((edu, idx) => (
+          <div key={idx} className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/40 p-3.5 space-y-3">
+            <div>
+              <label className={label}>School</label>
               <input
                 type="text"
                 value={edu.institution}
-                onChange={(e) => updateEducation(idx, "institution", e.target.value)}
-                placeholder="University name"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                onChange={(e) => updateEducation(idx, { institution: e.target.value })}
+                placeholder="BITS Pilani"
+                className={field}
               />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className={label}>Degree</label>
                 <input
                   type="text"
                   value={edu.degree}
-                  onChange={(e) => updateEducation(idx, "degree", e.target.value)}
-                  placeholder="Degree (e.g., Bachelor of Science)"
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                  onChange={(e) => updateEducation(idx, { degree: e.target.value })}
+                  placeholder="B.E."
+                  className={field}
                 />
+              </div>
+              <div>
+                <label className={label}>Field</label>
                 <input
                   type="text"
                   value={edu.field}
-                  onChange={(e) => updateEducation(idx, "field", e.target.value)}
-                  placeholder="Field of study"
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                  onChange={(e) => updateEducation(idx, { field: e.target.value })}
+                  placeholder="Computer Science"
+                  className={field}
                 />
               </div>
-
-              <input
-                type="number"
-                value={edu.graduationYear}
-                onChange={(e) => updateEducation(idx, "graduationYear", e.target.value)}
-                placeholder="Graduation year (e.g., 2024)"
-                min="1950"
-                max="2100"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
-              />
-
-              <div className="flex justify-end pt-1">
-                <button
-                  type="button"
-                  onClick={() => removeEducation(idx)}
-                  className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl text-red-600 dark:text-red-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                  Remove
-                </button>
+            </div>
+            <div className="flex items-end gap-3">
+              <div className="w-32">
+                <label className={label}>Year</label>
+                <input
+                  type="number"
+                  value={edu.graduationYear}
+                  onChange={(e) => updateEducation(idx, { graduationYear: e.target.value })}
+                  placeholder="2018"
+                  min="1950"
+                  max="2100"
+                  className={field}
+                />
+              </div>
+              <div className="ml-auto pb-2">
+                <RemoveButton onClick={() => setResume((prev) => ({
+                  ...prev,
+                  education: prev.education.filter((_, i) => i !== idx),
+                }))} />
               </div>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        ))}
+      </Section>
 
       {/* Skills */}
-      <section className="space-y-4">
-        <div>
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Skills
-            </h2>
-            <FieldAIButton
-              section="skills"
-              value={resume.skills.join(", ")}
-              context={`Roles: ${resume.experience.map((e) => `${e.title} at ${e.company}`).join("; ")}`}
-              onApply={(improved) => handleSkillsChange(improved)}
-            />
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-            List your top tools, technologies, and abilities that fit the job.
-          </p>
-        </div>
+      <Section
+        title="Skills"
+        count={resume.skills.length}
+        hint="Tools, languages, and strengths — comma separated"
+        action={
+          <FieldAIButton
+            section="skills"
+            value={skillsValue}
+            context={`Roles: ${resume.experience.map((e) => `${e.title} at ${e.company}`).join("; ")}`}
+            onApply={handleSkillsChange}
+            label="Improve"
+          />
+        }
+      >
         <textarea
-          value={resume.skills.join(", ")}
+          value={skillsValue}
           onChange={(e) => handleSkillsChange(e.target.value)}
-          placeholder="Enter skills separated by commas (e.g., JavaScript, React, Node.js, Python, AWS)"
+          placeholder="React, TypeScript, Next.js, Node.js, PostgreSQL, AWS, Design systems"
           rows={3}
-          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+          className={field}
         />
         {resume.skills.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-1">
+          <div className="flex flex-wrap gap-1.5">
             {resume.skills.map((skill, idx) => (
               <span
-                key={idx}
-                className="px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300 border border-brand-100 dark:border-brand-800 text-xs font-semibold shadow-sm"
+                key={`${skill}-${idx}`}
+                className="rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 text-[11.5px] font-medium text-slate-600 dark:text-slate-300"
               >
                 {skill}
               </span>
             ))}
           </div>
         )}
-      </section>
+      </Section>
 
-      {/* Your projects */}
-      <section className="space-y-5">
-        <div>
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Your projects
-            </h2>
-            <button
-              type="button"
-              onClick={addProject}
-              className="text-sm px-4 py-2 rounded-xl bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-500/20 border border-brand-200 dark:border-brand-800/50 font-semibold shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Add Project
-            </button>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-            Showcase personal or work projects that demonstrate your practical skills.
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          {(resume.projects || []).map((proj, idx) => (
-            <div key={idx} className="p-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 shadow-sm hover:shadow-md transition-all duration-200 space-y-4">
-              <input
-                type="text"
-                value={proj.name}
-                onChange={(e) => updateProject(idx, "name", e.target.value)}
-                placeholder="Project name"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
-              />
-
-              <div className="flex items-center justify-between gap-2">
-                <p className="block text-xs font-semibold text-slate-500 dark:text-slate-300">
-                  Description
-                </p>
+      {/* Projects */}
+      <Section
+        title="Projects"
+        count={(resume.projects || []).length}
+        hint="Optional — side projects that show your craft"
+        defaultOpen={(resume.projects || []).length > 0}
+        action={<AddButton onClick={() => setResume((prev) => ({
+          ...prev,
+          projects: [...(prev.projects || []), { name: "", description: "", technologies: [] }],
+        }))}>Add project</AddButton>}
+      >
+        {(resume.projects || []).length === 0 && (
+          <p className="text-[12.5px] text-slate-400 dark:text-slate-500">No projects yet. Optional, but useful early in your career.</p>
+        )}
+        {(resume.projects || []).map((proj, idx) => (
+          <div key={idx} className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/40 p-3.5 space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className={label}>Project name</label>
+                <input
+                  type="text"
+                  value={proj.name}
+                  onChange={(e) => updateProject(idx, { name: e.target.value })}
+                  placeholder="Atlas — design system"
+                  className={field}
+                />
+              </div>
+              <div>
+                <label className={label}>Tech</label>
+                <input
+                  type="text"
+                  value={proj.technologies.join(", ")}
+                  onChange={(e) =>
+                    updateProject(idx, { technologies: e.target.value.split(",").map((t) => t.trim()) })
+                  }
+                  placeholder="React, TypeScript"
+                  className={field}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <label className="text-[12px] font-semibold text-slate-600 dark:text-slate-300">One-line description</label>
                 <FieldAIButton
                   section="project"
                   value={proj.description}
                   context={`${proj.name}. Tech: ${proj.technologies.join(", ")}`}
                   label="Improve"
-                  onApply={(improved) => updateProject(idx, "description", improved)}
+                  onApply={(description) => updateProject(idx, { description })}
                 />
               </div>
               <textarea
                 value={proj.description}
-                onChange={(e) => updateProject(idx, "description", e.target.value)}
-                placeholder="Brief project description and key accomplishments..."
+                onChange={(e) => updateProject(idx, { description: e.target.value })}
+                placeholder="An accessible 40-component React library used by 2,000+ developers."
                 rows={2}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
+                className={field}
               />
+            </div>
+            <div className="flex justify-end">
+              <RemoveButton onClick={() => setResume((prev) => ({
+                ...prev,
+                projects: (prev.projects || []).filter((_, i) => i !== idx),
+              }))} />
+            </div>
+          </div>
+        ))}
+      </Section>
 
-              <input
-                type="text"
-                value={proj.technologies.join(", ")}
-                onChange={(e) =>
-                  updateProject(
-                    idx,
-                    "technologies",
-                    e.target.value.split(",").map((t) => t.trim())
-                  )
-                }
-                placeholder="Technologies used (comma-separated, e.g., React, TypeScript, TailwindCSS)"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
-              />
+      {/* Certifications */}
+      <Section
+        title="Certifications"
+        count={(resume.certifications || []).length}
+        hint="Licenses, credentials, and courses"
+        defaultOpen={(resume.certifications || []).length > 0}
+        action={<AddButton onClick={() => setResume((prev) => ({
+          ...prev,
+          certifications: [...(prev.certifications || []), ""],
+        }))}>Add</AddButton>}
+      >
+        {(resume.certifications || []).length === 0 && (
+          <p className="text-[12.5px] text-slate-400 dark:text-slate-500">No certifications yet.</p>
+        )}
+        {(resume.certifications || []).map((cert, idx) => (
+          <div key={idx} className="flex items-center gap-2">
+            <input
+              type="text"
+              value={cert}
+              onChange={(e) => setResume((prev) => {
+                const certifications = [...(prev.certifications || [])];
+                certifications[idx] = e.target.value;
+                return { ...prev, certifications };
+              })}
+              placeholder="AWS Certified Solutions Architect"
+              className={field}
+            />
+            <RemoveButton onClick={() => setResume((prev) => ({
+              ...prev,
+              certifications: (prev.certifications || []).filter((_, i) => i !== idx),
+            }))} label="✕" />
+          </div>
+        ))}
+      </Section>
 
-              <div className="flex justify-end pt-1">
+      {/* Section order */}
+      <details className="group rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+        <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3 select-none [&::-webkit-details-marker]:hidden">
+          <span className="flex-1">
+            <span className="text-[13px] font-semibold text-slate-900 dark:text-white">Section order</span>
+            <span className="mt-0.5 block text-[11.5px] text-slate-400 dark:text-slate-500">
+              Move sections up or down on the page.
+            </span>
+          </span>
+          <svg className="w-4 h-4 text-slate-400 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+          </svg>
+        </summary>
+        <div className="border-t border-slate-100 dark:border-slate-800 p-3 space-y-1">
+          {sectionOrder.map((key, idx) => (
+            <div key={key} className="flex items-center justify-between gap-2 px-1.5 py-1">
+              <span className="text-[12.5px] font-medium text-slate-700 dark:text-slate-200">{SECTION_LABELS[key]}</span>
+              <div className="flex gap-1">
                 <button
                   type="button"
-                  onClick={() => removeProject(idx)}
-                  className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl text-red-600 dark:text-red-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
+                  onClick={() => moveSection(idx, "up")}
+                  disabled={idx === 0}
+                  aria-label={`Move ${SECTION_LABELS[key]} up`}
+                  className="h-7 w-7 rounded-md border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed text-[12px]"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                  Remove
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveSection(idx, "down")}
+                  disabled={idx === sectionOrder.length - 1}
+                  aria-label={`Move ${SECTION_LABELS[key]} down`}
+                  className="h-7 w-7 rounded-md border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed text-[12px]"
+                >
+                  ↓
                 </button>
               </div>
             </div>
           ))}
         </div>
-      </section>
+      </details>
 
-      {/* Certificates */}
-      <section className="space-y-5">
-        <div>
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Certificates
-            </h2>
-            <button
-              type="button"
-              onClick={addCertification}
-              className="text-sm px-4 py-2 rounded-xl bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-500/20 border border-brand-200 dark:border-brand-800/50 font-semibold shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Add Certification
-            </button>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-            Add any relevant licenses, credentials, or courses you have completed.
-          </p>
-        </div>
-
-        <div className="space-y-3">
-          {(resume.certifications || []).map((cert, idx) => (
-            <div key={idx} className="flex gap-3">
-              <input
-                type="text"
-                value={cert}
-                onChange={(e) => updateCertification(idx, e.target.value)}
-                placeholder="Certification name (e.g., AWS Certified Solutions Architect)"
-                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
-              />
-              <button
-                type="button"
-                onClick={() => removeCertification(idx)}
-                className="inline-flex items-center gap-1 text-xs font-bold px-3 py-2.5 rounded-xl text-red-600 dark:text-red-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-transparent hover:border-red-100"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-                Remove
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Validation Error */}
-      {errors.sections && (
-        <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 shadow-sm flex items-center gap-2 text-sm text-red-700 dark:text-red-300">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-          </svg>
-          {errors.sections}
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+      <div className="flex justify-end pt-2">
         <button
           type="button"
           onClick={handleClear}
-          className="px-5 py-2.5 rounded-xl border border-red-200 dark:border-red-800 text-red-600 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-500/20 dark:bg-red-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-sm font-semibold flex items-center gap-1.5"
+          className="text-[11.5px] font-medium text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-          Clear All Data
+          Clear all data
         </button>
       </div>
     </form>

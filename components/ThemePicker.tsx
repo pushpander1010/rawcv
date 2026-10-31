@@ -1,155 +1,47 @@
 "use client";
 
-import { useState, useMemo } from "react";
 import type { ThemeId } from "@/types";
 import { useResume } from "@/context/ResumeContext";
 
-interface ThemeMeta {
+export interface ThemeMeta {
   id: ThemeId;
   name: string;
-  category: "Classic" | "Modern" | "Minimal" | "Executive" | "Creative";
-  description: string;
+  note: string;
   accent: string;
-  preview: string;
+  paper: string;
+  ink: string;
 }
 
-const THEMES: ThemeMeta[] = [
-  {
-    id: "classic",
-    name: "Classic",
-    category: "Classic",
-    description: "Traditional serif layout with clean section dividers",
-    accent: "bg-slate-800",
-    preview: "Serif · Single column",
-  },
-  {
-    id: "modern",
-    name: "Modern",
-    category: "Modern",
-    description: "Two-column layout with a dark sidebar and accent color",
-    accent: "bg-slate-700",
-    preview: "Sans-serif · Two column",
-  },
-  {
-    id: "minimal",
-    name: "Minimal",
-    category: "Minimal",
-    description: "Generous whitespace, light typography, no visual noise",
-    accent: "bg-slate-200 dark:bg-slate-700",
-    preview: "Light · Airy",
-  },
-  {
-    id: "executive",
-    name: "Executive",
-    category: "Executive",
-    description: "Bold headers and formal layout for senior roles",
-    accent: "bg-slate-900",
-    preview: "Bold · Formal",
-  },
-  {
-    id: "creative",
-    name: "Creative",
-    category: "Creative",
-    description: "Gradient accents and timeline layout for creative roles",
-    accent: "bg-brand-600",
-    preview: "Gradient · Timeline",
-  },
-  {
-    id: "sharp",
-    name: "Sharp",
-    category: "Modern",
-    description: "High-contrast black & white with geometric accents",
-    accent: "bg-black",
-    preview: "B&W · Geometric",
-  },
-  {
-    id: "navy",
-    name: "Navy",
-    category: "Executive",
-    description: "Deep navy sidebar with gold accents, polished and professional",
-    accent: "bg-[#0f2044]",
-    preview: "Navy · Gold accents",
-  },
-  {
-    id: "terra",
-    name: "Terra",
-    category: "Classic",
-    description: "Warm earthy tones with elegant serif typography",
-    accent: "bg-[#8b4513]",
-    preview: "Serif · Warm tones",
-  },
-  {
-    id: "enhancv",
-    name: "Enhancv",
-    category: "Modern",
-    description: "Two-column layout with blue accents, avatar initials, and tag-style skills",
-    accent: "bg-[#008cff]",
-    preview: "Blue · Two column",
-  },
-  {
-    id: "europass",
-    name: "Europass",
-    category: "Classic",
-    description: "European CV format with photo in header, languages section, and personal details",
-    accent: "bg-[#1a3a5c]",
-    preview: "EU · Photo header · Languages",
-  },
-  {
-    id: "canadian",
-    name: "Canadian",
-    category: "Minimal",
-    description: "Clean Canadian resume — no photo, no personal details beyond contact",
-    accent: "bg-[#cc2936]",
-    preview: "Red accent · Clean · Single column",
-  },
-  {
-    id: "fotoram",
-    name: "Fotoram",
-    category: "Creative",
-    description: "Modern photo-focused theme with a large circular photo and dark gradient header",
-    accent: "bg-[#1a1a2e]",
-    preview: "Dark gradient · Large photo",
-  },
-  {
-    id: "zety",
-    name: "Zety",
-    category: "Modern",
-    description: "Professional two-column layout with photo in a dark sidebar",
-    accent: "bg-[#2c3e50]",
-    preview: "Dark sidebar · Photo",
-  },
-  {
-    id: "resumeio",
-    name: "Resume.io",
-    category: "Minimal",
-    description: "Clean single-column layout with circular photo header and blue accents",
-    accent: "bg-[#2563eb]",
-    preview: "Blue accent · Photo header",
-  },
+export const THEMES: ThemeMeta[] = [
+  { id: "maang", name: "MAANG", note: "Dense · ATS", accent: "#000000", paper: "#ffffff", ink: "#000000" },
+  { id: "classic", name: "Classic", note: "Serif · timeless", accent: "#22201d", paper: "#ffffff", ink: "#22201d" },
+  { id: "minimal", name: "Minimal", note: "Airy · editorial", accent: "#334155", paper: "#ffffff", ink: "#111827" },
+  { id: "modern", name: "Modern", note: "Dark sidebar", accent: "#8fb6d9", paper: "#1d2733", ink: "#ffffff" },
+  { id: "executive", name: "Executive", note: "Bold · senior", accent: "#c8a96a", paper: "#12161c", ink: "#ffffff" },
+  { id: "atlas", name: "Atlas", note: "Swiss · precise", accent: "#1e4ed8", paper: "#ffffff", ink: "#101828" },
+  { id: "editorial", name: "Editorial", note: "Magazine · warm", accent: "#8f3a22", paper: "#fffefb", ink: "#1a1714" },
+  { id: "navy", name: "Navy", note: "Navy · gold", accent: "#e5b96f", paper: "#0e2138", ink: "#ffffff" },
+  { id: "creative", name: "Creative", note: "Violet · timeline", accent: "#5b3df5", paper: "#ffffff", ink: "#16151c" },
+  { id: "enhancv", name: "Enhancv", note: "Blue · two column", accent: "#0b72e7", paper: "#ffffff", ink: "#0f172a" },
+  { id: "terra", name: "Terra", note: "Warm · serif", accent: "#9a4a24", paper: "#fffdf8", ink: "#2f241c" },
+  { id: "sharp", name: "Sharp", note: "Mono · stark", accent: "#0a0a0a", paper: "#ffffff", ink: "#0a0a0a" },
+  { id: "resumeio", name: "Resume.io", note: "Soft · friendly", accent: "#2563eb", paper: "#ffffff", ink: "#0f172a" },
+  { id: "zety", name: "Zety", note: "Slate sidebar", accent: "#93b4d1", paper: "#22303f", ink: "#ffffff" },
+  { id: "fotoram", name: "Fotoram", note: "Photo · gradient", accent: "#3a6ea5", paper: "#22303f", ink: "#ffffff" },
+  { id: "europass", name: "Europass", note: "EU · languages", accent: "#1c3f66", paper: "#ffffff", ink: "#0f172a" },
+  { id: "canadian", name: "Canadian", note: "Clean · no photo", accent: "#b3202c", paper: "#ffffff", ink: "#111827" },
 ];
 
-const CATEGORIES = ["All", "Classic", "Modern", "Minimal", "Executive", "Creative"] as const;
+export function themeName(id: ThemeId): string {
+  return THEMES.find((t) => t.id === id)?.name ?? "Classic";
+}
 
 interface Props {
-  /** Called when user picks a theme — also updates ResumeContext internally */
   onSelect?: (themeId: ThemeId) => void;
 }
 
 export default function ThemePicker({ onSelect }: Props) {
   const { state, setState } = useResume();
-  const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState<string>("All");
-
-  const filtered = useMemo(() => {
-    return THEMES.filter((t) => {
-      const matchesCategory = activeCategory === "All" || t.category === activeCategory;
-      const matchesSearch =
-        !search.trim() ||
-        t.name.toLowerCase().includes(search.toLowerCase()) ||
-        t.description.toLowerCase().includes(search.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-  }, [search, activeCategory]);
 
   function handleSelect(id: ThemeId) {
     setState((prev) => ({ ...prev, selectedTheme: id }));
@@ -157,89 +49,53 @@ export default function ThemePicker({ onSelect }: Props) {
   }
 
   return (
-    <div className="w-full">
-      {/* Search + filter bar */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-5">
-        <input
-          type="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search themes…"
-          aria-label="Search themes"
-          className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all duration-200 shadow-sm"
-        />
-        <div className="flex gap-1.5 flex-wrap" role="group" aria-label="Filter by category">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setActiveCategory(cat)}
-              aria-pressed={activeCategory === cat}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-brand-500/10 ${
-                activeCategory === cat
-                  ? "bg-brand-600 text-white shadow-md shadow-brand-500/10"
-                  : "bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
-              }`}
+    <div
+      className="grid grid-cols-2 sm:grid-cols-4 gap-2.5"
+      role="listbox"
+      aria-label="Resume themes"
+    >
+      {THEMES.map((theme) => {
+        const isSelected = state.selectedTheme === theme.id;
+        return (
+          <button
+            key={theme.id}
+            type="button"
+            role="option"
+            aria-selected={isSelected}
+            onClick={() => handleSelect(theme.id)}
+            className={`group relative rounded-lg border p-2 text-left transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 dark:focus-visible:ring-white ${
+              isSelected
+                ? "border-slate-900 dark:border-white ring-1 ring-slate-900 dark:ring-white bg-white dark:bg-slate-900"
+                : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-slate-400 dark:hover:border-slate-500"
+            }`}
+          >
+            {/* Miniature paper */}
+            <div
+              className="relative h-[52px] rounded overflow-hidden border border-black/5"
+              style={{ background: theme.paper }}
             >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Theme grid */}
-      {filtered.length === 0 ? (
-        <p className="text-sm text-slate-600 dark:text-slate-300 text-center py-8">No themes match your search.</p>
-      ) : (
-        <div
-          className="grid grid-cols-2 sm:grid-cols-3 gap-4"
-          role="listbox"
-          aria-label="Resume themes"
-        >
-          {filtered.map((theme) => {
-            const isSelected = state.selectedTheme === theme.id;
-            return (
-              <button
-                key={theme.id}
-                type="button"
-                role="option"
-                aria-selected={isSelected}
-                onClick={() => handleSelect(theme.id)}
-                className={`group rounded-2xl border-2 overflow-hidden text-left hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-brand-500/10 ${
-                  isSelected
-                    ? "border-brand-600 shadow-lg shadow-brand-500/10"
-                    : "border-slate-200 dark:border-slate-700 hover:border-brand-400 hover:shadow-md"
-                }`}
-              >
-                {/* Thumbnail */}
-                <div className={`h-24 ${theme.accent} relative flex items-end p-3`}>
-                  {/* Simulated resume lines */}
-                  <div className="w-full space-y-1 opacity-30">
-                    <div className="h-2 bg-white dark:bg-slate-900 rounded w-3/4" />
-                    <div className="h-1.5 bg-white dark:bg-slate-900 rounded w-1/2" />
-                    <div className="h-1 bg-white dark:bg-slate-900 rounded w-2/3" />
-                  </div>
-                  {isSelected && (
-                    <span className="absolute top-2 right-2 w-5 h-5 bg-brand-500 rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    </span>
-                  )}
-                </div>
-
-                {/* Info */}
-                <div className="p-3 bg-white dark:bg-slate-900">
-                  <div className="font-semibold text-sm text-slate-900 dark:text-white mb-0.5">
-                    {theme.name}
-                  </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-300">{theme.preview}</div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      )}
+              <div className="px-2 pt-2">
+                <div className="h-1.5 w-3/4 rounded-sm" style={{ background: theme.ink, opacity: 0.85 }} />
+                <div className="mt-1 h-1 w-1/2 rounded-sm" style={{ background: theme.accent }} />
+                <div className="mt-1.5 h-1 w-full rounded-sm" style={{ background: theme.ink, opacity: 0.16 }} />
+                <div className="mt-1 h-1 w-5/6 rounded-sm" style={{ background: theme.ink, opacity: 0.16 }} />
+                <div className="mt-1 h-1 w-2/3 rounded-sm" style={{ background: theme.ink, opacity: 0.16 }} />
+              </div>
+              {isSelected && (
+                <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-slate-900 dark:bg-white flex items-center justify-center">
+                  <svg className="w-2.5 h-2.5 text-white dark:text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3.5} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              )}
+            </div>
+            <div className="mt-1.5 flex items-baseline justify-between gap-1">
+              <span className="text-[12px] font-semibold text-slate-900 dark:text-white truncate">{theme.name}</span>
+            </div>
+            <span className="block text-[10px] text-slate-400 dark:text-slate-500 truncate">{theme.note}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }

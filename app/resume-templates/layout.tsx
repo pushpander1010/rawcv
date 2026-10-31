@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import HowToSchema from "@/components/HowToSchema";
 
 export const metadata: Metadata = {
-  title: "Resume Templates — 9 Professional Themes for Your CV | rawcv",
+  title: "Resume Templates — 17 Professional, ATS-Safe Designs | rawcv",
   description:
-    "Explore 9 professionally designed resume templates: Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant. Find the perfect ATS-friendly theme for your job search. Free to use.",
+    "Explore 17 professionally designed resume templates — MAANG, Atlas, Editorial, Classic, Minimal, Modern, Executive, Europass, Canadian, and more. ATS-safe, free, and typeset for one clean A4 page.",
   alternates: { canonical: "https://www.rawcv.com/resume-templates" },
   openGraph: {
-    title: "Resume Templates — 9 Professional Themes for Your CV | rawcv",
+    title: "Resume Templates — 17 Professional, ATS-Safe Designs | rawcv",
     description:
-      "Explore 9 professionally designed resume templates: Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant. ATS-friendly, AI-optimized, and free to use.",
+      "Explore 17 professionally designed resume templates — MAANG, Atlas, Editorial, Classic, Minimal, Modern, Executive, Europass, Canadian, and more. ATS-safe, free, and typeset for one clean A4 page.",
     url: "https://www.rawcv.com/resume-templates",
     type: "website",
     siteName: "rawcv",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Resume Templates — 9 Professional Themes | rawcv",
+    title: "Resume Templates — 17 ATS-Safe Designs | rawcv",
     description:
-      "Browse 9 beautifully designed resume templates. ATS-friendly, AI-powered, and completely free to start.",
+      "Browse 17 typeset, ATS-safe resume templates. Free PDF export, no account required.",
     images: ["/og-image.png"],
   },
   keywords: [

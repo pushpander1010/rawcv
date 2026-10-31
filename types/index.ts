@@ -14,7 +14,10 @@ export type ThemeId =
   | "canadian"
   | "fotoram"
   | "zety"
-  | "resumeio";
+  | "resumeio"
+  | "editorial"
+  | "atlas"
+  | "maang";
 
 // ─── Resume Format (region-specific) ────────────────────────────────────────
 

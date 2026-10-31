@@ -18,12 +18,17 @@ export default function FreeDownloadButton({ resume, theme, typography, onValida
   const [loading, setLoading] = useState(false);
   const [docLoading, setDocLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [done, setDone] = useState<string | null>(null);
   const typo = normalizeTypography(typography);
 
   const doValidate = (): boolean => {
     const msg = validateResume(resume);
-    if (msg) { setError(msg); onValidationError?.(msg); return false; }
+    if (msg) {
+      setError(msg);
+      onValidationError?.(msg);
+      return false;
+    }
+    setDone(null);
     return true;
   };
 
@@ -34,27 +39,40 @@ export default function FreeDownloadButton({ resume, theme, typography, onValida
     try {
       const sName = safeName(resume.contact.name);
       const result = await downloadViaApi(resume, theme, "/api/export-free", typo);
-      if (result.fallbackHtml) { openPrintWindow(result.fallbackHtml, sName); setShowSuccessModal(true); return; }
+      if (result.fallbackHtml) {
+        openPrintWindow(result.fallbackHtml, sName);
+        setDone("Opened the print dialog — choose “Save as PDF”.");
+        return;
+      }
       if (result.error) throw new Error(result.error);
-      if (result.blob) { downloadBlob(result.blob, sName); setShowSuccessModal(true); }
+      if (result.blob) {
+        downloadBlob(result.blob, sName);
+        setDone("PDF downloaded.");
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Could not generate PDF. Please try again.";
       if (msg.includes("timeout") || msg.includes("AbortError")) setError("PDF generation timed out. Please try again.");
-      else if (msg.includes("Failed to fetch") || msg.includes("NetworkError")) setError("Network error. Please check your connection and try again.");
+      else if (msg.includes("Failed to fetch") || msg.includes("NetworkError")) setError("Network error. Check your connection and try again.");
       else setError(msg);
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleBrowserPrint = () => {
     setError(null);
     if (!doValidate() || !resume) return;
     try {
-      const sName = safeName(resume.contact.name);
       const html = browserPrint(resume, theme, typo);
-      const win = openPrintWindow(html, sName);
-      if (!win) { setError("Pop-up blocked. Please allow pop-ups and try again."); return; }
-      setShowSuccessModal(true);
-    } catch { setError("Failed to initialize browser print dialog."); }
+      const win = openPrintWindow(html, safeName(resume.contact.name));
+      if (!win) {
+        setError("Pop-up blocked. Please allow pop-ups and try again.");
+        return;
+      }
+      setDone("Print dialog opened.");
+    } catch {
+      setError("Could not open the print dialog.");
+    }
   };
 
   const handleDocx = async () => {
@@ -64,9 +82,9 @@ export default function FreeDownloadButton({ resume, theme, typography, onValida
     try {
       const blob = await buildDocxBlob(resume, typo);
       downloadDocxFile(`${safeName(resume.contact.name)}-resume.docx`, blob);
-      setShowSuccessModal(true);
+      setDone("Word document downloaded.");
     } catch {
-      setError("Could not generate Word file. Please try again.");
+      setError("Could not generate the Word file. Please try again.");
     } finally {
       setDocLoading(false);
     }
@@ -77,9 +95,9 @@ export default function FreeDownloadButton({ resume, theme, typography, onValida
     if (!doValidate() || !resume) return;
     try {
       downloadTextFile(`${safeName(resume.contact.name)}-resume.txt`, resumeToPlainText(resume));
-      setShowSuccessModal(true);
+      setDone("Plain text downloaded.");
     } catch {
-      setError("Could not generate TXT file. Please try again.");
+      setError("Could not generate the text file.");
     }
   };
 
@@ -87,42 +105,72 @@ export default function FreeDownloadButton({ resume, theme, typography, onValida
 
   return (
     <div className="space-y-3">
-      <button type="button" onClick={handleDownload} disabled={isDisabled} aria-label="Download resume as PDF"
-        className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-base shadow-md shadow-emerald-500/10 hover:shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200">
-        {loading ? (<><svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" /></svg>Generating PDF…</>) : (<><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" /></svg>Download PDF (AI Server)</>)}
+      <button
+        type="button"
+        onClick={handleDownload}
+        disabled={isDisabled}
+        aria-label="Download resume as PDF"
+        className="w-full flex items-center justify-center gap-2 h-11 rounded-lg bg-slate-900 dark:bg-white disabled:opacity-50 disabled:cursor-not-allowed text-white dark:text-slate-900 font-semibold text-[14px] hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
+      >
+        {loading ? (
+          <>
+            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Preparing PDF…
+          </>
+        ) : (
+          <>
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+            </svg>
+            Download PDF
+          </>
+        )}
       </button>
-      <button type="button" onClick={handleBrowserPrint} disabled={isDisabled} aria-label="Print or save resume via browser"
-        className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl border-2 border-emerald-600/30 bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 hover:border-emerald-600/60 font-semibold text-base hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
-        Save PDF (Instant Browser)
-      </button>
-      <div className="grid grid-cols-2 gap-2.5">
-        <button type="button" onClick={handleDocx} disabled={isDisabled} aria-label="Download resume as Word document"
-          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm transition-colors focus:outline-none">
-          {docLoading ? "Making Word…" : "Download Word"}
+
+      <div className="grid grid-cols-3 gap-1.5">
+        <button
+          type="button"
+          onClick={handleDocx}
+          disabled={isDisabled}
+          className="h-9 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[12.5px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 transition-colors"
+        >
+          {docLoading ? "Word…" : "Word"}
         </button>
-        <button type="button" onClick={handleTxt} disabled={isDisabled} aria-label="Download resume as plain text"
-          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm transition-colors focus:outline-none">
-          Download TXT
+        <button
+          type="button"
+          onClick={handleTxt}
+          disabled={isDisabled}
+          className="h-9 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[12.5px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 transition-colors"
+        >
+          Plain text
+        </button>
+        <button
+          type="button"
+          onClick={handleBrowserPrint}
+          disabled={isDisabled}
+          className="h-9 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[12.5px] font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 transition-colors"
+        >
+          Print
         </button>
       </div>
-      {error && <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800"><p className="text-sm text-red-700 dark:text-red-300">{error}</p></div>}
-      <p className="text-xs text-slate-500 dark:text-slate-300 text-center">100% Free — No account required!</p>
-      {showSuccessModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform animate-in zoom-in-95 duration-200">
-            <div className="text-center space-y-4">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 text-2xl font-bold">✓</div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Resume Generated!</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-300">Your ATS-safe PDF is ready. Want to optimize your bullet points and match your resume to specific job descriptions with AI?</p>
-              <div className="flex flex-col gap-2 pt-2">
-                <a href="/analyze" className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md text-center">Analyze Your Resume with AI</a>
-                <button type="button" onClick={() => setShowSuccessModal(false)} className="w-full py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 dark:bg-slate-800 font-semibold text-sm">Maybe Later</button>
-              </div>
-            </div>
-          </div>
-        </div>
+
+      {error && (
+        <p className="rounded-md bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 px-3 py-2 text-[12.5px] text-red-700 dark:text-red-300">
+          {error}
+        </p>
       )}
+      {done && !error && (
+        <p className="rounded-md bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 px-3 py-2 text-[12.5px] text-emerald-700 dark:text-emerald-300">
+          {done}
+        </p>
+      )}
+
+      <p className="text-[11.5px] text-slate-500 dark:text-slate-400">
+        Free forever · no watermark · ATS-safe text PDF
+      </p>
     </div>
   );
 }

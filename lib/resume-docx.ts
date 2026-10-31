@@ -6,6 +6,7 @@ import type { ParsedResume, ResumeTypography } from "@/types";
 import { DEFAULT_TYPOGRAPHY, TYPO_LIMITS, normalizeTypography } from "@/types";
 
 import { normalizeSectionOrder } from "@/lib/section-order";
+import { formatDateRange, formatResumeDate } from "@/lib/format-date";
 
 const FONT_MAP: Record<string, string> = {
   default: "Calibri",
@@ -86,7 +87,7 @@ export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTyp
     } else if (key === "experience" && resume.experience?.length) {
       children.push(heading("Experience", font, size));
       for (const job of resume.experience) {
-        const dates = [job.startDate, job.endDate].filter(Boolean).join(" - ");
+        const dates = formatDateRange(job.startDate, job.endDate);
         children.push(
           new Paragraph({
             spacing: { before: 120, after: 20, line },
@@ -112,7 +113,7 @@ export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTyp
         children.push(
           new Paragraph({
             spacing: { before: 80, after: 20, line },
-            children: runs(`${degree}${edu.graduationYear ? ` (${edu.graduationYear})` : ""}`, { bold: true, size, font }),
+            children: runs(`${degree}${edu.graduationYear ? ` (${formatResumeDate(edu.graduationYear)})` : ""}`, { bold: true, size, font }),
           })
         );
         if (edu.institution) children.push(body(edu.institution, font, size, line));

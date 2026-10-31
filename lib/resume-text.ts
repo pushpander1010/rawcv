@@ -3,6 +3,7 @@
 
 import type { ParsedResume } from "@/types";
 import { normalizeSectionOrder } from "@/lib/section-order";
+import { formatDateRange, formatResumeDate } from "@/lib/format-date";
 
 export function resumeToPlainText(resume: ParsedResume): string {
   const lines: string[] = [];
@@ -23,7 +24,7 @@ export function resumeToPlainText(resume: ParsedResume): string {
     } else if (key === "experience" && resume.experience?.length) {
       lines.push("EXPERIENCE");
       for (const job of resume.experience) {
-        const dates = [job.startDate, job.endDate].filter(Boolean).join(" - ");
+        const dates = formatDateRange(job.startDate, job.endDate);
         lines.push(`${job.title}${job.company ? ` — ${job.company}` : ""}${dates ? ` (${dates})` : ""}`);
         for (const b of job.bullets || []) {
           if (b?.trim()) lines.push(`- ${b.trim()}`);
@@ -34,7 +35,7 @@ export function resumeToPlainText(resume: ParsedResume): string {
       lines.push("EDUCATION");
       for (const edu of resume.education) {
         const degree = [edu.degree, edu.field].filter(Boolean).join(" in ");
-        lines.push(`${degree}${edu.graduationYear ? ` (${edu.graduationYear})` : ""}`);
+        lines.push(`${degree}${edu.graduationYear ? ` (${formatResumeDate(edu.graduationYear)})` : ""}`);
         if (edu.institution) lines.push(edu.institution);
         lines.push("");
       }

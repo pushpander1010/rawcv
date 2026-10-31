@@ -1,201 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import type { ParsedResume } from "@/types";
-
-interface KeywordStats {
-  total: number;
-  unique: number;
-  topKeywords: Array<{ word: string; count: number }>;
-  missingCommon: string[];
-}
 
 interface Props {
   resume: ParsedResume | null;
 }
 
 const COMMON_KEYWORDS = [
-  "leadership",
-  "communication",
-  "problem-solving",
-  "teamwork",
-  "project management",
-  "data analysis",
-  "strategic planning",
-  "customer service",
-  "technical skills",
-  "innovation",
-  "agile",
-  "scrum",
-  "python",
-  "javascript",
-  "sql",
-  "aws",
-  "cloud",
-  "api",
-  "database",
-  "frontend",
-  "backend",
-  "full-stack",
-  "react",
-  "node.js",
-  "devops",
-  "ci/cd",
-  "docker",
-  "kubernetes",
-  "microservices",
-  "rest",
-  "graphql",
+  "leadership", "communication", "problem-solving", "teamwork", "project management",
+  "data analysis", "strategic planning", "customer service", "innovation", "agile",
+  "python", "javascript", "sql", "aws", "cloud", "api", "database", "frontend",
+  "backend", "react", "node.js", "devops", "docker", "kubernetes", "graphql",
 ];
 
+function analyze(resume: ParsedResume | null) {
+  const empty = { total: 0, unique: 0, topKeywords: [] as Array<{ word: string; count: number }>, missingCommon: [] as string[], words: [] as string[] };
+  if (!resume) return empty;
+
+  const parts: string[] = [];
+  if (resume.contact.name) parts.push(resume.contact.name);
+  if (resume.summary) parts.push(resume.summary);
+  resume.experience?.forEach((e) => {
+    parts.push(e.company, e.title, ...(e.bullets || []));
+  });
+  resume.education?.forEach((e) => parts.push(e.institution, e.degree, e.field));
+  resume.skills?.forEach((s) => parts.push(s));
+  resume.certifications?.forEach((c) => parts.push(c));
+  resume.projects?.forEach((p) => {
+    parts.push(p.name, p.description, ...(p.technologies || []));
+  });
+
+  const words = (parts.join(" ").toLowerCase().match(/\b[\w.\-]+\b/g) || []).filter((w) => w.length > 3);
+  const counts: Record<string, number> = {};
+  for (const word of words) counts[word] = (counts[word] || 0) + 1;
+
+  const keys = Object.keys(counts);
+  const topKeywords = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 12)
+    .map(([word, count]) => ({ word, count }));
+
+  const missingCommon = COMMON_KEYWORDS
+    .filter((k) => !keys.some((rk) => rk.includes(k) || k.includes(rk)))
+    .slice(0, 8);
+
+  return { total: words.length, unique: keys.length, topKeywords, missingCommon, words };
+}
+
 export default function FreeKeywordAnalyzer({ resume }: Props) {
-  const [stats, setStats] = useState<KeywordStats | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { total, unique, topKeywords, missingCommon } = useMemo(() => analyze(resume), [resume]);
 
-  const analyzeKeywords = () => {
-    if (!resume) return;
-
-    setLoading(true);
-
-    // Extract all text from resume
-    const textParts: string[] = [];
-
-    if (resume.contact.name) textParts.push(resume.contact.name);
-    if (resume.summary) textParts.push(resume.summary);
-
-    resume.experience?.forEach((exp) => {
-      if (exp.company) textParts.push(exp.company);
-      if (exp.title) textParts.push(exp.title);
-      exp.bullets?.forEach((b) => textParts.push(b));
-    });
-
-    resume.education?.forEach((edu) => {
-      if (edu.institution) textParts.push(edu.institution);
-      if (edu.degree) textParts.push(edu.degree);
-      if (edu.field) textParts.push(edu.field);
-    });
-
-    resume.skills?.forEach((s) => textParts.push(s));
-    resume.certifications?.forEach((c) => textParts.push(c));
-    resume.projects?.forEach((p) => {
-      if (p.name) textParts.push(p.name);
-      if (p.description) textParts.push(p.description);
-      p.technologies?.forEach((t) => textParts.push(t));
-    });
-
-    const fullText = textParts.join(" ").toLowerCase();
-
-    // Count keywords
-    const keywordCounts: Record<string, number> = {};
-    const words = fullText.match(/\b[\w\-\.]+\b/g) || [];
-
-    words.forEach((word) => {
-      if (word.length > 3) {
-        keywordCounts[word] = (keywordCounts[word] || 0) + 1;
-      }
-    });
-
-    // Get top keywords
-    const topKeywords = Object.entries(keywordCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 15)
-      .map(([word, count]) => ({ word, count }));
-
-    // Find missing common keywords
-    const resumeKeywordsLower = Object.keys(keywordCounts).map((k) => k.toLowerCase());
-    const missingCommon = COMMON_KEYWORDS.filter(
-      (k) => !resumeKeywordsLower.some((rk) => rk.includes(k) || k.includes(rk))
-    ).slice(0, 10);
-
-    setStats({
-      total: words.length,
-      unique: Object.keys(keywordCounts).length,
-      topKeywords,
-      missingCommon,
-    });
-
-    setLoading(false);
-  };
+  if (!resume) return <p className="text-[12.5px] text-slate-400">Add some content to analyse keywords.</p>;
 
   return (
     <div className="space-y-4">
-      <button
-        type="button"
-        onClick={analyzeKeywords}
-        disabled={loading || !resume}
-        className="w-full px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-brand-500/10 hover:shadow-brand-500/20 hover:-translate-y-0.5"
-      >
-        {loading ? "Analyzing..." : "🔍 Analyze Keywords (Free)"}
-      </button>
+      <div className="flex items-center gap-6 text-[12.5px]">
+        <span className="text-slate-500 dark:text-slate-400">
+          <strong className="text-slate-900 dark:text-white font-semibold tabular-nums">{total}</strong> words
+        </span>
+        <span className="text-slate-500 dark:text-slate-400">
+          <strong className="text-slate-900 dark:text-white font-semibold tabular-nums">{unique}</strong> unique
+        </span>
+        <span className="text-slate-400 dark:text-slate-500">
+          {total >= 250 && total <= 600 ? "Good length for one page" : total < 250 ? "A little thin" : "Consider trimming"}
+        </span>
+      </div>
 
-      {stats && (
-        <div className="space-y-4">
-          {/* Stats */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-xl bg-brand-50 dark:bg-brand-950/30 border border-brand-100 dark:border-brand-800">
-              <p className="text-xs text-brand-600 mb-1">Total Words</p>
-              <p className="text-2xl font-bold text-brand-700 dark:text-brand-300">{stats.total}</p>
-            </div>
-            <div className="p-3 rounded-xl bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-800">
-              <p className="text-xs text-brand-600 mb-1">Unique Keywords</p>
-              <p className="text-2xl font-bold text-brand-700 dark:text-brand-300">{stats.unique}</p>
-            </div>
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400 dark:text-slate-500 mb-2">Most used words</p>
+        <div className="flex flex-wrap gap-1.5">
+          {topKeywords.map((kw) => (
+            <span key={kw.word} className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-0.5 text-[11.5px] text-slate-600 dark:text-slate-300">
+              {kw.word} <span className="text-slate-400 dark:text-slate-500">{kw.count}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {missingCommon.length > 0 && (
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400 dark:text-slate-500 mb-2">Worth adding, if true</p>
+          <div className="flex flex-wrap gap-1.5">
+            {missingCommon.map((kw) => (
+              <span key={kw} className="rounded-md border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 px-2 py-0.5 text-[11.5px] text-amber-800 dark:text-amber-300">
+                {kw}
+              </span>
+            ))}
           </div>
-
-          {/* Top Keywords */}
-          <div>
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-2 text-sm">
-              Top Keywords
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {stats.topKeywords.map((kw, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-200 text-xs font-medium border border-brand-200 dark:border-brand-700/40"
-                >
-                  {kw.word} <span className="opacity-70">({kw.count})</span>
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Missing Keywords */}
-          {stats.missingCommon.length > 0 && (
-            <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
-              <p className="text-xs font-medium text-amber-700 dark:text-amber-300 mb-2">
-                💡 Consider adding these common keywords:
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {stats.missingCommon.map((kw, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2 py-1 rounded text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-200"
-                  >
-                    {kw}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Upgrade CTA */}
-          <div className="p-4 rounded-lg bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-800">
-            <p className="text-xs text-brand-700 dark:text-brand-300 mb-2">
-              <strong>✅ This analysis is free and doesn&apos;t use any credits</strong>
-            </p>
-            <p className="text-xs text-brand-700 dark:text-brand-300 mb-2">
-              <strong>Get AI-powered keyword suggestions</strong>
-            </p>
-            <p className="text-xs text-brand-600 mb-3">
-              Sign up to get personalized keyword recommendations based on your target job descriptions.
-            </p>
-            <a
-              href="/analyze"
-              className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700 dark:text-brand-300"
-            >
-              Explore Premium Features →
-            </a>
-          </div>
+          <p className="mt-2 text-[11.5px] text-slate-400 dark:text-slate-500">
+            Generic keywords are a starting point. For real matching, paste a job description in the analyzer.
+          </p>
         </div>
       )}
     </div>

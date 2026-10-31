@@ -2,306 +2,134 @@ import Link from "next/link";
 import Script from "next/script";
 import Breadcrumb from "@/components/Breadcrumb";
 import type { Metadata } from "next";
+import type { ParsedResume, ThemeId } from "@/types";
+import { renderThemeBody } from "@/lib/theme-renderer";
+import { RESUME_CSS } from "@/lib/resume-styles";
 
 export const metadata: Metadata = {
-  title: "Resume Templates — 9 Professional Themes for Your CV | rawcv",
+  title: "Resume Templates — 17 Professional, ATS-Safe Designs | rawcv",
   description:
-    "Explore 9 professionally designed resume templates — Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant — plus EU, Canada, US, International, and ATS-Optimized formats. ATS-friendly, AI-optimized, and free to use.",
+    "Explore 17 free resume templates — MAANG, Classic, Minimal, Modern, Executive, Atlas, Editorial, Europass, Canadian and more. ATS-safe, typeset for one clean page, and free to download.",
   alternates: { canonical: "https://www.rawcv.com/resume-templates" },
   openGraph: {
-    title: "Resume Templates — 9 Professional Themes for Your CV | rawcv",
+    title: "Resume Templates — 17 Professional, ATS-Safe Designs | rawcv",
     description:
-      "Explore 9 professionally designed resume templates — Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant — plus EU, Canada, US, International, and ATS-Optimized formats. ATS-friendly, AI-optimized, and free to use.",
+      "17 free resume templates, typeset for one clean A4 page. ATS-safe, no watermark, no signup.",
     url: "https://www.rawcv.com/resume-templates",
   },
 };
 
-/* ── Template data ── */
-
-interface ThemeInfo {
-  id: string;
+const THEMES: Array<{
+  id: ThemeId;
   name: string;
   tagline: string;
-  description: string;
-  features: string[];
-  previewColors: string;
-  previewClass: string;
   bestFor: string;
-}
-
-const themes: ThemeInfo[] = [
-  {
-    id: "classic",
-    name: "Classic",
-    tagline: "Timeless & Trusted",
-    description:
-      "A traditional two-column layout with serif headings and a clean, conservative structure. Ideal for finance, law, government, and academia where traditional formatting is expected.",
-    features: [
-      "Serif heading font (Lora)",
-      "Two-column section layout",
-      "Reverse-chronological experience",
-      "Traditional date placement",
-    ],
-    previewColors: "from-amber-800 to-yellow-700",
-    previewClass: "bg-gradient-to-br",
-    bestFor: "Finance, Law, Government, Academia",
-  },
-  {
-    id: "modern",
-    name: "Modern",
-    tagline: "Clean & Contemporary",
-    description:
-      "A sleek, single-column layout with sans-serif typography, ample whitespace, and subtle accent borders. Optimized for modern applicant tracking systems while maintaining visual appeal.",
-    features: [
-      "Sans-serif font (Inter)",
-      "Single-column flow",
-      "Skill-bar visual indicators",
-      "Accent color section headers",
-    ],
-    previewColors: "from-brand-600 to-blue-500",
-    previewClass: "bg-gradient-to-br",
-    bestFor: "Tech, Startups, Marketing, Consulting",
-  },
-  {
-    id: "minimal",
-    name: "Minimal",
-    tagline: "Less Is More",
-    description:
-      "A stripped-back, ultra-clean design with maximum whitespace and minimal visual ornamentation. Lets your content speak without distraction.",
-    features: [
-      "Maximal whitespace",
-      "No decorative borders",
-      "Compact experience lines",
-      "Subtle thin separator lines",
-    ],
-    previewColors: "from-slate-400 to-slate-300",
-    previewClass: "bg-gradient-to-br",
-    bestFor: "Design, UX, Writing, Research",
-  },
-  {
-    id: "executive",
-    name: "Executive",
-    tagline: "Command Authority",
-    description:
-      "A premium, high-impact layout designed for senior professionals and C-level executives. Features a bold top profile bar, achievement callouts, and strategic content hierarchy.",
-    features: [
-      "Bold top profile summary bar",
-      "Achievement callout boxes",
-      "Strategic content hierarchy",
-      "Executive summary section",
-    ],
-    previewColors: "from-slate-900 to-slate-700",
-    previewClass: "bg-gradient-to-br",
-    bestFor: "C-Suite, Directors, Senior Management",
-  },
-  {
-    id: "creative",
-    name: "Creative",
-    tagline: "Stand Out From the Crowd",
-    description:
-      "An expressive layout with accent colour blocks, icon-driven sections, and non-standard content arrangement. Built for roles where visual creativity is valued.",
-    features: [
-      "Colour block accents",
-      "Icon-driven section headers",
-      "Non-standard content arrangement",
-      "Portfolio / project highlight area",
-    ],
-    previewColors: "from-pink-500 to-orange-400",
-    previewClass: "bg-gradient-to-br",
-    bestFor: "Graphic Design, Art Direction, Media, Advertising",
-  },
-  {
-    id: "professional",
-    name: "Professional",
-    tagline: "Polished & Polished",
-    description:
-      "A versatile, mid-weight layout that balances visual polish with strict ATS compatibility. Understated elegance with clear content tiers and refined spacing.",
-    features: [
-      "Refined spacing tiers",
-      "Understated accent elements",
-      "Clear visual hierarchy",
-      "ATS-optimised structure",
-    ],
-    previewColors: "from-blue-700 to-blue-500",
-    previewClass: "bg-gradient-to-br",
-    bestFor: "Engineering, Healthcare, Education, General Management",
-  },
-  {
-    id: "simple",
-    name: "Simple",
-    tagline: "Straight to the Point",
-    description:
-      "A no-frills, one-column layout with the smallest possible file footprint. Everything is text-based with zero images or decorative elements for maximum ATS parseability.",
-    features: [
-      "Pure text — no icons or images",
-      "One-column single pass",
-      "Smallest file footprint",
-      "Maximum ATS parseability",
-    ],
-    previewColors: "from-emerald-600 to-teal-500",
-    previewClass: "bg-gradient-to-br",
-    bestFor: "ATS-heavy screenings, Volume applications, Recent graduates",
-  },
-  {
-    id: "bold",
-    name: "Bold",
-    tagline: "Make a Statement",
-    description:
-      "A high-contrast layout with oversized headings, strong colour blocks, and prominent call-to-action sections. Designed to grab a recruiter's attention within seconds.",
-    features: [
-      "Oversized headings (2x standard)",
-      "High-contrast colour blocks",
-      "Prominent CTA sections",
-      "Large skill-highlight badges",
-    ],
-    previewColors: "from-red-600 to-rose-500",
-    previewClass: "bg-gradient-to-br",
-    bestFor: "Sales, Business Development, Entrepreneurship, Leadership roles",
-  },
-  {
-    id: "elegant",
-    name: "Elegant",
-    tagline: "Refined Sophistication",
-    description:
-      "A refined, editorial-inspired layout that uses serif body text, subtle decorative rules, and a sophisticated colour palette of deep navy and gold accents.",
-    features: [
-      "Serif body text (Lora)",
-      "Decorative rule dividers",
-      "Navy + gold colour palette",
-      "Editorial-inspired layout",
-    ],
-    previewColors: "from-brand-900 to-brand-600",
-    previewClass: "bg-gradient-to-br",
-    bestFor: "Luxury, Fashion, Hospitality, Publishing, PM roles",
-  },
+}> = [
+  { id: "maang", name: "MAANG", tagline: "Dense, plain, ATS-first", bestFor: "Google, Amazon, Meta, Apple, Netflix" },
+  { id: "atlas", name: "Atlas", tagline: "Swiss precision", bestFor: "Tech, product, consulting" },
+  { id: "editorial", name: "Editorial", tagline: "Warm magazine", bestFor: "Design, writing, creative leads" },
+  { id: "classic", name: "Classic", tagline: "Timeless serif", bestFor: "Finance, law, academia" },
+  { id: "minimal", name: "Minimal", tagline: "Quiet and airy", bestFor: "Design, research, any industry" },
+  { id: "modern", name: "Modern", tagline: "Dark sidebar", bestFor: "Startups, engineering, marketing" },
+  { id: "executive", name: "Executive", tagline: "Senior authority", bestFor: "Directors, VPs, C-suite" },
+  { id: "navy", name: "Navy", tagline: "Navy + gold", bestFor: "Finance, consulting, management" },
+  { id: "creative", name: "Creative", tagline: "Violet timeline", bestFor: "Brand, media, art direction" },
+  { id: "enhancv", name: "Enhancv", tagline: "Blue, two column", bestFor: "Product, engineering, growth" },
+  { id: "terra", name: "Terra", tagline: "Warm serif", bestFor: "Education, hospitality, publishing" },
+  { id: "sharp", name: "Sharp", tagline: "Mono, high contrast", bestFor: "Engineering, data, architecture" },
+  { id: "resumeio", name: "Resume.io", tagline: "Soft and friendly", bestFor: "General, early career" },
+  { id: "zety", name: "Zety", tagline: "Slate sidebar", bestFor: "Operations, sales, project leads" },
+  { id: "fotoram", name: "Fotoram", tagline: "Photo header", bestFor: "Creative, EU markets" },
+  { id: "europass", name: "Europass", tagline: "EU format", bestFor: "Europe, public sector, academia" },
+  { id: "canadian", name: "Canadian", tagline: "Clean, no photo", bestFor: "Canada, US, conservative fields" },
 ];
 
-/* ── Card component ── */
+const SAMPLE: ParsedResume = {
+  contact: {
+    name: "Aarav Mehta",
+    email: "aarav.mehta@gmail.com",
+    phone: "+91 98765 43210",
+    location: "Bengaluru, India",
+    linkedin: "linkedin.com/in/aaravmehta",
+    website: "aaravmehta.dev",
+  },
+  summary:
+    "Senior frontend engineer with 8 years building high-traffic consumer products. Led platform migrations for 4M+ users, cut load times 62%, and mentored teams of six.",
+  experience: [
+    {
+      company: "Razorpay",
+      title: "Senior Frontend Engineer",
+      startDate: "2021-04",
+      endDate: "Present",
+      bullets: [
+        "Led a six-person team rebuilding the merchant dashboard in Next.js, cutting p95 load time from 4.8s to 1.8s.",
+        "Designed a shared component library adopted by nine product squads, reducing UI build time 40%.",
+        "Introduced performance budgets and CI checks, preventing 30+ regressions per quarter.",
+      ],
+    },
+    {
+      company: "Swiggy",
+      title: "Frontend Engineer",
+      startDate: "2018-06",
+      endDate: "2021-03",
+      bullets: [
+        "Rewrote checkout and lifted conversion 12% across 2M weekly orders.",
+        "Built A/B testing tooling used in 140 experiments, tripling experiment velocity.",
+      ],
+    },
+  ],
+  education: [{ institution: "BITS Pilani", degree: "B.E.", field: "Computer Science", graduationYear: "2018" }],
+  skills: ["React", "TypeScript", "Next.js", "Node.js", "GraphQL", "PostgreSQL", "AWS", "Design systems", "Performance"],
+  certifications: ["AWS Certified Solutions Architect – Associate"],
+  projects: [
+    {
+      name: "Atlas — open-source design system",
+      description: "A 40-component accessible React library with 2.1k GitHub stars.",
+      technologies: ["React", "TypeScript", "Storybook"],
+    },
+  ],
+  sectionOrder: ["summary", "experience", "projects", "education", "skills", "certifications"],
+};
 
-function TemplateCard({ theme }: { theme: ThemeInfo }) {
-  return (
-    <div className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-      {/* Preview area */}
-      <Link
-        href={`/build?theme=${theme.id}`}
-        className="block aspect-[4/3] relative overflow-hidden"
-        aria-label={`Preview ${theme.name} template`}
-      >
-        <div
-          className={`absolute inset-0 ${theme.previewClass} ${theme.previewColors} opacity-90`}
-        />
-        {/* Simulated template preview */}
-        <div className="absolute inset-x-4 top-4 bottom-4 rounded-lg bg-white dark:bg-slate-900/90 p-3 shadow-inner flex flex-col gap-1.5 text-[10px]">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-4 h-4 rounded-full bg-black/10" />
-            <div className="h-2 w-16 rounded bg-slate-300" />
-          </div>
-          <div className="h-1.5 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
-          <div className="h-1.5 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
-          <div className="mt-1 border-t border-slate-200 dark:border-slate-700 pt-1 space-y-1">
-            <div className="flex gap-2">
-              <div className="w-6 h-1 rounded bg-slate-300" />
-              <div className="flex-1 space-y-0.5">
-                <div className="h-1 rounded bg-slate-200 dark:bg-slate-700" />
-                <div className="h-1 rounded bg-slate-200 dark:bg-slate-700" />
-              </div>
-            </div>
-            <div className="h-1 w-2/3 rounded bg-slate-200 dark:bg-slate-700" />
-          </div>
-        </div>
-        {/* Theme name badge */}
-        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900/90 backdrop-blur-sm text-xs font-bold text-slate-900 dark:text-white shadow-sm">
-          {theme.name}
-        </div>
-      </Link>
-
-      {/* Info area */}
-      <div className="p-5">
-        <div className="flex items-start justify-between mb-2">
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              {theme.name}
-            </h3>
-            <p className="text-xs text-brand-600 font-semibold uppercase tracking-wide">
-              {theme.tagline}
-            </p>
-          </div>
-          <span className="inline-block px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">
-            FREE
-          </span>
-        </div>
-
-        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3 line-clamp-2">
-          {theme.description}
-        </p>
-
-        {/* Features list */}
-        <ul className="space-y-1 mb-3">
-          {theme.features.map((f) => (
-            <li
-              key={f}
-              className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-300"
-            >
-              <span className="w-1 h-1 rounded-full bg-brand-50 dark:bg-brand-950/30 flex-shrink-0" />
-              {f}
-            </li>
-          ))}
-        </ul>
-
-        <p className="text-[10px] text-slate-600 dark:text-slate-300 mb-3">
-          Best for:{" "}
-          <span className="font-medium text-slate-600 dark:text-slate-300">
-            {theme.bestFor}
-          </span>
-        </p>
-
-        <Link
-          href={`/build?theme=${theme.id}`}
-          className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-semibold rounded-xl bg-brand-600 hover:bg-brand-700 text-white transition-colors"
-        >
-          Use {theme.name} Template
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-/* ── FAQ component ── */
-
-function FAQ({ question, answer }: { question: string; answer: string }) {
-  return (
-    <details className="group border-b border-slate-200 dark:border-slate-700 pb-4 mb-4 last:border-b-0 last:pb-0 last:mb-0">
-      <summary className="flex items-center justify-between cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-white py-2 hover:text-brand-600 transition-colors">
-        {question}
-        <span className="text-slate-500 dark:text-slate-300 group-open:rotate-45 transition-transform text-lg leading-none">
-          +
-        </span>
-      </summary>
-      <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed pt-1">
-        {answer}
-      </p>
-    </details>
-  );
-}
-
-/* ── Page ── */
+const FAQS = [
+  {
+    q: "Are these templates really free?",
+    a: "Yes. Every template, the live preview, and PDF, Word, and text export are free — no watermark, no account, no credits.",
+  },
+  {
+    q: "Are the templates ATS-friendly?",
+    a: "Yes. Each design avoids tables, text boxes, and image-based text, exports as selectable text, and normalises dates. We test them against Workday, Greenhouse, Lever, and Taleo parsing.",
+  },
+  {
+    q: "Can I switch templates after I start?",
+    a: "Any time. Your content is stored separately from the design, so switching reflows the same resume into a new layout without retyping anything.",
+  },
+  {
+    q: "Which template should I choose?",
+    a: "Classic, Minimal, and Canadian are the safest for conservative fields. Atlas and Modern suit tech and product. Editorial, Terra, and Creative are for design-led roles. Europass is built for European applications.",
+  },
+  {
+    q: "Can I change the font and spacing?",
+    a: "Yes. Open the builder and use the Text panel to choose a typeface, body size, and line height. The A4 page and the PDF update together.",
+  },
+];
 
 export default function ResumeTemplatesPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Resume Templates Gallery",
+    name: "Resume Templates",
     description:
-      "14 professionally designed resume templates — Classic, Modern, Minimal, Executive, Creative, Professional, Simple, Bold, and Elegant plus EU, Canada, US, International, and ATS-Optimized formats.",
+      "17 free, ATS-safe resume templates. Typeset for one clean A4 page, with instant PDF download.",
     url: "https://www.rawcv.com/resume-templates",
-    numberOfItems: themes.length,
-    itemListElement: themes.map((t, i) => ({
+    numberOfItems: THEMES.length,
+    itemListElement: THEMES.map((t, i) => ({
       "@type": "ListItem",
       position: i + 1,
       item: {
         "@type": "CreativeWork",
         name: `${t.name} Resume Template`,
-        description: t.description,
+        description: `${t.name} — ${t.tagline}. Best for ${t.bestFor}.`,
         url: `https://www.rawcv.com/build?theme=${t.id}`,
       },
     })),
@@ -310,248 +138,189 @@ export default function ResumeTemplatesPage() {
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Are your resume templates ATS-friendly?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes, every template at rawcv is designed with ATS parsing in mind. We avoid tables, columns that confuse parsers, embedded images, and non-standard fonts. Each template generates clean HTML that converts to text-based PDFs compatible with nearly all applicant tracking systems including Workday, Greenhouse, Lever, Taleo, and SAP SuccessFactors.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Can I switch templates after I start building my resume?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Absolutely. You can switch between any of the 14 templates at any time without losing your content. Each template uses the same data model — your experience, education, skills, and custom sections are preserved and automatically reformatted to match the new theme's layout and styling.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Do I need design skills to use these templates?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Not at all. Our AI-powered builder handles all the formatting, spacing, and styling automatically. You simply fill in your content through a guided interface, and the template applies professional typography, consistent alignment, and proper hierarchy. Every template is pre-configured with optimal margins, font sizes, and spacing ratios.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How do I choose the right template for my industry?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Consider your industry norms and the role you are targeting. For traditional fields like finance, law, and academia, our Classic or Professional templates are safest. For tech and startups, Modern or Minimal work well. Creative roles benefit from the Creative template's expressive layout, while senior executives should choose Executive for its authority-focused structure. Each template card includes a 'Best for' recommendation.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Are the templates free to use?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes, all 14 resume templates are free to use. You can build, preview, and switch between templates without any cost. Exporting your finished resume as a PDF uses credits — new users receive 20 free credits upon sign-up, which covers multiple exports. There are no hidden fees or subscription requirements for template access.",
-        },
-      },
-    ],
+    mainEntity: FAQS.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 
   return (
     <>
-      {/* JSON-LD structured data */}
-      <Script
-        id="resume-templates-collection-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <Script
-        id="resume-templates-faq-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
-      />
+      <style dangerouslySetInnerHTML={{ __html: RESUME_CSS }} />
+      <Script id="resume-templates-collection-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Script id="resume-templates-faq-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pb-20">
-        {/* ── Hero ── */}
-        <section className="relative overflow-hidden pt-20 pb-16 px-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800">
-          <div className="relative max-w-4xl mx-auto">
-            <Breadcrumb
-              items={[
-                { label: "Home", href: "/" },
-                { label: "Resume Templates", href: "/resume-templates" },
-              ]}
-            />
-            <div className="text-center mb-6">
-              <span className="inline-block px-3 py-1 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-200 text-xs font-bold uppercase tracking-wide mb-4">
-                Resume Templates
-              </span>
-              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-brand-600">
-                14 Professional Resume Templates
-              </h1>
-              <p className="text-lg text-slate-500 dark:text-slate-300 max-w-2xl mx-auto">
-                Choose from 14 expertly crafted templates, each optimised for ATS
-                compatibility and recruiter appeal. Preview, switch, and build
-                your perfect resume in minutes — no design skills required.
-              </p>
-            </div>
-            {/* Quick stats */}
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
-              <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300">
-                <span className="text-brand-500 font-bold">14</span> Templates
+      <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-white">
+        {/* Hero */}
+        <section className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+            <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Resume templates", href: "/resume-templates" }]} />
+            <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+              <div>
+                <p className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500 mb-3">
+                  The gallery
+                </p>
+                <h1 className="text-[32px] sm:text-[44px] font-bold tracking-[-0.03em] leading-[1.05]">
+                  17 templates.
+                  <br />
+                  <span className="font-serif italic font-normal text-blue-600">One clean page.</span>
+                </h1>
+                <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed text-slate-500 dark:text-slate-400">
+                  Every design is typeset for A4, tested for ATS parsing, and free to export.
+                  Pick one, swap the content, and download a PDF in minutes.
+                </p>
               </div>
-              <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300">
-                <span className="text-brand-500 font-bold">100%</span>{" "}
-                ATS-Friendly
-              </div>
-              <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300">
-                <span className="text-brand-500 font-bold">Free</span> to Use
-              </div>
-              <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300">
-                <span className="text-brand-500 font-bold">AI</span> Optimized
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-[12px] text-slate-500 dark:text-slate-400 lg:pb-1">
+                <span><strong className="text-slate-900 dark:text-white font-semibold">17</strong> designs</span>
+                <span><strong className="text-slate-900 dark:text-white font-semibold">100%</strong> ATS-safe</span>
+                <span><strong className="text-slate-900 dark:text-white font-semibold">$0</strong> forever</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── Template Grid ── */}
-        <section className="max-w-7xl mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {themes.map((theme) => (
-              <TemplateCard key={theme.id} theme={theme} />
+
+        {/* Featured: MAANG */}
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8 sm:pb-10">
+          <div className="overflow-hidden rounded-2xl bg-slate-900 text-white">
+            <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] items-center p-6 sm:p-10">
+              <div className="max-w-xl">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-3">
+                  Featured · Big-tech layout
+                </p>
+                <h2 className="text-[26px] sm:text-[32px] font-bold tracking-[-0.025em] leading-[1.05]">
+                  MAANG — the resume that gets selected.
+                </h2>
+                <p className="mt-3 text-[13.5px] leading-relaxed text-slate-300">
+                  Modelled on the plain, content-dense resumes that pass Google, Amazon, Meta,
+                  Apple, and Netflix screens. One column, black text, standard headings, no
+                  color or decoration — just a full page of measurable achievements.
+                </p>
+                <ul className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-[12px] text-slate-300">
+                  <li>Single column, ATS-first markup</li>
+                  <li>Compact 10.5pt body, dense bullets</li>
+                  <li>Standard section headings</li>
+                  <li>No color, icons, or tables</li>
+                  <li>Dates normalised on export</li>
+                  <li>Fits a full page of content</li>
+                </ul>
+                <div className="mt-6 flex flex-wrap items-center gap-4">
+                  <Link
+                    href="/build?theme=maang"
+                    className="inline-flex items-center gap-1.5 rounded-md bg-white px-4 py-2.5 text-[12.5px] font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
+                  >
+                    Build with MAANG <span aria-hidden="true">→</span>
+                  </Link>
+                  <span className="text-[11.5px] text-slate-500">Free · no account · no watermark</span>
+                </div>
+              </div>
+              <div className="relative mx-auto w-full max-w-[320px]">
+                <div className="overflow-hidden rounded-lg bg-white ring-1 ring-white/15 shadow-2xl">
+                  <div className="flex h-[360px] justify-center overflow-hidden">
+                    <div
+                      className="shrink-0"
+                      style={{ width: 794, height: 1123, transform: "scale(0.38)", transformOrigin: "top center" }}
+                      dangerouslySetInnerHTML={{ __html: renderThemeBody(SAMPLE, "maang") }}
+                    />
+                  </div>
+                </div>
+                <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-900 shadow-lg">
+                  MAANG
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Grid */}
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+            {THEMES.filter((theme) => theme.id !== "maang").map((theme) => (
+              <div
+                key={theme.id}
+                className="group relative rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden hover:border-slate-400 dark:hover:border-slate-600 hover:shadow-[0_20px_40px_-24px_rgba(15,23,42,0.4)] transition-all duration-200"
+              >
+                <Link
+                  href={`/build?theme=${theme.id}`}
+                  className="absolute inset-0 z-10"
+                  aria-label={`Use the ${theme.name} resume template`}
+                />
+                <div className="relative h-[300px] overflow-hidden bg-slate-100 dark:bg-slate-800">
+                  <div className="absolute left-1/2 top-4 -translate-x-1/2">
+                    <div
+                      style={{
+                        width: 794,
+                        height: 1123,
+                        transform: "scale(0.36)",
+                        transformOrigin: "top center",
+                      }}
+                      dangerouslySetInnerHTML={{ __html: renderThemeBody(SAMPLE, theme.id) }}
+                    />
+                  </div>
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-100 dark:from-slate-800 to-transparent" />
+                </div>
+                <div className="flex items-center justify-between gap-2 px-3.5 py-3 border-t border-slate-100 dark:border-slate-800">
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-semibold text-slate-900 dark:text-white truncate">{theme.name}</p>
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500 truncate">{theme.tagline}</p>
+                  </div>
+                  <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 shrink-0 transition-colors">
+                    Use →
+                  </span>
+                </div>
+              </div>
             ))}
           </div>
         </section>
 
-        {/* ── SEO Content Section ── */}
-        <section className="border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
-          <div className="max-w-4xl mx-auto px-6 py-16 space-y-8 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Why the Right Resume Template Matters
-            </h2>
-            <p>
-              Your resume template is the first impression you make on a
-              recruiter or hiring manager. Studies show that recruiters spend an
-              average of just 7.4 seconds scanning a resume before deciding
-              whether to move forward. The layout, typography, spacing, and
-              visual hierarchy of your chosen template directly influence that
-              critical first impression. A well-designed template guides the
-              reader's eye to your most important achievements, while a cluttered
-              or poorly structured template can bury your strongest qualifications
-              beneath visual noise.
-            </p>
-            <p>
-              At rawcv, every template is built on a foundation of readability
-              and ATS compatibility. Applicant Tracking Systems parse resumes
-              into structured data before a human ever sees them. Templates with
-              complex tables, text boxes, graphics, or non-standard section
-              headings frequently break during parsing, resulting in garbled or
-              incomplete data reaching the recruiter. Our templates use clean,
-              semantic HTML that produces text-based PDFs parsers handle
-              reliably. We test each template against major ATS platforms
-              including Workday, Greenhouse, Lever, Taleo, iCIMS, and SAP
-              SuccessFactors.
-            </p>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Choosing the Right Template for Your Career Stage
-            </h3>
-            <p>
-              Early-career professionals and recent graduates often benefit from
-              the Simple or Minimal templates, which keep the focus on education,
-              internships, and transferable skills without excessive formatting.
-              Mid-career professionals with 5-15 years of experience typically
-              find the Modern, Professional, or Classic templates strike the right
-              balance between showcasing a growing list of accomplishments and
-              maintaining concise scannability. Senior executives and
-              C-suite candidates should consider the Executive or Bold templates,
-              which provide dedicated space for strategic achievements, board
-              memberships, and high-level impact statements.
-            </p>
-            <p>
-              Industry norms also play a significant role. Creative industries
-              such as graphic design, advertising, and media welcome expressive
-              layouts and the Creative template is designed specifically for these
-              fields. Technology, startups, and consulting firms tend to prefer
-              clean, modern aesthetics — the Modern and Minimal templates perform
-              well here. Traditional sectors like finance, law, and government
-              still favour conservative layouts, making Classic, Professional, and
-              Elegant the safest choices. When in doubt, the Professional template
-              is a universally safe option that works across industries without
-              appearing either too flashy or too plain.
-            </p>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Template Features That Boost Your Chances
-            </h3>
-            <p>
-              Beyond aesthetics, certain template features directly impact your
-              interview callback rate. Clear content hierarchy — achieved through
-              distinct heading sizes, consistent spacing, and strategic use of
-              bold text — helps recruiters quickly locate your current role,
-              key achievements, and education. Reverse-chronological experience
-              ordering remains the gold standard and all our templates follow this
-              convention. Skill highlight sections, achievement callout boxes, and
-              summary profiles give you dedicated spaces to emphasise your
-              strongest selling points, and each template positions these elements
-              differently to suit various narrative strategies.
-            </p>
-            <p>
-              All 14 templates are available immediately, free of charge. You can
-              preview, select, and switch between templates at any point during
-              the building process without losing your content. Our AI-powered
-              builder also provides real-time suggestions for bullet point
-              improvement, skill gap analysis, and job description alignment —
-              but the template you choose is entirely up to you. Explore the
-              gallery above, preview the themes, and start building your best
-              resume today.
-            </p>
+        {/* Guidance */}
+        <section className="border-y border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+            <div className="max-w-2xl">
+              <h2 className="text-[22px] sm:text-[26px] font-bold tracking-tight">How to choose</h2>
+              <p className="mt-2 text-[14px] text-slate-500 dark:text-slate-400">
+                Format should signal fit, not fight the parser. When in doubt, choose the quieter design.
+              </p>
+            </div>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { k: "Conservative", t: "Classic · Minimal · Canadian", d: "Finance, law, government, healthcare, and academia. Single column, serif or quiet sans, zero ornament." },
+                { k: "Modern", t: "MAANG · Atlas · Modern · Editorial", d: "Tech, product, design, and consulting. MAANG is the plain, dense, ATS-first layout used in big-tech hiring." },
+                { k: "Regional", t: "Europass · Canadian", d: "Europe expects languages and sometimes a photo; Canada expects no photo and no personal details." },
+              ].map((g) => (
+                <div key={g.k} className="border-t-2 border-slate-900 dark:border-white pt-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">{g.k}</p>
+                  <p className="mt-2 text-[14px] font-semibold text-slate-900 dark:text-white">{g.t}</p>
+                  <p className="mt-1.5 text-[12.5px] leading-relaxed text-slate-500 dark:text-slate-400">{g.d}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* ── FAQ Section ── */}
-        <section className="max-w-3xl mx-auto px-6 py-16">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-300">
-              Everything you need to know about our resume templates.
-            </p>
+        {/* FAQ */}
+        <section className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <h2 className="text-[22px] sm:text-[26px] font-bold tracking-tight mb-6">Template questions</h2>
+          <div className="divide-y divide-slate-200 dark:divide-slate-800 border-y border-slate-200 dark:border-slate-800">
+            {FAQS.map((f) => (
+              <details key={f.q} className="group">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
+                  <span className="text-[13.5px] font-semibold text-slate-900 dark:text-white">{f.q}</span>
+                  <span className="text-slate-400 group-open:rotate-45 transition-transform text-lg leading-none">+</span>
+                </summary>
+                <p className="pb-4 pr-8 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{f.a}</p>
+              </details>
+            ))}
           </div>
-          <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-            <FAQ
-              question="Are your resume templates ATS-friendly?"
-              answer="Yes, every template at rawcv is designed with ATS parsing in mind. We avoid tables, columns that confuse parsers, embedded images, and non-standard fonts. Each template generates clean HTML that converts to text-based PDFs compatible with nearly all applicant tracking systems including Workday, Greenhouse, Lever, Taleo, and SAP SuccessFactors."
-            />
-            <FAQ
-              question="Can I switch templates after I start building my resume?"
-              answer="Absolutely. You can switch between any of the 14 templates at any time without losing your content. Each template uses the same data model — your experience, education, skills, and custom sections are preserved and automatically reformatted to match the new theme's layout and styling."
-            />
-            <FAQ
-              question="Do I need design skills to use these templates?"
-              answer="Not at all. Our AI-powered builder handles all the formatting, spacing, and styling automatically. You simply fill in your content through a guided interface, and the template applies professional typography, consistent alignment, and proper hierarchy. Every template is pre-configured with optimal margins, font sizes, and spacing ratios."
-            />
-            <FAQ
-              question="How do I choose the right template for my industry?"
-              answer="Consider your industry norms and the role you are targeting. For traditional fields like finance, law, and academia, our Classic or Professional templates are safest. For tech and startups, Modern or Minimal work well. Creative roles benefit from the Creative template's expressive layout, while senior executives should choose Executive for its authority-focused structure. Each template card includes a 'Best for' recommendation."
-            />
-            <FAQ
-              question="Are the templates free to use?"
-              answer="Yes, all 14 resume templates are free to use. You can build, preview, and switch between templates without any cost. Exporting your finished resume as a PDF uses credits — new users receive 20 free credits upon sign-up, which covers multiple exports. There are no hidden fees or subscription requirements for template access."
-            />
-          </div>
-        </section>
 
-        {/* ── CTA ── */}
-        <section className="max-w-3xl mx-auto px-6 text-center">
-          <div className="rounded-2xl bg-brand-600 p-10 shadow-xl">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
-              Start Building Your Resume
-            </h2>
-            <p className="text-brand-100 text-sm mb-6 max-w-lg mx-auto">
-              Pick a template, add your details, and let AI optimise every
-              section. Free to start — no credit card required.
-            </p>
-            <Link
-              href="/build"
-              className="inline-flex items-center justify-center px-8 py-3 text-sm font-bold rounded-xl bg-white dark:bg-slate-900 text-brand-700 dark:text-brand-300 hover:bg-brand-50 transition-colors shadow-lg"
-            >
-              Build Your Resume Now
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl bg-slate-900 px-6 py-6">
+            <div>
+              <p className="text-[15px] font-semibold text-white">Pick a template and start writing.</p>
+              <p className="text-[12.5px] text-slate-400 mt-0.5">Free PDF, Word, and text export. No account.</p>
+            </div>
+            <Link href="/build" className="shrink-0 inline-flex items-center gap-1.5 rounded-md bg-white px-4 py-2 text-[12.5px] font-semibold text-slate-900 hover:bg-slate-100 transition-colors">
+              Open the builder <span aria-hidden="true">→</span>
             </Link>
           </div>
         </section>
