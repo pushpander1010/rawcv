@@ -6,9 +6,9 @@ import FieldAIButton from "@/components/FieldAIButton";
 import BulletCoach from "@/components/BulletCoach";
 import {
   normalizeSectionOrder,
-  DEFAULT_SECTION_ORDER,
   SECTION_LABELS,
 } from "@/lib/section-order";
+import { recommendedSectionOrder, inferCareerStage, stageLabel } from "@/lib/section-recommendation";
 
 interface Props {
   onResumeChange: (resume: ParsedResume) => void;
@@ -29,7 +29,8 @@ const emptyResume = (): ParsedResume => ({
   certifications: [],
   projects: [],
   awards: [],
-  sectionOrder: [...DEFAULT_SECTION_ORDER],
+  sectionOrder: recommendedSectionOrder({ experience: [], education: [] }),
+  sectionOrderCustomized: false,
 });
 
 function Section({
@@ -106,7 +107,12 @@ function RemoveButton({ onClick, label: text = "Remove" }: { onClick: () => void
 }
 
 export default function FreeResumeForm({ onResumeChange, initialResume }: Props) {
-  const [resume, setResume] = useState<ParsedResume>(initialResume || emptyResume());
+  const [resume, setResume] = useState<ParsedResume>(() => {
+    if (!initialResume) return emptyResume();
+    return initialResume.sectionOrderCustomized
+      ? initialResume
+      : { ...initialResume, sectionOrder: recommendedSectionOrder(initialResume) };
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
@@ -129,7 +135,11 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
     const sig = JSON.stringify(initialResume);
     if (sig !== lastExternalSig.current && sig !== JSON.stringify(resume)) {
       lastExternalSig.current = sig;
-      setResume(initialResume);
+      setResume(
+        initialResume.sectionOrderCustomized
+          ? initialResume
+          : { ...initialResume, sectionOrder: recommendedSectionOrder(initialResume) }
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialResume]);
@@ -183,7 +193,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
     const next = [...current];
     const [removed] = next.splice(index, 1);
     next.splice(target, 0, removed);
-    setResume((prev) => ({ ...prev, sectionOrder: next }));
+    setResume((prev) => ({ ...prev, sectionOrder: next, sectionOrderCustomized: true }));
   };
 
   const handleClear = () => {
@@ -196,6 +206,11 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
 
   const sectionOrder = normalizeSectionOrder(resume.sectionOrder);
   const skillsValue = resume.skills.join(", ");
+  const recommended = recommendedSectionOrder(resume);
+  const stage = inferCareerStage(resume);
+  const usingRecommended =
+    !resume.sectionOrderCustomized &&
+    JSON.stringify(sectionOrder) === JSON.stringify(recommended);
 
   return (
     <form className="space-y-2.5" onSubmit={(e) => e.preventDefault()}>
@@ -714,7 +729,9 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
           <span className="flex-1">
             <span className="text-[13px] font-semibold text-slate-900 dark:text-white">Section order</span>
             <span className="mt-0.5 block text-[11.5px] text-slate-400 dark:text-slate-500">
-              Move sections up or down on the page.
+              {usingRecommended
+                ? `Auto-arranged for ${stageLabel(stage)}. Reorder any time.`
+                : "Custom order. Move sections up or down."}
             </span>
           </span>
           <svg className="w-4 h-4 text-slate-400 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
@@ -722,6 +739,22 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
           </svg>
         </summary>
         <div className="border-t border-slate-100 dark:border-slate-800 p-3 space-y-1">
+          <div className="flex items-center justify-between gap-2 px-1.5 pb-2">
+            <span className="text-[10.5px] font-semibold uppercase tracking-[0.12em] text-slate-400 dark:text-slate-500">
+              {stageLabel(stage)} layout
+            </span>
+            <button
+              type="button"
+              onClick={() => setResume((prev) => ({
+                ...prev,
+                sectionOrder: recommendedSectionOrder(prev),
+                sectionOrderCustomized: false,
+              }))}
+              className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 underline underline-offset-2 hover:text-slate-900 dark:hover:text-white"
+            >
+              Use recommended
+            </button>
+          </div>
           {sectionOrder.map((key, idx) => (
             <div key={key} className="flex items-center justify-between gap-2 px-1.5 py-1">
               <span className="text-[12.5px] font-medium text-slate-700 dark:text-slate-200">{SECTION_LABELS[key]}</span>

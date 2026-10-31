@@ -7,6 +7,8 @@ import { useResume } from "@/context/ResumeContext";
 import { RESUME_THEME_IDS } from "@/lib/theme-renderer";
 import { polishResumeBullets } from "@/lib/bullet-coach";
 import { scoreResume } from "@/lib/resume-score";
+import { recommendedSectionOrder } from "@/lib/section-recommendation";
+import { normalizeSectionOrder } from "@/lib/section-order";
 import FreeResumeForm from "@/components/FreeResumeForm";
 import ResumePreview from "@/components/ResumePreview";
 import UndoButton from "@/components/UndoButton";
@@ -46,6 +48,20 @@ export default function FreeBuildClient() {
   const strength = useMemo(() => completeness(resume), [resume]);
   const review = useMemo(() => scoreResume(resume), [resume]);
   const reviewScore = review.score;
+
+  // Apply the standard layout for this career stage unless the user has
+  // explicitly reordered sections. This is what makes a student resume put
+  // Education first and an experienced resume put Experience/Skills first.
+  useEffect(() => {
+    if (!isHydrated || !resume || resume.sectionOrderCustomized) return;
+    const current = normalizeSectionOrder(resume.sectionOrder);
+    const recommended = recommendedSectionOrder(resume);
+    if (JSON.stringify(current) !== JSON.stringify(recommended)) {
+      setState((prev) =>
+        prev.parsed ? { ...prev, parsed: { ...prev.parsed, sectionOrder: recommended } } : prev
+      );
+    }
+  }, [isHydrated, resume, setState]);
 
   // Honour /build?theme=atlas links from the template gallery.
   const searchParams = useSearchParams();

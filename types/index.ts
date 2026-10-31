@@ -141,6 +141,8 @@ export interface ParsedResume {
   references?: string;
   format?: ResumeFormat;
   sectionOrder?: ResumeSectionKey[];
+  /** True once the user manually reorders sections — stops auto-recommendation. */
+  sectionOrderCustomized?: boolean;
 }
 
 // ─── Resume Typography ─────────────────────────────────────────────────────

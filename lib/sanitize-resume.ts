@@ -135,5 +135,19 @@ export function sanitizeResume(resume: Partial<ParsedResume> | null | undefined)
     references: resume.references ? toStr(resume.references) : undefined,
     format: resume.format && FORMATS.has(resume.format) ? resume.format : undefined,
     sectionOrder: resume.sectionOrder ? normalizeSectionOrder(resume.sectionOrder) : undefined,
+    sectionOrderCustomized:
+      resume.sectionOrderCustomized === true
+        ? true
+        : resume.sectionOrderCustomized === false
+        ? false
+        : (() => {
+            if (!resume.sectionOrder) return undefined;
+            const normalized = normalizeSectionOrder(resume.sectionOrder);
+            const legacyDefault = normalized.filter((k) => k !== "awards");
+            return JSON.stringify(legacyDefault) !==
+              JSON.stringify(["summary", "experience", "education", "skills", "projects", "certifications"])
+              ? true
+              : undefined;
+          })(),
   };
 }
