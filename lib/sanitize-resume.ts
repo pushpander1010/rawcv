@@ -30,6 +30,7 @@ function sanitizeExperience(exp: Partial<WorkExperience>): WorkExperience {
     title: toStr(exp.title),
     startDate: toStr(exp.startDate),
     endDate: toStr(exp.endDate),
+    ...(exp.location ? { location: toStr(exp.location) } : {}),
     bullets: Array.isArray(exp.bullets) ? exp.bullets.map(toStr) : [],
   };
 }
@@ -43,6 +44,8 @@ function sanitizeEducation(edu: Partial<Education>): Education {
     degree: toStr(edu.degree),
     field: toStr(edu.field),
     graduationYear: toStr(edu.graduationYear),
+    ...(edu.gpa ? { gpa: toStr(edu.gpa) } : {}),
+    coursework: Array.isArray(edu.coursework) ? edu.coursework.map(toStr).filter(Boolean) : undefined,
   };
 }
 
@@ -54,6 +57,8 @@ function sanitizeProject(proj: Partial<Project>): Project {
     name: toStr(proj.name),
     description: toStr(proj.description),
     technologies: Array.isArray(proj.technologies) ? proj.technologies.map(toStr) : [],
+    ...(proj.link ? { link: toStr(proj.link) } : {}),
+    bullets: Array.isArray(proj.bullets) ? proj.bullets.map(toStr).filter(Boolean) : undefined,
   };
 }
 
@@ -99,6 +104,7 @@ export function sanitizeResume(resume: Partial<ParsedResume> | null | undefined)
       phone: resume.contact?.phone ? toStr(resume.contact.phone) : undefined,
       location: resume.contact?.location ? toStr(resume.contact.location) : undefined,
       linkedin: resume.contact?.linkedin ? toStr(resume.contact.linkedin) : undefined,
+      github: resume.contact?.github ? toStr(resume.contact.github) : undefined,
       website: resume.contact?.website ? toStr(resume.contact.website) : undefined,
     },
     summary: resume.summary ? toStr(resume.summary) : undefined,
@@ -112,6 +118,7 @@ export function sanitizeResume(resume: Partial<ParsedResume> | null | undefined)
     certifications: Array.isArray(resume.certifications)
       ? resume.certifications.map(toStr)
       : undefined,
+    awards: Array.isArray(resume.awards) ? resume.awards.map(toStr).filter(Boolean) : undefined,
     projects: Array.isArray(resume.projects)
       ? resume.projects.map(sanitizeProject)
       : undefined,

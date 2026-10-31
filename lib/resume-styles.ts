@@ -375,57 +375,97 @@ export const RESUME_CSS = `
 .rcv-fluid .rcv { width: 100%; min-height: 0; padding: 10mm; }
 .rcv-fluid .rcv--modern, .rcv-fluid .rcv--navy, .rcv-fluid .rcv--zety { min-height: 0; }
 
-/* ═══════════════════════ MAANG (new) ═══════════════════════ */
-/* The plain, dense, single-column style used by engineers hired at
-   Google / Amazon / Meta / Apple / Netflix. No ornament, no color,
-   maximum content per page, built for ATS parsing above all else. */
+/* ═══════════════════════ MAANG ═══════════════════════ */
+/* Built from the actual format behind big-tech callbacks: the Jake's Resume
+   lineage — serif, one column, centered contact, ruled uppercase headings,
+   Education/Experience/Projects/Technical Skills, GPA + coursework, GitHub,
+   project links, and 2–4 dense X-Y-Z bullets per role. */
 .rcv--maang {
   --ink: #000000;
-  --muted: #262626;
-  --faint: #3f3f3f;
+  --muted: #222222;
+  --faint: #333333;
   --accent: #000000;
   --rule: #000000;
   --tint: #ffffff;
-  font-family: var(--rcv-font, Arial, Helvetica, sans-serif);
-  font-size: calc(var(--rcv-size, 11pt) * 0.94);
+  font-family: var(--rcv-font, Georgia, "Times New Roman", serif);
+  font-size: calc(var(--rcv-size, 11pt) * 0.93);
   line-height: 1.34;
   letter-spacing: 0;
 }
-.rcv--maang .rcv-head { text-align: center; padding-bottom: 2.2mm; border-bottom: 1.5px solid #000; margin-bottom: 0; }
-.rcv--maang .rcv-name { font-size: 2.15em; font-weight: 700; letter-spacing: .01em; text-transform: uppercase; line-height: 1; }
+.rcv--maang .rcv-head {
+  text-align: center;
+  padding-bottom: 2mm;
+  border-bottom: 1px solid #000;
+}
+.rcv--maang .rcv-name {
+  font-size: 2.15em;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.05;
+}
 .rcv--maang .rcv-role { display: none; }
-.rcv--maang .rcv-contact { justify-content: center; gap: .8mm 0; margin-top: 1.5mm; font-size: .8em; }
-.rcv--maang .rcv-sep { padding: 0 2mm; color: #000; }
-.rcv--maang .rcv-section { margin-top: 3.2mm; }
+.rcv--maang .rcv-contact {
+  justify-content: center;
+  gap: .6mm 0;
+  margin-top: 1.4mm;
+  font-size: .8em;
+  color: #000;
+}
+.rcv--maang .rcv-ci a { border-bottom: 0; }
+.rcv--maang .rcv-sep { padding: 0 2.2mm; color: #000; }
+.rcv--maang .rcv-section { margin-top: 3mm; }
 .rcv--maang .rcv-h {
   display: block;
-  padding-bottom: .8mm;
-  margin-bottom: 1.8mm;
+  padding-bottom: .7mm;
+  margin-bottom: 1.7mm;
   border-bottom: 1px solid #000;
-  font-size: .8em;
+  font-size: .86em;
   font-weight: 700;
-  letter-spacing: .08em;
+  letter-spacing: .045em;
+  text-transform: uppercase;
   color: #000;
 }
 .rcv--maang .rcv-h::after { display: none; }
-.rcv--maang .rcv-item { margin-bottom: 2.4mm; }
-.rcv--maang .rcv-job-title { font-size: 1em; font-weight: 700; }
-.rcv--maang .rcv-org { margin-top: 0; font-size: .92em; font-weight: 700; color: #000; }
-.rcv--maang .rcv-date { font-size: .78em; color: #222; letter-spacing: 0; }
-.rcv--maang .rcv-desc { margin-top: .6mm; font-size: .94em; line-height: 1.38; color: #111; }
-.rcv--maang .rcv-bullets { margin-top: .7mm; }
-.rcv--maang .rcv-bullets li { padding-left: 3.8mm; margin-bottom: .2mm; font-size: .94em; line-height: 1.36; color: #111; }
-.rcv--maang .rcv-bullets li::before { width: 1mm; height: 1mm; top: .56em; background: #000; opacity: 1; }
-.rcv--maang .rcv-degree { font-size: .96em; }
-.rcv--maang .rcv-school { margin-top: 0; font-size: .92em; color: #111; }
+.rcv--maang .rcv-item { margin-bottom: 2.6mm; }
+.rcv--maang .rcv-job-title { font-size: 1em; font-weight: 700; line-height: 1.28; }
+.rcv--maang .rcv-org {
+  margin-top: 0;
+  font-size: .95em;
+  font-weight: 400;
+  font-style: italic;
+  color: #111;
+}
+.rcv--maang .rcv-date { font-size: .8em; font-weight: 400; color: #111; letter-spacing: 0; }
+.rcv--maang .rcv-desc { margin-top: .5mm; font-size: .95em; line-height: 1.4; color: #111; }
+.rcv--maang .rcv-bullets { margin-top: .8mm; }
+.rcv--maang .rcv-bullets li {
+  padding-left: 3.4mm;
+  margin-bottom: .25mm;
+  font-size: .95em;
+  line-height: 1.36;
+  color: #111;
+}
+.rcv--maang .rcv-bullets li::before {
+  width: .9mm;
+  height: .9mm;
+  top: .57em;
+  background: #000;
+  opacity: 1;
+}
+.rcv--maang .rcv-degree { font-size: 1em; font-weight: 700; }
+.rcv--maang .rcv-school { margin-top: 0; font-size: .95em; font-style: italic; color: #111; }
+.rcv--maang .rcv-note { margin-top: .2mm; font-size: .86em; color: #222; }
 .rcv--maang .rcv-skill-line { font-size: .94em; line-height: 1.42; color: #111; }
-.rcv--maang .rcv-skill-line .rcv-sep { padding: 0 1.2mm; color: #555; }
+.rcv--maang .rcv-skill-groups { font-size: .94em; line-height: 1.46; color: #111; }
+.rcv--maang .rcv-skill-groups p { margin: 0 0 .4mm; }
+.rcv--maang .rcv-skill-groups b { font-weight: 700; font-style: italic; }
 .rcv--maang .rcv-tag { padding: 0; border: 0; background: none; font-size: .9em; }
-.rcv--maang .rcv-tech { font-size: .8em; color: #222; }
-.rcv--maang .rcv-cert { font-size: .9em; }
+.rcv--maang .rcv-tech { font-size: .82em; color: #222; font-style: italic; }
+.rcv--maang .rcv-proj-link { color: #111; text-decoration: underline; text-underline-offset: 1.5px; font-size: .9em; }
+.rcv--maang .rcv-cert { font-size: .92em; padding-left: 3.8mm; }
+.rcv--maang .rcv-cert::before { content: "•"; color: #000; }
 .rcv--maang .rcv-lang { font-size: .9em; }
-.rcv--maang .rcv-two-col { columns: 2; column-gap: 8mm; }
-.rcv--maang .rcv-two-col .rcv-item { break-inside: avoid; }
 
 /* ═══════════════════════ Print ═══════════════════════ */
 @media print {

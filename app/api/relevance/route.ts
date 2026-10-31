@@ -6,28 +6,29 @@ import type { ParsedResume, RelevanceResult } from "@/types";
 import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { requireAuth, sanitiseJD } from "@/lib/api-guard";
 
-const SYSTEM_PROMPT = `You are an expert resume-to-job-description relevance analyst. Carefully compare the candidate's resume against the provided job description to determine how well they match.
+const SYSTEM_PROMPT = `You are a strict resume-to-job-description matcher used by candidates applying to Google, Meta, Amazon, and similar companies.
 
-Your analysis must be thorough and specific:
-1. Score based on both explicit keyword matches AND semantic alignment (similar concepts phrased differently)
-2. Identify critical missing keywords — terms that appear in the JD's requirements/qualifications but are absent from the resume
-3. Flag missing hard skills that would be dealbreakers for the role
-4. Provide actionable recommendations: specific changes the candidate could make to improve alignment
+Compare the resume to the job description and score honestly. Do NOT inflate: a resume missing 2+ must-have requirements cannot score above 75.
 
-Return JSON in this exact shape:
+1. Extract the JD's must-have skills, tools, domain terms, and seniority signals.
+2. Mark each as present (used in a bullet/project, with context), listed only (skills section but no evidence), or absent.
+3. Score by evidence, not keyword presence:
+   - 85–100: nearly all must-haves are evidenced in achievement bullets, seniority matches
+   - 70–84: most present, 1–2 important gaps
+   - 50–69: several must-haves missing or only listed
+   - 0–49: fundamentally different role or missing core requirements
+4. missingKeywords: exact JD terms that are absent from the resume (max 15)
+5. missingSkills: hard skills/technologies from the JD that are absent (max 10)
+6. recommendations: specific, truthful edits. Never suggest inventing experience; suggest reframing existing work or learning the skill.
+
+Return JSON only:
 {
-  "score": number,           // 0–100 relevance score
-  "missingKeywords": string[], // most impactful keywords in JD not found in resume (max 15)
-  "missingSkills": string[],   // hard skills from JD absent from resume skills section (max 10)
-  "recommendations": string[]  // prioritized, actionable recommendations (max 8)
-}
+  "score": number,
+  "missingKeywords": string[],
+  "missingSkills": string[],
+  "recommendations": string[]
+}`;
 
-Scoring guidance:
-- 90–100: Resume strongly matches the JD with most keywords and skills present
-- 70–89: Good match with minor gaps
-- 50–69: Moderate match, several important keywords/skills missing
-- 0–49: Poor match, significant gaps
-- Note: For junior/fresher roles, be more lenient on years-of-experience gaps but strict on skill gaps`;
 
 export async function POST(req: NextRequest) {
   const auth = await requireAuth(req);

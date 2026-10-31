@@ -88,6 +88,7 @@ function analyseResume(r: Partial<ParsedResume>): ResumeAnalysis {
   if (r.contact?.phone)    filled.push("phone");         else missing.push("phone");
   if (r.contact?.location) filled.push("location");      else missing.push("location");
   if (r.contact?.linkedin) filled.push("LinkedIn");      else missing.push("LinkedIn");
+  if (r.contact?.github)   filled.push("GitHub");        else missing.push("GitHub");
 
   // Optional contact extras — lump into one note, never block progress
   if (r.contact?.website) filled.push("website/other links");
@@ -134,6 +135,7 @@ function buildResumeSnapshot(r: Partial<ParsedResume>): string {
   if (r.contact?.phone)    parts.push(`Phone: ${r.contact.phone}`);
   if (r.contact?.location) parts.push(`Location: ${r.contact.location}`);
   if (r.contact?.linkedin) parts.push(`LinkedIn: ${r.contact.linkedin}`);
+  if (r.contact?.github)   parts.push(`GitHub: ${r.contact.github}`);
   if (r.summary)           parts.push(`Summary: (present)`);
   if (r.experience?.length)
     parts.push(`Experience: ${r.experience.length} job(s) — ${r.experience.map(j => j.title ?? "?").join(", ")}`);
@@ -145,6 +147,8 @@ function buildResumeSnapshot(r: Partial<ParsedResume>): string {
     parts.push(`Certifications: ${r.certifications.length}`);
   if (r.projects?.length)
     parts.push(`Projects: ${r.projects.length}`);
+  if (r.awards?.length)
+    parts.push(`Awards: ${r.awards.length}`);
 
   return parts.length > 0 ? parts.join("\n") : "(empty)";
 }
@@ -156,13 +160,14 @@ STRICT OUTPUT RULE — respond with ONLY valid JSON, no markdown, no extra text:
 {"message":"<your message>","resumeUpdate":<object or null>,"isComplete":<boolean>,"nextStep":<number>}
 
 RESUME FIELDS:
-contact: {name, email, phone, location, linkedin, website}
+contact: {name, email, phone, location, linkedin, github, website}
 summary: "3-4 sentence professional summary"
-experience: [{company, title, startDate, endDate, bullets:["achievement 1","achievement 2"]}]
-education: [{institution, degree, field, graduationYear}]
+experience: [{company, title, startDate, endDate, location, bullets:["achievement 1","achievement 2"]}]
+education: [{institution, degree, field, graduationYear, gpa, coursework:["course1"]}]
 skills: ["skill1","skill2"]
 certifications: ["cert1"]
-projects: [{name, description, technologies:["tech1"]}]
+awards: ["honor / scholarship / hackathon result"]
+projects: [{name, description, technologies:["tech1"], link, bullets:["highlight 1"]}]
 
 STEP ORDER (strict — never skip required steps):
 0 = name
@@ -211,19 +216,20 @@ OUTPUT FORMAT — every response must be exactly this JSON shape, no exceptions:
 {"message":"<your reply>","resumeUpdate":<changed fields only, or null>,"undoSection":<section key or null>,"isComplete":<boolean>}
 
 RESUME SCHEMA (use these exact field names):
-contact: {name, email, phone, location, linkedin, website}
+contact: {name, email, phone, location, linkedin, github, website}
 summary: string
-experience: [{company, title, startDate, endDate, bullets:["bullet"]}]
-education: [{institution, degree, field, graduationYear}]
+experience: [{company, title, startDate, endDate, location, bullets:["bullet"]}]
+education: [{institution, degree, field, graduationYear, gpa, coursework:["course1"]}]
 skills: ["skill1"]
 certifications: ["cert1"]
-projects: [{name, description, technologies:["tech1"]}]
+awards: ["honor / scholarship / hackathon result"]
+projects: [{name, description, technologies:["tech1"], link, bullets:["highlight 1"]}]
 
 EDITING RULES:
 - Apply EXACTLY what the user asks — do NOT ask for clarification or suggest alternatives
 - For arrays, return the COMPLETE updated array with only the requested change applied
 - REORDERING: if user says "move up", "swap", or "put X before Y" — reorder and return full updated array
-- ENHANCEMENT: if user asks to "improve", "enhance", "add bullets", "make better", "generate", "write", "create" — generate 3-5 strong, ATS-optimized bullet points with action verbs and quantified outcomes
+- ENHANCEMENT: if user asks to "improve", "enhance", "add bullets", "make better", "generate", "write", "create" — rewrite 2-4 strong, ATS-optimized bullets using ONLY facts, numbers, tools, and outcomes already present. Never invent a metric or employer
 - ⭐ CRITICAL: When enhancing experience bullets, ALWAYS return the COMPLETE experience array in resumeUpdate with ALL jobs and their bullets (both existing and new)
 - ⭐ CRITICAL: Do NOT just say you added bullets — actually include them in the resumeUpdate JSON
 - ⭐ GENERATION REQUESTS: If user says "generate [section]", "write a [section]", "create [section]", "give me a good [section]" — create professional, ATS-optimized content and include in resumeUpdate
@@ -232,13 +238,14 @@ EDITING RULES:
 - isComplete: true only when user explicitly says they are done
 
 ENHANCEMENT RULES (when user asks to improve/enhance/generate):
-- Generate realistic, ATS-optimized bullet points with strong action verbs
-- Include quantified outcomes where reasonable (e.g., "Increased efficiency by 25%", "Led team of 8")
-- Use industry-standard keywords for the role
-- Keep bullets concise (1-2 lines max)
+- Use the Google X-Y-Z shape only when the facts already contain X, Y, and Z: "Accomplished X, as measured by Y, by doing Z"
+- Start every bullet with a strong, accurate action verb; no first-person pronouns
+- NEVER invent percentages, dollar amounts, team sizes, user counts, or latency numbers. If a result is missing, improve the wording and ask the user for the real metric in one short sentence
+- Use industry-standard keywords already supported by their experience
+- Keep bullets 1-2 lines, 12-28 words
 - Return the COMPLETE updated experience array with enhanced bullets
-- For summary generation: Create a 3-4 sentence professional summary highlighting key skills, experience, and value proposition
-- For skills generation: Add 8-12 relevant technical and soft skills based on their experience
+- For summary generation: 2-3 sentences, role + years + strongest real result; no adjectives without evidence
+- For skills generation: only skills evidenced by their experience; group-worthy hard skills first, no soft-skill padding
 
 EXAMPLE - When user asks to enhance bullets for a job:
 User: "Enhance the bullets for my Data Scientist role"
@@ -251,12 +258,9 @@ Your response MUST include in resumeUpdate:
       "startDate": "2020-01",
       "endDate": "Present",
       "bullets": [
-        "Led machine learning initiatives that improved model accuracy by 23%",
-        "Developed Python-based data pipeline processing 2M+ records daily",
-        "Mentored team of 3 junior data scientists on best practices",
-        "Reduced data processing time by 40% through optimization",
-        "Published 2 research papers on predictive analytics in peer-reviewed journals",
-        "Collaborated with product team to deploy 5 ML models to production"
+        "Rebuilt the customer churn model in Python and scikit-learn, replacing the legacy scoring job",
+        "Shipped the model behind the weekly retention review with product and engineering",
+        "Documented the training pipeline so analysts can retrain it without engineering support"
       ]
     }
   ]
@@ -281,7 +285,7 @@ CRITICAL RULES:
 1. DO NOT ask follow-up questions — just do what the user asks
 2. ⭐ ALWAYS end your message with a suggestion about what to improve next (unless isComplete is true) — NEVER end without guiding them forward
 3. Accept user input as-is and apply it immediately
-4. For vague requests, make reasonable assumptions and apply them
+4. For vague requests, make the smallest factual edit and ask one targeted question rather than inventing data
 5. If user says "done" or "that's all", set isComplete: true
 6. ⭐ After making a change, ALWAYS suggest the next section to improve based on what's missing or weak — guide the user's flow
 7. ⭐ EVERY response must end with a clear suggestion — this keeps the user engaged and moving forward
@@ -291,7 +295,7 @@ CRITICAL RULES:
 
 // ─── Sanitise resume state ─────────────────────────────────────────────────────
 const ALLOWED_KEYS: Array<keyof ParsedResume> = [
-  "contact", "summary", "experience", "education", "skills", "certifications", "projects",
+  "contact", "summary", "experience", "education", "skills", "certifications", "projects", "awards",
 ];
 
 function sanitizeResumeState(rawState: Record<string, unknown>): Partial<ParsedResume> {

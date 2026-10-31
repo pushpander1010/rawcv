@@ -68,7 +68,7 @@ export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTyp
   );
 
   // Contact line
-  const bits = [c.email, c.phone, c.location, c.linkedin, c.website].filter(Boolean) as string[];
+  const bits = [c.email, c.phone, c.location, c.linkedin, c.github, c.website].filter(Boolean) as string[];
   if (bits.length > 0) {
     children.push(
       new Paragraph({
@@ -91,7 +91,7 @@ export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTyp
         children.push(
           new Paragraph({
             spacing: { before: 120, after: 20, line },
-            children: runs(`${job.title}${job.company ? ` — ${job.company}` : ""}`, { bold: true, size, font }),
+            children: runs(`${job.title}${job.company ? ` — ${job.company}` : ""}${job.location ? `, ${job.location}` : ""}`, { bold: true, size, font }),
           })
         );
         if (dates) {
@@ -117,6 +117,8 @@ export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTyp
           })
         );
         if (edu.institution) children.push(body(edu.institution, font, size, line));
+        if (edu.gpa) children.push(body(`GPA: ${edu.gpa}`, font, size, line));
+        if (edu.coursework?.length) children.push(body(`Coursework: ${edu.coursework.join(", ")}`, font, size, line));
       }
     } else if (key === "skills" && resume.skills?.length) {
       children.push(heading("Skills", font, size));
@@ -130,16 +132,22 @@ export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTyp
             children: runs(p.name, { bold: true, size, font }),
           })
         );
-        if (p.technologies?.length) {
+        if (p.technologies?.length || p.link) {
           children.push(
             new Paragraph({
               spacing: { after: p.description ? 40 : 80, line },
-              children: runs(`Tech: ${p.technologies.join(", ")}`, { italic: true, size: size - 2, font, color: "4B5563" }),
+              children: runs([p.technologies?.length ? `Tech: ${p.technologies.join(", ")}` : "", p.link ? `Link: ${p.link}` : ""].filter(Boolean).join("  |  "), { italic: true, size: size - 2, font, color: "4B5563" }),
             })
           );
         }
         if (p.description) children.push(body(p.description, font, size, line));
+        for (const b of p.bullets || []) {
+          if (b?.trim()) children.push(bullet(b.trim(), font, size, line));
+        }
       }
+    } else if (key === "awards" && resume.awards?.length) {
+      children.push(heading("Awards & Leadership", font, size));
+      for (const award of resume.awards) children.push(bullet(award, font, size, line));
     } else if (key === "certifications" && resume.certifications?.length) {
       children.push(heading("Certifications", font, size));
       for (const cert of resume.certifications) children.push(bullet(cert, font, size, line));

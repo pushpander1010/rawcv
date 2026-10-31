@@ -39,6 +39,7 @@ const designerSample: ParsedResume = {
     phone: "+1 (415) 555-0198",
     location: "San Francisco, CA",
     linkedin: "linkedin.com/in/mayachen",
+    github: "github.com/mayachen",
     website: "mayachen.design",
   },
   summary:
@@ -66,11 +67,12 @@ const designerSample: ParsedResume = {
       ],
     },
   ],
-  education: [{ institution: "Rhode Island School of Design", degree: "BFA", field: "Graphic Design", graduationYear: "2017" }],
+  education: [{ institution: "Rhode Island School of Design", degree: "BFA", field: "Graphic Design", graduationYear: "2017", gpa: "3.9/4.0", coursework: ["Typography", "Interaction Design", "Design Systems"] }],
   skills: ["Product strategy", "Interaction design", "Design systems", "Figma", "Prototyping", "User research", "Accessibility"],
   certifications: [],
-  projects: [{ name: "Field Notes", description: "A free interview-notes template used by 12,000 designers.", technologies: ["Figma", "Notion"] }],
-  sectionOrder: ["summary", "experience", "projects", "education", "skills", "certifications"],
+  projects: [{ name: "Field Notes", description: "A free interview-notes template used by 12,000 designers.", technologies: ["Figma", "Notion"], link: "github.com/mayachen/field-notes", bullets: ["Reached 12,000 active designers and 4.8/5 rating"] }],
+  awards: ["AIGA Design Scholar, 2017"],
+  sectionOrder: ["summary", "experience", "projects", "education", "skills", "awards", "certifications"],
 };
 
 const engineerSample: ParsedResume = {
@@ -80,6 +82,7 @@ const engineerSample: ParsedResume = {
     phone: "+91 98765 43210",
     location: "Bengaluru, India",
     linkedin: "linkedin.com/in/aaravmehta",
+    github: "github.com/aaravmehta",
     website: "aaravmehta.dev",
   },
   summary:
@@ -107,11 +110,12 @@ const engineerSample: ParsedResume = {
       ],
     },
   ],
-  education: [{ institution: "BITS Pilani", degree: "B.E.", field: "Computer Science", graduationYear: "2018" }],
+  education: [{ institution: "BITS Pilani", degree: "B.E.", field: "Computer Science", graduationYear: "2018", gpa: "8.7/10", coursework: ["Data Structures", "Operating Systems", "DBMS", "Computer Networks"] }],
   skills: ["React", "TypeScript", "Next.js", "Node.js", "GraphQL", "PostgreSQL", "AWS", "Design systems", "Performance"],
   certifications: ["AWS Certified Solutions Architect – Associate"],
-  projects: [{ name: "Atlas", description: "An accessible 40-component React library with 2.1k GitHub stars.", technologies: ["React", "TypeScript", "Storybook"] }],
-  sectionOrder: ["summary", "experience", "projects", "education", "skills", "certifications"],
+  projects: [{ name: "Atlas", description: "An accessible 40-component React library.", technologies: ["React", "TypeScript", "Storybook"], link: "github.com/aaravmehta/atlas", bullets: ["Reached 2.1k GitHub stars and 12k monthly installs", "Cut consumer bundle size 38% by removing the runtime CSS layer"] }],
+  awards: ["AWS Certified Solutions Architect – Associate", "Top 5% in BITS ACM coding contest (2,000+ entrants)"],
+  sectionOrder: ["summary", "experience", "projects", "education", "skills", "awards", "certifications"],
 };
 
 const managerSample: ParsedResume = {
@@ -121,6 +125,7 @@ const managerSample: ParsedResume = {
     phone: "+44 7700 900123",
     location: "London, UK",
     linkedin: "linkedin.com/in/sofiarossi",
+    github: "github.com/sofiarossi",
     website: "sofiarossi.co",
   },
   summary:
@@ -148,17 +153,24 @@ const managerSample: ParsedResume = {
       ],
     },
   ],
-  education: [{ institution: "London School of Economics", degree: "MSc", field: "Management", graduationYear: "2015" }],
+  education: [{ institution: "London School of Economics", degree: "MSc", field: "Management", graduationYear: "2015", gpa: "Distinction", coursework: ["Corporate Finance", "Strategy", "Econometrics"] }],
   skills: ["Product strategy", "Pricing", "B2B SaaS", "Discovery", "Analytics", "Team leadership", "Fintech", "Roadmapping"],
   certifications: [],
-  projects: [],
-  sectionOrder: ["summary", "experience", "education", "skills", "projects", "certifications"],
+  projects: [{ name: "Pricing Playbook", description: "An open B2B pricing teardown library.", technologies: ["Notion", "SQL"], link: "github.com/sofiarossi/pricing-playbook", bullets: ["Used by 3,000+ operators; featured in Lenny's Newsletter"] }],
+  awards: ["Monzo CEO Award for Business Banking, 2023"],
+  sectionOrder: ["summary", "experience", "projects", "education", "skills", "awards", "certifications"],
+};
+
+const maangSample: ParsedResume = {
+  ...managerSample,
+  summary: "",
+  sectionOrder: ["education", "experience", "projects", "skills", "awards", "certifications"],
 };
 
 const showcase = [
   { theme: "editorial" as const, label: "Editorial", sample: designerSample },
   { theme: "atlas" as const, label: "Atlas", sample: engineerSample },
-  { theme: "maang" as const, label: "MAANG", sample: managerSample },
+  { theme: "maang" as const, label: "MAANG", sample: maangSample },
 ];
 
 export default function LandingPage() {
@@ -277,7 +289,7 @@ export default function LandingPage() {
                   </div>
                   <figcaption className="mt-2.5 flex items-center justify-between text-[11.5px]">
                     <span className="font-semibold text-slate-700 dark:text-slate-200">{label}</span>
-                    <span className="text-slate-400 dark:text-slate-500">{i === 0 ? "Warm serif" : i === 1 ? "Swiss grid" : "Dense · ATS"}</span>
+                    <span className="text-slate-400 dark:text-slate-500">{i === 0 ? "Warm serif" : i === 1 ? "Swiss grid" : "Jake’s-style · ATS"}</span>
                   </figcaption>
                 </figure>
               ))}

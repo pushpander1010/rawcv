@@ -19,6 +19,7 @@ function normalizeParsed(data: any): ParsedResume {
       phone:    data?.contact?.phone    ?? "",
       location: data?.contact?.location ?? "",
       linkedin: data?.contact?.linkedin ?? "",
+      github:   data?.contact?.github   ?? "",
       website:  data?.contact?.website  ?? "",
     },
     summary: data?.summary ?? "",
@@ -28,6 +29,7 @@ function normalizeParsed(data: any): ParsedResume {
           title:     e?.title     ?? "",
           startDate: e?.startDate ?? "",
           endDate:   e?.endDate   ?? "",
+          location:  e?.location  ?? "",
           bullets:   Array.isArray(e?.bullets) ? e.bullets : [],
         }))
       : [],
@@ -37,15 +39,20 @@ function normalizeParsed(data: any): ParsedResume {
           degree:         e?.degree         ?? "",
           field:          e?.field          ?? "",
           graduationYear: e?.graduationYear ?? "",
+          gpa:            e?.gpa            ?? "",
+          coursework:     Array.isArray(e?.coursework) ? e.coursework : [],
         }))
       : [],
     skills:         Array.isArray(data?.skills)         ? data.skills         : [],
     certifications: Array.isArray(data?.certifications) ? data.certifications : [],
+    awards: Array.isArray(data?.awards) ? data.awards : [],
     projects: Array.isArray(data?.projects)
       ? data.projects.map((p: any) => ({
           name:         p?.name         ?? "",
           description:  p?.description  ?? "",
           technologies: Array.isArray(p?.technologies) ? p.technologies : [],
+          link:         p?.link         ?? "",
+          bullets:      Array.isArray(p?.bullets) ? p.bullets : [],
         }))
       : [],
   };
@@ -110,20 +117,25 @@ const SYSTEM_PROMPT = `You are a precise resume parser. Extract ALL information 
 
 Return a JSON object with this exact structure:
 {
-  "contact": { "name": "", "email": "", "phone": "", "location": "", "linkedin": "", "website": "" },
+  "contact": { "name": "", "email": "", "phone": "", "location": "", "linkedin": "", "github": "", "website": "" },
   "summary": "",
-  "experience": [{ "company": "", "title": "", "startDate": "", "endDate": "", "bullets": [""] }],
-  "education": [{ "institution": "", "degree": "", "field": "", "graduationYear": "" }],
+  "experience": [{ "company": "", "title": "", "startDate": "", "endDate": "", "location": "", "bullets": [""] }],
+  "education": [{ "institution": "", "degree": "", "field": "", "graduationYear": "", "gpa": "", "coursework": [""] }],
   "skills": [""],
   "certifications": [""],
-  "projects": [{ "name": "", "description": "", "technologies": [""] }]
+  "awards": [""],
+  "projects": [{ "name": "", "description": "", "technologies": [""], "link": "", "bullets": [""] }]
 }
 
 Guidelines:
 - Extract EVERY job, EVERY bullet point verbatim — do not summarize or rewrite
-- Extract ALL skills mentioned anywhere in the resume (skills section, experience bullets, etc.)
+- Extract GPA exactly as written (e.g. "3.8/4.0", "8.7/10") and relevant coursework as separate short items
+- Extract GitHub separately from a portfolio website; never merge them
+- Extract project links and project bullets when present; do not turn them into a generic description
+- Extract awards, scholarships, honors, and leadership roles into awards
+- Skills: prefer the explicit skills section. Include a tool mentioned elsewhere only when it is clearly a hard skill used in the role; do not pad with soft-skill guesses
 - Use empty string for missing fields, empty array for missing arrays
-- Preserve the original wording of bullet points exactly as written
+- Preserve the original wording of bullet points exactly as written — never invent metrics or details
 - For graduationYear, extract the year as a string (e.g. "2020", "Expected 2024")`;
 
 export async function POST(req: NextRequest) {
@@ -168,7 +180,7 @@ export async function POST(req: NextRequest) {
     let parsed: ParsedResume;
     try {
       const prompt = `Parse this resume:\n\n${rawText.slice(0, 12000)}`;
-      const result = await complete(prompt, SYSTEM_PROMPT, { maxTokens: 2000 });
+      const result = await complete(prompt, SYSTEM_PROMPT, { maxTokens: 5000 });
       console.log("[parse] result — experience:", (result as any)?.experience?.length, "skills:", (result as any)?.skills?.length);
       parsed = normalizeParsed(result);
     } catch (err) {

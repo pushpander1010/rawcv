@@ -5,18 +5,20 @@ import { NextRequest, NextResponse } from "next/server";
 import type { ParsedResume, ATSResult, ATSIssue } from "@/types";
 import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { requireAuth } from "@/lib/api-guard";
-import { runRuleChecks, calculateBaseScore } from "@/lib/ats-rules";
+import { runRuleChecks } from "@/lib/ats-rules";
+import { scoreResume } from "@/lib/resume-score";
 
 const SYSTEM_PROMPT = `You are an expert ATS (Applicant Tracking System) analyst with deep knowledge of how major ATS platforms (Greenhouse, Lever, Workday, Taleo, iCIMS) parse and score resumes. Analyze the provided resume data for nuanced issues that automated rule-based checks cannot catch.
 
-Focus on:
-1. Semantic relevance — does the candidate's profile suggest a coherent career narrative?
-2. Job title vagueness — are titles generic when they should be descriptive?
-3. Quantification gaps — are achievements described without metrics or outcomes?
-4. Buzzword authenticity — are keywords used with genuine context or just listed?
-5. Formatting inconsistencies — do date formats, verb tenses, or section styles vary?
-6. Keyword prevalence — are industry-standard terms for the implied role present?
-7. Summary impact — does the summary differentiate the candidate or just describe roles?
+Judge the resume the way a Google / Meta engineering screen would:
+1. One-page density and a coherent career narrative
+2. X-Y-Z bullets: did the candidate accomplish X, measured by Y, by doing Z?
+3. Real metrics (%, latency, $, users, scale) versus duty statements
+4. Strong, specific action verbs — flag "responsible for", "helped", "worked on"
+5. Evidence for listed skills, not just a keyword list
+6. Education signal for students: GPA, coursework, graduation date
+7. GitHub / portfolio and project links for engineering roles
+8. Standard section headings, dates, and ATS-safe formatting
 
 Return JSON in this exact shape:
 {
@@ -45,14 +47,20 @@ export async function POST(req: NextRequest) {
   }
 
   const ruleIssues = runRuleChecks(parsed, raw);
-  let baseScore = calculateBaseScore(ruleIssues);
+  const quality = scoreResume(parsed);
+  const qualityIssues: ATSIssue[] = quality.issues.slice(0, 10).map((issue) => ({
+    type: `quality_${issue.id}`,
+    description: `${issue.title}. ${issue.fix}`,
+    impact: issue.impact,
+  }));
+  let baseScore = quality.score;
 
   let aiIssues: ATSIssue[] = [];
   try {
     const prompt = `Resume data:\n${JSON.stringify(parsed, null, 2)}\n\nRaw text excerpt:\n${raw.slice(0, 2000)}`;
     const aiResult = await complete(prompt, SYSTEM_PROMPT) as { additionalIssues: ATSIssue[]; scoreAdjustment: number };
     aiIssues = Array.isArray(aiResult.additionalIssues) ? aiResult.additionalIssues : [];
-    const adjustment = Math.max(-20, Math.min(10, aiResult.scoreAdjustment ?? 0));
+    const adjustment = Math.max(-10, Math.min(8, aiResult.scoreAdjustment ?? 0));
     baseScore = Math.max(0, Math.min(100, baseScore + adjustment));
   } catch {
     // fall back to rule-based score only
@@ -60,6 +68,6 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({
     score: Math.round(baseScore),
-    issues: [...ruleIssues, ...aiIssues],
+    issues: [...ruleIssues, ...qualityIssues, ...aiIssues],
   } satisfies ATSResult);
 }

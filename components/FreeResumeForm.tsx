@@ -20,13 +20,14 @@ const field =
 const label = "block text-[12px] font-semibold text-slate-600 dark:text-slate-300 mb-1.5";
 
 const emptyResume = (): ParsedResume => ({
-  contact: { name: "", email: "", phone: "", location: "", linkedin: "", website: "" },
+  contact: { name: "", email: "", phone: "", location: "", linkedin: "", github: "", website: "" },
   summary: "",
   experience: [],
   education: [],
   skills: [],
   certifications: [],
   projects: [],
+  awards: [],
   sectionOrder: [...DEFAULT_SECTION_ORDER],
 });
 
@@ -253,6 +254,16 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
             />
           </div>
           <div>
+            <label className={label}>GitHub</label>
+            <input
+              type="url"
+              value={resume.contact.github || ""}
+              onChange={(e) => handleContactChange("github", e.target.value)}
+              placeholder="github.com/you"
+              className={field}
+            />
+          </div>
+          <div>
             <label className={label}>Website / portfolio</label>
             <input
               type="url"
@@ -330,7 +341,7 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div>
                 <label className={label}>Start</label>
                 <input
@@ -349,6 +360,16 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                   className={field}
                 />
                 <p className="mt-1 text-[10.5px] text-slate-400 dark:text-slate-500">Leave empty for “Present”.</p>
+              </div>
+              <div>
+                <label className={label}>Location</label>
+                <input
+                  type="text"
+                  value={exp.location || ""}
+                  onChange={(e) => updateExperience(idx, { location: e.target.value })}
+                  placeholder="Bengaluru, IN"
+                  className={field}
+                />
               </div>
             </div>
             <div>
@@ -436,9 +457,9 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 />
               </div>
             </div>
-            <div className="flex items-end gap-3">
-              <div className="w-32">
-                <label className={label}>Year</label>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={label}>Graduation year</label>
                 <input
                   type="number"
                   value={edu.graduationYear}
@@ -449,12 +470,34 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                   className={field}
                 />
               </div>
-              <div className="ml-auto pb-2">
-                <RemoveButton onClick={() => setResume((prev) => ({
-                  ...prev,
-                  education: prev.education.filter((_, i) => i !== idx),
-                }))} />
+              <div>
+                <label className={label}>GPA</label>
+                <input
+                  type="text"
+                  value={edu.gpa || ""}
+                  onChange={(e) => updateEducation(idx, { gpa: e.target.value })}
+                  placeholder="3.8/4.0"
+                  className={field}
+                />
               </div>
+            </div>
+            <div>
+              <label className={label}>Relevant coursework</label>
+              <input
+                type="text"
+                value={(edu.coursework || []).join(", ")}
+                onChange={(e) => updateEducation(idx, {
+                  coursework: e.target.value.split(",").map((c) => c.trim()).filter(Boolean),
+                })}
+                placeholder="Data Structures, Operating Systems, Databases"
+                className={field}
+              />
+            </div>
+            <div className="flex justify-end">
+              <RemoveButton onClick={() => setResume((prev) => ({
+                ...prev,
+                education: prev.education.filter((_, i) => i !== idx),
+              }))} />
             </div>
           </div>
         ))}
@@ -535,6 +578,16 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                   className={field}
                 />
               </div>
+              <div>
+                <label className={label}>GitHub / live link</label>
+                <input
+                  type="url"
+                  value={proj.link || ""}
+                  onChange={(e) => updateProject(idx, { link: e.target.value })}
+                  placeholder="github.com/you/atlas"
+                  className={field}
+                />
+              </div>
             </div>
             <div>
               <div className="flex items-center justify-between gap-2 mb-1.5">
@@ -554,6 +607,18 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 rows={2}
                 className={field}
               />
+              <div>
+                <label className={label}>Project highlights · one per line</label>
+                <textarea
+                  value={(proj.bullets || []).join("\n")}
+                  onChange={(e) => updateProject(idx, {
+                    bullets: e.target.value.split("\n").filter((b) => b.trim()),
+                  })}
+                  placeholder={"Cut bundle size 38% by replacing the runtime CSS-in-JS layer\nReached 2.1k GitHub stars and 12k monthly installs"}
+                  rows={2}
+                  className={field}
+                />
+              </div>
             </div>
             <div className="flex justify-end">
               <RemoveButton onClick={() => setResume((prev) => ({
@@ -561,6 +626,44 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 projects: (prev.projects || []).filter((_, i) => i !== idx),
               }))} />
             </div>
+          </div>
+        ))}
+      </Section>
+
+
+      {/* Awards & leadership */}
+      <Section
+        title="Awards & leadership"
+        count={(resume.awards || []).length}
+        hint="Honors, scholarships, hackathons, leadership"
+        defaultOpen={(resume.awards || []).length > 0}
+        action={<AddButton onClick={() => setResume((prev) => ({
+          ...prev,
+          awards: [...(prev.awards || []), ""],
+        }))}>Add</AddButton>}
+      >
+        {(resume.awards || []).length === 0 && (
+          <p className="text-[12.5px] text-slate-400 dark:text-slate-500">
+            Optional, but useful for students and early-career candidates.
+          </p>
+        )}
+        {(resume.awards || []).map((award, idx) => (
+          <div key={idx} className="flex items-center gap-2">
+            <input
+              type="text"
+              value={award}
+              onChange={(e) => setResume((prev) => {
+                const awards = [...(prev.awards || [])];
+                awards[idx] = e.target.value;
+                return { ...prev, awards };
+              })}
+              placeholder="Won 2nd place out of 50 teams at HackMIT"
+              className={field}
+            />
+            <RemoveButton onClick={() => setResume((prev) => ({
+              ...prev,
+              awards: (prev.awards || []).filter((_, i) => i !== idx),
+            }))} label="✕" />
           </div>
         ))}
       </Section>

@@ -148,6 +148,26 @@ export default function EnhancementList({ enhancements, loading = false }: Enhan
           skills[skillIdx] = suggestion.improved;
           parsed.skills = skills;
         }
+      } else if (section === "projects") {
+        parsed.projects = (parsed.projects || []).map((proj) => {
+          if (proj.name === suggestion.original) return { ...proj, name: suggestion.improved };
+          if (proj.description === suggestion.original) return { ...proj, description: suggestion.improved };
+          const bullets = (proj.bullets || []).map((b) => (b === suggestion.original ? suggestion.improved : b));
+          return { ...proj, bullets };
+        });
+      } else if (section === "education") {
+        parsed.education = parsed.education.map((edu) => {
+          const next = { ...edu };
+          if (edu.institution === suggestion.original) next.institution = suggestion.improved;
+          else if (edu.degree === suggestion.original) next.degree = suggestion.improved;
+          else if (edu.field === suggestion.original) next.field = suggestion.improved;
+          else if (edu.gpa === suggestion.original) next.gpa = suggestion.improved;
+          return next;
+        });
+      } else if (section === "awards") {
+        parsed.awards = (parsed.awards || []).map((a) => (a === suggestion.original ? suggestion.improved : a));
+      } else if (section === "certifications") {
+        parsed.certifications = (parsed.certifications || []).map((c) => (c === suggestion.original ? suggestion.improved : c));
       }
 
       return { ...prev, parsed };

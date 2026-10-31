@@ -13,7 +13,6 @@ import TypographyControls from "@/components/TypographyControls";
 import FreeDownloadButton from "@/components/FreeDownloadButton";
 import FreeATSChecker from "@/components/FreeATSChecker";
 import FreeKeywordAnalyzer from "@/components/FreeKeywordAnalyzer";
-import FreeFormattingChecker from "@/components/FreeFormattingChecker";
 
 type Panel = "theme" | "text" | "download" | null;
 type Tab = "preview" | "review";
@@ -231,7 +230,7 @@ export default function FreeBuildClient() {
                 <div>
                   <h2 className="text-[15px] font-semibold text-slate-900 dark:text-white">Resume review</h2>
                   <p className="text-[12.5px] text-slate-500 dark:text-slate-400 mt-0.5">
-                    Three instant checks, run locally on this draft. Nothing is uploaded.
+                    A deterministic review against the patterns behind big-tech screens. Nothing is uploaded.
                   </p>
                 </div>
                 <span className="shrink-0 rounded-full border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
@@ -241,7 +240,7 @@ export default function FreeBuildClient() {
 
               <section>
                 <h3 className="text-[12px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3">
-                  ATS compatibility
+                  Big-tech resume score
                 </h3>
                 <FreeATSChecker resume={resume} />
               </section>
@@ -251,13 +250,6 @@ export default function FreeBuildClient() {
                 </h3>
                 <FreeKeywordAnalyzer resume={resume} />
               </section>
-              <section className="pt-5 border-t border-slate-200 dark:border-slate-800">
-                <h3 className="text-[12px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 mb-3">
-                  Formatting
-                </h3>
-                <FreeFormattingChecker resume={resume} />
-              </section>
-
               <div className="rounded-lg bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 p-4">
                 <p className="text-[13px] font-semibold text-slate-900 dark:text-white">Want AI-level feedback?</p>
                 <p className="text-[12.5px] text-slate-500 dark:text-slate-400 mt-1 mb-3">

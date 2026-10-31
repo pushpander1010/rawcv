@@ -4,6 +4,7 @@ export type ResumeSectionKey =
   | "education"
   | "skills"
   | "projects"
+  | "awards"
   | "certifications";
 
 export const DEFAULT_SECTION_ORDER: ResumeSectionKey[] = [
@@ -12,6 +13,7 @@ export const DEFAULT_SECTION_ORDER: ResumeSectionKey[] = [
   "education",
   "skills",
   "projects",
+  "awards",
   "certifications",
 ];
 
@@ -21,6 +23,7 @@ export const SECTION_LABELS: Record<ResumeSectionKey, string> = {
   education: "Education",
   skills: "Skills",
   projects: "Your projects",
+  awards: "Awards & leadership",
   certifications: "Certificates",
 };
 

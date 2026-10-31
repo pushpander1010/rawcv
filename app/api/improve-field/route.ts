@@ -14,21 +14,25 @@ const BodySchema = z.object({
 
 const HINTS: Record<string, string> = {
   summary:
-    "Rewrite as a concise 3-4 sentence professional summary. Impact-driven, no filler, no invented employers or dates.",
+    "Rewrite as 2–3 sentences: role, years of experience, domain, and the strongest real result. No first-person pronouns, no 'passionate/hardworking/team player', no invented facts or numbers.",
   bullets:
-    "Rewrite each bullet on its own line. Start with a strong action verb, keep 1-2 lines each, add a plausible metric only where the original implies a measurable outcome. Never invent companies, titles, or dates. Return bullets only, one per line, no numbering.",
+    "Rewrite each bullet on its own line, one per line, no numbering. 12–28 words. Start with a strong, accurate action verb. Put the result before the method. Use the X-Y-Z shape only when the facts already contain X, Y, and Z. NEVER invent a percentage, dollar amount, team size, user count, or latency number — if the input has no metric, keep it out. Remove 'responsible for', 'helped with', 'worked on', and first-person pronouns.",
   skills:
-    "Return a comma-separated list of 8-12 relevant hard + soft skills based on the input and context. No explanations, just the list.",
+    "Return a comma-separated list of hard skills that are explicitly present or directly evidenced in the input/context. Do not add tools, languages, or certifications the person has not shown. Keep 8–15 skills, hard skills first, no proficiency ratings.",
   project:
-    "Rewrite as a concise 2-3 sentence project description highlighting stack, role, and outcome. No invented metrics unless implied.",
+    "Rewrite as 1–2 concise sentences plus optional bullets: what was built, the stack, and the real outcome. Do not invent users, stars, latency, or revenue.",
   education:
-    "Clean up the education text. Never invent institutions, degrees, or years.",
+    "Clean up the education text. Preserve institution, degree, field, year, GPA, and coursework exactly. Never invent any of them.",
 };
 
-const SYSTEM_PROMPT = `You are a resume writing assistant. Improve ONLY the text the user provides.
-Rules:
-- Preserve all facts exactly — no invented employers, titles, dates, numbers, or skills.
-- Keep the same language the input uses.
+const SYSTEM_PROMPT = `You are a senior big-tech resume editor. Improve ONLY the text the user provides.
+
+Hard rules:
+- Preserve every fact, number, company, title, date, school, degree, and tool exactly.
+- Never invent or estimate a metric. If the input has no number, do not add one.
+- Never add a skill or experience the person has not shown.
+- No first-person pronouns. No filler adjectives.
+- Write like a Google/Meta engineering resume: strong verb first, result before method, 12–28 words per bullet, one bullet per line.
 - Return JSON only: {"improved":"<improved text>"}`;
 
 export async function POST(req: NextRequest) {

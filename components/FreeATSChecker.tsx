@@ -2,114 +2,109 @@
 
 import { useMemo } from "react";
 import type { ParsedResume } from "@/types";
-
-interface ATSIssue {
-  type: string;
-  description: string;
-  impact: "high" | "medium" | "low";
-  suggestion?: string;
-}
+import { scoreResume } from "@/lib/resume-score";
 
 interface Props {
   resume: ParsedResume | null;
 }
 
-function analyze(resume: ParsedResume | null): { score: number; issues: ATSIssue[] } {
-  if (!resume) return { score: 0, issues: [] };
-  const issues: ATSIssue[] = [];
-  let score = 100;
-
-  if (!resume.contact.name?.trim()) {
-    issues.push({ type: "name", description: "No name in the contact block", impact: "high", suggestion: "Add your full name at the top." });
-    score -= 15;
-  }
-  if (!resume.contact.email?.trim()) {
-    issues.push({ type: "email", description: "No email address", impact: "high", suggestion: "Add a professional email address." });
-    score -= 15;
-  }
-  if (!resume.experience?.length) {
-    issues.push({ type: "experience", description: "No work experience section", impact: "high", suggestion: "Add at least one role with 2–4 achievement bullets." });
-    score -= 20;
-  } else {
-    const bullets = resume.experience.flatMap((e) => e.bullets || []);
-    const weak = bullets.filter((b) => b.split(/\s+/).length < 5);
-    if (bullets.length && weak.length / bullets.length > 0.5) {
-      issues.push({ type: "bullets", description: "Most bullets are shorter than 5 words", impact: "medium", suggestion: "Expand each bullet with an action and a result." });
-      score -= 10;
-    }
-  }
-  if (!resume.education?.length) {
-    issues.push({ type: "education", description: "No education section", impact: "medium", suggestion: "Add your degree, school, and graduation year." });
-    score -= 10;
-  }
-  if (!resume.skills?.length) {
-    issues.push({ type: "skills", description: "No skills section", impact: "high", suggestion: "List 8–12 relevant tools and strengths." });
-    score -= 15;
-  } else if (resume.skills.length < 5) {
-    issues.push({ type: "skills", description: "Only a few skills listed", impact: "medium", suggestion: "Aim for 8–12 skills that match the job." });
-    score -= 5;
-  }
-  if (!resume.summary || resume.summary.trim().length < 20) {
-    issues.push({ type: "summary", description: "No summary, or it is very short", impact: "low", suggestion: "Add 2–3 lines: role, years, and one measurable result." });
-    score -= 5;
-  }
-  if (!resume.certifications?.length) {
-    issues.push({ type: "certifications", description: "No certifications listed", impact: "low", suggestion: "Add relevant credentials if you have them." });
-    score -= 3;
-  }
-
-  return { score: Math.max(0, score), issues };
-}
-
-const impactStyle: Record<ATSIssue["impact"], string> = {
+const impactStyles = {
   high: "text-red-600 dark:text-red-400",
   medium: "text-amber-600 dark:text-amber-400",
   low: "text-slate-400 dark:text-slate-500",
-};
+} as const;
 
 export default function FreeATSChecker({ resume }: Props) {
-  const { score, issues } = useMemo(() => analyze(resume), [resume]);
-  const tone = score >= 80 ? "emerald" : score >= 60 ? "amber" : "red";
+  const result = useMemo(() => scoreResume(resume), [resume]);
 
-  if (!resume) return <p className="text-[12.5px] text-slate-400">Add some content to run the ATS check.</p>;
+  if (!resume) {
+    return <p className="text-[12.5px] text-slate-400">Add some content to run the review.</p>;
+  }
+
+  const tone =
+    result.score >= 85
+      ? "text-emerald-600 dark:text-emerald-400"
+      : result.score >= 65
+      ? "text-amber-600 dark:text-amber-400"
+      : "text-red-600 dark:text-red-400";
+
+  const barTone =
+    result.score >= 85
+      ? "bg-emerald-500"
+      : result.score >= 65
+      ? "bg-amber-500"
+      : "bg-red-500";
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-4">
-        <span className={`text-[30px] font-bold leading-none tabular-nums ${
-          tone === "emerald" ? "text-emerald-600 dark:text-emerald-400" : tone === "amber" ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400"
-        }`}>
-          {score}
-        </span>
-        <div className="flex-1 min-w-0">
-          <div className="h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-            <div
-              className={`h-full rounded-full ${tone === "emerald" ? "bg-emerald-500" : tone === "amber" ? "bg-amber-500" : "bg-red-500"}`}
-              style={{ width: `${score}%` }}
-            />
+    <div className="space-y-5">
+      <div className="flex items-start gap-4">
+        <div>
+          <span className={`text-[34px] font-bold leading-none tabular-nums ${tone}`}>{result.score}</span>
+          <span className="text-[12px] text-slate-400 dark:text-slate-500"> /100</span>
+        </div>
+        <div className="flex-1 min-w-0 pt-0.5">
+          <div className="flex items-baseline justify-between gap-3">
+            <p className="text-[13px] font-semibold text-slate-900 dark:text-white">{result.band} for big-tech screens</p>
+            <span className="text-[11px] text-slate-400 dark:text-slate-500 tabular-nums">
+              {result.wordCount} words · {Math.round(result.metricsRatio * 100)}% metrics
+            </span>
           </div>
-          <p className="mt-2 text-[12px] text-slate-500 dark:text-slate-400">
-            {score >= 80 ? "Strong ATS foundation — fix the details below to finish." : score >= 60 ? "Parseable, but a few sections need work." : "Several sections are missing or too thin."}
+          <div className="mt-1.5 h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+            <div className={`h-full rounded-full ${barTone}`} style={{ width: `${result.score}%` }} />
+          </div>
+          <p className="mt-1.5 text-[11.5px] text-slate-500 dark:text-slate-400">
+            {result.score >= 85
+              ? "This matches the pattern of resumes that pass Google/Meta screens. Keep every claim truthful."
+              : result.score >= 65
+              ? "Competitive, but the issues below are the difference between a screen and a rejection."
+              : "This is likely to be filtered. Fix the high-impact issues first."}
           </p>
         </div>
       </div>
 
-      {issues.length > 0 ? (
-        <ul className="divide-y divide-slate-100 dark:divide-slate-800">
-          {issues.map((issue) => (
-            <li key={issue.type} className="flex items-start gap-3 py-2.5">
-              <span className={`mt-0.5 text-[9.5px] font-bold uppercase tracking-wider w-11 shrink-0 ${impactStyle[issue.impact]}`}>
-                {issue.impact}
-              </span>
-              <div className="min-w-0">
-                <p className="text-[12.5px] font-medium text-slate-800 dark:text-slate-200">{issue.description}</p>
-                {issue.suggestion && <p className="text-[11.5px] text-slate-500 dark:text-slate-400 mt-0.5">{issue.suggestion}</p>}
-              </div>
-            </li>
-          ))}
-        </ul>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2.5">
+        {result.categories.map((cat) => (
+          <div key={cat.key}>
+            <div className="flex items-center justify-between text-[10.5px] text-slate-500 dark:text-slate-400">
+              <span className="font-medium">{cat.label}</span>
+              <span className="tabular-nums">{Math.round(cat.score)}/{cat.max}</span>
+            </div>
+            <div className="mt-1 h-1 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-slate-700 dark:bg-slate-300"
+                style={{ width: `${(cat.score / Math.max(1, cat.max)) * 100}%` }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {result.issues.length > 0 ? (
+        <div>
+          <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-500 mb-1">
+            What is costing you interviews
+          </p>
+          <ul className="divide-y divide-slate-100 dark:divide-slate-800">
+            {result.issues.slice(0, 8).map((issue) => (
+              <li key={issue.id} className="flex items-start gap-3 py-2.5">
+                <span className={`mt-0.5 w-11 shrink-0 text-[9.5px] font-bold uppercase tracking-wider ${impactStyles[issue.impact]}`}>
+                  {issue.impact}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[12.5px] font-medium text-slate-800 dark:text-slate-200">{issue.title}</p>
+                  <p className="mt-0.5 text-[11.5px] leading-relaxed text-slate-500 dark:text-slate-400">{issue.detail}</p>
+                  <p className="mt-0.5 text-[11.5px] leading-relaxed text-slate-700 dark:text-slate-300">
+                    <span className="font-semibold">Fix:</span> {issue.fix}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : (
-        <p className="text-[12.5px] text-emerald-700 dark:text-emerald-400">No structural ATS issues found.</p>
+        <p className="text-[12.5px] text-emerald-700 dark:text-emerald-400">
+          No structural issues found. Tailor the content to each job description before applying.
+        </p>
       )}
     </div>
   );

@@ -7,34 +7,40 @@ import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
 import { requireAuth } from "@/lib/api-guard";
 
-const SYSTEM_PROMPT = `You are an expert senior resume coach and career strategist. Thoroughly analyze the provided resume and generate targeted, high-impact improvement suggestions.
+const SYSTEM_PROMPT = `You are an expert big-tech resume coach. Review the resume the way a Google/Meta/Amazon engineering screener would, then propose only factual improvements.
 
-Cover these areas in priority order:
-1. **Action verb strength** — replace weak/passive verbs (was, was responsible for, helped with) with powerful alternatives (drove, delivered, implemented, optimized, spearheaded)
-2. **Quantification** — add specific metrics, percentages, dollar amounts, time saved wherever the original implies results
-3. **Clarity & conciseness** — tighten verbose phrases, remove filler words, improve readability
-4. **Section completeness** — flag sections that are too thin or missing critical elements
-5. **Summary impact** — strengthen the professional summary to differentiate the candidate
-6. **Keyword optimization** — suggest terms that would strengthen ATS matching for the implied role
+TRUTH RULES (highest priority):
+- Never invent metrics, percentages, dollar amounts, employers, titles, dates, degrees, awards, or tools.
+- Preserve every number and fact. If a result is missing, rewrite for clarity and put "Add your real metric" in the reason.
+- Do not upgrade a contribution into ownership or a team result into individual work.
+
+BIG-TECH REVIEW PRIORITIES:
+1. Bullet quality: X-Y-Z shape (accomplished X, measured by Y, by doing Z), strong first verb, result before method, 12–28 words.
+2. Evidence: metrics, scale, latency, revenue, users, time saved — only when already present or clearly implied without inventing a figure.
+3. Duties disguised as achievements ("Responsible for...", "Worked on..."): rewrite around outcome and scope.
+4. Summary: 2–3 sentences, role + years + strongest real outcome; no "passionate/hardworking".
+5. Skills: hard skills evidenced by the resume; flag unproven keyword lists rather than adding more.
+6. Student signal: GPA, relevant coursework, projects with links, awards/leadership.
+7. One-page density: cut low-value bullets and filler.
 
 Return JSON in this exact shape:
 {
   "suggestions": [
     {
-      "section": string,    // e.g. "experience", "summary", "skills", "education", "projects"
-      "original": string,   // the exact text to be improved
-      "improved": string,   // the improved version — significantly better, not just a tweak
-      "reason": string      // brief explanation of why this change helps (e.g. "Adds measurable impact" / "Replaces passive voice")
+      "section": "experience" | "summary" | "skills" | "education" | "projects" | "awards",
+      "original": "exact text from the resume",
+      "improved": "rewritten version, same facts and numbers",
+      "reason": "specific screen-level reason, e.g. 'Adds a real metric placeholder' or 'Leads with outcome'"
     }
   ]
 }
 
 Rules:
-- Return 3–15 suggestions, ordered by impact (most important first)
-- Never fabricate facts, dates, company names, job titles, or degree names
-- Keep improved text factually consistent with the original scope
-- Each suggestion must target a specific, identifiable piece of text
-- Make the improved version genuinely better — not just a minor wording change`;
+- 3–15 suggestions, most impactful first
+- "original" must exactly match existing text
+- Never return a suggestion that only changes style without improving clarity or evidence
+- If the resume is already strong, return fewer, sharper suggestions`;
+
 
 export async function POST(req: NextRequest) {
   const auth = await requireAuth(req);

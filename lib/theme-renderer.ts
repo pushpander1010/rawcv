@@ -18,7 +18,7 @@ import { normalizeSectionOrder, type ResumeSectionKey } from "@/lib/section-orde
 import { RESUME_CSS } from "@/lib/resume-styles";
 import { formatDateRange, formatResumeDate } from "@/lib/format-date";
 
-/** Merge accepted TailorChanges into a ParsedResume copy */
+/** Merge accepted TailorChanges into a ParsedResume copy. */
 export function applyChanges(
   resume: ParsedResume,
   changes: TailorChange[] = []
@@ -29,17 +29,68 @@ export function applyChanges(
   const result: ParsedResume = JSON.parse(JSON.stringify(resume));
 
   for (const change of accepted) {
-    if (change.section === "summary") {
+    const f = change.field;
+
+    if (change.section === "summary" && f === "summary") {
       result.summary = change.tailored;
-    } else if (change.section === "experience") {
-      const expMatch = change.field.match(/experience\[(\d+)\]\.bullets\[(\d+)\]/);
-      if (expMatch) {
-        const ei = parseInt(expMatch[1]);
-        const bi = parseInt(expMatch[2]);
+      continue;
+    }
+
+    if (change.section === "experience") {
+      const bulletMatch = f.match(/^experience\[(\d+)\]\.bullets\[(\d+)\]$/);
+      if (bulletMatch) {
+        const ei = parseInt(bulletMatch[1], 10);
+        const bi = parseInt(bulletMatch[2], 10);
         if (result.experience[ei]?.bullets[bi] !== undefined) {
           result.experience[ei].bullets[bi] = change.tailored;
         }
       }
+      continue;
+    }
+
+    if (change.section === "skills" && f === "skills") {
+      try {
+        const skills = JSON.parse(change.tailored);
+        if (Array.isArray(skills)) result.skills = skills.map(String);
+      } catch { /* skip malformed */ }
+      continue;
+    }
+
+    if (change.section === "projects") {
+      const nameMatch = f.match(/^projects\[(\d+)\]\.name$/);
+      const descMatch = f.match(/^projects\[(\d+)\]\.description$/);
+      const techMatch = f.match(/^projects\[(\d+)\]\.technologies$/);
+      if (nameMatch) {
+        const pi = parseInt(nameMatch[1], 10);
+        if (result.projects?.[pi]) result.projects[pi].name = change.tailored;
+      } else if (descMatch) {
+        const pi = parseInt(descMatch[1], 10);
+        if (result.projects?.[pi]) result.projects[pi].description = change.tailored;
+      } else if (techMatch) {
+        const pi = parseInt(techMatch[1], 10);
+        try {
+          const tech = JSON.parse(change.tailored);
+          if (Array.isArray(tech) && result.projects?.[pi]) {
+            result.projects[pi].technologies = tech.map(String);
+          }
+        } catch { /* skip */ }
+      }
+      continue;
+    }
+
+    if (change.section === "certifications" && f === "certifications") {
+      try {
+        const certs = JSON.parse(change.tailored);
+        if (Array.isArray(certs)) result.certifications = certs.map(String);
+      } catch { /* skip */ }
+      continue;
+    }
+
+    if (change.section === "awards" && f === "awards") {
+      try {
+        const awards = JSON.parse(change.tailored);
+        if (Array.isArray(awards)) result.awards = awards.map(String);
+      } catch { /* skip */ }
     }
   }
 
@@ -70,6 +121,10 @@ function contactHref(type: string, value: string): string | null {
       if (v.startsWith("http")) return v;
       if (v.includes("linkedin.com")) return `https://${v.replace(/^(https?:\/\/)?(www\.)?/, "")}`;
       return `https://linkedin.com/in/${v.replace(/^@/, "")}`;
+    case "github":
+      if (v.startsWith("http")) return v;
+      if (v.includes("github.com")) return `https://${v.replace(/^(https?:\/\/)?(www\.)?/, "")}`;
+      return `https://github.com/${v.replace(/^@/, "")}`;
     case "website":
       if (v.startsWith("http")) return v;
       return `https://${v.replace(/^(www\.)?/, "")}`;
@@ -79,6 +134,9 @@ function contactHref(type: string, value: string): string | null {
 
 function contactValue(type: string, value: string): string {
   if (type === "linkedin") return "LinkedIn";
+  if (type === "github") {
+    return "GitHub";
+  }
   if (type === "website") {
     try {
       return new URL(value.startsWith("http") ? value : `https://${value}`)
@@ -99,15 +157,16 @@ function contactLink(type: string, value?: string): string {
   return `<span class="rcv-ci"><a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${label}</a></span>`;
 }
 
-function contactLine(contact: ParsedResume["contact"]): string {
+function contactLine(contact: ParsedResume["contact"], separator = "·"): string {
   const parts = [
     contactLink("email", contact.email),
     contactLink("phone", contact.phone),
     contactLink("location", contact.location),
     contactLink("linkedin", contact.linkedin),
+    contactLink("github", contact.github),
     contactLink("website", contact.website),
   ].filter(Boolean);
-  return parts.join('<span class="rcv-sep">·</span>');
+  return parts.join(`<span class="rcv-sep">${separator}</span>`);
 }
 
 function initials(name: string): string {
@@ -147,7 +206,8 @@ function jobHtml(
   const heading = title || company;
   if (!heading && !job.bullets.length) return "";
 
-  const meta = title && company ? `<div class="rcv-org">${esc(company)}</div>` : "";
+  const companyLine = [company, job.location?.trim()].filter(Boolean).join(" · ");
+  const meta = title && companyLine ? `<div class="rcv-org">${esc(companyLine)}</div>` : "";
   const inner = `
     <div class="rcv-row">
       <div class="rcv-job-title">${esc(heading)}</div>
@@ -178,6 +238,8 @@ function educationHtml(edu: EducationEntry, opts: { rail?: boolean } = {}): stri
       <div>
         <div class="rcv-degree">${esc(degreeLine)}</div>
         ${edu.institution ? `<div class="rcv-school">${esc(edu.institution)}</div>` : ""}
+        ${edu.gpa ? `<div class="rcv-note">GPA: ${esc(edu.gpa)}</div>` : ""}
+        ${edu.coursework?.length ? `<div class="rcv-note">Coursework: ${edu.coursework.map(esc).join(", ")}</div>` : ""}
       </div>
       <div class="rcv-date">${esc(formatResumeDate(edu.graduationYear))}</div>
     </div>`;
@@ -188,6 +250,8 @@ function educationHtml(edu: EducationEntry, opts: { rail?: boolean } = {}): stri
       <div>
         <div class="rcv-degree">${esc(degreeLine)}</div>
         ${edu.institution ? `<div class="rcv-school">${esc(edu.institution)}</div>` : ""}
+        ${edu.gpa ? `<div class="rcv-note">GPA: ${esc(edu.gpa)}</div>` : ""}
+        ${edu.coursework?.length ? `<div class="rcv-note">Coursework: ${edu.coursework.map(esc).join(", ")}</div>` : ""}
       </div>
     </div>`;
   }
@@ -197,10 +261,23 @@ function educationHtml(edu: EducationEntry, opts: { rail?: boolean } = {}): stri
 function projectHtml(project: Project): string {
   if (!project.name && !project.description) return "";
   const tech = project.technologies?.filter((t) => t.trim()) ?? [];
+  const link = project.link
+    ? (() => {
+        const href = project.link!.startsWith("http") ? project.link! : `https://${project.link}`;
+        let label = "Link";
+        try {
+          const url = new URL(href);
+          label = `${url.hostname.replace(/^www\./, "")}${url.pathname.replace(/\/$/, "")}`;
+        } catch { label = project.link!; }
+        return `<a class="rcv-proj-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
+      })()
+    : "";
+  const bullets = bulletsHtml(project.bullets ?? []);
   return `<div class="rcv-item rcv-proj">
-    <div class="rcv-proj-name">${esc(project.name)}</div>
+    <div class="rcv-proj-name">${esc(project.name)}${link ? ` <span class="rcv-sep">|</span> ${link}` : ""}</div>
     ${tech.length ? `<div class="rcv-tech">${tech.map(esc).join('<span class="rcv-sep">·</span>')}</div>` : ""}
     ${project.description ? `<p class="rcv-desc">${esc(project.description)}</p>` : ""}
+    ${bullets}
   </div>`;
 }
 
@@ -212,9 +289,43 @@ function certificationsHtml(items?: string[]): string {
     .join("")}</ul>`;
 }
 
-function skillsHtml(skills: string[], style: "tags" | "line" | "plain" | "comma" = "tags"): string {
+
+const SKILL_GROUPS: Array<{ label: string; keys: string[] }> = [
+  { label: "Languages", keys: ["python", "java", "javascript", "typescript", "c++", "c#", "go", "golang", "rust", "ruby", "php", "swift", "kotlin", "scala", "sql", "bash", "r"] },
+  { label: "Frameworks", keys: ["react", "next.js", "nextjs", "vue", "angular", "svelte", "node", "express", "django", "flask", "fastapi", "spring", "rails", "laravel", ".net", "graphql", "redux", "tailwind"] },
+  { label: "Cloud & DevOps", keys: ["aws", "gcp", "azure", "docker", "kubernetes", "terraform", "jenkins", "ci/cd", "github actions", "linux", "cloud", "lambda", "ec2", "s3"] },
+  { label: "Data", keys: ["postgres", "postgresql", "mysql", "mongodb", "redis", "dynamodb", "snowflake", "bigquery", "kafka", "spark", "hadoop", "elasticsearch", "database", "sql"] },
+  { label: "Tools", keys: ["git", "github", "figma", "jira", "storybook", "webpack", "vite", "jest", "cypress", "postman", "datadog", "grafana"] },
+];
+
+/** Group flat skills into the category lines used by engineering resumes. */
+function groupedSkillsHtml(skills: string[]): string {
+  const groups = new Map<string, string[]>();
+  const used = new Set<string>();
+  for (const group of SKILL_GROUPS) {
+    for (const skill of skills) {
+      if (used.has(skill)) continue;
+      const lower = skill.toLowerCase();
+      if (group.keys.some((k) => lower === k || (k.length > 3 && lower.includes(k)))) {
+        if (!groups.has(group.label)) groups.set(group.label, []);
+        groups.get(group.label)!.push(skill);
+        used.add(skill);
+      }
+    }
+  }
+  const rest = skills.filter((s) => !used.has(s));
+  if (rest.length) groups.set("Additional", rest);
+  return `<div class="rcv-skill-groups">${Array.from(groups.entries())
+    .map(([label, items]) => `<p><b>${esc(label)}:</b> ${items.map(esc).join(", ")}</p>`)
+    .join("")}</div>`;
+}
+
+function skillsHtml(skills: string[], style: "tags" | "line" | "plain" | "comma" | "grouped" = "tags"): string {
   const list = skills.filter((s) => s.trim());
   if (!list.length) return "";
+  if (style === "grouped") {
+    return groupedSkillsHtml(list);
+  }
   if (style === "comma") {
     return `<p class="rcv-skill-line">${list.map(esc).join(", ")}</p>`;
   }
@@ -262,7 +373,7 @@ function interestsHtml(interests?: string[]): string {
 
 type Labels = Partial<Record<ResumeSectionKey, string>>;
 interface SectionOptions {
-  skills?: "tags" | "line" | "plain" | "comma";
+  skills?: "tags" | "line" | "plain" | "comma" | "grouped";
   bullets?: string;
   rail?: boolean;
   summaryClass?: string;
@@ -274,6 +385,7 @@ const DEFAULT_LABELS: Record<ResumeSectionKey, string> = {
   education: "Education",
   skills: "Skills",
   projects: "Selected Projects",
+  awards: "Awards & Leadership",
   certifications: "Certifications",
 };
 
@@ -311,6 +423,8 @@ function sectionForKey(
       const body = (r.projects ?? []).map(projectHtml).join("");
       return body ? sectionWrapper(title, body) : "";
     }
+    case "awards":
+      return sectionWrapper(title, certificationsHtml(r.awards));
     case "certifications":
       return sectionWrapper(title, certificationsHtml(r.certifications));
     default:
@@ -604,9 +718,17 @@ function renderMaang(r: ParsedResume): string {
   return `<div class="rcv rcv--maang">
     <header class="rcv-head">
       <h1 class="rcv-name">${esc(r.contact.name || "Your Name")}</h1>
-      <div class="rcv-contact">${contactLine(r.contact)}</div>
+      <div class="rcv-contact">${contactLine(r.contact, "|")}</div>
     </header>
-    ${renderOrdered(r, order, { summary: "Summary", experience: "Experience", education: "Education", skills: "Technical Skills", projects: "Projects", certifications: "Certifications" }, { skills: "comma" })}
+    ${renderOrdered(r, order, {
+      summary: "Summary",
+      experience: "Experience",
+      education: "Education",
+      skills: "Technical Skills",
+      projects: "Projects",
+      awards: "Awards & Leadership",
+      certifications: "Certifications",
+    }, { skills: "grouped" })}
     ${languagesSection(r)}
   </div>`;
 }

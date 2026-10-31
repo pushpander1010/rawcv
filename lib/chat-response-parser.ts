@@ -11,6 +11,7 @@ const ContactSchema = z.object({
   phone: z.string().optional().nullable(),
   location: z.string().optional().nullable(),
   linkedin: z.string().optional().nullable(),
+  github: z.string().optional().nullable(),
   website: z.string().optional().nullable(),
 }).partial();
 
@@ -19,6 +20,7 @@ const WorkExperienceSchema = z.object({
   title: z.string().optional().nullable(),
   startDate: z.string().optional().nullable(),
   endDate: z.string().optional().nullable(),
+  location: z.string().optional().nullable(),
   bullets: z.array(z.string()).optional().nullable(),
 }).partial();
 
@@ -27,12 +29,16 @@ const EducationSchema = z.object({
   degree: z.string().optional().nullable(),
   field: z.string().optional().nullable(),
   graduationYear: z.string().optional().nullable(),
+  gpa: z.string().optional().nullable(),
+  coursework: z.array(z.string()).optional().nullable(),
 }).partial();
 
 const ProjectSchema = z.object({
   name: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   technologies: z.array(z.string()).optional().nullable(),
+  link: z.string().optional().nullable(),
+  bullets: z.array(z.string()).optional().nullable(),
 }).partial();
 
 const ResumeUpdateSchema = z.object({
@@ -43,6 +49,7 @@ const ResumeUpdateSchema = z.object({
   skills: z.array(z.string()).optional().nullable(),
   certifications: z.array(z.string()).optional().nullable(),
   projects: z.array(ProjectSchema).optional().nullable(),
+  awards: z.array(z.string()).optional().nullable(),
 }).partial();
 
 const BuildResponseSchema = z.object({
@@ -134,6 +141,7 @@ export function validateResumeUpdate(update: Partial<ParsedResume> | null): Part
       phone: typeof update.contact.phone === "string" ? update.contact.phone : undefined,
       location: typeof update.contact.location === "string" ? update.contact.location : undefined,
       linkedin: typeof update.contact.linkedin === "string" ? update.contact.linkedin : undefined,
+      github: typeof update.contact.github === "string" ? update.contact.github : undefined,
       website: typeof update.contact.website === "string" ? update.contact.website : undefined,
     };
   }
@@ -152,6 +160,7 @@ export function validateResumeUpdate(update: Partial<ParsedResume> | null): Part
         title: typeof exp.title === "string" ? exp.title : "",
         startDate: typeof exp.startDate === "string" ? exp.startDate : "",
         endDate: typeof exp.endDate === "string" ? exp.endDate : "",
+        ...(typeof exp.location === "string" ? { location: exp.location } : {}),
         bullets: Array.isArray(exp.bullets)
           ? exp.bullets.filter((b) => typeof b === "string")
           : [],
@@ -167,6 +176,8 @@ export function validateResumeUpdate(update: Partial<ParsedResume> | null): Part
         degree: typeof edu.degree === "string" ? edu.degree : "",
         field: typeof edu.field === "string" ? edu.field : "",
         graduationYear: typeof edu.graduationYear === "string" ? edu.graduationYear : "",
+        ...(typeof edu.gpa === "string" ? { gpa: edu.gpa } : {}),
+        coursework: Array.isArray(edu.coursework) ? edu.coursework.filter((c) => typeof c === "string") : undefined,
       }));
   }
 
@@ -190,7 +201,13 @@ export function validateResumeUpdate(update: Partial<ParsedResume> | null): Part
         technologies: Array.isArray(proj.technologies)
           ? proj.technologies.filter((t) => typeof t === "string")
           : [],
+        ...(typeof proj.link === "string" ? { link: proj.link } : {}),
+        bullets: Array.isArray(proj.bullets) ? proj.bullets.filter((b) => typeof b === "string") : undefined,
       }));
+  }
+
+  if (Array.isArray(update.awards)) {
+    validated.awards = update.awards.filter((a) => typeof a === "string");
   }
 
   // Return null if no valid data was found

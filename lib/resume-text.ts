@@ -10,7 +10,7 @@ export function resumeToPlainText(resume: ParsedResume): string {
   const c = resume.contact;
 
   lines.push(c.name || "Resume");
-  const contactBits = [c.email, c.phone, c.location, c.linkedin, c.website].filter(Boolean);
+  const contactBits = [c.email, c.phone, c.location, c.linkedin, c.github, c.website].filter(Boolean);
   if (contactBits.length > 0) lines.push(contactBits.join(" | "));
   lines.push("");
 
@@ -25,7 +25,7 @@ export function resumeToPlainText(resume: ParsedResume): string {
       lines.push("EXPERIENCE");
       for (const job of resume.experience) {
         const dates = formatDateRange(job.startDate, job.endDate);
-        lines.push(`${job.title}${job.company ? ` — ${job.company}` : ""}${dates ? ` (${dates})` : ""}`);
+        lines.push(`${job.title}${job.company ? ` — ${job.company}` : ""}${job.location ? `, ${job.location}` : ""}${dates ? ` (${dates})` : ""}`);
         for (const b of job.bullets || []) {
           if (b?.trim()) lines.push(`- ${b.trim()}`);
         }
@@ -37,6 +37,8 @@ export function resumeToPlainText(resume: ParsedResume): string {
         const degree = [edu.degree, edu.field].filter(Boolean).join(" in ");
         lines.push(`${degree}${edu.graduationYear ? ` (${formatResumeDate(edu.graduationYear)})` : ""}`);
         if (edu.institution) lines.push(edu.institution);
+        if (edu.gpa) lines.push(`GPA: ${edu.gpa}`);
+        if (edu.coursework?.length) lines.push(`Coursework: ${edu.coursework.join(", ")}`);
         lines.push("");
       }
     } else if (key === "skills" && resume.skills?.length) {
@@ -48,9 +50,15 @@ export function resumeToPlainText(resume: ParsedResume): string {
       for (const p of resume.projects) {
         lines.push(p.name);
         if (p.technologies?.length) lines.push(`Tech: ${p.technologies.join(", ")}`);
+        if (p.link) lines.push(`Link: ${p.link}`);
         if (p.description) lines.push(p.description);
+        for (const b of p.bullets || []) if (b?.trim()) lines.push(`- ${b.trim()}`);
         lines.push("");
       }
+    } else if (key === "awards" && resume.awards?.length) {
+      lines.push("AWARDS & LEADERSHIP");
+      for (const award of resume.awards) lines.push(`- ${award}`);
+      lines.push("");
     } else if (key === "certifications" && resume.certifications?.length) {
       lines.push("CERTIFICATIONS");
       for (const cert of resume.certifications) lines.push(`- ${cert}`);

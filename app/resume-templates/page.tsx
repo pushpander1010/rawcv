@@ -51,6 +51,7 @@ const SAMPLE: ParsedResume = {
     phone: "+91 98765 43210",
     location: "Bengaluru, India",
     linkedin: "linkedin.com/in/aaravmehta",
+    github: "github.com/aaravmehta",
     website: "aaravmehta.dev",
   },
   summary:
@@ -78,17 +79,26 @@ const SAMPLE: ParsedResume = {
       ],
     },
   ],
-  education: [{ institution: "BITS Pilani", degree: "B.E.", field: "Computer Science", graduationYear: "2018" }],
+  education: [{ institution: "BITS Pilani", degree: "B.E.", field: "Computer Science", graduationYear: "2018", gpa: "8.7/10", coursework: ["Data Structures", "Operating Systems", "DBMS", "Computer Networks"] }],
   skills: ["React", "TypeScript", "Next.js", "Node.js", "GraphQL", "PostgreSQL", "AWS", "Design systems", "Performance"],
   certifications: ["AWS Certified Solutions Architect – Associate"],
   projects: [
     {
       name: "Atlas — open-source design system",
-      description: "A 40-component accessible React library with 2.1k GitHub stars.",
+      description: "A 40-component accessible React library.",
       technologies: ["React", "TypeScript", "Storybook"],
+      link: "github.com/aaravmehta/atlas",
+      bullets: ["Reached 2.1k GitHub stars and 12k monthly installs", "Cut consumer bundle size 38% by removing the runtime CSS layer"],
     },
   ],
-  sectionOrder: ["summary", "experience", "projects", "education", "skills", "certifications"],
+  awards: ["AWS Certified Solutions Architect – Associate", "Top 5% in BITS ACM coding contest (2,000+ entrants)"],
+  sectionOrder: ["summary", "experience", "projects", "education", "skills", "awards", "certifications"],
+};
+
+const MAANG_SAMPLE: ParsedResume = {
+  ...SAMPLE,
+  summary: "",
+  sectionOrder: ["education", "experience", "projects", "skills", "awards", "certifications"],
 };
 
 const FAQS = [
@@ -193,17 +203,18 @@ export default function ResumeTemplatesPage() {
                   MAANG — the resume that gets selected.
                 </h2>
                 <p className="mt-3 text-[13.5px] leading-relaxed text-slate-300">
-                  Modelled on the plain, content-dense resumes that pass Google, Amazon, Meta,
-                  Apple, and Netflix screens. One column, black text, standard headings, no
-                  color or decoration — just a full page of measurable achievements.
+                  Modelled on the format behind big-tech callbacks: the Jake’s Resume lineage used
+                  for Google, Amazon, Meta, Apple, and Netflix screens. One column, serif type,
+                  centered contact, ruled headings, Education/Experience/Projects/Skills — and a
+                  full page of measurable work.
                 </p>
                 <ul className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-[12px] text-slate-300">
-                  <li>Single column, ATS-first markup</li>
-                  <li>Compact 10.5pt body, dense bullets</li>
-                  <li>Standard section headings</li>
-                  <li>No color, icons, or tables</li>
-                  <li>Dates normalised on export</li>
-                  <li>Fits a full page of content</li>
+                  <li>Education first for students &amp; new grads</li>
+                  <li>GPA and relevant coursework</li>
+                  <li>GitHub plus project links</li>
+                  <li>2–4 X-Y-Z bullets per role</li>
+                  <li>Serif, single column, one page</li>
+                  <li>No photo, color, or decoration</li>
                 </ul>
                 <div className="mt-6 flex flex-wrap items-center gap-4">
                   <Link
@@ -221,7 +232,7 @@ export default function ResumeTemplatesPage() {
                     <div
                       className="shrink-0"
                       style={{ width: 794, height: 1123, transform: "scale(0.38)", transformOrigin: "top center" }}
-                      dangerouslySetInnerHTML={{ __html: renderThemeBody(SAMPLE, "maang") }}
+                      dangerouslySetInnerHTML={{ __html: renderThemeBody(MAANG_SAMPLE, "maang") }}
                     />
                   </div>
                 </div>

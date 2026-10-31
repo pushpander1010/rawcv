@@ -82,6 +82,8 @@ export interface WorkExperience {
   title: string;
   startDate: string;
   endDate: string | "Present";
+  /** Optional city/country shown beside the company. */
+  location?: string;
   bullets: string[];
 }
 
@@ -90,12 +92,20 @@ export interface Education {
   degree: string;
   field: string;
   graduationYear: string;
+  /** e.g. "3.8/4.0" — important for new-grad big-tech screens. */
+  gpa?: string;
+  /** Relevant coursework, one course per item. */
+  coursework?: string[];
 }
 
 export interface Project {
   name: string;
   description: string;
   technologies: string[];
+  /** GitHub / live demo URL. */
+  link?: string;
+  /** Optional 1–3 achievement bullets for the project. */
+  bullets?: string[];
 }
 
 export interface LanguageProficiency {
@@ -113,6 +123,7 @@ export interface ParsedResume {
     phone?: string;
     location?: string;
     linkedin?: string;
+    github?: string;
     website?: string;
   };
   photo?: string; // base64 data URL or blob URL
@@ -122,6 +133,7 @@ export interface ParsedResume {
   skills: string[];
   certifications?: string[];
   projects?: Project[];
+  awards?: string[];
   languages?: LanguageProficiency[];
   volunteerExperience?: WorkExperience[];
   interests?: string[];

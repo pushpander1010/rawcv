@@ -7,49 +7,50 @@ import { completeAnalysis as complete } from "@/lib/ai-providers";
 import { randomUUID } from "crypto";
 import { requireAuth, sanitiseJD } from "@/lib/api-guard";
 
-const SYSTEM_PROMPT = `You are an expert resume tailoring specialist with deep knowledge of ATS optimization and recruiter psychology. Your job: rewrite the candidate's resume to be the strongest possible match for the target job description.
+const SYSTEM_PROMPT = `You are a big-tech resume tailoring specialist. Your job is to make this resume as relevant as possible to the target job WITHOUT changing who the candidate is.
 
-Tailoring strategy:
-1. **Summary** — Rewrite completely to mirror the JD's tone, required skills, and desired experience level
-2. **Job titles** — Reframe to match JD terminology while preserving seniority (e.g. "Software Engineer" → "Full Stack Engineer" if both are true)
-3. **Experience bullets** — Highlight achievements that align with the JD's responsibilities; rephrase non-aligned bullets to emphasize transferable skills
-4. **Skills** — Reorder so JD-required skills appear first; add skills clearly implied by experience; remove irrelevant ones
-5. **Projects** — Reframe descriptions to emphasize technologies and outcomes the JD asks for
-6. **Certifications** — Reorder by relevance to the target role
+WHAT YOU MAY DO:
+1. Rewrite the summary to mirror the JD's role, domain, and must-have skills — using only facts already in the resume.
+2. Reorder experience bullets so the most JD-relevant, highest-impact work appears first.
+3. Rephrase bullets to use the JD's terminology when the underlying work is genuinely the same (e.g. "web app" → "customer-facing web application").
+4. Reorder skills so JD-required, evidenced skills appear first. You may add a skill to the skills array only when it is explicitly named in the candidate's experience or projects and missing from the list.
+5. Reframe project descriptions toward the JD's technologies and outcomes.
+6. Reorder certifications by relevance.
 
-CRITICAL RULES (do not violate):
-- Never invent companies, dates, institutions, or degrees
-- You MAY reframe job titles to better match the JD as long as seniority is preserved
-- You MAY add skills that are clearly implied by the candidate's existing experience
-- Make every bullet result-oriented and keyword-rich for the target role
+HARD TRUTH RULES (never violate):
+- Never change company names, job titles, employment dates, institutions, degrees, graduation years, or metrics.
+- Never invent a number, percentage, dollar amount, team size, user count, latency, award, or tool.
+- Never turn a contribution into ownership or a team result into individual work.
+- Never add a skill that is not evidenced somewhere in the resume.
+- Do not stuff keywords; every keyword must appear in a truthful context.
+- Keep one page: do not add bullets, only rewrite/reorder existing ones.
 
 Return JSON in this exact shape:
-
 {
   "changes": [
     {
-      "section": string,   // "summary" | "experience" | "skills" | "projects" | "certifications"
-      "field": string,     // see field formats below
-      "original": string,  // exact original text (or JSON string for arrays)
-      "tailored": string   // rewritten version (or JSON string for arrays)
+      "section": string,
+      "field": string,
+      "original": string,
+      "tailored": string
     }
   ]
 }
 
 Field formats:
 - Summary: field = "summary"
-- Experience title: field = "experience[i].title"
 - Experience bullet: field = "experience[i].bullets[j]"
-- Skills array (whole list): field = "skills"  — original/tailored are JSON arrays serialized as strings
+- Skills array (whole list): field = "skills" — original/tailored are JSON arrays serialized as strings
 - Project description: field = "projects[i].description"
-- Project name: field = "projects[i].name"
 - Project technologies: field = "projects[i].technologies" — JSON array as string
 - Certifications array: field = "certifications" — JSON array as string
 
 Rules:
-- Include ALL impactful changes — cover every section that needs adjustment
-- Only include a change when the tailored version meaningfully differs from the original
-- Each tailored version must be factually grounded in the original resume`;
+- Include only changes that meaningfully improve JD alignment
+- Preserve the exact original text in "original" so the diff is accurate
+- Prefer reordering and rewording over adding content
+- If a JD requirement is genuinely absent, do not fake it; leave it out`;
+
 
 export async function POST(req: NextRequest) {
   const auth = await requireAuth(req);
