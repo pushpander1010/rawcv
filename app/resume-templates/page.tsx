@@ -80,7 +80,7 @@ const SAMPLE: ParsedResume = {
       ],
     },
   ],
-  education: [{ institution: "BITS Pilani", degree: "B.E.", field: "Computer Science", graduationYear: "2018", gpa: "8.7/10", coursework: ["Data Structures", "Operating Systems", "DBMS", "Computer Networks"] }],
+  education: [{ institution: "BITS Pilani", degree: "B.E.", field: "Computer Science", startYear: "2014", graduationYear: "2018", gpa: "8.7/10", coursework: ["Data Structures", "Operating Systems", "DBMS", "Computer Networks"] }],
   skills: ["React", "TypeScript", "Next.js", "Node.js", "GraphQL", "PostgreSQL", "AWS", "Design systems", "Performance"],
   certifications: ["AWS Certified Solutions Architect – Associate"],
   projects: [

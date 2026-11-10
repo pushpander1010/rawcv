@@ -16,7 +16,7 @@ import {
 import { sanitizeResume as sanitizeResumeUtil } from "@/lib/sanitize-resume";
 import { normalizeSectionOrder, type ResumeSectionKey } from "@/lib/section-order";
 import { RESUME_CSS } from "@/lib/resume-styles";
-import { formatDateRange, formatResumeDate } from "@/lib/format-date";
+import { formatDateRange } from "@/lib/format-date";
 
 /** Merge accepted TailorChanges into a ParsedResume copy. */
 export function applyChanges(
@@ -207,18 +207,19 @@ function jobHtml(
   const heading = title || company;
   if (!heading && !job.bullets.length) return "";
 
-  // Compact one-line header: "Title (Company) · Location". The organisation and
-  // location sit inline with the job title instead of on a separate line, so
-  // each role uses one less line and the page packs in more content.
+  // Compact one-line header: "Title | Company | Location". The organisation and
+  // location sit inline with the job title, separated by pipes, so each role
+  // uses one less line and the page packs in more content.
   const inlineMeta: string[] = [];
   if (company && title) {
-    inlineMeta.push(`<span class="rcv-org">(${esc(company)})</span>`);
+    inlineMeta.push(`<span class="rcv-org">${esc(company)}</span>`);
   }
   if (location) {
     inlineMeta.push(`<span class="rcv-loc">${esc(location)}</span>`);
   }
+  const bar = '<span class="rcv-dot">|</span>';
   const meta = inlineMeta.length
-    ? ` <span class="rcv-inline-meta">${inlineMeta.join('<span class="rcv-dot">·</span>')}</span>`
+    ? `<span class="rcv-inline-meta">${bar}${inlineMeta.join(bar)}</span>`
     : "";
 
   const dates = esc(formatDateRange(job.startDate, job.endDate));
@@ -255,7 +256,7 @@ function educationHtml(edu: EducationEntry, opts: { rail?: boolean } = {}): stri
     edu.institution ? `<span class="rcv-school">${esc(edu.institution)}</span>` : "",
   ]
     .filter(Boolean)
-    .join('<span class="rcv-dot">·</span>');
+    .join('<span class="rcv-dot">|</span>');
   const notes = [
     edu.gpa ? `GPA: ${esc(edu.gpa)}` : "",
     edu.coursework?.length ? `Coursework: ${edu.coursework.map(esc).join(", ")}` : "",
@@ -263,7 +264,7 @@ function educationHtml(edu: EducationEntry, opts: { rail?: boolean } = {}): stri
     .filter(Boolean)
     .join(" · ");
   const noteLine = notes ? `<div class="rcv-note">${notes}</div>` : "";
-  const dates = esc(formatResumeDate(edu.graduationYear));
+  const dates = esc(formatDateRange(edu.startYear, edu.graduationYear));
 
   const body = `
     <div class="rcv-row">

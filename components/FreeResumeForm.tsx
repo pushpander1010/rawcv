@@ -537,10 +537,10 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
         title="Education"
         count={resume.education.length}
         active={activeSection === "education"}
-        hint="Degree, school, and graduation year"
+        hint="Degree, school, and start/end year"
         action={<AddButton onClick={() => setResume((prev) => ({
           ...prev,
-          education: [...prev.education, { institution: "", degree: "", field: "", graduationYear: "" }],
+          education: [...prev.education, { institution: "", degree: "", field: "", startYear: "", graduationYear: "" }],
         }))}>Add school</AddButton>}
       >
         {resume.education.length === 0 && (
@@ -580,9 +580,21 @@ export default function FreeResumeForm({ onResumeChange, initialResume }: Props)
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className={label}>Graduation year</label>
+                <label className={label}>Start year</label>
+                <input
+                  type="number"
+                  value={edu.startYear || ""}
+                  onChange={(e) => updateEducation(idx, { startYear: e.target.value })}
+                  placeholder="2014"
+                  min="1950"
+                  max="2100"
+                  className={field}
+                />
+              </div>
+              <div>
+                <label className={label}>End year</label>
                 <input
                   type="number"
                   value={edu.graduationYear}

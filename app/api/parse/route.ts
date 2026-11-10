@@ -39,6 +39,7 @@ function normalizeParsed(data: any): ParsedResume {
           degree:         e?.degree         ?? "",
           field:          e?.field          ?? "",
           graduationYear: e?.graduationYear ?? "",
+          startYear:      e?.startYear      ?? "",
           gpa:            e?.gpa            ?? "",
           coursework:     Array.isArray(e?.coursework) ? e.coursework : [],
         }))
@@ -120,7 +121,7 @@ Return a JSON object with this exact structure:
   "contact": { "name": "", "email": "", "phone": "", "location": "", "linkedin": "", "github": "", "website": "" },
   "summary": "",
   "experience": [{ "company": "", "title": "", "startDate": "", "endDate": "", "location": "", "bullets": [""] }],
-  "education": [{ "institution": "", "degree": "", "field": "", "graduationYear": "", "gpa": "", "coursework": [""] }],
+  "education": [{ "institution": "", "degree": "", "field": "", "startYear": "", "graduationYear": "", "gpa": "", "coursework": [""] }],
   "skills": [""],
   "certifications": [""],
   "awards": [""],
@@ -136,6 +137,7 @@ Guidelines:
 - Skills: prefer the explicit skills section. Include a tool mentioned elsewhere only when it is clearly a hard skill used in the role; do not pad with soft-skill guesses
 - Use empty string for missing fields, empty array for missing arrays
 - Preserve the original wording of bullet points exactly as written — never invent metrics or details
+- For education, extract the start year into startYear and the end/graduation year into graduationYear (both as strings, e.g. "2016", "2020")
 - For graduationYear, extract the year as a string (e.g. "2020", "Expected 2024")`;
 
 export async function POST(req: NextRequest) {

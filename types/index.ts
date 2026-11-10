@@ -93,6 +93,8 @@ export interface Education {
   degree: string;
   field: string;
   graduationYear: string;
+  /** Year the programme started; graduationYear is the end year. */
+  startYear?: string;
   /** e.g. "3.8/4.0" — important for new-grad big-tech screens. */
   gpa?: string;
   /** Relevant coursework, one course per item. */

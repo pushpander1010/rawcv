@@ -48,6 +48,7 @@ const SAMPLE: ParsedResume = {
       institution: "BITS Pilani",
       degree: "B.E.",
       field: "Computer Science",
+      startYear: "2014",
       graduationYear: "2018",
       gpa: "8.7/10",
       coursework: ["Data Structures", "Operating Systems", "DBMS", "Computer Networks"],

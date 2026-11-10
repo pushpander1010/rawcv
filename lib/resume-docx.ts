@@ -6,7 +6,7 @@ import type { ParsedResume, ResumeTypography } from "@/types";
 import { DEFAULT_TYPOGRAPHY, TYPO_LIMITS, normalizeTypography } from "@/types";
 
 import { normalizeSectionOrder } from "@/lib/section-order";
-import { formatDateRange, formatResumeDate } from "@/lib/format-date";
+import { formatDateRange } from "@/lib/format-date";
 
 const FONT_MAP: Record<string, string> = {
   default: "Calibri",
@@ -91,7 +91,7 @@ export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTyp
         children.push(
           new Paragraph({
             spacing: { before: 120, after: 20, line },
-            children: runs(`${job.title}${job.company ? ` — ${job.company}` : ""}${job.location ? `, ${job.location}` : ""}`, { bold: true, size, font }),
+            children: runs(`${job.title}${job.company ? ` | ${job.company}` : ""}${job.location ? ` | ${job.location}` : ""}`, { bold: true, size, font }),
           })
         );
         if (dates) {
@@ -110,13 +110,13 @@ export async function buildDocxBlob(resume: ParsedResume, typography?: ResumeTyp
       children.push(heading("Education", font, size));
       for (const edu of resume.education) {
         const degree = [edu.degree, edu.field].filter(Boolean).join(" in ");
+        const dates = formatDateRange(edu.startYear, edu.graduationYear);
         children.push(
           new Paragraph({
             spacing: { before: 80, after: 20, line },
-            children: runs(`${degree}${edu.graduationYear ? ` (${formatResumeDate(edu.graduationYear)})` : ""}`, { bold: true, size, font }),
+            children: runs(`${degree}${edu.institution ? ` | ${edu.institution}` : ""}${dates ? ` (${dates})` : ""}`, { bold: true, size, font }),
           })
         );
-        if (edu.institution) children.push(body(edu.institution, font, size, line));
         if (edu.gpa) children.push(body(`GPA: ${edu.gpa}`, font, size, line));
         if (edu.coursework?.length) children.push(body(`Coursework: ${edu.coursework.join(", ")}`, font, size, line));
       }

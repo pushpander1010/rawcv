@@ -44,6 +44,7 @@ function sanitizeEducation(edu: Partial<Education>): Education {
     degree: toStr(edu.degree),
     field: toStr(edu.field),
     graduationYear: toStr(edu.graduationYear),
+    ...(edu.startYear ? { startYear: toStr(edu.startYear) } : {}),
     ...(edu.gpa ? { gpa: toStr(edu.gpa) } : {}),
     coursework: Array.isArray(edu.coursework) ? edu.coursework.map(toStr).filter(Boolean) : undefined,
   };

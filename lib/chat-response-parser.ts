@@ -29,6 +29,7 @@ const EducationSchema = z.object({
   degree: z.string().optional().nullable(),
   field: z.string().optional().nullable(),
   graduationYear: z.string().optional().nullable(),
+  startYear: z.string().optional().nullable(),
   gpa: z.string().optional().nullable(),
   coursework: z.array(z.string()).optional().nullable(),
 }).partial();
@@ -176,6 +177,7 @@ export function validateResumeUpdate(update: Partial<ParsedResume> | null): Part
         degree: typeof edu.degree === "string" ? edu.degree : "",
         field: typeof edu.field === "string" ? edu.field : "",
         graduationYear: typeof edu.graduationYear === "string" ? edu.graduationYear : "",
+        ...(typeof edu.startYear === "string" ? { startYear: edu.startYear } : {}),
         ...(typeof edu.gpa === "string" ? { gpa: edu.gpa } : {}),
         coursework: Array.isArray(edu.coursework) ? edu.coursework.filter((c) => typeof c === "string") : undefined,
       }));

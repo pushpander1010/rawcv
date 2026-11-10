@@ -3,7 +3,7 @@
 
 import type { ParsedResume } from "@/types";
 import { normalizeSectionOrder } from "@/lib/section-order";
-import { formatDateRange, formatResumeDate } from "@/lib/format-date";
+import { formatDateRange } from "@/lib/format-date";
 
 export function resumeToPlainText(resume: ParsedResume): string {
   const lines: string[] = [];
@@ -25,7 +25,7 @@ export function resumeToPlainText(resume: ParsedResume): string {
       lines.push("EXPERIENCE");
       for (const job of resume.experience) {
         const dates = formatDateRange(job.startDate, job.endDate);
-        lines.push(`${job.title}${job.company ? ` — ${job.company}` : ""}${job.location ? `, ${job.location}` : ""}${dates ? ` (${dates})` : ""}`);
+        lines.push(`${job.title}${job.company ? ` | ${job.company}` : ""}${job.location ? ` | ${job.location}` : ""}${dates ? ` (${dates})` : ""}`);
         for (const b of job.bullets || []) {
           if (b?.trim()) lines.push(`- ${b.trim()}`);
         }
@@ -35,8 +35,8 @@ export function resumeToPlainText(resume: ParsedResume): string {
       lines.push("EDUCATION");
       for (const edu of resume.education) {
         const degree = [edu.degree, edu.field].filter(Boolean).join(" in ");
-        lines.push(`${degree}${edu.graduationYear ? ` (${formatResumeDate(edu.graduationYear)})` : ""}`);
-        if (edu.institution) lines.push(edu.institution);
+        const dates = formatDateRange(edu.startYear, edu.graduationYear);
+        lines.push(`${degree}${edu.institution ? ` | ${edu.institution}` : ""}${dates ? ` (${dates})` : ""}`);
         if (edu.gpa) lines.push(`GPA: ${edu.gpa}`);
         if (edu.coursework?.length) lines.push(`Coursework: ${edu.coursework.join(", ")}`);
         lines.push("");
