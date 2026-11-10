@@ -203,26 +203,41 @@ function jobHtml(
 ): string {
   const title = job.title?.trim();
   const company = job.company?.trim();
+  const location = job.location?.trim();
   const heading = title || company;
   if (!heading && !job.bullets.length) return "";
 
-  const companyLine = [company, job.location?.trim()].filter(Boolean).join(" · ");
-  const meta = title && companyLine ? `<div class="rcv-org">${esc(companyLine)}</div>` : "";
-  const inner = `
+  // Compact one-line header: "Title (Company) · Location". The organisation and
+  // location sit inline with the job title instead of on a separate line, so
+  // each role uses one less line and the page packs in more content.
+  const inlineMeta: string[] = [];
+  if (company && title) {
+    inlineMeta.push(`<span class="rcv-org">(${esc(company)})</span>`);
+  }
+  if (location) {
+    inlineMeta.push(`<span class="rcv-loc">${esc(location)}</span>`);
+  }
+  const meta = inlineMeta.length
+    ? ` <span class="rcv-inline-meta">${inlineMeta.join('<span class="rcv-dot">·</span>')}</span>`
+    : "";
+
+  const dates = esc(formatDateRange(job.startDate, job.endDate));
+  const bullets = bulletsHtml(job.bullets, opts.bullets);
+  const titleHtml = `<div class="rcv-job-title">${esc(heading)}${meta}</div>`;
+  const rowHtml = `
     <div class="rcv-row">
-      <div class="rcv-job-title">${esc(heading)}</div>
-      <div class="rcv-date">${esc(formatDateRange(job.startDate, job.endDate))}</div>
-    </div>
-    ${meta}
-    ${bulletsHtml(job.bullets, opts.bullets)}`;
+      ${titleHtml}
+      <div class="rcv-date">${dates}</div>
+    </div>`;
 
   if (opts.rail) {
+    // The left rail already owns the date — don't render it a second time.
     return `<div class="rcv-item rcv-with-date">
-      <div class="rcv-date">${esc(formatDateRange(job.startDate, job.endDate))}</div>
-      <div>${inner}</div>
+      <div class="rcv-date">${dates}</div>
+      <div>${titleHtml}${bullets}</div>
     </div>`;
   }
-  return `<div class="rcv-item rcv-job">${inner}</div>`;
+  return `<div class="rcv-item rcv-job">${rowHtml}${bullets}</div>`;
 }
 
 function educationHtml(edu: EducationEntry, opts: { rail?: boolean } = {}): string {
@@ -233,29 +248,36 @@ function educationHtml(edu: EducationEntry, opts: { rail?: boolean } = {}): stri
     : degree || field;
   if (!degreeLine && !edu.institution) return "";
 
-  const inner = `
+  // Compact: degree + institution on one line; GPA/coursework fold into a single
+  // note line instead of stacking one line each.
+  const head = [
+    degreeLine ? `<span class="rcv-degree">${esc(degreeLine)}</span>` : "",
+    edu.institution ? `<span class="rcv-school">${esc(edu.institution)}</span>` : "",
+  ]
+    .filter(Boolean)
+    .join('<span class="rcv-dot">·</span>');
+  const notes = [
+    edu.gpa ? `GPA: ${esc(edu.gpa)}` : "",
+    edu.coursework?.length ? `Coursework: ${edu.coursework.map(esc).join(", ")}` : "",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  const noteLine = notes ? `<div class="rcv-note">${notes}</div>` : "";
+  const dates = esc(formatResumeDate(edu.graduationYear));
+
+  const body = `
     <div class="rcv-row">
-      <div>
-        <div class="rcv-degree">${esc(degreeLine)}</div>
-        ${edu.institution ? `<div class="rcv-school">${esc(edu.institution)}</div>` : ""}
-        ${edu.gpa ? `<div class="rcv-note">GPA: ${esc(edu.gpa)}</div>` : ""}
-        ${edu.coursework?.length ? `<div class="rcv-note">Coursework: ${edu.coursework.map(esc).join(", ")}</div>` : ""}
-      </div>
-      <div class="rcv-date">${esc(formatResumeDate(edu.graduationYear))}</div>
+      <div><div class="rcv-edu-head">${head}</div>${noteLine}</div>
+      <div class="rcv-date">${dates}</div>
     </div>`;
 
   if (opts.rail) {
     return `<div class="rcv-item rcv-with-date">
-      <div class="rcv-date">${esc(formatResumeDate(edu.graduationYear))}</div>
-      <div>
-        <div class="rcv-degree">${esc(degreeLine)}</div>
-        ${edu.institution ? `<div class="rcv-school">${esc(edu.institution)}</div>` : ""}
-        ${edu.gpa ? `<div class="rcv-note">GPA: ${esc(edu.gpa)}</div>` : ""}
-        ${edu.coursework?.length ? `<div class="rcv-note">Coursework: ${edu.coursework.map(esc).join(", ")}</div>` : ""}
-      </div>
+      <div class="rcv-date">${dates}</div>
+      <div><div class="rcv-edu-head">${head}</div>${noteLine}</div>
     </div>`;
   }
-  return `<div class="rcv-item rcv-edu">${inner}</div>`;
+  return `<div class="rcv-item rcv-edu">${body}</div>`;
 }
 
 function projectHtml(project: Project): string {
@@ -272,10 +294,15 @@ function projectHtml(project: Project): string {
         return `<a class="rcv-proj-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
       })()
     : "";
+  // Compact: tech stack sits inline with the project name (no separate line).
+  const techInline = tech.length
+    ? ` <span class="rcv-dot">|</span> <span class="rcv-tech">${tech
+        .map(esc)
+        .join('<span class="rcv-dot">·</span>')}</span>`
+    : "";
   const bullets = bulletsHtml(project.bullets ?? []);
   return `<div class="rcv-item rcv-proj">
-    <div class="rcv-proj-name">${esc(project.name)}${link ? ` <span class="rcv-sep">|</span> ${link}` : ""}</div>
-    ${tech.length ? `<div class="rcv-tech">${tech.map(esc).join('<span class="rcv-sep">·</span>')}</div>` : ""}
+    <div class="rcv-proj-name">${esc(project.name)}${link ? ` <span class="rcv-dot">|</span> ${link}` : ""}${techInline}</div>
     ${project.description ? `<p class="rcv-desc">${esc(project.description)}</p>` : ""}
     ${bullets}
   </div>`;

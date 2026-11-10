@@ -160,7 +160,7 @@ export interface ResumeTypography {
 export const DEFAULT_TYPOGRAPHY: ResumeTypography = {
   font: "default",
   fontSizePt: 11,
-  lineHeight: 1.6,
+  lineHeight: 1.45,
 };
 
 /** Slider bounds for the Text style panel */
