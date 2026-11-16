@@ -10,6 +10,7 @@ import type {
 } from "@/types";
 import {
   DEFAULT_TYPOGRAPHY,
+  DENSITY_PRESETS,
   RESUME_FONT_STACKS,
   normalizeTypography,
 } from "@/types";
@@ -853,7 +854,9 @@ export function renderThemeHtml(
     body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
     ${RESUME_CSS}
     #resume-root {
-      width: 180mm;
+      /* Match the PDF page box (210mm minus the density margins) so the
+         exported pages break exactly like the on-screen preview. */
+      width: calc(210mm - 2 * ${DENSITY_PRESETS[typo.density].padX});
       --rcv-size: ${typo.fontSizePt}pt;
       --rcv-lh: ${typo.lineHeight};
     }
@@ -864,6 +867,6 @@ export function renderThemeHtml(
     ${fontOverride}
   </style>
 </head>
-<body><div id="resume-root">${body}</div></body>
+<body><div id="resume-root" class="rcv-density-${typo.density}">${body}</div></body>
 </html>`;
 }

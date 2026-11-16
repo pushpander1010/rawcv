@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Script from "next/script";
+import Link from "next/link";
 import FreeBuildClient from "./FreeBuildClient";
 import HowToSchema from "@/components/HowToSchema";
 
@@ -69,6 +70,21 @@ export default function BuildPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Chat shortcut — the fastest way in */}
+      <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 pt-5">
+        <Link
+          href="/chat"
+          className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
+        >
+          <span className="text-[13px] font-semibold text-slate-900 dark:text-white">
+            Prefer talking? Build the whole resume in chat — paste your old one and it does the rest.
+          </span>
+          <span className="text-[12.5px] font-semibold text-blue-600 dark:text-blue-400 shrink-0">
+            Open chat →
+          </span>
+        </Link>
       </div>
 
       {/* Builder */}

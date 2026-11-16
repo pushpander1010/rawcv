@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const pdfBuffer = await generatePdf(html);
+    const pdfBuffer = await generatePdf(html, typography);
     const filename = `${safeFileName(parsed.contact?.name)}-resume.pdf`;
     return new NextResponse(new Uint8Array(pdfBuffer), {
       status: 200,

@@ -5,6 +5,7 @@ import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const NAV_ITEMS = [
+  { href: "/chat", label: "AI chat" },
   { href: "/build", label: "Builder" },
   { href: "/analyze", label: "Analyze" },
   { href: "/tailor", label: "Tailor" },
@@ -44,10 +45,10 @@ export default function Navbar() {
           <div className="flex items-center gap-1.5 shrink-0">
             <ThemeToggle />
             <Link
-              href="/build"
+              href="/chat"
               className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[13px] font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
             >
-              Build resume
+              Chat to build
               <span aria-hidden="true">→</span>
             </Link>
 

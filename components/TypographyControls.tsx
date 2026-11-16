@@ -1,8 +1,8 @@
 "use client";
 
 import { useResume } from "@/context/ResumeContext";
-import { DEFAULT_TYPOGRAPHY, TYPO_LIMITS, normalizeTypography } from "@/types";
-import type { ResumeFont } from "@/types";
+import { DEFAULT_TYPOGRAPHY, DENSITY_PRESETS, TYPO_LIMITS, normalizeTypography } from "@/types";
+import type { ResumeDensity, ResumeFont } from "@/types";
 
 const FONTS: Array<{ id: ResumeFont; label: string }> = [
   { id: "default", label: "Theme default" },
@@ -12,19 +12,48 @@ const FONTS: Array<{ id: ResumeFont; label: string }> = [
   { id: "times", label: "Times New Roman" },
 ];
 
+const DENSITIES: ResumeDensity[] = ["compact", "standard", "relaxed"];
+
 export default function TypographyControls({ collapsible = false }: { collapsible?: boolean }) {
   const { state, setState } = useResume();
   const typo = normalizeTypography(state.typography);
   const isDefault =
     typo.font === DEFAULT_TYPOGRAPHY.font &&
     typo.fontSizePt === DEFAULT_TYPOGRAPHY.fontSizePt &&
-    typo.lineHeight === DEFAULT_TYPOGRAPHY.lineHeight;
+    typo.lineHeight === DEFAULT_TYPOGRAPHY.lineHeight &&
+    typo.density === DEFAULT_TYPOGRAPHY.density;
 
   const set = (patch: Partial<typeof typo>) =>
     setState((prev) => ({ ...prev, typography: { ...normalizeTypography(prev.typography), ...patch } }));
 
   const body = (
     <div className="space-y-4">
+      <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+          Page density
+        </span>
+        <div className="grid grid-cols-3 gap-1 p-1 rounded-lg bg-slate-100 dark:bg-slate-800" role="group" aria-label="Page density">
+          {DENSITIES.map((d) => (
+            <button
+              key={d}
+              type="button"
+              onClick={() => set({ density: d })}
+              aria-pressed={typo.density === d}
+              className={`px-2 py-1.5 rounded-md text-[12.5px] font-semibold transition-colors focus:outline-none ${
+                typo.density === d
+                  ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              }`}
+            >
+              {DENSITY_PRESETS[d].label}
+            </button>
+          ))}
+        </div>
+        <p className="text-[11.5px] text-slate-400 dark:text-slate-500">
+          {DENSITY_PRESETS[typo.density].hint}
+        </p>
+      </div>
+
       <div className="flex flex-col gap-1.5">
         <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
           Font style
@@ -115,7 +144,7 @@ export default function TypographyControls({ collapsible = false }: { collapsibl
   return (
     <details className="group">
       <summary className="cursor-pointer text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-300 list-none">
-        Text style: {FONTS.find((f) => f.id === typo.font)?.label}, {typo.fontSizePt.toFixed(1)} pt,{" "}
+        Type &amp; density: {DENSITY_PRESETS[typo.density].label}, {typo.fontSizePt.toFixed(1)} pt,{" "}
         {typo.lineHeight.toFixed(2)}×{!isDefault && " (custom)"}
       </summary>
       <div className="pt-3">{body}</div>

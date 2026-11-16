@@ -19,7 +19,7 @@ export const RESUME_CSS = `
   width: 210mm;
   min-height: 297mm;
   margin: 0 auto;
-  padding: 14mm 15mm;
+  padding: var(--rcv-pad-y, 14mm) var(--rcv-pad-x, 15mm);
   background: var(--paper);
   color: var(--ink);
   font-family: var(--rcv-font, Arial, Helvetica, sans-serif);
@@ -33,6 +33,58 @@ export const RESUME_CSS = `
 }
 .rcv *, .rcv *::before, .rcv *::after { box-sizing: border-box; }
 .rcv p { margin: 0; }
+
+/* ── Density presets ────────────────────────────────────────────────────── */
+/* Applied on ANY ancestor (preview wrapper / PDF root) so one class governs
+   page padding and every vertical gap inside the sheet. */
+.rcv-density-compact .rcv {
+  --rcv-pad-y: 10.5mm;
+  --rcv-pad-x: 12mm;
+  --rcv-sec-gap: 2.3mm;
+  --rcv-item-gap: 1.6mm;
+  --rcv-bullet-gap: .2mm;
+  --rcv-head-gap: 1.3mm;
+}
+.rcv-density-standard .rcv {
+  --rcv-pad-y: 14mm;
+  --rcv-pad-x: 15mm;
+  --rcv-sec-gap: 3.6mm;
+  --rcv-item-gap: 2.6mm;
+  --rcv-bullet-gap: .5mm;
+  --rcv-head-gap: 2mm;
+}
+.rcv-density-relaxed .rcv {
+  --rcv-pad-y: 17mm;
+  --rcv-pad-x: 17mm;
+  --rcv-sec-gap: 5mm;
+  --rcv-item-gap: 3.4mm;
+  --rcv-bullet-gap: .9mm;
+  --rcv-head-gap: 2.6mm;
+}
+/* Sidebar themes: keep their inner padding proportional to the paper padding */
+.rcv-density-compact .rcv--modern .rcv-side,
+.rcv-density-standard .rcv--modern .rcv-side,
+.rcv-density-relaxed .rcv--modern .rcv-side,
+.rcv-density-compact .rcv--navy .rcv-side,
+.rcv-density-standard .rcv--navy .rcv-side,
+.rcv-density-relaxed .rcv--navy .rcv-side,
+.rcv-density-compact .rcv--zety .rcv-side,
+.rcv-density-standard .rcv--zety .rcv-side,
+.rcv-density-relaxed .rcv--zety .rcv-side {
+  padding-top: calc(var(--rcv-pad-y) + 1mm);
+  padding-bottom: var(--rcv-pad-y);
+}
+.rcv-density-compact .rcv--modern,
+.rcv-density-standard .rcv--modern,
+.rcv-density-relaxed .rcv--modern,
+.rcv-density-compact .rcv--navy,
+.rcv-density-standard .rcv--navy,
+.rcv-density-relaxed .rcv--navy,
+.rcv-density-compact .rcv--zety,
+.rcv-density-standard .rcv--zety,
+.rcv-density-relaxed .rcv--zety {
+  padding: var(--rcv-pad-y) var(--rcv-pad-x);
+}
 .rcv h1, .rcv h2, .rcv h3 { margin: 0; font-weight: inherit; }
 .rcv ul { margin: 0; padding: 0; list-style: none; }
 .rcv a { color: inherit; text-decoration: none; }
@@ -60,13 +112,13 @@ export const RESUME_CSS = `
 .rcv-sep { padding: 0 2.4mm; color: #c1c7cf; }
 
 /* ── Sections ───────────────────────────────────────────────────────────── */
-.rcv-section { margin-top: 3.6mm; break-inside: auto; }
+.rcv-section { margin-top: var(--rcv-sec-gap, 3.6mm); break-inside: auto; }
 .rcv-section:first-child { margin-top: 0; }
 .rcv-h {
   display: flex;
   align-items: center;
   gap: 3mm;
-  margin-bottom: 2mm;
+  margin-bottom: var(--rcv-head-gap, 2mm);
   font-size: .74em;
   font-weight: 700;
   letter-spacing: .19em;
@@ -82,7 +134,7 @@ export const RESUME_CSS = `
 .rcv-h--accent { color: var(--accent); }
 
 /* ── Entries ────────────────────────────────────────────────────────────── */
-.rcv-item { margin-bottom: 2.6mm; break-inside: avoid; page-break-inside: avoid; }
+.rcv-item { margin-bottom: var(--rcv-item-gap, 2.6mm); break-inside: avoid; page-break-inside: avoid; }
 .rcv-item:last-child { margin-bottom: 0; }
 .rcv-row { display: flex; align-items: baseline; justify-content: space-between; gap: 5mm; }
 .rcv-row > *:first-child { min-width: 0; }
@@ -97,7 +149,7 @@ export const RESUME_CSS = `
 .rcv-desc { margin-top: .8mm; font-size: .95em; color: #39404a; line-height: 1.5; }
 
 .rcv-bullets { margin-top: 1mm; }
-.rcv-bullets li { position: relative; padding-left: 4.2mm; margin-bottom: .5mm; font-size: .95em; line-height: 1.48; color: #333a44; break-inside: avoid; }
+.rcv-bullets li { position: relative; padding-left: 4.2mm; margin-bottom: var(--rcv-bullet-gap, .5mm); font-size: .95em; line-height: 1.48; color: #333a44; break-inside: avoid; }
 .rcv-bullets li:last-child { margin-bottom: 0; }
 .rcv-bullets li::before { content: ""; position: absolute; left: 0; top: .6em; width: 1.6mm; height: 1.6mm; border-radius: 50%; background: var(--accent); opacity: .42; }
 .rcv-bullets--dash li { padding-left: 4mm; }

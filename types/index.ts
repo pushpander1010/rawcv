@@ -151,19 +151,66 @@ export interface ParsedResume {
 
 export type ResumeFont = "default" | "arial" | "calibri" | "georgia" | "times";
 
+/**
+ * Vertical rhythm preset. `compact` shrinks page padding, section gaps and
+ * bullet spacing so a full resume still fits on one A4 page.
+ */
+export type ResumeDensity = "compact" | "standard" | "relaxed";
+
 export interface ResumeTypography {
   font: ResumeFont;
   /** Body font size in points — free choice, not a preset */
   fontSizePt: number;
   /** Line height multiplier — free choice, not a preset */
   lineHeight: number;
+  /** Spacing preset — controls page padding + section/item gaps */
+  density: ResumeDensity;
 }
 
 export const DEFAULT_TYPOGRAPHY: ResumeTypography = {
   font: "default",
   fontSizePt: 11,
   lineHeight: 1.45,
+  density: "compact",
 };
+
+/** Density presets — page padding + vertical gaps, in CSS variable form */
+export const DENSITY_PRESETS: Record<
+  ResumeDensity,
+  { label: string; hint: string; padY: string; padX: string; secGap: string; itemGap: string; bulletGap: string; headGap: string }
+> = {
+  compact: {
+    label: "Compact",
+    hint: "Best for one-page resumes with full experience",
+    padY: "10.5mm",
+    padX: "12mm",
+    secGap: "2.3mm",
+    itemGap: "1.6mm",
+    bulletGap: "0.2mm",
+    headGap: "1.3mm",
+  },
+  standard: {
+    label: "Standard",
+    hint: "Balanced default for most resumes",
+    padY: "14mm",
+    padX: "15mm",
+    secGap: "3.6mm",
+    itemGap: "2.6mm",
+    bulletGap: "0.5mm",
+    headGap: "2mm",
+  },
+  relaxed: {
+    label: "Airy",
+    hint: "More white space, spreads onto two pages",
+    padY: "17mm",
+    padX: "17mm",
+    secGap: "5mm",
+    itemGap: "3.4mm",
+    bulletGap: "0.9mm",
+    headGap: "2.6mm",
+  },
+};
+
 
 /** Slider bounds for the Text style panel */
 export const TYPO_LIMITS = {
@@ -206,6 +253,12 @@ export function normalizeTypography(t: unknown): ResumeTypography {
   }
   return {
     font,
+    density:
+      o.density === "compact" || o.density === "standard" || o.density === "relaxed"
+        ? o.density
+        : o.spacing === "spacious"
+          ? "relaxed"
+          : DEFAULT_TYPOGRAPHY.density,
     fontSizePt: Math.min(TYPO_LIMITS.fontSizeMax, Math.max(TYPO_LIMITS.fontSizeMin, fontSizePt)),
     lineHeight:
       Math.round(

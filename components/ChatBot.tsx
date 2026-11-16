@@ -324,6 +324,20 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
     }
   }
 
+  // Starter prompts — cheapest path into the "just talk" experience
+  const starters =
+    mode === "build"
+      ? [
+          { label: "Paste my resume", kind: "prefix" as const, value: "Here is my current resume:\n" },
+          { label: "I'm a fresher", kind: "send" as const, value: "I'm a fresher with no work experience. Build me a strong one-page resume." },
+          { label: "I'm switching roles", kind: "prefix" as const, value: "I'm moving into a " },
+        ]
+      : [
+          { label: "Strengthen my bullets", kind: "send" as const, value: "Rewrite my experience bullets to be stronger and quantified where I already have numbers." },
+          { label: "Tighten to one page", kind: "send" as const, value: "Cut the resume down so it fits on one page without losing achievements." },
+          { label: "Add a summary", kind: "send" as const, value: "Write a 3-sentence professional summary using only what is already in my resume." },
+        ];
+
   return (
     <div className="flex flex-col h-full min-h-0">
 
@@ -350,6 +364,28 @@ export default function ChatBot({ mode = "build", onComplete, onEnd }: Props) {
             </div>
           </div>
         ))}
+
+        {messages.length <= 1 && !loading && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {starters.map((s) => (
+              <button
+                key={s.label}
+                type="button"
+                onClick={() => {
+                  if (s.kind === "send") {
+                    sendMessage(s.value);
+                  } else {
+                    setInput(s.value);
+                    inputRef.current?.focus();
+                  }
+                }}
+                className="rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-[12px] font-medium text-slate-600 dark:text-slate-300 hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {loading && (
           <div className="flex justify-start w-full">

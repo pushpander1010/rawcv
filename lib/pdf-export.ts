@@ -1,7 +1,23 @@
 /** Shared PDF generation via Puppeteer — used by /api/export and /api/export-free */
 
+import { DENSITY_PRESETS, normalizeTypography } from "@/types";
+import type { ResumeTypography } from "@/types";
 
-export async function generatePdf(html: string): Promise<Buffer> {
+/**
+ * Page margins must match the density preset, otherwise the PDF paginates
+ * differently from the live A4 preview (which is the whole promise of the
+ * page-count meter).
+ */
+export function pdfMargins(typography?: ResumeTypography) {
+  const typo = normalizeTypography(typography);
+  const preset = DENSITY_PRESETS[typo.density];
+  return { top: preset.padY, right: preset.padX, bottom: preset.padY, left: preset.padX };
+}
+
+export async function generatePdf(
+  html: string,
+  typography?: ResumeTypography
+): Promise<Buffer> {
   const isProduction = process.env.NODE_ENV === "production";
   let browser: any;
 
@@ -53,7 +69,7 @@ export async function generatePdf(html: string): Promise<Buffer> {
         format: "A4",
         printBackground: true,
         tagged: true,
-        margin: { top: "14mm", right: "15mm", bottom: "14mm", left: "15mm" },
+        margin: pdfMargins(typography),
       })
     );
     return pdfBuffer;
