@@ -1,17 +1,15 @@
 /** Shared PDF generation via Puppeteer — used by /api/export and /api/export-free */
 
-import { DENSITY_PRESETS, normalizeTypography } from "@/types";
 import type { ResumeTypography } from "@/types";
+import { inlineResumeFonts } from "@/lib/resume-fonts";
 
 /**
- * Page margins must match the density preset, otherwise the PDF paginates
- * differently from the live A4 preview (which is the whole promise of the
- * page-count meter).
+ * Zero @page margins on purpose: the resume sheet paints its own density
+ * padding (same CSS the preview uses), so every printed page starts and breaks
+ * exactly where the A4 preview slice does — including page 2 and beyond.
  */
-export function pdfMargins(typography?: ResumeTypography) {
-  const typo = normalizeTypography(typography);
-  const preset = DENSITY_PRESETS[typo.density];
-  return { top: preset.padY, right: preset.padX, bottom: preset.padY, left: preset.padX };
+export function pdfMargins() {
+  return { top: "0", right: "0", bottom: "0", left: "0" };
 }
 
 export async function generatePdf(
@@ -55,21 +53,27 @@ export async function generatePdf(
 
     // The document is fully self-contained (no webfonts, no remote assets), so
     // we only need the DOM — the old networkidle wait hung on blocked fonts.
-    await page.setContent(html, { waitUntil: "domcontentloaded" });
+    // Fonts are inlined as data URIs so nothing is fetched over the network,
+    // but they still have to finish decoding before the page is printed.
+    await page.setContent(inlineResumeFonts(html), { waitUntil: "load" });
 
     await Promise.race([
-      page.evaluate(() => (document as any).fonts?.ready),
-      new Promise((resolve) => setTimeout(resolve, 2500)),
+      page.evaluate(async () => {
+        const faces = Array.from((document as any).fonts ?? []);
+        await Promise.all(faces.map((f: any) => f.load?.().catch(() => {})));
+        await (document as any).fonts?.ready;
+      }),
+      new Promise((resolve) => setTimeout(resolve, 6000)),
     ]);
 
     await page.emulateMediaType("print");
 
     const pdfBuffer = Buffer.from(
       await page.pdf({
-        format: "A4",
+        preferCSSPageSize: true, // @page { size: 210mm 297mm } from the renderer
         printBackground: true,
         tagged: true,
-        margin: pdfMargins(typography),
+        margin: pdfMargins(),
       })
     );
     return pdfBuffer;

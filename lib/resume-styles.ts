@@ -8,6 +8,17 @@
  */
 
 export const RESUME_CSS = `
+/* ═══════════════════════ Fonts ═══════════════════════
+   Self-hosted, metric-compatible faces so the on-screen preview and the
+   server-rendered PDF use the exact same glyphs (server Chromium has almost
+   no system fonts — without this the PDF silently fell back to Open Sans). */
+@font-face { font-family: 'RCV Sans'; src: url('/fonts/rcv/arimo.woff2') format('woff2'); font-weight: 400 700; font-style: normal; font-display: block; }
+@font-face { font-family: 'RCV Serif'; src: url('/fonts/rcv/gelasio.woff2') format('woff2'); font-weight: 400 700; font-style: normal; font-display: block; }
+@font-face { font-family: 'RCV Calibri'; src: url('/fonts/rcv/carlito-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: 'RCV Calibri'; src: url('/fonts/rcv/carlito-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+@font-face { font-family: 'RCV Times'; src: url('/fonts/rcv/tinos-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: 'RCV Times'; src: url('/fonts/rcv/tinos-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+
 .rcv {
   --ink: #14171c;
   --muted: #5f6874;
@@ -22,7 +33,9 @@ export const RESUME_CSS = `
   padding: var(--rcv-pad-y, 14mm) var(--rcv-pad-x, 15mm);
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--rcv-font, Arial, Helvetica, sans-serif);
+  --rcv-sans: 'RCV Sans', Arial, Helvetica, sans-serif;
+  --rcv-serif: 'RCV Serif', Georgia, 'Times New Roman', serif;
+  font-family: var(--rcv-font, var(--rcv-sans));
   font-size: var(--rcv-size, 11pt);
   line-height: var(--rcv-lh, 1.42);
   font-weight: 400;
@@ -105,7 +118,7 @@ export const RESUME_CSS = `
 
 .rcv-name { font-size: 2.5em; font-weight: 700; letter-spacing: -0.022em; line-height: 1.02; }
 .rcv-role { margin-top: 1.2mm; font-size: .82em; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; color: var(--accent); }
-.rcv-contact { display: flex; flex-wrap: wrap; gap: 1.2mm 0; margin-top: 2mm; font-size: .78em; line-height: 1.5; color: var(--muted); }
+.rcv-contact { display: flex; flex-wrap: wrap; gap: 1.2mm 0; margin-top: 2mm; font-size: .78em; line-height: calc(var(--rcv-lh, 1.42) * 1.056); color: var(--muted); }
 .rcv-ci { white-space: nowrap; }
 .rcv-ci a { border-bottom: .5px solid transparent; }
 .rcv-ci a:hover { border-bottom-color: currentColor; }
@@ -138,18 +151,18 @@ export const RESUME_CSS = `
 .rcv-item:last-child { margin-bottom: 0; }
 .rcv-row { display: flex; align-items: baseline; justify-content: space-between; gap: 5mm; }
 .rcv-row > *:first-child { min-width: 0; }
-.rcv-job-title { font-size: 1.02em; font-weight: 700; line-height: 1.3; letter-spacing: -0.006em; }
+.rcv-job-title { font-size: 1.02em; font-weight: 700; line-height: calc(var(--rcv-lh, 1.42) * .915); letter-spacing: -0.006em; }
 .rcv-org { font-size: .9em; font-weight: 600; color: var(--muted); }
 .rcv-org em { font-style: normal; color: var(--faint); font-weight: 400; }
 .rcv-inline-meta { font-size: .9em; font-weight: 400; }
 .rcv-loc { font-size: .86em; font-weight: 400; color: var(--faint); }
 .rcv-dot { padding: 0 1.4mm; color: var(--faint); }
-.rcv-edu-head { line-height: 1.35; }
+.rcv-edu-head { line-height: calc(var(--rcv-lh, 1.42) * .951); }
 .rcv-date { flex-shrink: 0; font-size: .76em; font-weight: 500; color: var(--faint); white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: .03em; }
-.rcv-desc { margin-top: .8mm; font-size: .95em; color: #39404a; line-height: 1.5; }
+.rcv-desc { margin-top: .8mm; font-size: .95em; color: #39404a; line-height: calc(var(--rcv-lh, 1.42) * 1.056); }
 
 .rcv-bullets { margin-top: 1mm; }
-.rcv-bullets li { position: relative; padding-left: 4.2mm; margin-bottom: var(--rcv-bullet-gap, .5mm); font-size: .95em; line-height: 1.48; color: #333a44; break-inside: avoid; }
+.rcv-bullets li { position: relative; padding-left: 4.2mm; margin-bottom: var(--rcv-bullet-gap, .5mm); font-size: .95em; line-height: calc(var(--rcv-lh, 1.42) * 1.042); color: #333a44; break-inside: avoid; }
 .rcv-bullets li:last-child { margin-bottom: 0; }
 .rcv-bullets li::before { content: ""; position: absolute; left: 0; top: .6em; width: 1.6mm; height: 1.6mm; border-radius: 50%; background: var(--accent); opacity: .42; }
 .rcv-bullets--dash li { padding-left: 4mm; }
@@ -157,22 +170,22 @@ export const RESUME_CSS = `
 .rcv-bullets--plus li::before { content: "+"; top: auto; left: 0; width: auto; height: auto; background: none; border-radius: 0; color: var(--ink); opacity: 1; font-weight: 700; }
 
 /* ── Education ──────────────────────────────────────────────────────────── */
-.rcv-degree { font-size: .98em; font-weight: 700; line-height: 1.35; }
+.rcv-degree { font-size: .98em; font-weight: 700; line-height: calc(var(--rcv-lh, 1.42) * .951); }
 .rcv-school { font-size: .9em; color: var(--muted); }
 .rcv-note { margin-top: .3mm; font-size: .82em; color: var(--faint); }
 
 /* ── Skills / tags ──────────────────────────────────────────────────────── */
 .rcv-tags { display: flex; flex-wrap: wrap; gap: 1.2mm; }
-.rcv-tag { display: inline-block; padding: .5mm 2mm; border: .5px solid var(--rule); border-radius: .8mm; font-size: .8em; line-height: 1.5; color: #333a44; background: var(--tint); }
+.rcv-tag { display: inline-block; padding: .5mm 2mm; border: .5px solid var(--rule); border-radius: .8mm; font-size: .8em; line-height: calc(var(--rcv-lh, 1.42) * 1.056); color: #333a44; background: var(--tint); }
 .rcv-tags--plain .rcv-tag { padding: 0; border: 0; background: none; }
-.rcv-skill-line { font-size: .95em; color: #333a44; line-height: 1.55; }
+.rcv-skill-line { font-size: .95em; color: #333a44; line-height: calc(var(--rcv-lh, 1.42) * 1.092); }
 .rcv-skill-line .rcv-sep { padding: 0 1.5mm; }
-.rcv-inline-list { font-size: .95em; color: #333a44; line-height: 1.5; }
+.rcv-inline-list { font-size: .95em; color: #333a44; line-height: calc(var(--rcv-lh, 1.42) * 1.056); }
 .rcv-inline-list .rcv-sep { padding: 0 1.6mm; }
 
 /* ── Certifications ─────────────────────────────────────────────────────── */
 .rcv-cert-list { display: grid; grid-template-columns: 1fr 1fr; gap: .5mm 6mm; }
-.rcv-cert { position: relative; padding-left: 4.4mm; font-size: .88em; line-height: 1.5; color: #333a44; }
+.rcv-cert { position: relative; padding-left: 4.4mm; font-size: .88em; line-height: calc(var(--rcv-lh, 1.42) * 1.056); color: #333a44; }
 .rcv-cert::before { content: "—"; position: absolute; left: 0; color: var(--faint); }
 .rcv-side .rcv-cert-list { grid-template-columns: 1fr; }
 
@@ -196,7 +209,7 @@ export const RESUME_CSS = `
 .rcv-muted { color: var(--muted); }
 
 /* ═══════════════════════ CLASSIC ═══════════════════════ */
-.rcv--classic { font-family: var(--rcv-font, Georgia, "Times New Roman", serif); --accent: #22201d; --rule: #c8c3b9; }
+.rcv--classic { font-family: var(--rcv-font, var(--rcv-serif)); --accent: #22201d; --rule: #c8c3b9; }
 .rcv--classic .rcv-name { font-size: 2.45em; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
 .rcv--classic .rcv-role { color: #6f6659; letter-spacing: .22em; font-size: .76em; }
 .rcv--classic .rcv-h { display: block; padding-bottom: 1.3mm; border-bottom: 1px solid var(--rule); letter-spacing: .2em; }
@@ -220,7 +233,9 @@ export const RESUME_CSS = `
 .rcv--minimal .rcv-tag:nth-child(n) { padding: .4mm 2.2mm; border-radius: 4mm; }
 
 /* ═══════════════════════ MODERN ═══════════════════════ */
-.rcv--modern { display: flex; padding: 14mm 15mm; min-height: 297mm; }
+/* The side column is painted on the sheet itself (not only on the flex
+   child) so printed page 2 keeps the full-height colour band. */
+.rcv--modern { display: flex; background-image: linear-gradient(to right, transparent 0 var(--rcv-pad-x, 15mm), #1d2733 var(--rcv-pad-x, 15mm) calc(var(--rcv-pad-x, 15mm) + 68mm), transparent calc(var(--rcv-pad-x, 15mm) + 68mm)); padding: var(--rcv-pad-y, 14mm) var(--rcv-pad-x, 15mm); min-height: 297mm; }
 .rcv--modern .rcv-side { width: 68mm; flex-shrink: 0; padding: 15mm 7mm 14mm 9mm; background: #1d2733; color: #e8edf3; }
 .rcv--modern .rcv-main { flex: 1; min-width: 0; padding: 15mm 10mm 14mm 9mm; }
 .rcv--modern .rcv-name { font-size: 1.75em; color: #fff; letter-spacing: -.01em; line-height: 1.08; }
@@ -241,7 +256,7 @@ export const RESUME_CSS = `
 .rcv--modern .rcv-bullets li::before { background: #4d7ea8; opacity: .8; }
 
 /* ═══════════════════════ EXECUTIVE ═══════════════════════ */
-.rcv--executive { --accent: #12161c; --rule: #d8d3c7; --muted: #5f5b52; font-family: var(--rcv-font, Georgia, "Times New Roman", serif); }
+.rcv--executive { --accent: #12161c; --rule: #d8d3c7; --muted: #5f5b52; font-family: var(--rcv-font, var(--rcv-serif)); }
 .rcv--executive .rcv-head { padding: 7mm 8mm; margin: -1mm -2mm 5mm; background: #12161c; color: #fff; }
 .rcv--executive .rcv-name { color: #fff; font-size: 2.3em; letter-spacing: .02em; }
 .rcv--executive .rcv-role { color: #c8a96a; font-size: .74em; letter-spacing: .24em; }
@@ -284,7 +299,7 @@ export const RESUME_CSS = `
 .rcv--sharp .rcv-bullets li::before { background: none; content: "+"; width: auto; height: auto; border-radius: 0; color: #0a0a0a; font-weight: 700; opacity: 1; top: auto; }
 
 /* ═══════════════════════ NAVY ═══════════════════════ */
-.rcv--navy { display: flex; padding: 14mm 15mm; min-height: 297mm; }
+.rcv--navy { display: flex; background-image: linear-gradient(to right, transparent 0 var(--rcv-pad-x, 15mm), #0e2138 var(--rcv-pad-x, 15mm) calc(var(--rcv-pad-x, 15mm) + 66mm), transparent calc(var(--rcv-pad-x, 15mm) + 66mm)); padding: var(--rcv-pad-y, 14mm) var(--rcv-pad-x, 15mm); min-height: 297mm; }
 .rcv--navy .rcv-side { width: 66mm; flex-shrink: 0; background: #0e2138; color: #e7eef7; padding: 15mm 7mm 14mm 9mm; }
 .rcv--navy .rcv-main { flex: 1; min-width: 0; padding: 15mm 10mm 14mm 9mm; }
 .rcv--navy .rcv-side .rcv-name { color: #fff; font-size: 1.85em; letter-spacing: .01em; }
@@ -297,7 +312,7 @@ export const RESUME_CSS = `
 .rcv--navy .rcv-side .rcv-section { margin-top: 5mm; }
 .rcv--navy .rcv-side .rcv-degree, .rcv--navy .rcv-side .rcv-cert { color: #e7eef7; }
 .rcv--navy .rcv-side .rcv-school, .rcv--navy .rcv-side .rcv-note, .rcv--navy .rcv-side .rcv-inline-list { color: #8fa8c1; }
-.rcv--navy .rcv-side .rcv-inline-list { line-height: 1.7; }
+.rcv--navy .rcv-side .rcv-inline-list { line-height: calc(var(--rcv-lh, 1.42) * 1.197); }
 .rcv--navy .rcv-side .rcv-tag { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.1); color: #d8e5f2; }
 .rcv--navy .rcv-side .rcv-lang { color: #d8e5f2; border-color: rgba(255,255,255,.1); }
 .rcv--navy .rcv-side .rcv-lang span { color: #8fa8c1; }
@@ -306,13 +321,13 @@ export const RESUME_CSS = `
 .rcv--navy .rcv-bullets li::before { background: #0e2138; opacity: .55; }
 
 /* ═══════════════════════ TERRA ═══════════════════════ */
-.rcv--terra { --paper: #fffdf8; --ink: #2f241c; --accent: #9a4a24; --rule: #e8dccd; --muted: #6d5c4d; font-family: var(--rcv-font, Georgia, "Times New Roman", serif); }
+.rcv--terra { --paper: #fffdf8; --ink: #2f241c; --accent: #9a4a24; --rule: #e8dccd; --muted: #6d5c4d; font-family: var(--rcv-font, var(--rcv-serif)); }
 .rcv--terra .rcv-head { padding-bottom: 4.5mm; border-bottom: 2px solid #9a4a24; }
 .rcv--terra .rcv-name { font-size: 2.55em; letter-spacing: -.01em; }
 .rcv--terra .rcv-role { color: #9a4a24; letter-spacing: .2em; }
 .rcv--terra .rcv-h { display: block; padding-bottom: 1.2mm; border-bottom: 1px solid var(--rule); letter-spacing: .2em; color: #9a4a24; }
 .rcv--terra .rcv-h::after { display: none; }
-.rcv--terra .rcv-summary { font-size: 1.06em; line-height: 1.62; font-style: italic; color: #4a3a2d; }
+.rcv--terra .rcv-summary { font-size: 1.06em; line-height: calc(var(--rcv-lh, 1.42) * 1.141); font-style: italic; color: #4a3a2d; }
 .rcv--terra .rcv-tag { background: #f8efe3; border-color: #ecdcc8; color: #7a3a1c; }
 .rcv--terra .rcv-bullets li::before { background: #b46a42; opacity: .75; }
 
@@ -364,7 +379,7 @@ export const RESUME_CSS = `
 .rcv--fotoram .rcv-bullets li::before { background: #3a6ea5; opacity: .55; }
 
 /* ═══════════════════════ ZETY ═══════════════════════ */
-.rcv--zety { display: flex; padding: 14mm 15mm; min-height: 297mm; }
+.rcv--zety { display: flex; background-image: linear-gradient(to right, transparent 0 var(--rcv-pad-x, 15mm), #22303f var(--rcv-pad-x, 15mm) calc(var(--rcv-pad-x, 15mm) + 64mm), transparent calc(var(--rcv-pad-x, 15mm) + 64mm)); padding: var(--rcv-pad-y, 14mm) var(--rcv-pad-x, 15mm); min-height: 297mm; }
 .rcv--zety .rcv-side { width: 64mm; flex-shrink: 0; background: #22303f; color: #e6edf4; padding: 14mm 7mm 14mm 8mm; text-align: left; }
 .rcv--zety .rcv-main { flex: 1; min-width: 0; padding: 15mm 10mm 14mm 8mm; }
 .rcv--zety .rcv-side .rcv-name { color: #fff; font-size: 1.7em; letter-spacing: .01em; line-height: 1.12; }
@@ -397,12 +412,12 @@ export const RESUME_CSS = `
 .rcv--resumeio .rcv-bullets li::before { background: #2563eb; opacity: .5; }
 
 /* ═══════════════════════ EDITORIAL (new) ═══════════════════════ */
-.rcv--editorial { --paper: #fffefb; --ink: #1a1714; --accent: #8f3a22; --rule: #e6ded2; --muted: #6b6157; font-family: var(--rcv-font, Georgia, "Times New Roman", serif); }
+.rcv--editorial { --paper: #fffefb; --ink: #1a1714; --accent: #8f3a22; --rule: #e6ded2; --muted: #6b6157; font-family: var(--rcv-font, var(--rcv-serif)); }
 .rcv--editorial .rcv-head { padding-bottom: 5mm; border-bottom: 1px solid var(--ink); }
 .rcv--editorial .rcv-name { font-size: 3.1em; font-weight: 400; letter-spacing: -.045em; line-height: .98; }
 .rcv--editorial .rcv-role { margin-top: 2.4mm; color: #8f3a22; font-size: .76em; letter-spacing: .24em; font-weight: 600; }
 .rcv--editorial .rcv-contact { margin-top: 3.5mm; font-size: .78em; }
-.rcv--editorial .rcv-summary { font-size: 1.16em; line-height: 1.6; color: #3a332c; }
+.rcv--editorial .rcv-summary { font-size: 1.16em; line-height: calc(var(--rcv-lh, 1.42) * 1.127); color: #3a332c; }
 .rcv--editorial .rcv-summary::first-letter { font-size: 1.1em; }
 .rcv--editorial .rcv-h { position: relative; display: block; padding-left: 9mm; font-size: .7em; letter-spacing: .24em; color: #8f3a22; margin-bottom: 2.4mm; }
 .rcv--editorial .rcv-h::before { content: counter(rcv-sec, decimal-leading-zero); position: absolute; left: 0; top: -.2em; font-size: 1.2em; letter-spacing: .05em; color: #b9aa98; font-style: italic; }
@@ -428,7 +443,7 @@ export const RESUME_CSS = `
 .rcv--atlas .rcv-bullets li::before { border-radius: 0; background: #1e4ed8; opacity: .6; width: 1.4mm; height: 1.4mm; }
 
 /* Fluid (non-paginated) preview used in analysis panels */
-.rcv-fluid .rcv { width: 100%; min-height: 0; padding: 10mm; }
+.rcv-fluid .rcv { width: 100%; min-height: 0; padding: var(--rcv-pad-y, 14mm) var(--rcv-pad-x, 15mm); }
 .rcv-fluid .rcv--modern, .rcv-fluid .rcv--navy, .rcv-fluid .rcv--zety { min-height: 0; }
 
 /* ═══════════════════════ MAANG ═══════════════════════ */
@@ -443,9 +458,9 @@ export const RESUME_CSS = `
   --accent: #000000;
   --rule: #000000;
   --tint: #ffffff;
-  font-family: var(--rcv-font, Georgia, "Times New Roman", serif);
+  font-family: var(--rcv-font, var(--rcv-serif));
   font-size: calc(var(--rcv-size, 11pt) * 0.93);
-  line-height: 1.34;
+  line-height: calc(var(--rcv-lh, 1.42) * .944);
   letter-spacing: 0;
 }
 .rcv--maang .rcv-head {
@@ -484,7 +499,7 @@ export const RESUME_CSS = `
 }
 .rcv--maang .rcv-h::after { display: none; }
 .rcv--maang .rcv-item { margin-bottom: 2.6mm; }
-.rcv--maang .rcv-job-title { font-size: 1em; font-weight: 700; line-height: 1.28; }
+.rcv--maang .rcv-job-title { font-size: 1em; font-weight: 700; line-height: calc(var(--rcv-lh, 1.42) * .901); }
 .rcv--maang .rcv-org {
   margin-top: 0;
   font-size: .95em;
@@ -493,13 +508,13 @@ export const RESUME_CSS = `
   color: #111;
 }
 .rcv--maang .rcv-date { font-size: .8em; font-weight: 400; color: #111; letter-spacing: 0; }
-.rcv--maang .rcv-desc { margin-top: .5mm; font-size: .95em; line-height: 1.4; color: #111; }
+.rcv--maang .rcv-desc { margin-top: .5mm; font-size: .95em; line-height: calc(var(--rcv-lh, 1.42) * .986); color: #111; }
 .rcv--maang .rcv-bullets { margin-top: .8mm; }
 .rcv--maang .rcv-bullets li {
   padding-left: 3.4mm;
   margin-bottom: .25mm;
   font-size: .95em;
-  line-height: 1.36;
+  line-height: calc(var(--rcv-lh, 1.42) * .958);
   color: #111;
 }
 .rcv--maang .rcv-bullets li::before {
@@ -512,8 +527,8 @@ export const RESUME_CSS = `
 .rcv--maang .rcv-degree { font-size: 1em; font-weight: 700; }
 .rcv--maang .rcv-school { margin-top: 0; font-size: .95em; font-style: italic; color: #111; }
 .rcv--maang .rcv-note { margin-top: .2mm; font-size: .86em; color: #222; }
-.rcv--maang .rcv-skill-line { font-size: .94em; line-height: 1.42; color: #111; }
-.rcv--maang .rcv-skill-groups { font-size: .94em; line-height: 1.46; color: #111; }
+.rcv--maang .rcv-skill-line { font-size: .94em; line-height: var(--rcv-lh, 1.42); color: #111; }
+.rcv--maang .rcv-skill-groups { font-size: .94em; line-height: calc(var(--rcv-lh, 1.42) * 1.028); color: #111; }
 .rcv--maang .rcv-skill-groups p { margin: 0 0 .4mm; }
 .rcv--maang .rcv-skill-groups b { font-weight: 700; font-style: italic; }
 .rcv--maang .rcv-tag { padding: 0; border: 0; background: none; font-size: .9em; }
@@ -534,7 +549,7 @@ export const RESUME_CSS = `
   --accent: #8a6a3f;
   --rule: #e3dbcd;
   --tint: #f8f3ea;
-  font-family: var(--rcv-font, Georgia, "Times New Roman", serif);
+  font-family: var(--rcv-font, var(--rcv-serif));
 }
 .rcv--onyx::before {
   content: "";
@@ -571,7 +586,7 @@ export const RESUME_CSS = `
   margin-top: 0;
   text-align: right;
   font-size: .75em;
-  line-height: 1.55;
+  line-height: calc(var(--rcv-lh, 1.42) * 1.092);
   color: #5e584f;
 }
 .rcv--onyx .rcv-sep { padding: 0 1.8mm; color: #b8ab98; }
@@ -598,7 +613,7 @@ export const RESUME_CSS = `
   width: 1.1mm; height: 1.1mm; background: #8a6a3f; opacity: .85;
   transform: rotate(45deg); border-radius: 0;
 }
-.rcv--onyx .rcv-summary { font-size: 1.08em; line-height: 1.6; color: #3c372f; }
+.rcv--onyx .rcv-summary { font-size: 1.08em; line-height: calc(var(--rcv-lh, 1.42) * 1.127); color: #3c372f; }
 .rcv--onyx .rcv-tag {
   background: #f8f3ea;
   border-color: #e7ddcc;
@@ -612,11 +627,17 @@ export const RESUME_CSS = `
 
 /* ═══════════════════════ Print ═══════════════════════ */
 @media print {
-  .rcv { width: 100%; min-height: 0; padding: 0; box-shadow: none; }
-  .rcv--modern, .rcv--navy, .rcv--zety { min-height: 269mm; }
+  /* Keep the sheet padding (not @page margins) so print pagination matches
+     the preview slice exactly, page 2 included. */
+  .rcv { width: 210mm; min-height: 0; padding: var(--rcv-pad-y, 14mm) var(--rcv-pad-x, 15mm); box-shadow: none; }
+  /* Side themes fill the full sheet so their coloured column reaches the
+     page bottom in print too (border-box: 297mm includes the density padding). */
+  .rcv--modern, .rcv--navy, .rcv--zety { min-height: 297mm; }
   .rcv, .rcv * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  .rcv-item, .rcv-bullets li { break-inside: avoid; page-break-inside: avoid; }
+  /* Print is a pure 297mm grid so break points land exactly where the preview
+     slices the sheet — no mid-item pushes, no orphan/widow reflow. Lines stay
+     atomic, so text is never cut mid-line. */
+  .rcv-item, .rcv-bullets li { break-inside: auto; page-break-inside: auto; }
   .rcv-h { break-after: avoid; page-break-after: avoid; }
-  .rcv-job, .rcv-edu { orphans: 3; widows: 3; }
 }
 `;

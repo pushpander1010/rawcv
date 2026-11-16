@@ -10,7 +10,6 @@ import type {
 } from "@/types";
 import {
   DEFAULT_TYPOGRAPHY,
-  DENSITY_PRESETS,
   RESUME_FONT_STACKS,
   normalizeTypography,
 } from "@/types";
@@ -850,19 +849,21 @@ export function renderThemeHtml(
   <title>${esc(resume.contact.name)} — Resume</title>
   <style>
     * { box-sizing: border-box; }
+    /* Exact page box = the preview sheet, so 96dpi rasterisation is 1:1. */
+    @page { size: 210mm 297mm; margin: 0; }
     html, body { margin: 0; padding: 0; background: #fff; }
     body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
     ${RESUME_CSS}
     #resume-root {
-      /* Match the PDF page box (210mm minus the density margins) so the
-         exported pages break exactly like the on-screen preview. */
-      width: calc(210mm - 2 * ${DENSITY_PRESETS[typo.density].padX});
+      /* The print page box is a full A4 sheet with zero @page margins: the
+         sheet's own density padding does the inset, exactly like the preview
+         sheet. Same width, same padding, same break points. */
+      width: 210mm;
       --rcv-size: ${typo.fontSizePt}pt;
       --rcv-lh: ${typo.lineHeight};
     }
     #resume-root .rcv {
-      width: 100%;
-      padding: 0;
+      width: 210mm;
     }
     ${fontOverride}
   </style>

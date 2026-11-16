@@ -20,9 +20,10 @@ interface Props {
   hideFitMeter?: boolean;
 }
 
-// A4 at 96 CSS dpi: 210mm ≈ 794px wide, 297mm ≈ 1123px tall.
-const A4_WIDTH_PX = 794;
-const A4_HEIGHT_PX = 1123;
+// A4 at 96 CSS dpi — exact, so the page slices land on the same boundaries
+// Chrome uses when it prints (210mm = 793.7008px, 297mm = 1122.5197px).
+const A4_WIDTH_PX = (210 / 25.4) * 96;
+const A4_HEIGHT_PX = (297 / 25.4) * 96;
 
 const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
@@ -96,7 +97,7 @@ export default function ResumePreview({
     if (!el) return;
     const update = () => {
       const h = el.scrollHeight || el.offsetHeight || 0;
-      setPageCount(Math.max(1, Math.ceil((h - 6) / A4_HEIGHT_PX)));
+      setPageCount(Math.max(1, Math.ceil((h - 1) / A4_HEIGHT_PX)));
     };
     update();
     const ro = new ResizeObserver(update);
@@ -136,7 +137,7 @@ export default function ResumePreview({
 
     for (let step = 0; step < 16; step++) {
       const h = measureRef.current?.scrollHeight ?? 0;
-      if (Math.ceil((h - 6) / A4_HEIGHT_PX) <= 1) {
+      if (Math.ceil((h - 1) / A4_HEIGHT_PX) <= 1) {
         setFitting(false);
         return;
       }

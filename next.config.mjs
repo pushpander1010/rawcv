@@ -101,6 +101,12 @@ const nextConfig = {
   },
   experimental: {
     serverComponentsExternalPackages: ["mammoth", "mupdf", "puppeteer", "puppeteer-core", "@sparticuz/chromium-min"],
+    // The PDF renderer inlines /public/fonts/rcv/*.woff2 as data URIs; make sure
+    // those files ship with the serverless function (public/ is CDN-only).
+    outputFileTracingIncludes: {
+      "/api/export": ["./public/fonts/rcv/**"],
+      "/api/export-free": ["./public/fonts/rcv/**"],
+    },
   },
   webpack: (config, { isServer }) => {
     if (isServer) {

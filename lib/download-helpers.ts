@@ -43,7 +43,9 @@ export async function downloadViaApi(resume: ParsedResume, theme: string, endpoi
 export function openPrintWindow(html: string, sName: string): Window | null {
   const printHtml = html.replace(
     "</head>",
-    `<style>@page{margin:14mm 15mm;size:A4}body{margin:0}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>
+    // @page margins stay 0 — the resume sheet paints its own padding, so the
+    // print-out paginates exactly like the A4 preview.
+    `<style>@page{margin:0;size:210mm 297mm}body{margin:0}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>
       <script>window.onload=function(){document.title="${sName}-resume";window.print();window.onafterprint=function(){window.close()}};<\/script></head>`
   );
   const win = window.open("", "_blank");
